@@ -15,6 +15,7 @@
     "update": "npx npm-check-updates -u"
   },
   "dependencies": {
+    "@griffel/react": "^1.5.14",
     "@lexical/react": "^0.11.3",
     "@telekom/scale-components": "3.0.0-beta.137",
     "@telekom/scale-components-react": "3.0.0-beta.137",
