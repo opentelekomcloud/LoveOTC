@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { Header } from "./Components/Header"
 import "./globals.css"
 
 /**
@@ -23,7 +24,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body data-mode="light">{children}</body>
+      <body data-mode="light">
+        <Header />
+        {children}
+      </body>
     </html>
   )
 }
