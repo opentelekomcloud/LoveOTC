@@ -11,9 +11,6 @@ dependencies:
   '@lexical/react':
     specifier: ^0.11.3
     version: 0.11.3(lexical@0.11.3)(react-dom@18.2.0)(react@18.2.0)(yjs@13.6.7)
-  '@telekom/design-tokens':
-    specifier: 1.0.0-beta.8
-    version: 1.0.0-beta.8
   '@telekom/scale-components':
     specifier: 3.0.0-beta.137
     version: 3.0.0-beta.137
