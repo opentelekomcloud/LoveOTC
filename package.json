@@ -1,24 +1,35 @@
 {
-  "name": "love-otc",
-  "version": "0.1.0",
+  "name": "loveotc",
   "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "author": {
+    "name": "Aloento",
+    "email": "Me@Aloen.to"
+  },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "upgrade": "pnpm upgrade",
+    "update": "npx npm-check-updates -u"
   },
   "dependencies": {
+    "@lexical/react": "^0.11.3",
     "@telekom/scale-components": "3.0.0-beta.137",
     "@telekom/scale-components-react": "3.0.0-beta.137",
-    "@types/node": "20.4.6",
-    "@types/react": "18.2.18",
-    "@types/react-dom": "18.2.7",
     "ahooks": "^3.7.8",
     "dayjs": "^1.11.9",
-    "next": "13.4.12",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "typescript": "5.1.6"
+    "lexical": "^0.11.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-helmet": "^6.1.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.19",
+    "@types/react-dom": "^18.2.7",
+    "@vitejs/plugin-react-swc": "^3.3.2",
+    "typescript": "^5.1.6",
+    "vite": "^4.4.9"
   }
 }
