@@ -15,10 +15,9 @@
     "update": "npx npm-check-updates -u"
   },
   "dependencies": {
-    "@griffel/react": "^1.5.14",
+    "@fluentui/react-components": "^9.27.4",
+    "@griffel/core": "^1.14.1",
     "@lexical/react": "^0.11.3",
-    "@telekom/scale-components": "3.0.0-beta.137",
-    "@telekom/scale-components-react": "3.0.0-beta.137",
     "ahooks": "^3.7.8",
     "dayjs": "^1.11.9",
     "lexical": "^0.11.3",
