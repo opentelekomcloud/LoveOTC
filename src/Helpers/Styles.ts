@@ -26,4 +26,4 @@ export const ColFlex: GriffelStyle = { ...Flex, ...Col };
  * @since 0.1.0 ML
  * @version 0.1.0
  */
-export const NavH = 54;
+export const NavH = 60;

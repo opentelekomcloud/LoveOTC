@@ -1,4 +1,5 @@
-import { Portal, makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import { Avatar, Image, Link, Portal, Text, ToggleButton, makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import { CartRegular } from "@fluentui/react-icons";
 import { Flex, NavH } from "~/Helpers/Styles";
 
 /**
@@ -9,10 +10,10 @@ import { Flex, NavH } from "~/Helpers/Styles";
 const useStyle = makeStyles({
   navBox: {
     position: "fixed",
-    top: "0",
+    top: 0,
     width: "100%",
     height: `${NavH}px`,
-    ...shorthands.padding(0, "32px"),
+    ...shorthands.padding(0, tokens.spacingHorizontalXXXL),
     backgroundColor: "#fff",
     boxSizing: "border-box",
     boxShadow: tokens.shadow4
@@ -20,19 +21,17 @@ const useStyle = makeStyles({
   navBar: {
     ...Flex,
     height: "100%",
-    ...shorthands.margin("0", "auto"),
+    ...shorthands.margin(0, "auto"),
     alignItems: "center",
     justifyContent: "space-between"
   },
   logoBox: {
     ...Flex,
-    borderBottomStyle: "unset",
-    columnGap: "8px",
+    columnGap: tokens.spacingHorizontalL,
     alignItems: "center"
   },
   logoText: {
-    marginTop: "2px",
-    color: tokens.colorPalettePlatinumForeground2
+    color: tokens.colorBrandForeground2
   }
 });
 
@@ -48,12 +47,16 @@ export function TopNavBar() {
     <Portal>
       <header className={style.navBox}>
         <nav className={style.navBar}>
-          <div>
+          <Link className={style.logoBox} href="/" appearance="subtle">
+            <Image src="./telekom-logo.svg" height={NavH} />
 
-          </div>
+            <Text size={600} font="monospace" className={style.logoText}>LoveOTC</Text>
+          </Link>
 
-          <div>
+          <div className={style.logoBox}>
+            <ToggleButton icon={<CartRegular />} appearance="subtle" size="large" />
 
+            <Avatar name="A L" size={36} />
           </div>
         </nav>
       </header>
