@@ -8,6 +8,9 @@ dependencies:
   '@fluentui/react-components':
     specifier: ^9.27.4
     version: 9.27.4(@types/react-dom@18.2.7)(@types/react@18.2.19)(react-dom@18.2.0)(react@18.2.0)(scheduler@0.20.2)
+  '@fluentui/react-icons':
+    specifier: ^2.0.209
+    version: 2.0.209(react@18.2.0)
   '@griffel/core':
     specifier: ^1.14.1
     version: 1.14.1

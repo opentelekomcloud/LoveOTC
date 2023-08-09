@@ -20,3 +20,10 @@ export const Col: GriffelStyle = { flexDirection: "column" };
  * @version 0.1.0
  */
 export const ColFlex: GriffelStyle = { ...Flex, ...Col };
+
+/**
+ * @author Aloento
+ * @since 0.1.0 ML
+ * @version 0.1.0
+ */
+export const NavH = 60;
