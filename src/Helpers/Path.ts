@@ -1,6 +1,6 @@
 /**
  * @author Aloento
- * @since 0.1.1 ML
+ * @since 0.1.1 MusiLand
  * @version 0.1.0
  */
 export function Combine(paths: (string | false | undefined)[]): string {
