@@ -5,7 +5,7 @@ import { TopNavBar } from "./TopNavBar";
 
 /**
  * @author Aloento
- * @since 0.2.2 ML
+ * @since 0.2.2 MusiLand
  * @version 0.1.0
  */
 const useStyle = makeStyles({
@@ -22,7 +22,7 @@ const useStyle = makeStyles({
 
 /**
  * @author Aloento
- * @since 0.2.2 ML
+ * @since 0.2.2 MusiLand
  * @version 0.1.0
  */
 export function Layout({ children }: { children?: React.ReactNode; }) {
