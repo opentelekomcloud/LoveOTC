@@ -1,6 +1,7 @@
-import { Avatar, Image, Link, Portal, Text, ToggleButton, makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import { Image, Link, Portal, Text, ToggleButton, makeStyles, shorthands, tokens } from "@fluentui/react-components";
 import { CartRegular } from "@fluentui/react-icons";
 import { Flex, NavH } from "~/Helpers/Styles";
+import { AvatarMenu } from "./AvatarMenu";
 
 /**
  * @author Aloento
@@ -56,7 +57,7 @@ export function TopNavBar() {
           <div className={style.logoBox}>
             <ToggleButton icon={<CartRegular />} appearance="subtle" size="large" />
 
-            <Avatar size={36} />
+            <AvatarMenu />
           </div>
         </nav>
       </header>
