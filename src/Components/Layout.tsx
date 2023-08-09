@@ -1,5 +1,6 @@
 import { makeStyles } from "@fluentui/react-components";
-import { ColFlex } from "~/Helpers/Styles";
+import { ColFlex, NavH } from "~/Helpers/Styles";
+import { TopNavBar } from "./TopNavBar";
 
 /**
  * @author Aloento
@@ -11,6 +12,7 @@ const useStyle = makeStyles({
     ...ColFlex,
     minWidth: "1024px",
     position: "absolute",
+    marginTop: `${NavH}px`,
     width: "100%",
     height: "-webkit-fill-available",
     justifyContent: "space-between"
@@ -26,7 +28,7 @@ export function Layout({ children }: { children?: React.ReactNode; }) {
   const style = useStyle();
 
   return <>
-
+    <TopNavBar />
     <main className={style.body}>
       {children}
     </main>
