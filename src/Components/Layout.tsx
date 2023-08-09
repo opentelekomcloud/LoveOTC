@@ -1,5 +1,5 @@
-import { makeStyles } from "@griffel/react";
-import { ColFlex, NavH } from "~/Helpers/Styles";
+import { makeStyles } from "@fluentui/react-components";
+import { ColFlex } from "~/Helpers/Styles";
 
 /**
  * @author Aloento
@@ -11,7 +11,6 @@ const useStyle = makeStyles({
     ...ColFlex,
     minWidth: "1024px",
     position: "absolute",
-    marginTop: `${NavH}px`,
     width: "100%",
     height: "-webkit-fill-available",
     justifyContent: "space-between"
@@ -27,6 +26,7 @@ export function Layout({ children }: { children?: React.ReactNode; }) {
   const style = useStyle();
 
   return <>
+
     <main className={style.body}>
       {children}
     </main>
