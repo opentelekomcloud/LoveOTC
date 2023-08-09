@@ -48,7 +48,7 @@ export function TopNavBar() {
       <header className={style.navBox}>
         <nav className={style.navBar}>
           <Link className={style.logoBox} href="/" appearance="subtle">
-            <Image src="./telekom-logo.svg" height={NavH} />
+            <Image src="/telekom-logo.svg" height={NavH} />
 
             <Text size={600} font="monospace" className={style.logoText}>LoveOTC</Text>
           </Link>
@@ -56,7 +56,7 @@ export function TopNavBar() {
           <div className={style.logoBox}>
             <ToggleButton icon={<CartRegular />} appearance="subtle" size="large" />
 
-            <Avatar name="A L" size={36} />
+            <Avatar size={36} />
           </div>
         </nav>
       </header>

@@ -1,5 +1,6 @@
 import { makeStyles } from "@fluentui/react-components";
 import { ColFlex, NavH } from "~/Helpers/Styles";
+import { Footer } from "./Footer";
 import { TopNavBar } from "./TopNavBar";
 
 /**
@@ -31,6 +32,7 @@ export function Layout({ children }: { children?: React.ReactNode; }) {
     <TopNavBar />
     <main className={style.body}>
       {children}
+      <Footer />
     </main>
   </>
 }
