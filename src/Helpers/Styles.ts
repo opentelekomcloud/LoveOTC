@@ -35,3 +35,10 @@ export const BaseCard: GriffelStyle = {
  * @version 0.1.0
  */
 export const NavH = 60;
+
+/**
+ * @author Aloento
+ * @since 0.1.0 MusiLand
+ * @version 0.1.0
+ */
+export const NavW = "1636px";
