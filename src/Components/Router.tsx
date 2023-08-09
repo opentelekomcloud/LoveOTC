@@ -4,7 +4,7 @@ import { Combine } from "~/Helpers/Path";
 
 /**
  * @author Aloento
- * @since 0.1.0 ML
+ * @since 0.1.0 MusiLand
  * @version 0.1.0
  */
 interface IRouter {
@@ -18,7 +18,7 @@ const Router = createContext({} as IRouter);
 
 /**
  * @author Aloento
- * @since 0.1.0 ML
+ * @since 0.1.0 MusiLand
  * @version 0.1.0
  */
 export function useRouter() {
@@ -29,7 +29,7 @@ let reload = false;
 
 /**
  * @author Aloento
- * @since 0.1.1 ML
+ * @since 0.1.1 MusiLand
  * @version 0.1.0
  */
 export function BrowserRouter({ children }: { children: JSX.Element }): JSX.Element {
@@ -57,7 +57,7 @@ export function BrowserRouter({ children }: { children: JSX.Element }): JSX.Elem
 
   useMount(() => {
     addEventListener("click", e => {
-      const target = (e.target as HTMLElement)?.closest("a");
+      const target = (e.target as HTMusiLandElement)?.closest("a");
 
       if (target) {
         if (target.origin !== location.origin) {

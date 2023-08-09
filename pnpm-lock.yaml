@@ -14,9 +14,42 @@ dependencies:
   '@griffel/core':
     specifier: ^1.14.1
     version: 1.14.1
+  '@lexical/code':
+    specifier: ^0.11.3
+    version: 0.11.3(lexical@0.11.3)
+  '@lexical/file':
+    specifier: ^0.11.3
+    version: 0.11.3(lexical@0.11.3)
+  '@lexical/link':
+    specifier: ^0.11.3
+    version: 0.11.3(lexical@0.11.3)
+  '@lexical/list':
+    specifier: ^0.11.3
+    version: 0.11.3(lexical@0.11.3)
+  '@lexical/mark':
+    specifier: ^0.11.3
+    version: 0.11.3(lexical@0.11.3)
+  '@lexical/markdown':
+    specifier: ^0.11.3
+    version: 0.11.3(@lexical/clipboard@0.11.3)(@lexical/selection@0.11.3)(lexical@0.11.3)
+  '@lexical/overflow':
+    specifier: ^0.11.3
+    version: 0.11.3(lexical@0.11.3)
   '@lexical/react':
     specifier: ^0.11.3
     version: 0.11.3(lexical@0.11.3)(react-dom@18.2.0)(react@18.2.0)(yjs@13.6.7)
+  '@lexical/rich-text':
+    specifier: ^0.11.3
+    version: 0.11.3(@lexical/clipboard@0.11.3)(@lexical/selection@0.11.3)(@lexical/utils@0.11.3)(lexical@0.11.3)
+  '@lexical/selection':
+    specifier: ^0.11.3
+    version: 0.11.3(lexical@0.11.3)
+  '@lexical/table':
+    specifier: ^0.11.3
+    version: 0.11.3(lexical@0.11.3)
+  '@lexical/utils':
+    specifier: ^0.11.3
+    version: 0.11.3(lexical@0.11.3)
   ahooks:
     specifier: ^3.7.8
     version: 3.7.8(react@18.2.0)
@@ -1506,6 +1539,14 @@ packages:
 
   /@lexical/dragon@0.11.3(lexical@0.11.3):
     resolution: {integrity: sha512-S18uwqOOpV2yIAFVWqSvBdhZ5BGadPQO4ejZF15wP8LUuqkxCs+0I/MjLovQ7tx0Cx34KdDaOXtM6XeG74ixYw==}
+    peerDependencies:
+      lexical: 0.11.3
+    dependencies:
+      lexical: 0.11.3
+    dev: false
+
+  /@lexical/file@0.11.3(lexical@0.11.3):
+    resolution: {integrity: sha512-NKLT6qFVjOhTOyZh9aN3TSdeT1mjFC3d0IYoQE6NY1qP3W8OLea+11oCqVf7+0oh4g0zgk/YyeA74douXilpcA==}
     peerDependencies:
       lexical: 0.11.3
     dependencies:

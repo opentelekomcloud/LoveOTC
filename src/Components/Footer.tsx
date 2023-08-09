@@ -23,7 +23,7 @@ const useStyle = makeStyles({
 
 /**
  * @author Aloento
- * @since 0.3.1 ML
+ * @since 0.3.1 MusiLand
  * @version 0.1.0
  */
 export function Footer(): JSX.Element {
