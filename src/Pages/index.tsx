@@ -1,5 +1,5 @@
 import { useRouter } from "~/Components/Router";
-import { Lexical } from "~/Lexical";
+import { Product } from "./Product";
 
 /**
  * @author Aloento
@@ -11,6 +11,6 @@ export function EShopContent() {
   const path = Paths.at(0);
 
   return (
-    <Lexical />
+    <Product />
   )
 }

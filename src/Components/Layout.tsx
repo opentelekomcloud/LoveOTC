@@ -24,8 +24,9 @@ const useStyle = makeStyles({
     width: "-webkit-fill-available",
     marginLeft: "auto",
     marginRight: "auto",
-    paddingLeft: tokens.spacingVerticalMNudge,
-    paddingRight: tokens.spacingVerticalMNudge,
+    paddingLeft: tokens.spacingHorizontalM,
+    paddingRight: tokens.spacingHorizontalM,
+    paddingTop: tokens.spacingVerticalXXXL
   }
 });
 
