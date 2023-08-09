@@ -1,4 +1,4 @@
-import { makeStyles, mergeClasses, shorthands, tokens } from "@fluentui/react-components";
+import { makeStyles, mergeClasses, shorthands } from "@fluentui/react-components";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { useLexical } from "../Context/Setting";
 
