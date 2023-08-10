@@ -120,7 +120,7 @@ export function Product() {
               columnGap: tokens.spacingHorizontalM
             }}>
               <Field>
-                <SpinButton appearance="underline" />
+                <SpinButton appearance="underline" defaultValue={1} />
               </Field>
 
               <Button appearance="primary">ADD TO CART</Button>
@@ -132,7 +132,7 @@ export function Product() {
 
       <div style={{
         ...BaseCard,
-        padding: tokens.spacingHorizontalL
+        padding: tokens.spacingHorizontalXL
       }}>
         <Lexical Display State={JSON.stringify(demo.editorState)} />
       </div>
