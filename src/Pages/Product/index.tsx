@@ -3,6 +3,7 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { BaseCard, Col, ColFlex, Cover, Flex } from "~/Helpers/Styles";
 import { Lexical } from "~/Lexical";
+import demo from "./demo.json";
 
 const useStyle = makeStyles({
   img: {
@@ -21,10 +22,7 @@ export function Product() {
   const style = useStyle();
 
   return (
-    <div style={{
-      ...ColFlex,
-      rowGap: tokens.spacingVerticalXXL
-    }}>
+    <div style={ColFlex}>
       <div style={{
         ...Flex,
         columnGap: tokens.spacingHorizontalXXXL
@@ -70,6 +68,8 @@ export function Product() {
 
             <div style={{
               ...Flex,
+              flexWrap: "wrap",
+              rowGap: tokens.spacingHorizontalS,
               columnGap: tokens.spacingHorizontalM
             }}>
               <ToggleButton appearance="outline" checked style={{ borderColor: tokens.colorBrandForeground1 }}>Short Sleeve</ToggleButton>
@@ -89,6 +89,8 @@ export function Product() {
 
             <div style={{
               ...Flex,
+              flexWrap: "wrap",
+              rowGap: tokens.spacingHorizontalS,
               columnGap: tokens.spacingHorizontalM
             }}>
               <ToggleButton appearance="outline" checked style={{ borderColor: tokens.colorBrandForeground1 }}>S</ToggleButton>
@@ -128,7 +130,12 @@ export function Product() {
         </div>
       </div>
 
-      <Lexical />
+      <div style={{
+        ...BaseCard,
+        padding: tokens.spacingHorizontalL
+      }}>
+        <Lexical Display State={JSON.stringify(demo.editorState)} />
+      </div>
     </div>
   )
 }
