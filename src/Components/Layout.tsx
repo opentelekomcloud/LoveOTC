@@ -16,7 +16,8 @@ const useStyle = makeStyles({
     marginTop: `${NavH}px`,
     width: "100%",
     height: "-webkit-fill-available",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    backgroundColor: tokens.colorNeutralBackground2
   },
   content: {
     ...ColFlex,
