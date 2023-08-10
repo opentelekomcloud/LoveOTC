@@ -57,7 +57,7 @@ export function BrowserRouter({ children }: { children: JSX.Element }): JSX.Elem
 
   useMount(() => {
     addEventListener("click", e => {
-      const target = (e.target as HTMusiLandElement)?.closest("a");
+      const target = (e.target as HTMLElement)?.closest("a");
 
       if (target) {
         if (target.origin !== location.origin) {

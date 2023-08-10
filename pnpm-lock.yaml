@@ -14,10 +14,16 @@ dependencies:
   '@griffel/core':
     specifier: ^1.14.1
     version: 1.14.1
+  '@lexical/clipboard':
+    specifier: ^0.11.3
+    version: 0.11.3(lexical@0.11.3)
   '@lexical/code':
     specifier: ^0.11.3
     version: 0.11.3(lexical@0.11.3)
   '@lexical/file':
+    specifier: ^0.11.3
+    version: 0.11.3(lexical@0.11.3)
+  '@lexical/html':
     specifier: ^0.11.3
     version: 0.11.3(lexical@0.11.3)
   '@lexical/link':
