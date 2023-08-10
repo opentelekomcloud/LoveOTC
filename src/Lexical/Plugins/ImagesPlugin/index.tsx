@@ -34,7 +34,7 @@ export const INSERT_IMAGE_COMMAND: LexicalCommand<InsertImagePayload> =
 
 export function InsertImageDialog({ editor }: { editor: LexicalEditor }): JSX.Element {
   const [src, setSrc] = useState("https://source.unsplash.com/random");
-  const [altText, setAltText] = useState("MusiLand is a non-profit creative trading platform powered by the community.");
+  const [altText, setAltText] = useState("LoveOTC!");
 
   return (
     <DialogBody>
