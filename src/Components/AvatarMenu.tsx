@@ -1,5 +1,6 @@
 import { Avatar, Menu, MenuGroupHeader, MenuItem, MenuList, MenuPopover, MenuTrigger } from "@fluentui/react-components";
 import { useBoolean } from "ahooks";
+import { Setting } from "./Setting";
 
 /**
  * @author Aloento
@@ -7,21 +8,24 @@ import { useBoolean } from "ahooks";
  * @version 0.1.0
  */
 export function AvatarMenu() {
-  const [open, { toggle }] = useBoolean();
+  const [isMenu, { toggle: toggleMenu }] = useBoolean();
+  const [isModal, { toggle: toggleModal }] = useBoolean();
 
-  return (
-    <Menu open={open} onOpenChange={toggle}>
+  return <>
+    <Menu open={isMenu} onOpenChange={toggleMenu}>
       <MenuTrigger>
-        <Avatar size={36} active={open ? "active" : "unset"} />
+        <Avatar size={36} active={isMenu ? "active" : "unset"} />
       </MenuTrigger>
 
       <MenuPopover>
         <MenuList>
           <MenuGroupHeader>Hi Aloento</MenuGroupHeader>
-          <MenuItem>Setting</MenuItem>
+          <MenuItem onClick={toggleModal}>Setting</MenuItem>
           <MenuItem>Logout</MenuItem>
         </MenuList>
       </MenuPopover>
     </Menu>
-  )
+
+    <Setting Open={isModal} Toggle={toggleModal} />
+  </>
 }

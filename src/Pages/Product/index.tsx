@@ -73,7 +73,7 @@ export function Product() {
               columnGap: tokens.spacingHorizontalM
             }}>
               <ToggleButton appearance="outline" checked style={{ borderColor: tokens.colorBrandForeground1 }}>Short Sleeve</ToggleButton>
-              <ToggleButton appearance="outline" style={{ borderColor: tokens.colorBrandForeground1 }}>Short Sleeve</ToggleButton>
+              <ToggleButton appearance="outline" style={{ borderColor: tokens.colorBrandForeground1 }}>Long Sleeve</ToggleButton>
             </div>
           </div>
 
