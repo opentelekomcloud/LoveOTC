@@ -1,5 +1,5 @@
-import { makeStyles } from "@fluentui/react-components";
-import { ColFlex, NavH } from "~/Helpers/Styles";
+import { makeStyles, tokens } from "@fluentui/react-components";
+import { ColFlex, NavH, NavW } from "~/Helpers/Styles";
 import { Footer } from "./Footer";
 import { TopNavBar } from "./TopNavBar";
 
@@ -16,23 +16,38 @@ const useStyle = makeStyles({
     marginTop: `${NavH}px`,
     width: "100%",
     height: "-webkit-fill-available",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    backgroundColor: tokens.colorNeutralBackground2
+  },
+  content: {
+    ...ColFlex,
+    maxWidth: NavW,
+    width: "-webkit-fill-available",
+    marginLeft: "auto",
+    marginRight: "auto",
+    paddingLeft: tokens.spacingHorizontalM,
+    paddingRight: tokens.spacingHorizontalM,
+    paddingTop: tokens.spacingVerticalXXXL
   }
 });
 
 /**
  * @author Aloento
  * @since 0.2.2 MusiLand
- * @version 0.1.0
+ * @version 0.1.1
  */
 export function Layout({ children }: { children?: React.ReactNode; }) {
   const style = useStyle();
 
   return <>
     <TopNavBar />
-    <main className={style.body}>
-      {children}
+
+    <div className={style.body}>
+      <main className={style.content}>
+        {children}
+      </main>
+
       <Footer />
-    </main>
+    </div>
   </>
 }
