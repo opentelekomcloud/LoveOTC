@@ -1,6 +1,6 @@
 import { Image, Link, Portal, Text, ToggleButton, makeStyles, shorthands, tokens } from "@fluentui/react-components";
 import { CartRegular } from "@fluentui/react-icons";
-import { Flex, NavH } from "~/Helpers/Styles";
+import { Flex, NavH, NavW } from "~/Helpers/Styles";
 import { AvatarMenu } from "./AvatarMenu";
 
 /**
@@ -21,6 +21,7 @@ const useStyle = makeStyles({
   },
   navBar: {
     ...Flex,
+    maxWidth: NavW,
     height: "100%",
     ...shorthands.margin(0, "auto"),
     alignItems: "center",

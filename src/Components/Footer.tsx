@@ -1,5 +1,5 @@
 import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
-import { Flex } from "~/Helpers/Styles";
+import { Flex, NavW } from "~/Helpers/Styles";
 
 const useStyle = makeStyles({
   box: {
@@ -10,6 +10,7 @@ const useStyle = makeStyles({
   },
   main: {
     ...Flex,
+    maxWidth: NavW,
     ...shorthands.margin(0, "auto"),
   },
   logo: {
