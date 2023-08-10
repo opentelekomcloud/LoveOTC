@@ -1,4 +1,4 @@
-import { Divider, LargeTitle, Title3, ToggleButton, makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import { Button, Divider, Field, LargeTitle, SpinButton, Title3, ToggleButton, makeStyles, shorthands, tokens } from "@fluentui/react-components";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { BaseCard, Col, ColFlex, Cover, Flex } from "~/Helpers/Styles";
@@ -30,8 +30,8 @@ export function Product() {
         columnGap: tokens.spacingHorizontalXXXL
       }}>
         <Carousel showArrows>
-          <img className={style.img} src="https://api.lorem.space/image/fashion?w=600&h=600" />
-          <img className={style.img} src="https://api.lorem.space/image/fashion?w=800&h=800" />
+          <img className={style.img} src="https://picsum.photos/550" />
+          <img className={style.img} src="https://picsum.photos/650" />
           <img className={style.img} src="https://picsum.photos/500" />
           <img className={style.img} src="https://picsum.photos/600" />
           <img className={style.img} src="https://picsum.photos/700" />
@@ -45,7 +45,10 @@ export function Product() {
           flexBasis: "50%",
           flexShrink: 0,
           rowGap: tokens.spacingVerticalXL,
-          padding: `${tokens.spacingVerticalM} ${tokens.spacingHorizontalXXL}`,
+          paddingTop: tokens.spacingVerticalM,
+          paddingLeft: tokens.spacingHorizontalXXL,
+          paddingRight: tokens.spacingHorizontalXXL,
+          paddingBottom: tokens.spacingHorizontalXXL
         }}>
           <LargeTitle style={{
             color: tokens.colorBrandForeground1
@@ -98,6 +101,29 @@ export function Product() {
           </div>
 
           <Divider />
+
+          <div style={{
+            ...ColFlex,
+            rowGap: tokens.spacingVerticalS,
+          }}>
+            <Title3 style={{
+              color: tokens.colorBrandForeground1
+            }}>
+              QUANTITY
+            </Title3>
+
+            <div style={{
+              ...Flex,
+              justifyContent: "space-between",
+              columnGap: tokens.spacingHorizontalM
+            }}>
+              <Field>
+                <SpinButton appearance="underline" />
+              </Field>
+
+              <Button appearance="primary">ADD TO CART</Button>
+            </div>
+          </div>
 
         </div>
       </div>
