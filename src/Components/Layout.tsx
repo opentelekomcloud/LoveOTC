@@ -15,7 +15,7 @@ const useStyle = makeStyles({
     position: "absolute",
     marginTop: `${NavH}px`,
     width: "100%",
-    height: "-webkit-fill-available",
+    minHeight: "-webkit-fill-available",
     justifyContent: "space-between",
     backgroundColor: tokens.colorNeutralBackground2
   },

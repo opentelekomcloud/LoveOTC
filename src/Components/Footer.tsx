@@ -4,7 +4,7 @@ import { Flex, NavW } from "~/Helpers/Styles";
 const useStyle = makeStyles({
   box: {
     width: "-webkit-fill-available",
-    marginTop: tokens.spacingVerticalXXL,
+    marginTop: tokens.spacingVerticalXXXL,
     ...shorthands.padding(tokens.spacingVerticalXXL, 0),
     backgroundColor: tokens.colorNeutralBackgroundInverted
   },
