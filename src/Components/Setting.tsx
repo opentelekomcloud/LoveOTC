@@ -1,4 +1,5 @@
-import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger } from "@fluentui/react-components";
+import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Label, tokens } from "@fluentui/react-components";
+import { ColFlex, Flex } from "~/Helpers/Styles";
 
 interface ISetting {
   Open: boolean;
@@ -16,19 +17,45 @@ export function Setting({ Open, Toggle }: ISetting) {
     <Dialog open={Open} onOpenChange={Toggle}>
       <DialogSurface>
         <DialogBody>
-          <DialogTitle>Dialog title</DialogTitle>
-          <DialogContent>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
-            exercitationem cumque repellendus eaque est dolor eius expedita
-            nulla ullam? Tenetur reprehenderit aut voluptatum impedit voluptates
-            in natus iure cumque eaque?
+          <DialogTitle>Personal Information</DialogTitle>
+
+          <DialogContent style={Flex}>
+            <div style={{
+              ...ColFlex,
+              flexBasis: "50%",
+              rowGap: tokens.spacingVerticalM
+            }}>
+              <Field label="Name" size="large">
+                <Label>Aloento</Label>
+              </Field>
+
+              <Field label="E-Mail" size="large">
+                <Label>Aloento</Label>
+              </Field>
+            </div>
+
+            <div style={{
+              ...ColFlex,
+              flexBasis: "50%",
+              rowGap: tokens.spacingVerticalM
+            }}>
+              <Field label="Phone" size="large">
+                <Label>Aloento</Label>
+              </Field>
+
+              <Field label="Name" size="large">
+                <Label>Aloento</Label>
+              </Field>
+            </div>
           </DialogContent>
+
           <DialogActions>
             <DialogTrigger disableButtonEnhancement>
-              <Button appearance="secondary">Close</Button>
+              <Button appearance="secondary">Cancel</Button>
             </DialogTrigger>
-            <Button appearance="primary">Do Something</Button>
+            <Button appearance="primary">Submit</Button>
           </DialogActions>
+
         </DialogBody>
       </DialogSurface>
     </Dialog>
