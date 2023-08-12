@@ -1,6 +1,11 @@
 import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Input, Label, tokens } from "@fluentui/react-components";
 import { ColFlex, Flex } from "~/Helpers/Styles";
 
+/**
+ * @author Aloento
+ * @since 0.1.0
+ * @version 0.1.0
+ */
 interface ISetting {
   Open: boolean;
   Toggle: () => void;
@@ -12,7 +17,6 @@ interface ISetting {
  * @version 0.1.0
  */
 export function Setting({ Open, Toggle }: ISetting) {
-
   return (
     <Dialog open={Open} onOpenChange={Toggle}>
       <DialogSurface>

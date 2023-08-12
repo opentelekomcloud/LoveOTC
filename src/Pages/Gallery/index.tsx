@@ -1,4 +1,4 @@
-import { Body1, Card, CardFooter, CardPreview, Title3, makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import { Body1, Card, CardFooter, CardPreview, Image, Title3, makeStyles, shorthands, tokens } from "@fluentui/react-components";
 import { ColFlex, Cover, Flex } from "~/Helpers/Styles";
 
 /**
@@ -8,8 +8,6 @@ import { ColFlex, Cover, Flex } from "~/Helpers/Styles";
  */
 const useStyles = makeStyles({
   card: {
-    marginTop: "10px",
-    marginBottom: "10px",
     flexBasis: "23%",
     flexGrow: 0,
   },
@@ -60,7 +58,7 @@ export function Gallery() {
   return (
     <div style={{
       ...ColFlex,
-      rowGap: tokens.spacingVerticalL
+      rowGap: tokens.spacingVerticalXL
     }}>
       <Title3>T-Shirt</Title3>
 
@@ -68,13 +66,14 @@ export function Gallery() {
         ...Flex,
         flexWrap: "wrap",
         justifyContent: "space-evenly",
-        columnGap: tokens.spacingVerticalL
+        columnGap: tokens.spacingVerticalL,
+        rowGap: tokens.spacingVerticalXL
       }}>
         {
           cardList.map((item) => (
             <Card className={style.card}>
               <CardPreview>
-                <img className={style.img} src={item.Image} />
+                <Image className={style.img} src={item.Image} />
               </CardPreview>
 
               <CardFooter>

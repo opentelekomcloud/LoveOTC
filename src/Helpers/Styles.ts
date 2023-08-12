@@ -22,6 +22,11 @@ export const Col: GriffelStyle = { flexDirection: "column" };
  */
 export const ColFlex: GriffelStyle = { ...Flex, ...Col };
 
+/**
+ * @author Aloento
+ * @since 0.1.0
+ * @version 0.1.0
+ */
 export const BaseCard: GriffelStyle = {
   ...Flex,
   backgroundColor: tokens.colorNeutralBackground1,

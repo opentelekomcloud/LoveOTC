@@ -1,6 +1,11 @@
 import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
 import { Flex, NavW } from "~/Helpers/Styles";
 
+/**
+ * @author Aloento
+ * @since 0.1.0
+ * @version 0.1.0
+ */
 const useStyle = makeStyles({
   box: {
     width: "-webkit-fill-available",

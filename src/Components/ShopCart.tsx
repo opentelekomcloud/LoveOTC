@@ -3,6 +3,11 @@ import { CartRegular, DeleteRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
 import { ColFlex, Cover } from "~/Helpers/Styles";
 
+/**
+ * @author Aloento
+ * @since 0.1.0
+ * @version 0.1.0
+ */
 interface ICartItem {
   Id: number;
   Image: string;
@@ -11,6 +16,11 @@ interface ICartItem {
   Quantity: number;
 }
 
+/**
+ * @author Aloento
+ * @since 0.1.0
+ * @version 0.1.0
+ */
 const columns: TableColumnDefinition<ICartItem>[] = [
   createTableColumn<ICartItem>({
     columnId: "Cover",

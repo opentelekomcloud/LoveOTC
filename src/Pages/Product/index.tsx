@@ -5,6 +5,11 @@ import { BaseCard, Col, ColFlex, Cover, Flex } from "~/Helpers/Styles";
 import { Lexical } from "~/Lexical";
 import demo from "./demo.json";
 
+/**
+ * @author Aloento
+ * @since 0.1.0
+ * @version 0.1.0
+ */
 const useStyle = makeStyles({
   img: {
     aspectRatio: "1",
