@@ -1,7 +1,8 @@
-import { Body1Strong, Button, Caption1, DataGrid, DataGridBody, DataGridCell, DataGridRow, Field, Image, Popover, PopoverSurface, PopoverTrigger, SpinButton, TableColumnDefinition, ToggleButton, createTableColumn, tokens } from "@fluentui/react-components";
+import { Body1Strong, Button, Caption1, DataGrid, DataGridBody, DataGridCell, DataGridRow, Field, Image, Popover, PopoverSurface, PopoverTrigger, SpinButton, TableColumnDefinition, ToggleButton, createTableColumn } from "@fluentui/react-components";
 import { CartRegular, DeleteRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
 import { ColFlex, Cover } from "~/Helpers/Styles";
+import { Confirm } from "./Confirm";
 
 /**
  * @author Aloento
@@ -114,7 +115,7 @@ export function ShopCart() {
           </DataGridBody>
         </DataGrid>
 
-        <Button appearance="primary" style={{ marginTop: tokens.spacingVerticalM }}>Checkout</Button>
+        <Confirm />
       </PopoverSurface>
     </Popover>
   )
