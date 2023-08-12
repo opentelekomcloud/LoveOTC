@@ -1,4 +1,4 @@
-import { Body1, Card, CardFooter, CardPreview, Image, Title3, makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import { Body1, Card, CardFooter, CardPreview, Image, Link, Title3, makeStyles, tokens } from "@fluentui/react-components";
 import { ColFlex, Cover, Flex } from "~/Helpers/Styles";
 
 /**
@@ -14,7 +14,8 @@ const useStyles = makeStyles({
   img: {
     aspectRatio: "1",
     ...Cover,
-    ...shorthands.borderRadius(tokens.borderRadiusMedium)
+    borderTopLeftRadius: tokens.borderRadiusMedium,
+    borderTopRightRadius: tokens.borderRadiusMedium,
   },
 });
 
@@ -78,7 +79,7 @@ export function Gallery() {
 
               <CardFooter>
                 <Body1>
-                  {item.Name}
+                  <Link href="/Product">{item.Name}</Link>
                 </Body1>
               </CardFooter>
             </Card>
