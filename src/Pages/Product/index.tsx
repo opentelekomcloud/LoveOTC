@@ -5,6 +5,11 @@ import { BaseCard, Col, ColFlex, Cover, Flex } from "~/Helpers/Styles";
 import { Lexical } from "~/Lexical";
 import demo from "./demo.json";
 
+/**
+ * @author Aloento
+ * @since 0.1.0
+ * @version 0.1.0
+ */
 const useStyle = makeStyles({
   img: {
     aspectRatio: "1",
@@ -73,7 +78,7 @@ export function Product() {
               columnGap: tokens.spacingHorizontalM
             }}>
               <ToggleButton appearance="outline" checked style={{ borderColor: tokens.colorBrandForeground1 }}>Short Sleeve</ToggleButton>
-              <ToggleButton appearance="outline" style={{ borderColor: tokens.colorBrandForeground1 }}>Short Sleeve</ToggleButton>
+              <ToggleButton appearance="outline" style={{ borderColor: tokens.colorBrandForeground1 }}>Long Sleeve</ToggleButton>
             </div>
           </div>
 

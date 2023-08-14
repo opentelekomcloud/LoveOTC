@@ -1,4 +1,7 @@
+import { useMemo } from "react";
 import { useRouter } from "~/Components/Router";
+import { Gallery } from "./Gallery";
+import { History } from "./History";
 import { Product } from "./Product";
 
 /**
@@ -10,7 +13,20 @@ export function EShopContent() {
   const { Paths } = useRouter();
   const path = Paths.at(0);
 
-  return (
-    <Product />
-  )
+  return useMemo(() => {
+    switch (path) {
+      case "Product":
+        return <Product />;
+
+      case "History":
+        return <History />;
+
+      case "":
+      case undefined:
+        return <Gallery />;
+
+      default:
+        return <div>404</div>
+    }
+  }, [path])
 }
