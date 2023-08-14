@@ -9,7 +9,7 @@ import { Confirm } from "./Confirm";
  * @since 0.1.0
  * @version 0.1.0
  */
-interface ICartItem {
+export interface ICartItem {
   Id: number;
   Image: string;
   Name: string;
@@ -26,11 +26,15 @@ const columns: TableColumnDefinition<ICartItem>[] = [
   createTableColumn<ICartItem>({
     columnId: "Cover",
     renderCell(item) {
-      return <Image shape="square" style={{
-        ...Cover,
-        aspectRatio: "1",
-        height: "44px"
-      }} src={item.Image} />
+      return <Image
+        shape="square"
+        style={{
+          ...Cover,
+          aspectRatio: "1",
+          height: "44px"
+        }}
+        src={item.Image}
+      />
     },
   }),
   createTableColumn<ICartItem>({

@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useRouter } from "~/Components/Router";
 import { Gallery } from "./Gallery";
+import { History } from "./History";
 import { Product } from "./Product";
 
 /**
@@ -16,6 +17,9 @@ export function EShopContent() {
     switch (path) {
       case "Product":
         return <Product />;
+
+      case "History":
+        return <History />;
 
       case "":
       case undefined:
