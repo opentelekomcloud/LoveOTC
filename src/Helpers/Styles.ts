@@ -57,3 +57,12 @@ export const Cover: GriffelStyle = {
   objectFit: "cover",
   objectPosition: "center",
 };
+
+/**
+ * @author Aloento
+ * @since 0.1.0 MusiLand
+ * @version 0.1.0
+ */
+export const NoGrow = {
+  style: { flexGrow: "unset" }
+}
