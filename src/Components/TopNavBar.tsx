@@ -1,6 +1,8 @@
-import { Image, Link, Portal, Text, makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import { Button, Image, Link, Portal, Text, makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import { AddRegular } from "@fluentui/react-icons";
 import { Flex, NavH, NavW } from "~/Helpers/Styles";
 import { AvatarMenu } from "./AvatarMenu";
+import { useRouter } from "./Router";
 import { ShopCart } from "./ShopCart";
 
 /**
@@ -44,6 +46,9 @@ const useStyle = makeStyles({
  */
 export function TopNavBar() {
   const style = useStyle();
+  const { Paths } = useRouter();
+  const path1 = Paths.at(0);
+  const path2 = Paths.at(1);
 
   return (
     <Portal>
@@ -56,11 +61,14 @@ export function TopNavBar() {
           </Link>
 
           <div className={style.logoBox}>
+            {path1 === "Admin" && !path2 &&
+              <Button appearance="primary" icon={<AddRegular />}>New Product</Button>}
+
             <ShopCart />
             <AvatarMenu />
           </div>
         </nav>
       </header>
-    </Portal>
+    </Portal >
   )
 }
