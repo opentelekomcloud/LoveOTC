@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { useRouter } from "~/Components/Router";
 import { AdminOrder } from "./Order";
 import { AdminProduct } from "./Product";
+import { AdminUser } from "./User";
 
 /**
  * @author Aloento
@@ -19,6 +20,9 @@ export function Admin() {
 
       case "Order":
         return <AdminOrder />;
+
+      case "User":
+        return <AdminUser />;
 
       case "":
       case undefined:
