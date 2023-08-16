@@ -9,7 +9,7 @@ import { CoverCol } from "~/Helpers/CoverCol";
  * @since 0.1.0
  * @version 0.1.0
  */
-interface IHistoryItem extends ICartItem {
+export interface IHistoryItem extends ICartItem {
   Status: string,
   TrackNumber: string,
   OrderDate: Date
@@ -20,7 +20,7 @@ interface IHistoryItem extends ICartItem {
  * @since 0.1.0
  * @version 0.1.0
  */
-const columns: TableColumnDefinition<IHistoryItem>[] = [
+export const HistoryColumns: TableColumnDefinition<IHistoryItem>[] = [
   CoverCol,
   createTableColumn<IHistoryItem>({
     columnId: "Product",
@@ -149,6 +149,6 @@ const items: IHistoryItem[] = [
  */
 export function History() {
   return (
-    <DelegateDataGrid Items={items} Columns={columns} />
+    <DelegateDataGrid Items={items} Columns={HistoryColumns} />
   )
 }

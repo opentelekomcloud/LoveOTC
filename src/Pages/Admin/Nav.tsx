@@ -19,7 +19,7 @@ const useStyle = makeStyles({
     color: tokens.colorNeutralForegroundDisabled
   },
   link: {
-    textDecorationLine: "unset"
+    textDecorationLine: "unset !important"
   }
 })
 

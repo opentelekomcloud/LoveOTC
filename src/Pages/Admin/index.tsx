@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { useRouter } from "~/Components/Router";
+import { AdminOrder } from "./Order";
 import { AdminProduct } from "./Product";
 
 /**
@@ -15,6 +16,9 @@ export function Admin() {
     switch (path) {
       case "Product":
         return <AdminProduct />;
+
+      case "Order":
+        return <AdminOrder />;
 
       case "":
       case undefined:
