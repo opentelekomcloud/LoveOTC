@@ -12,11 +12,6 @@ export default defineConfig({
   },
   build: {
     target: "esnext",
-    minify: "terser",
-    terserOptions: {
-      ecma: 2020,
-      module: true,
-    },
     reportCompressedSize: false,
     modulePreload: {
       polyfill: false,

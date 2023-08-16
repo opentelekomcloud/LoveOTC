@@ -1,5 +1,7 @@
 import { Image, Link, Portal, Text, makeStyles, shorthands, tokens } from "@fluentui/react-components";
 import { Flex, NavH, NavW } from "~/Helpers/Styles";
+import { AdminTopNav } from "~/Pages/Admin/Nav";
+import { AdminProductAddButton } from "~/Pages/Admin/Product/Button";
 import { AvatarMenu } from "./AvatarMenu";
 import { ShopCart } from "./ShopCart";
 
@@ -55,12 +57,15 @@ export function TopNavBar() {
             <Text size={600} font="monospace" className={style.logoText}>LoveOTC</Text>
           </Link>
 
+          <AdminTopNav />
+
           <div className={style.logoBox}>
+            <AdminProductAddButton />
             <ShopCart />
             <AvatarMenu />
           </div>
         </nav>
       </header>
-    </Portal>
+    </Portal >
   )
 }

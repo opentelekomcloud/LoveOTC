@@ -1,14 +1,15 @@
-import { Body1Strong, Button, DataGrid, DataGridBody, DataGridCell, DataGridHeader, DataGridHeaderCell, DataGridRow, Image, TableColumnDefinition, createTableColumn, tokens } from "@fluentui/react-components";
+import { Body1Strong, Button, DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
 import { BoxArrowLeftRegular } from "@fluentui/react-icons";
+import { DelegateDataGrid } from "~/Components/DelegateDataGrid";
 import { ICartItem } from "~/Components/ShopCart";
-import { Cover } from "~/Helpers/Styles";
+import { CoverCol } from "~/Helpers/CoverCol";
 
 /**
  * @author Aloento
  * @since 0.1.0
  * @version 0.1.0
  */
-interface IHistoryItem extends ICartItem {
+export interface IHistoryItem extends ICartItem {
   Status: string,
   TrackNumber: string,
   OrderDate: Date
@@ -19,34 +20,8 @@ interface IHistoryItem extends ICartItem {
  * @since 0.1.0
  * @version 0.1.0
  */
-const columns: TableColumnDefinition<IHistoryItem>[] = [
-  createTableColumn<IHistoryItem>({
-    columnId: "Cover",
-    renderHeaderCell: () => {
-      return (
-        <DataGridHeaderCell style={{ flexBasis: "unset", flexGrow: "unset" }}>
-          <div style={{ width: "50px" }} />
-        </DataGridHeaderCell>
-      )
-    },
-    renderCell(item) {
-      return (
-        <DataGridCell style={{ flexBasis: "unset", flexGrow: "unset" }}>
-          <Image
-            shape="square"
-            style={{
-              ...Cover,
-              aspectRatio: "1",
-              width: "50px",
-              marginTop: tokens.spacingVerticalXS,
-              marginBottom: tokens.spacingVerticalXS,
-            }}
-            src={item.Image}
-          />
-        </DataGridCell>
-      )
-    },
-  }),
+export const HistoryColumns: TableColumnDefinition<IHistoryItem>[] = [
+  CoverCol,
   createTableColumn<IHistoryItem>({
     columnId: "Product",
     renderHeaderCell: () => {
@@ -126,20 +101,17 @@ const columns: TableColumnDefinition<IHistoryItem>[] = [
     columnId: "Action",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "unset", flexGrow: "unset" }}>
+        <DataGridHeaderCell style={{ flexBasis: "2.5%", flexGrow: "unset" }}>
           Refund
         </DataGridHeaderCell>
       )
     },
     renderCell(item) {
       return (
-        <DataGridCell style={{ flexBasis: "unset", flexGrow: "unset" }}>
+        <DataGridCell style={{ flexBasis: "2.5%", flexGrow: "unset", justifyContent: "center" }}>
           <Button
             appearance="subtle"
             icon={<BoxArrowLeftRegular />}
-            style={{
-              minWidth: "44px"
-            }}
           />
         </DataGridCell>
       )
@@ -177,26 +149,6 @@ const items: IHistoryItem[] = [
  */
 export function History() {
   return (
-    <div>
-      <DataGrid
-        items={items}
-        columns={columns}
-        getRowId={(item: ICartItem) => item.Id}
-      >
-        <DataGridHeader>
-          <DataGridRow>
-            {({ renderHeaderCell }) => renderHeaderCell()}
-          </DataGridRow>
-        </DataGridHeader>
-
-        <DataGridBody<ICartItem>>
-          {({ item, rowId }) => (
-            <DataGridRow<ICartItem> key={rowId}>
-              {({ renderCell }) => renderCell(item)}
-            </DataGridRow>
-          )}
-        </DataGridBody>
-      </DataGrid>
-    </div>
+    <DelegateDataGrid Items={items} Columns={HistoryColumns} />
   )
 }
