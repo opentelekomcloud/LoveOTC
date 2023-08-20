@@ -4,7 +4,7 @@ import { Combine } from "~/Helpers/Path";
 
 /**
  * @author Aloento
- * @since 0.1.0 MusiLand
+ * @since 0.5.0 MusiLand
  * @version 0.1.0
  */
 interface IRouter {
@@ -14,22 +14,32 @@ interface IRouter {
   Reload: (bool: boolean) => void,
 }
 
+/**
+ * @author Aloento
+ * @since 0.5.0 MusiLand
+ * @version 0.1.0
+ */
 const Router = createContext({} as IRouter);
 
 /**
  * @author Aloento
- * @since 0.1.0 MusiLand
+ * @since 0.5.0 MusiLand
  * @version 0.1.0
  */
 export function useRouter() {
   return useContext(Router);
 }
 
+/**
+ * @author Aloento
+ * @since 0.5.0 MusiLand
+ * @version 0.1.0
+ */
 let reload = false;
 
 /**
  * @author Aloento
- * @since 0.1.1 MusiLand
+ * @since 0.5.0 MusiLand
  * @version 0.1.0
  */
 export function BrowserRouter({ children }: { children: JSX.Element }): JSX.Element {
