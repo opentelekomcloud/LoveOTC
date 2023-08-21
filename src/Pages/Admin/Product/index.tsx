@@ -1,7 +1,9 @@
 import { Body1Strong, Button, DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
 import { OpenRegular } from "@fluentui/react-icons";
+import { useBoolean } from "ahooks";
 import { CoverCol } from "~/Helpers/CoverCol";
 import { DelegateDataGrid } from "../../../Components/DelegateDataGrid";
+import { AdminProductEdit } from "./Edit";
 
 /**
  * @author Aloento
@@ -82,18 +84,23 @@ const columns: TableColumnDefinition<IProductItem>[] = [
     columnId: "Action",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "2.5%", flexGrow: "unset" }}>
-          Action
+        <DataGridHeaderCell style={{ flexBasis: "2.5%", flexGrow: 0 }}>
+          Detail
         </DataGridHeaderCell>
       )
     },
     renderCell(item) {
+      const [open, { toggle }] = useBoolean();
+
       return (
-        <DataGridCell style={{ flexBasis: "2.5%", flexGrow: "unset", justifyContent: "center" }}>
+        <DataGridCell style={{ flexBasis: "2.5%", flexGrow: 0, justifyContent: "center" }}>
           <Button
             appearance="subtle"
             icon={<OpenRegular />}
+            onClick={toggle}
           />
+
+          <AdminProductEdit Open={open} Toggle={toggle} />
         </DataGridCell>
       )
     },

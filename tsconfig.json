@@ -2,8 +2,8 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "target": "esnext",
-    "module": "esnext",
+    "target": "ESNext",
+    "module": "ESNext",
     "allowJs": true,
     "checkJs": true,
     "strict": true,
@@ -18,7 +18,7 @@
     "noImplicitOverride": true,
     "importHelpers": true,
     "removeComments": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "experimentalDecorators": true,
     "useDefineForClassFields": true,
@@ -28,7 +28,7 @@
       "~/*": ["./src/*"]
     }
   },
-  "include": ["vite.config.ts", "src/**/*"],
+  "include": ["vite.config.ts", "src"],
   "exclude": ["node_modules", "dist"],
   "typeAcquisition": {
     "enable": true

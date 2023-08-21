@@ -1,4 +1,4 @@
-import { DataGridCell, DataGridHeaderCell, Image, createTableColumn, makeStyles, mergeClasses, tokens } from "@fluentui/react-components";
+import { DataGridCell, DataGridHeaderCell, Image, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
 import { Cover } from "./Styles";
 
 /**
@@ -9,10 +9,7 @@ import { Cover } from "./Styles";
 const useStyle = makeStyles({
   unset: {
     flexBasis: "unset",
-    flexGrow: "unset"
-  },
-  size: {
-    width: "50px"
+    flexGrow: 0
   },
   img: {
     ...Cover,
@@ -24,33 +21,44 @@ const useStyle = makeStyles({
 
 /**
  * @author Aloento
- * @since 0.1.0
+ * @since 0.5.0
  * @version 0.1.0
  */
-export const CoverCol = createTableColumn<{
-  Image: string;
-}>({
-  columnId: "Cover",
-  renderHeaderCell: () => {
-    const style = useStyle();
+export function MakeCoverCol(Size: number) {
+  const w = { width: `${Size}px` };
 
-    return (
-      <DataGridHeaderCell className={style.unset}>
-        <div className={style.size} />
-      </DataGridHeaderCell>
-    )
-  },
-  renderCell(item) {
-    const style = useStyle();
+  return createTableColumn<{
+    Image: string;
+  }>({
+    columnId: "Cover",
+    renderHeaderCell: () => {
+      const style = useStyle();
 
-    return (
-      <DataGridCell className={style.unset}>
-        <Image
-          shape="square"
-          className={mergeClasses(style.img, style.size)}
-          src={item.Image}
-        />
-      </DataGridCell>
-    )
-  },
-})
+      return (
+        <DataGridHeaderCell className={style.unset}>
+          <div style={w} />
+        </DataGridHeaderCell>
+      )
+    },
+    renderCell(item) {
+      const style = useStyle();
+
+      return (
+        <DataGridCell className={style.unset}>
+          <Image
+            className={style.img}
+            style={w}
+            src={item.Image}
+          />
+        </DataGridCell>
+      )
+    },
+  })
+}
+
+/**
+ * @author Aloento
+ * @since 0.1.0
+ * @version 0.2.0
+ */
+export const CoverCol = MakeCoverCol(50);

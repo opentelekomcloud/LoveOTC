@@ -1,8 +1,10 @@
-import { Body1Strong, Button, Caption1, DataGrid, DataGridBody, DataGridCell, DataGridRow, Field, Image, Popover, PopoverSurface, PopoverTrigger, SpinButton, TableColumnDefinition, ToggleButton, createTableColumn } from "@fluentui/react-components";
+import { Body1Strong, Button, Caption1, DataGridCell, Field, Popover, PopoverSurface, PopoverTrigger, SpinButton, TableColumnDefinition, ToggleButton, createTableColumn } from "@fluentui/react-components";
 import { CartRegular, DeleteRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
-import { ColFlex, Cover } from "~/Helpers/Styles";
+import { MakeCoverCol } from "~/Helpers/CoverCol";
+import { ColFlex } from "~/Helpers/Styles";
 import { Confirm } from "./Confirm";
+import { DelegateDataGrid } from "./DelegateDataGrid";
 
 /**
  * @author Aloento
@@ -13,55 +15,52 @@ export interface ICartItem {
   Id: number;
   Image: string;
   Name: string;
-  Type: string;
+  Type: string[];
   Quantity: number;
 }
 
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.0
+ * @version 0.2.0
  */
-const columns: TableColumnDefinition<ICartItem>[] = [
-  createTableColumn<ICartItem>({
-    columnId: "Cover",
-    renderCell(item) {
-      return <Image
-        shape="square"
-        style={{
-          ...Cover,
-          aspectRatio: "1",
-          height: "44px"
-        }}
-        src={item.Image}
-      />
-    },
-  }),
+export const CartColumns: TableColumnDefinition<ICartItem>[] = [
+  MakeCoverCol(44),
   createTableColumn<ICartItem>({
     columnId: "Product",
     renderCell(item) {
       return (
-        <div style={ColFlex}>
+        <DataGridCell style={{
+          ...ColFlex,
+          alignItems: "flex-start",
+          justifyContent: "center",
+        }}>
           <Body1Strong>{item.Name}</Body1Strong>
-          <Caption1>{item.Type}</Caption1>
-        </div>
+          <Caption1>{item.Type.reduce((prev, curr) => `${prev} ${curr},`, "")}</Caption1>
+        </DataGridCell>
       )
     }
   }),
   createTableColumn<ICartItem>({
-    columnId: "Num",
+    columnId: "Quantity",
     renderCell(item) {
       return (
-        <Field defaultValue={item.Quantity}>
-          <SpinButton style={{ width: "44px" }} />
-        </Field>
+        <DataGridCell style={{ flexBasis: "10%", flexGrow: 0 }}>
+          <Field defaultValue={item.Quantity}>
+            <SpinButton />
+          </Field>
+        </DataGridCell>
       )
     }
   }),
   createTableColumn<ICartItem>({
     columnId: "Action",
     renderCell(item) {
-      return <Button appearance="subtle" icon={<DeleteRegular />} />
+      return (
+        <DataGridCell style={{ flexBasis: "7%", flexGrow: 0 }}>
+          <Button appearance="subtle" icon={<DeleteRegular />} />
+        </DataGridCell>
+      )
     },
   })
 ]
@@ -71,14 +70,14 @@ const items: ICartItem[] = [
     Id: 1,
     Image: "https://picsum.photos/550",
     Name: "OTC SHIRT - GREY",
-    Type: "Short Sleeve, S",
+    Type: ["Short Sleeve", "S"],
     Quantity: 1
   },
   {
     Id: 2,
     Image: "https://picsum.photos/600",
     Name: "OTC Cap - Cap and Cap",
-    Type: "Red, Long and Long",
+    Type: ["Red", "Long and Long"],
     Quantity: 1
   }
 ]
@@ -98,27 +97,7 @@ export function ShopCart() {
       </PopoverTrigger>
 
       <PopoverSurface style={ColFlex}>
-        <DataGrid
-          items={items}
-          columns={columns}
-          getRowId={(item: ICartItem) => item.Id}
-        >
-          <DataGridBody<ICartItem>>
-            {({ item, rowId }) => (
-              <DataGridRow<ICartItem> key={rowId}>
-                {({ columnId, renderCell }) => (
-                  <DataGridCell style={{
-                    flexBasis: "unset",
-                    flexGrow: columnId === "Product" ? 1 : 0
-                  }}>
-                    {renderCell(item)}
-                  </DataGridCell>
-                )}
-              </DataGridRow>
-            )}
-          </DataGridBody>
-        </DataGrid>
-
+        <DelegateDataGrid Items={items} Columns={CartColumns} NoHeader />
         <Confirm />
       </PopoverSurface>
     </Popover>

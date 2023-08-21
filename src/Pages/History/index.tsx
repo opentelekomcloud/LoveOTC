@@ -1,15 +1,16 @@
-import { Body1Strong, Button, DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
+import { Button, DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
 import { BoxArrowLeftRegular } from "@fluentui/react-icons";
 import { DelegateDataGrid } from "~/Components/DelegateDataGrid";
-import { ICartItem } from "~/Components/ShopCart";
-import { CoverCol } from "~/Helpers/CoverCol";
+import { IType } from "../Admin/Product/Combo";
 
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.0
+ * @version 0.2.0
  */
-export interface IHistoryItem extends ICartItem {
+export interface IHistoryItem {
+  Id: number;
+  Orders: IOrder[];
   Status: string,
   TrackNumber: string,
   OrderDate: Date
@@ -17,46 +18,47 @@ export interface IHistoryItem extends ICartItem {
 
 /**
  * @author Aloento
- * @since 0.1.0
+ * @since 0.5.0
  * @version 0.1.0
  */
+export interface IOrder {
+  Name: string;
+  Type: IType[];
+  Quantity: number;
+}
+
+/**
+ * @author Aloento
+ * @since 0.1.0
+ * @version 0.2.0
+ */
 export const HistoryColumns: TableColumnDefinition<IHistoryItem>[] = [
-  CoverCol,
-  createTableColumn<IHistoryItem>({
-    columnId: "Product",
-    renderHeaderCell: () => {
-      return <DataGridHeaderCell>Product</DataGridHeaderCell>
-    },
-    renderCell(item) {
-      return (
-        <DataGridCell>
-          <Body1Strong>{item.Name}</Body1Strong>
-        </DataGridCell>
-      )
-    }
-  }),
-  createTableColumn<IHistoryItem>({
-    columnId: "Type",
-    renderHeaderCell: () => {
-      return <DataGridHeaderCell>Type</DataGridHeaderCell>
-    },
-    renderCell(item) {
-      return (
-        <DataGridCell>
-          <Body1Strong>{item.Type}</Body1Strong>
-        </DataGridCell>
-      )
-    }
-  }),
   createTableColumn<IHistoryItem>({
     columnId: "OrderId",
     renderHeaderCell: () => {
-      return <DataGridHeaderCell>Order Id</DataGridHeaderCell>
+      return (
+        <DataGridHeaderCell style={{ flexBasis: "5%", flexGrow: 0 }}>
+          Order Id
+        </DataGridHeaderCell>
+      )
+    },
+    renderCell(item) {
+      return (
+        <DataGridCell style={{ flexBasis: "5%", flexGrow: 0 }}>
+          {item.Id}
+        </DataGridCell>
+      )
+    }
+  }),
+  createTableColumn<IHistoryItem>({
+    columnId: "Products",
+    renderHeaderCell: () => {
+      return <DataGridHeaderCell>Products</DataGridHeaderCell>
     },
     renderCell(item) {
       return (
         <DataGridCell>
-          {item.Id}
+          {item.Orders[0].Name} {item.Orders.length > 1 && `& +${item.Orders.length - 1}`}
         </DataGridCell>
       )
     }
@@ -64,10 +66,18 @@ export const HistoryColumns: TableColumnDefinition<IHistoryItem>[] = [
   createTableColumn<IHistoryItem>({
     columnId: "Quantity",
     renderHeaderCell: () => {
-      return <DataGridHeaderCell>Quantity</DataGridHeaderCell>;
+      return (
+        <DataGridHeaderCell style={{ flexBasis: "4%", flexGrow: 0 }}>
+          Quantity
+        </DataGridHeaderCell>
+      )
     },
     renderCell(item) {
-      return <DataGridCell>{item.Quantity}</DataGridCell>
+      return (
+        <DataGridCell style={{ flexBasis: "4%", flexGrow: 0 }}>
+          {item.Orders.map(val => val.Quantity).reduce((prev, curr) => prev + curr, 0)}
+        </DataGridCell>
+      )
     }
   }),
   createTableColumn<IHistoryItem>({
@@ -98,17 +108,17 @@ export const HistoryColumns: TableColumnDefinition<IHistoryItem>[] = [
     }
   }),
   createTableColumn<IHistoryItem>({
-    columnId: "Action",
+    columnId: "Cancel",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "2.5%", flexGrow: "unset" }}>
-          Refund
+        <DataGridHeaderCell style={{ flexBasis: "2.5%", flexGrow: 0 }}>
+          Cancel
         </DataGridHeaderCell>
       )
     },
     renderCell(item) {
       return (
-        <DataGridCell style={{ flexBasis: "2.5%", flexGrow: "unset", justifyContent: "center" }}>
+        <DataGridCell style={{ flexBasis: "2.5%", flexGrow: 0, justifyContent: "center" }}>
           <Button
             appearance="subtle"
             icon={<BoxArrowLeftRegular />}
@@ -122,24 +132,62 @@ export const HistoryColumns: TableColumnDefinition<IHistoryItem>[] = [
 const items: IHistoryItem[] = [
   {
     Id: 1,
-    Image: "https://picsum.photos/550",
-    Name: "OTC SHIRT - GREY",
-    Type: "Short Sleeve, S",
-    Quantity: 1,
+    Orders: [
+      {
+        Name: "OTC SHIRT - GREY",
+        Type: [
+          {
+            Variant: "Color",
+            Type: "Red"
+          },
+          {
+            Variant: "Size",
+            Type: "S"
+          }
+        ],
+        Quantity: 1
+      },
+      {
+        Name: "OTC Cap - Cap and Cap",
+        Type: [
+          {
+            Variant: "Color",
+            Type: "Red"
+          },
+          {
+            Variant: "Size",
+            Type: "Long and Long"
+          }
+        ],
+        Quantity: 1
+      }
+    ],
     OrderDate: new Date(),
     TrackNumber: "Number123456789",
     Status: "Finished"
   },
   {
     Id: 2,
-    Image: "https://picsum.photos/600",
-    Name: "OTC Cap - Cap and Cap",
-    Type: "Red, Long and Long",
-    Quantity: 1,
+    Orders: [
+      {
+        Name: "OTC Cap - Cap and Cap",
+        Type: [
+          {
+            Variant: "Color",
+            Type: "Red"
+          },
+          {
+            Variant: "Size",
+            Type: "Long and Long"
+          }
+        ],
+        Quantity: 1
+      }
+    ],
     OrderDate: new Date(),
     TrackNumber: "Number123456789",
     Status: "Finished"
-  }
+  },
 ]
 
 /**

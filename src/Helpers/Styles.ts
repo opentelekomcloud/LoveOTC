@@ -1,5 +1,5 @@
 import { shorthands, tokens } from "@fluentui/react-components";
-import { GriffelStyle } from "@griffel/core";
+import { GriffelStyle } from "@griffel/react";
 
 /**
  * @author Aloento
@@ -24,7 +24,7 @@ export const ColFlex: GriffelStyle = { ...Flex, ...Col };
 
 /**
  * @author Aloento
- * @since 0.1.0
+ * @since 0.1.0 MusiLand
  * @version 0.1.0
  */
 export const BaseCard: GriffelStyle = {
@@ -64,5 +64,5 @@ export const Cover: GriffelStyle = {
  * @version 0.1.0
  */
 export const NoGrow = {
-  style: { flexGrow: "unset" }
+  style: { flexGrow: 0 }
 }
