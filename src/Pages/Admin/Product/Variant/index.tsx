@@ -95,15 +95,17 @@ const items: IVariantItem[] = [
  * @version 0.1.0
  */
 export function AdminProductVariant() {
-  return <>
-    <div style={{
-      ...Flex,
-      justifyContent: "space-between"
-    }}>
-      <Subtitle1>Variant</Subtitle1>
-      <Button appearance="primary" icon={<AddRegular />}>New Variant</Button>
-    </div>
+  return (
+    <div>
+      <div style={{
+        ...Flex,
+        justifyContent: "space-between"
+      }}>
+        <Subtitle1>Variant</Subtitle1>
+        <Button appearance="primary" icon={<AddRegular />}>New Variant</Button>
+      </div>
 
-    <DelegateDataGrid Items={items} Columns={columns} />
-  </>
+      <DelegateDataGrid Items={items} Columns={columns} />
+    </div>
+  )
 }

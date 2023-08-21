@@ -15,7 +15,7 @@ export interface ICartItem {
   Id: number;
   Image: string;
   Name: string;
-  Type: string;
+  Type: string[];
   Quantity: number;
 }
 
@@ -36,13 +36,13 @@ export const CartColumns: TableColumnDefinition<ICartItem>[] = [
           justifyContent: "center",
         }}>
           <Body1Strong>{item.Name}</Body1Strong>
-          <Caption1>{item.Type}</Caption1>
+          <Caption1>{item.Type.reduce((prev, curr) => `${prev} ${curr},`, "")}</Caption1>
         </DataGridCell>
       )
     }
   }),
   createTableColumn<ICartItem>({
-    columnId: "Num",
+    columnId: "Quantity",
     renderCell(item) {
       return (
         <DataGridCell style={{ flexBasis: "10%", flexGrow: 0 }}>
@@ -70,14 +70,14 @@ const items: ICartItem[] = [
     Id: 1,
     Image: "https://picsum.photos/550",
     Name: "OTC SHIRT - GREY",
-    Type: "Short Sleeve, S",
+    Type: ["Short Sleeve", "S"],
     Quantity: 1
   },
   {
     Id: 2,
     Image: "https://picsum.photos/600",
     Name: "OTC Cap - Cap and Cap",
-    Type: "Red, Long and Long",
+    Type: ["Red", "Long and Long"],
     Quantity: 1
   }
 ]

@@ -11,14 +11,14 @@ const items: ICartItem[] = [
     Id: 1,
     Image: "https://picsum.photos/550",
     Name: "OTC SHIRT - GREY",
-    Type: "Short Sleeve, S",
+    Type: ["Short Sleeve", "S"],
     Quantity: 1
   },
   {
     Id: 2,
     Image: "https://picsum.photos/600",
     Name: "OTC Cap - Cap and Cap",
-    Type: "Red, Long and Long",
+    Type: ["Red", "Long and Long"],
     Quantity: 1
   }
 ]

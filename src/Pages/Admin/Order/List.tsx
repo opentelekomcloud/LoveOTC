@@ -1,7 +1,5 @@
-import { Body1Strong, Button, Caption1, DataGridCell, Field, SpinButton, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
-import { DeleteRegular } from "@fluentui/react-icons";
+import { DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
 import { DelegateDataGrid } from "~/Components/DelegateDataGrid";
-import { ColFlex } from "~/Helpers/Styles";
 import { IOrder } from "~/Pages/History";
 
 /**
@@ -21,45 +19,72 @@ interface IOrderItem extends IOrder {
 const columns: TableColumnDefinition<IOrderItem>[] = [
   createTableColumn<IOrderItem>({
     columnId: "Product",
+    renderHeaderCell() {
+      return <DataGridHeaderCell>Name</DataGridHeaderCell>
+    },
     renderCell(item) {
-      return (
-        <DataGridCell style={{
-          ...ColFlex,
-          alignItems: "flex-start",
-          justifyContent: "center",
-        }}>
-          <Body1Strong>{item.Name}</Body1Strong>
-          <Caption1>{item.Type}</Caption1>
-        </DataGridCell>
-      )
+      return <DataGridCell>{item.Name}</DataGridCell>
     }
   }),
   createTableColumn<IOrderItem>({
-    columnId: "Num",
+    columnId: "Type",
+    renderHeaderCell() {
+      return <DataGridHeaderCell>Type</DataGridHeaderCell>
+    },
+    renderCell(item) {
+      return <DataGridCell>{item.Type.reduce((prev, curr) => `${prev} ${curr.Variant} : ${curr.Type} ;`, "")}</DataGridCell>
+    }
+  }),
+  createTableColumn<IOrderItem>({
+    columnId: "Quantity",
+    renderHeaderCell() {
+      return (
+        <DataGridHeaderCell style={{ flexBasis: "10%", flexGrow: 0 }}>
+          Quantity
+        </DataGridHeaderCell>
+      )
+    },
     renderCell(item) {
       return (
         <DataGridCell style={{ flexBasis: "10%", flexGrow: 0 }}>
-          <Field defaultValue={item.Quantity}>
-            <SpinButton />
-          </Field>
+          {item.Quantity}
         </DataGridCell>
       )
     }
   }),
-  createTableColumn<IOrderItem>({
-    columnId: "Action",
-    renderCell(item) {
-      return (
-        <DataGridCell style={{ flexBasis: "7%", flexGrow: 0 }}>
-          <Button appearance="subtle" icon={<DeleteRegular />} />
-        </DataGridCell>
-      )
-    },
-  })
 ]
 
 const items: IOrderItem[] = [
-
+  {
+    Id: 0,
+    Name: "OTC Cap - Cap and Cap",
+    Type: [
+      {
+        Variant: "Color",
+        Type: "Red"
+      },
+      {
+        Variant: "Size",
+        Type: "S"
+      }
+    ],
+    Quantity: 1
+  },
+  {
+    Id: 1,
+    Name: "OTC SHIRT - GREY",
+    Type: [
+      {
+        Variant: "Color",
+        Type: "Red"
+      },
+      {
+        Variant: "Size",
+        Type: "S"
+      }
+    ],
+    Quantity: 1
+  }
 ]
 
 /**
@@ -69,6 +94,6 @@ const items: IOrderItem[] = [
  */
 export function AdminOrderList() {
   return (
-    <DelegateDataGrid Items={items} Columns={columns} NoHeader />
+    <DelegateDataGrid Items={items} Columns={columns} />
   )
 }

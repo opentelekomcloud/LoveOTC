@@ -54,15 +54,7 @@ const columns: TableColumnDefinition<IComboItem>[] = [
       return <DataGridHeaderCell>Combo</DataGridHeaderCell>
     },
     renderCell(item) {
-      return (
-        <DataGridCell>
-          {
-            item.Combo.reduce((prev, curr) => {
-              return `${prev} ${curr.Variant} : ${curr.Type} ; `;
-            }, "")
-          }
-        </DataGridCell>
-      )
+      return <DataGridCell>{item.Combo.reduce((prev, curr) => `${prev} ${curr.Variant} : ${curr.Type} ;`, "")}</DataGridCell>
     }
   }),
   createTableColumn<IComboItem>({
@@ -129,15 +121,17 @@ const items: IComboItem[] = [
  * @version 0.1.0
  */
 export function AdminProductCombo() {
-  return <>
-    <div style={{
-      ...Flex,
-      justifyContent: "space-between"
-    }}>
-      <Subtitle1>Combo</Subtitle1>
-      <Button appearance="primary" icon={<AddRegular />}>New Combo</Button>
-    </div>
+  return (
+    <div>
+      <div style={{
+        ...Flex,
+        justifyContent: "space-between"
+      }}>
+        <Subtitle1>Combo</Subtitle1>
+        <Button appearance="primary" icon={<AddRegular />}>New Combo</Button>
+      </div>
 
-    <DelegateDataGrid Items={items} Columns={columns} />
-  </>
+      <DelegateDataGrid Items={items} Columns={columns} />
+    </div>
+  )
 }

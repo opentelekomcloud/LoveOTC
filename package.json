@@ -15,7 +15,7 @@
     "update": "npx npm-check-updates -u"
   },
   "dependencies": {
-    "@fluentui/react-components": "^9.29.3",
+    "@fluentui/react-components": "^9.29.4",
     "@fluentui/react-icons": "^2.0.211",
     "@griffel/react": "^1.5.14",
     "@lexical/clipboard": "^0.12.0",
