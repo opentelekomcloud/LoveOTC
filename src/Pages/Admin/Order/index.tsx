@@ -1,7 +1,9 @@
 import { Button, DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
 import { OpenRegular } from "@fluentui/react-icons";
+import { useBoolean } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DelegateDataGrid";
 import { HistoryColumns, IHistoryItem } from "~/Pages/History";
+import { AdminOrderEdit } from "./Edit";
 
 /**
  * @author Aloento
@@ -14,18 +16,23 @@ const columns: TableColumnDefinition<IHistoryItem>[] = [
     columnId: "Action",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "2.5%", flexGrow: "unset" }}>
+        <DataGridHeaderCell style={{ flexBasis: "2.5%", flexGrow: 0 }}>
           Action
         </DataGridHeaderCell>
       )
     },
     renderCell(item) {
+      const [open, { toggle }] = useBoolean();
+
       return (
-        <DataGridCell style={{ flexBasis: "2.5%", flexGrow: "unset", justifyContent: "center" }}>
+        <DataGridCell style={{ flexBasis: "2.5%", flexGrow: 0, justifyContent: "center" }}>
           <Button
             appearance="subtle"
             icon={<OpenRegular />}
+            onClick={toggle}
           />
+
+          <AdminOrderEdit Open={open} Toggle={toggle} />
         </DataGridCell>
       )
     },
@@ -35,24 +42,62 @@ const columns: TableColumnDefinition<IHistoryItem>[] = [
 const items: IHistoryItem[] = [
   {
     Id: 1,
-    Image: "https://picsum.photos/550",
-    Name: "OTC SHIRT - GREY",
-    Type: "Short Sleeve, S",
-    Quantity: 1,
+    Orders: [
+      {
+        Name: "OTC SHIRT - GREY",
+        Type: [
+          {
+            Variant: "Color",
+            Type: "Red"
+          },
+          {
+            Variant: "Size",
+            Type: "S"
+          }
+        ],
+        Quantity: 1
+      },
+      {
+        Name: "OTC Cap - Cap and Cap",
+        Type: [
+          {
+            Variant: "Color",
+            Type: "Red"
+          },
+          {
+            Variant: "Size",
+            Type: "Long and Long"
+          }
+        ],
+        Quantity: 1
+      }
+    ],
     OrderDate: new Date(),
     TrackNumber: "Number123456789",
     Status: "Finished"
   },
   {
     Id: 2,
-    Image: "https://picsum.photos/600",
-    Name: "OTC Cap - Cap and Cap",
-    Type: "Red, Long and Long",
-    Quantity: 1,
+    Orders: [
+      {
+        Name: "OTC Cap - Cap and Cap",
+        Type: [
+          {
+            Variant: "Color",
+            Type: "Red"
+          },
+          {
+            Variant: "Size",
+            Type: "Long and Long"
+          }
+        ],
+        Quantity: 1
+      }
+    ],
     OrderDate: new Date(),
     TrackNumber: "Number123456789",
     Status: "Finished"
-  }
+  },
 ]
 
 /**

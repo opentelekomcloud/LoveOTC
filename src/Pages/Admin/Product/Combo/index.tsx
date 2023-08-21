@@ -35,14 +35,14 @@ const columns: TableColumnDefinition<IComboItem>[] = [
     columnId: "Id",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "4%", flexGrow: "unset" }}>
+        <DataGridHeaderCell style={{ flexBasis: "4%", flexGrow: 0 }}>
           Id
         </DataGridHeaderCell>
       )
     },
     renderCell(item) {
       return (
-        <DataGridCell style={{ flexBasis: "4%", flexGrow: "unset" }}>
+        <DataGridCell style={{ flexBasis: "4%", flexGrow: 0 }}>
           {item.Id}
         </DataGridCell>
       )
@@ -69,14 +69,14 @@ const columns: TableColumnDefinition<IComboItem>[] = [
     columnId: "Stock",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "5%", flexGrow: "unset" }}>
+        <DataGridHeaderCell style={{ flexBasis: "5%", flexGrow: 0 }}>
           Stock
         </DataGridHeaderCell>
       )
     },
     renderCell(item) {
       return (
-        <DataGridCell style={{ flexBasis: "5%", flexGrow: "unset" }}>
+        <DataGridCell style={{ flexBasis: "5%", flexGrow: 0 }}>
           {item.Stock}
         </DataGridCell>
       )
@@ -86,14 +86,14 @@ const columns: TableColumnDefinition<IComboItem>[] = [
     columnId: "Action",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "7%", flexGrow: "unset" }}>
+        <DataGridHeaderCell style={{ flexBasis: "7%", flexGrow: 0 }}>
           Action
         </DataGridHeaderCell>
       )
     },
     renderCell(item) {
       return (
-        <DataGridCell style={{ flexBasis: "7%", flexGrow: "unset" }}>
+        <DataGridCell style={{ flexBasis: "7%", flexGrow: 0 }}>
           <AdminProductComboEdit />
 
           <Button

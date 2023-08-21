@@ -31,14 +31,14 @@ const columns: TableColumnDefinition<ITypeItem>[] = [
     columnId: "Action",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "12%", flexGrow: "unset" }}>
+        <DataGridHeaderCell style={{ flexBasis: "12%", flexGrow: 0 }}>
           Action
         </DataGridHeaderCell>
       )
     },
     renderCell(item) {
       return (
-        <DataGridCell style={{ flexBasis: "12%", flexGrow: "unset" }}>
+        <DataGridCell style={{ flexBasis: "12%", flexGrow: 0 }}>
           <Button
             appearance="subtle"
             icon={<EditRegular />}

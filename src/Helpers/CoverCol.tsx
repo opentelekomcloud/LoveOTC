@@ -9,7 +9,7 @@ import { Cover } from "./Styles";
 const useStyle = makeStyles({
   unset: {
     flexBasis: "unset",
-    flexGrow: "unset"
+    flexGrow: 0
   },
   img: {
     ...Cover,

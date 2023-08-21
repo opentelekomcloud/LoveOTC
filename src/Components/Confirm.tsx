@@ -1,78 +1,10 @@
-import { Body1Strong, Button, Caption1, DataGrid, DataGridBody, DataGridCell, DataGridHeader, DataGridHeaderCell, DataGridRow, Field, Image, Label, SpinButton, TableColumnDefinition, Textarea, createTableColumn, tokens } from "@fluentui/react-components";
+import { Button, Field, Label, Textarea, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
-import { DeleteRegular, DismissRegular } from "@fluentui/react-icons";
+import { DismissRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
-import { ColFlex, Cover, Flex } from "~/Helpers/Styles";
-
-/**
- * @author Aloento
- * @since 0.1.0
- * @version 0.1.0
- */
-interface ICartItem {
-  Id: number;
-  Image: string;
-  Name: string;
-  Type: string;
-  Quantity: number;
-}
-
-/**
- * @author Aloento
- * @since 0.1.0
- * @version 0.1.0
- */
-const columns: TableColumnDefinition<ICartItem>[] = [
-  createTableColumn<ICartItem>({
-    columnId: "Cover",
-    renderHeaderCell: () => {
-      return <div style={{ width: "44px" }} />;
-    },
-    renderCell(item) {
-      return <Image shape="square" style={{
-        ...Cover,
-        aspectRatio: "1",
-        height: "44px"
-      }} src={item.Image} />
-    },
-  }),
-  createTableColumn<ICartItem>({
-    columnId: "Product",
-    renderHeaderCell: () => {
-      return "Product";
-    },
-    renderCell(item) {
-      return (
-        <div style={ColFlex}>
-          <Body1Strong>{item.Name}</Body1Strong>
-          <Caption1>{item.Type}</Caption1>
-        </div>
-      )
-    }
-  }),
-  createTableColumn<ICartItem>({
-    columnId: "Num",
-    renderHeaderCell: () => {
-      return "Quantity";
-    },
-    renderCell(item) {
-      return (
-        <Field defaultValue={item.Quantity}>
-          <SpinButton style={{ width: "44px" }} />
-        </Field>
-      )
-    }
-  }),
-  createTableColumn<ICartItem>({
-    columnId: "Action",
-    renderHeaderCell: () => {
-      return "Delete";
-    },
-    renderCell(item) {
-      return <Button appearance="subtle" icon={<DeleteRegular />} />
-    },
-  })
-]
+import { ColFlex, Flex } from "~/Helpers/Styles";
+import { DelegateDataGrid } from "./DelegateDataGrid";
+import { CartColumns, ICartItem } from "./ShopCart";
 
 const items: ICartItem[] = [
   {
@@ -94,7 +26,7 @@ const items: ICartItem[] = [
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 export function Confirm() {
   const [open, { toggle }] = useBoolean();
@@ -154,39 +86,7 @@ export function Confirm() {
             <Label>Some Address Address Address Address Address Address Address</Label>
           </Field>
 
-          <DataGrid
-            items={items}
-            columns={columns}
-            getRowId={(item: ICartItem) => item.Id}
-          >
-            <DataGridHeader>
-              <DataGridRow>
-                {({ columnId, renderHeaderCell }) => (
-                  <DataGridHeaderCell style={{
-                    flexBasis: "unset",
-                    flexGrow: columnId === "Product" ? 1 : 0
-                  }}>
-                    {renderHeaderCell()}
-                  </DataGridHeaderCell>
-                )}
-              </DataGridRow>
-            </DataGridHeader>
-
-            <DataGridBody<ICartItem>>
-              {({ item, rowId }) => (
-                <DataGridRow<ICartItem> key={rowId}>
-                  {({ columnId, renderCell }) => (
-                    <DataGridCell style={{
-                      flexBasis: "unset",
-                      flexGrow: columnId === "Product" ? 1 : 0
-                    }}>
-                      {renderCell(item)}
-                    </DataGridCell>
-                  )}
-                </DataGridRow>
-              )}
-            </DataGridBody>
-          </DataGrid>
+          <DelegateDataGrid Items={items} Columns={CartColumns} NoHeader />
 
           <Field label="Comment" size="large">
             <Textarea />

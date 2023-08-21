@@ -84,7 +84,7 @@ const columns: TableColumnDefinition<IProductItem>[] = [
     columnId: "Action",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "2.5%", flexGrow: "unset" }}>
+        <DataGridHeaderCell style={{ flexBasis: "2.5%", flexGrow: 0 }}>
           Detail
         </DataGridHeaderCell>
       )
@@ -93,7 +93,7 @@ const columns: TableColumnDefinition<IProductItem>[] = [
       const [open, { toggle }] = useBoolean();
 
       return (
-        <DataGridCell style={{ flexBasis: "2.5%", flexGrow: "unset", justifyContent: "center" }}>
+        <DataGridCell style={{ flexBasis: "2.5%", flexGrow: 0, justifyContent: "center" }}>
           <Button
             appearance="subtle"
             icon={<OpenRegular />}

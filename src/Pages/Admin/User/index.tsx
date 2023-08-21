@@ -1,6 +1,6 @@
-import { Button, Checkbox, DataGrid, DataGridBody, DataGridCell, DataGridHeader, DataGridHeaderCell, DataGridRow, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
+import { Button, Checkbox, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
 import { DeleteRegular } from "@fluentui/react-icons";
-import { ICartItem } from "~/Components/ShopCart";
+import { DefaultDataGrid } from "~/Components/DefaultDataGrid";
 
 /**
  * @author Aloento
@@ -75,36 +75,10 @@ const items: IUserItem[] = [
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 export function AdminUser() {
   return (
-    <DataGrid
-      items={items}
-      columns={columns}
-      getRowId={(item: ICartItem) => item.Id}
-    >
-      <DataGridHeader>
-        <DataGridRow>
-          {({ renderHeaderCell }) => (
-            <DataGridHeaderCell>
-              {renderHeaderCell()}
-            </DataGridHeaderCell>
-          )}
-        </DataGridRow>
-      </DataGridHeader>
-
-      <DataGridBody<ICartItem>>
-        {({ item, rowId }) => (
-          <DataGridRow<ICartItem> key={rowId}>
-            {({ renderCell }) => (
-              <DataGridCell>
-                {renderCell(item)}
-              </DataGridCell>
-            )}
-          </DataGridRow>
-        )}
-      </DataGridBody>
-    </DataGrid>
+    <DefaultDataGrid Items={items} Columns={columns} />
   )
 }

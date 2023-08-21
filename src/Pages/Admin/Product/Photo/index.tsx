@@ -36,14 +36,14 @@ const columns: TableColumnDefinition<IPhotoItem>[] = [
     columnId: "Action",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "11%", flexGrow: "unset" }}>
+        <DataGridHeaderCell style={{ flexBasis: "11%", flexGrow: 0 }}>
           Action
         </DataGridHeaderCell>
       )
     },
     renderCell(item) {
       return (
-        <DataGridCell style={{ flexBasis: "11%", flexGrow: "unset" }}>
+        <DataGridCell style={{ flexBasis: "11%", flexGrow: 0 }}>
           <Button
             appearance="subtle"
             icon={<ArrowUpRegular />}

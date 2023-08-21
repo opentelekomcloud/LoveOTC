@@ -64,5 +64,5 @@ export const Cover: GriffelStyle = {
  * @version 0.1.0
  */
 export const NoGrow = {
-  style: { flexGrow: "unset" }
+  style: { flexGrow: 0 }
 }

@@ -24,14 +24,14 @@ const columns: TableColumnDefinition<IVariantItem>[] = [
     columnId: "Name",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "12%", flexGrow: "unset" }}>
+        <DataGridHeaderCell style={{ flexBasis: "12%", flexGrow: 0 }}>
           Name
         </DataGridHeaderCell>
       )
     },
     renderCell(item) {
       return (
-        <DataGridCell style={{ flexBasis: "12%", flexGrow: "unset" }}>
+        <DataGridCell style={{ flexBasis: "12%", flexGrow: 0 }}>
           {item.Id}
         </DataGridCell>
       )
@@ -58,14 +58,14 @@ const columns: TableColumnDefinition<IVariantItem>[] = [
     columnId: "Action",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "7%", flexGrow: "unset" }}>
+        <DataGridHeaderCell style={{ flexBasis: "7%", flexGrow: 0 }}>
           Action
         </DataGridHeaderCell>
       )
     },
     renderCell(item) {
       return (
-        <DataGridCell style={{ flexBasis: "7%", flexGrow: "unset" }}>
+        <DataGridCell style={{ flexBasis: "7%", flexGrow: 0 }}>
           <AdminProductVariantEdit />
 
           <Button
