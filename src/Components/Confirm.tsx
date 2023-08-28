@@ -37,7 +37,7 @@ export function Confirm() {
     <Drawer
       open={open}
       onOpenChange={toggle}
-      position="right"
+      position="end"
       size="medium"
       modalType="alert"
     >
