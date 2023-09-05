@@ -16,7 +16,7 @@ export function AdminProductEdit({ Open, Toggle }: { Open: boolean; Toggle: () =
     <Drawer
       open={Open}
       onOpenChange={Toggle}
-      position="right"
+      position="end"
       size="large"
       modalType="alert"
     >

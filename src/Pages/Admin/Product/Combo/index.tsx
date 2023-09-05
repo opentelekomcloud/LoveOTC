@@ -9,7 +9,7 @@ import { AdminProductComboEdit } from "./Edit";
  * @since 0.5.0
  * @version 0.1.0
  */
-interface IComboItem {
+export interface IComboItem {
   Id: number;
   Combo: IType[];
   Stock: number;
