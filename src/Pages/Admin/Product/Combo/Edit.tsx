@@ -9,7 +9,7 @@ import { IType } from ".";
  * @since 0.5.0
  * @version 0.1.0
  */
-interface IComboItem extends IType {
+interface IComboDetailItem extends IType {
   Id: number;
 }
 
@@ -18,8 +18,8 @@ interface IComboItem extends IType {
  * @since 0.5.0
  * @version 0.1.0
  */
-const columns: TableColumnDefinition<IComboItem>[] = [
-  createTableColumn<IComboItem>({
+const columns: TableColumnDefinition<IComboDetailItem>[] = [
+  createTableColumn<IComboDetailItem>({
     columnId: "Variant",
     renderHeaderCell: () => {
       return <DataGridHeaderCell>Variant</DataGridHeaderCell>
@@ -28,7 +28,7 @@ const columns: TableColumnDefinition<IComboItem>[] = [
       return <DataGridCell>{item.Variant}</DataGridCell>
     }
   }),
-  createTableColumn<IComboItem>({
+  createTableColumn<IComboDetailItem>({
     columnId: "Type",
     renderHeaderCell: () => {
       return <DataGridHeaderCell>Type</DataGridHeaderCell>
@@ -37,7 +37,7 @@ const columns: TableColumnDefinition<IComboItem>[] = [
       return <DataGridCell>{item.Type}</DataGridCell>
     }
   }),
-  createTableColumn<IComboItem>({
+  createTableColumn<IComboDetailItem>({
     columnId: "Action",
     renderHeaderCell: () => {
       return (
@@ -64,7 +64,7 @@ const columns: TableColumnDefinition<IComboItem>[] = [
   })
 ]
 
-const items: IComboItem[] = [
+const items: IComboDetailItem[] = [
   {
     Id: 0,
     Variant: "Color",
