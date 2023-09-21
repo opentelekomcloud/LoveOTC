@@ -1,38 +1,46 @@
-import { Button, Field, Label, Textarea, tokens } from "@fluentui/react-components";
+import { Button, Field, Label, Textarea, makeStyles, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { DismissRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
 import { ColFlex, Flex } from "~/Helpers/Styles";
-import { DelegateDataGrid } from "./DelegateDataGrid";
-import { CartColumns, ICartItem } from "./ShopCart";
+import { DelegateDataGrid } from "../DelegateDataGrid";
+import { CartColumns } from "./Columns";
+import { useShopCart } from "./Context";
 
-const items: ICartItem[] = [
-  {
-    Id: 1,
-    Image: "https://picsum.photos/550",
-    Name: "OTC SHIRT - GREY",
-    Type: ["Short Sleeve", "S"],
-    Quantity: 1
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.1.0
+ */
+export const useStyles = makeStyles({
+  body: {
+    ...ColFlex,
+    rowGap: tokens.spacingVerticalL
   },
-  {
-    Id: 2,
-    Image: "https://picsum.photos/600",
-    Name: "OTC Cap - Cap and Cap",
-    Type: ["Red", "Long and Long"],
-    Quantity: 1
+  person: Flex,
+  inf: {
+    ...ColFlex,
+    flexBasis: "50%",
+    rowGap: tokens.spacingVerticalM
+  },
+  sub: {
+    width: "fit-content",
+    alignSelf: "flex-end"
   }
-]
+});
 
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.2.0
+ * @version 0.3.0
  */
 export function Confirm() {
   const [open, { toggle }] = useBoolean();
+  const style = useStyles();
+  const { List } = useShopCart();
 
   return <>
-    <Button appearance="primary" onClick={toggle} style={{ marginTop: tokens.spacingVerticalM }}>Checkout</Button>
+    <Button appearance="primary" onClick={toggle} disabled={!List.length}>Checkout</Button>
 
     <Drawer
       open={open}
@@ -56,28 +64,17 @@ export function Confirm() {
       </DrawerHeader>
 
       <DrawerBody>
-        <div style={{
-          ...ColFlex,
-          rowGap: tokens.spacingVerticalL
-        }}>
-          <div style={Flex}>
-            <div style={{
-              ...ColFlex,
-              flexBasis: "50%",
-              rowGap: tokens.spacingVerticalM
-            }}>
+        <div className={style.body}>
+          <div className={style.person}>
+            <div className={style.inf}>
               <Field label="Name" size="large">
                 <Label>Aloento</Label>
               </Field>
             </div>
 
-            <div style={{
-              ...ColFlex,
-              flexBasis: "50%",
-              rowGap: tokens.spacingVerticalM
-            }}>
+            <div className={style.inf}>
               <Field label="Phone" size="large">
-                <Label>Aloento</Label>
+                <Label>123456789</Label>
               </Field>
             </div>
           </div>
@@ -86,16 +83,13 @@ export function Confirm() {
             <Label>Some Address Address Address Address Address Address Address</Label>
           </Field>
 
-          <DelegateDataGrid Items={items} Columns={CartColumns} NoHeader />
+          <DelegateDataGrid Items={List} Columns={CartColumns} NoHeader />
 
           <Field label="Comment" size="large">
             <Textarea />
           </Field>
 
-          <Button appearance="primary" style={{
-            width: "fit-content",
-            alignSelf: "flex-end"
-          }}>
+          <Button appearance="primary" className={style.sub} disabled={!List.length}>
             Submit
           </Button>
         </div>

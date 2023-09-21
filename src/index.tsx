@@ -2,6 +2,7 @@ import { BrandVariants, FluentProvider, createLightTheme } from "@fluentui/react
 import ReactDOM from "react-dom/client";
 import { Layout } from "./Components/Layout";
 import { BrowserRouter } from "./Components/Router";
+import { ShopCartContext } from "./Components/ShopCart/Context";
 import { EShopContent } from "./Pages";
 
 /**
@@ -31,9 +32,11 @@ const Magenta: BrandVariants = {
 ReactDOM.createRoot(document.getElementById("LoveOTC")!).render(
   <BrowserRouter>
     <FluentProvider applyStylesToPortals theme={createLightTheme(Magenta)}>
-      <Layout>
-        <EShopContent />
-      </Layout>
+      <ShopCartContext>
+        <Layout>
+          <EShopContent />
+        </Layout>
+      </ShopCartContext>
     </FluentProvider>
   </BrowserRouter>
 );
