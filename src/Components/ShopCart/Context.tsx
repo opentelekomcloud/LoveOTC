@@ -8,7 +8,16 @@ const items: ICartItem[] = [
     ProdId: random(1, 10),
     Image: "https://picsum.photos/550",
     Name: "OTC SHIRT - GREY",
-    Type: ["Short Sleeve", "S"],
+    Type: [
+      {
+        Variant: "Color",
+        Type: "White"
+      },
+      {
+        Variant: "Size",
+        Type: "S"
+      }
+    ],
     Quantity: 1
   },
   {
@@ -16,7 +25,16 @@ const items: ICartItem[] = [
     ProdId: random(1, 10),
     Image: "https://picsum.photos/600",
     Name: "OTC Cap - Cap and Cap",
-    Type: ["Red", "Long and Long"],
+    Type: [
+      {
+        Variant: "Color",
+        Type: "Red"
+      },
+      {
+        Variant: "Size",
+        Type: "Long and Long"
+      }
+    ],
     Quantity: 1
   }
 ]

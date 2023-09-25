@@ -1,6 +1,6 @@
 import { Button, DataGridCell, DataGridHeaderCell, Subtitle1, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
 import { AddRegular, ArrowDownRegular, ArrowUpRegular } from "@fluentui/react-icons";
-import { DelegateDataGrid } from "~/Components/DelegateDataGrid";
+import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { Flex } from "~/Helpers/Styles";
 import { AdminProductPhotoEdit } from "./Edit";

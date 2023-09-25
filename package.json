@@ -15,8 +15,8 @@
     "update": "npx npm-check-updates -u"
   },
   "dependencies": {
-    "@fluentui/react-components": "^9.31.1",
-    "@fluentui/react-icons": "^2.0.216",
+    "@fluentui/react-components": "^9.32.1",
+    "@fluentui/react-icons": "^2.0.218",
     "@griffel/react": "^1.5.15",
     "@lexical/clipboard": "^0.12.2",
     "@lexical/code": "^0.12.2",
@@ -33,7 +33,7 @@
     "@lexical/table": "^0.12.2",
     "@lexical/utils": "^0.12.2",
     "ahooks": "^3.7.8",
-    "dayjs": "^1.11.9",
+    "dayjs": "^1.11.10",
     "dexie": "^3.2.4",
     "lexical": "^0.12.2",
     "lodash-es": "^4.17.21",

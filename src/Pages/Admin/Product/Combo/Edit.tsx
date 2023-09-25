@@ -1,6 +1,6 @@
 import { Button, DataGridCell, DataGridHeaderCell, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Label, SpinButton, TableColumnDefinition, createTableColumn, tokens } from "@fluentui/react-components";
 import { AddRegular, DeleteRegular, DismissRegular, EditRegular } from "@fluentui/react-icons";
-import { DelegateDataGrid } from "~/Components/DelegateDataGrid";
+import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { Flex } from "~/Helpers/Styles";
 import { IType } from ".";
 

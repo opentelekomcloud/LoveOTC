@@ -1,5 +1,5 @@
 import { DataGrid, DataGridBody, DataGridCell, DataGridHeader, DataGridHeaderCell, DataGridRow, TableRowId } from "@fluentui/react-components";
-import { IDataGrid } from "./DelegateDataGrid";
+import { IDataGrid } from "./Delegate";
 
 /**
  * @author Aloento

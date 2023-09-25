@@ -1,6 +1,6 @@
 import { Button, DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
 import { BoxArrowLeftRegular } from "@fluentui/react-icons";
-import { DelegateDataGrid } from "~/Components/DelegateDataGrid";
+import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { IType } from "../Admin/Product/Combo";
 
 /**

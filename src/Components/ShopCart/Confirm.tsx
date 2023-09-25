@@ -3,7 +3,7 @@ import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/r
 import { DismissRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
 import { ColFlex, Flex } from "~/Helpers/Styles";
-import { DelegateDataGrid } from "../DelegateDataGrid";
+import { DelegateDataGrid } from "../DataGrid/Delegate";
 import { CartColumns } from "./Columns";
 import { useShopCart } from "./Context";
 
