@@ -1,5 +1,5 @@
 import { DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
-import { DelegateDataGrid } from "~/Components/DelegateDataGrid";
+import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { IOrder } from "~/Pages/History";
 
 /**

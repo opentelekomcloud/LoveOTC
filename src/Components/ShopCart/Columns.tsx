@@ -20,7 +20,7 @@ export const CartColumns: TableColumnDefinition<ICartItem>[] = [
             <Body1Strong>{item.Name}</Body1Strong>
           </Link>
 
-          <Caption1>{item.Type.reduce((prev, curr) => `${prev} ${curr},`, "")}</Caption1>
+          <Caption1>{item.Type.reduce((prev, curr) => `${prev} ${curr.Type},`, "")}</Caption1>
         </DataGridCell>
       );
     }

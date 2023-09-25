@@ -1,6 +1,6 @@
 import { Button, Checkbox, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
 import { DeleteRegular } from "@fluentui/react-icons";
-import { DefaultDataGrid } from "~/Components/DefaultDataGrid";
+import { DefaultDataGrid } from "~/Components/DataGrid";
 
 /**
  * @author Aloento
