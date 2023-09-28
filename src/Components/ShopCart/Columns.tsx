@@ -1,8 +1,31 @@
-import { Body1Strong, Button, Caption1, DataGridCell, Link, SpinButton, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
+import { Body1Strong, Button, Caption1, DataGridCell, Link, SpinButton, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
 import { DeleteRegular } from "@fluentui/react-icons";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
-import { ICartItem, useStyles } from ".";
+import { ColFlex } from "~/Helpers/Styles";
+import { useLimit } from "~/Helpers/useLimit";
+import { ICartItem } from ".";
 import { useShopCart } from "./Context";
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.1.0
+ */
+const useStyles = makeStyles({
+  prod: {
+    ...ColFlex,
+    alignItems: "flex-start",
+    justifyContent: "center",
+  },
+  qua: {
+    flexBasis: "12%",
+    flexGrow: 0
+  },
+  act: {
+    flexBasis: "7%",
+    flexGrow: 0
+  },
+});
 
 /**
  * @author Aloento
@@ -20,7 +43,7 @@ export const CartColumns: TableColumnDefinition<ICartItem>[] = [
             <Body1Strong>{item.Name}</Body1Strong>
           </Link>
 
-          <Caption1>{item.Type.reduce((prev, curr) => `${prev} ${curr.Type},`, "")}</Caption1>
+          <Caption1>{Object.values(item.Type).reduce((prev, curr) => `${prev} ${curr},`, "")}</Caption1>
         </DataGridCell>
       );
     }
@@ -29,20 +52,20 @@ export const CartColumns: TableColumnDefinition<ICartItem>[] = [
     columnId: "Quantity",
     renderCell(item) {
       const { List, Update } = useShopCart();
+      const [dis, max] = useLimit(item.ProdId);
 
       return (
         <DataGridCell className={useStyles().qua}>
           <SpinButton
             defaultValue={item.Quantity}
             min={1}
-            max={3}
+            max={max}
+            value={List.find(x => x.Id === item.Id)!.Quantity}
             onChange={(_, v) => {
-              const i = List.findIndex(x => x.Id === item.Id);
-              List[i] = {
-                ...item,
-                Quantity: v.value!
-              };
+              const i = List.find(x => x.Id === item.Id)!;
+              if (dis && v.value! >= i.Quantity) return;
 
+              i.Quantity = v.value!;
               Update(List);
             }} />
         </DataGridCell>

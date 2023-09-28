@@ -12,7 +12,7 @@ import { AdminProductPhotoEdit } from "./Edit";
  */
 interface IPhotoItem {
   Id: number;
-  Image: string;
+  Cover: string;
   Caption?: string;
 }
 
@@ -64,12 +64,12 @@ const columns: TableColumnDefinition<IPhotoItem>[] = [
 const items: IPhotoItem[] = [
   {
     Id: 0,
-    Image: "https://picsum.photos/550",
+    Cover: "https://picsum.photos/550",
     Caption: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
   },
   {
     Id: 1,
-    Image: "https://picsum.photos/650",
+    Cover: "https://picsum.photos/650",
     Caption: "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   }
 ]

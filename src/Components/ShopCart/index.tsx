@@ -1,8 +1,7 @@
 import { Body1, Popover, PopoverSurface, PopoverTrigger, ToggleButton, makeStyles, tokens } from "@fluentui/react-components";
 import { CartRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
-import { ColFlex, Flex } from "~/Helpers/Styles";
-import { IType } from "~/Pages/Admin/Product/Combo";
+import { Flex } from "~/Helpers/Styles";
 import { DelegateDataGrid } from "../DataGrid/Delegate";
 import { CartColumns } from "./Columns";
 import { Confirm } from "./Confirm";
@@ -13,20 +12,7 @@ import { useShopCart } from "./Context";
  * @since 0.5.0
  * @version 0.1.0
  */
-export const useStyles = makeStyles({
-  prod: {
-    ...ColFlex,
-    alignItems: "flex-start",
-    justifyContent: "center",
-  },
-  qua: {
-    flexBasis: "10%",
-    flexGrow: 0
-  },
-  act: {
-    flexBasis: "7%",
-    flexGrow: 0
-  },
+const useStyles = makeStyles({
   conf: {
     ...Flex,
     width: "100%",
@@ -45,9 +31,9 @@ export const useStyles = makeStyles({
 export interface ICartItem {
   Id: number;
   ProdId: number;
-  Image: string;
+  Cover: string;
   Name: string;
-  Type: IType[];
+  Type: Record<string, string>;
   Quantity: number;
 }
 
@@ -67,7 +53,7 @@ export function ShopCart() {
         <ToggleButton icon={<CartRegular />} appearance="subtle" size="large" checked={open} />
       </PopoverTrigger>
 
-      <PopoverSurface className={style.prod}>
+      <PopoverSurface>
         <DelegateDataGrid Items={List} Columns={CartColumns} NoHeader />
 
         <div className={style.conf}>

@@ -12,7 +12,7 @@ import { AdminProductEdit } from "./Edit";
  */
 interface IProductItem {
   Id: number;
-  Image: string;
+  Cover: string;
   Name: string;
   Category: string;
   Variant: number;
@@ -110,7 +110,7 @@ const columns: TableColumnDefinition<IProductItem>[] = [
 const items: IProductItem[] = [
   {
     Id: 1,
-    Image: "https://picsum.photos/550",
+    Cover: "https://picsum.photos/550",
     Name: "OTC SHIRT - GREY",
     Category: "Clothes",
     Variant: 2,
@@ -119,7 +119,7 @@ const items: IProductItem[] = [
   },
   {
     Id: 2,
-    Image: "https://picsum.photos/600",
+    Cover: "https://picsum.photos/600",
     Name: "OTC Cap - Cap and Cap",
     Category: "Hat",
     Variant: 2,

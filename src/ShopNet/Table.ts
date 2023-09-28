@@ -6,12 +6,12 @@ import Dexie from "dexie";
  *
  * @author Aloento
  * @since 0.3.1 MusiLand
- * @version 0.2.0
+ * @version 0.2.1
  */
-interface ITable<T = unknown> {
-  Id: string,
-  Exp: number | string | null,
-  Val: NonNullable<T>
+interface ITable<T> {
+  Id: string;
+  Exp: number | string | null;
+  Val: NonNullable<T>;
 }
 
 /**
@@ -19,10 +19,10 @@ interface ITable<T = unknown> {
  *
  * @author Aloento
  * @since 0.3.1 MusiLand
- * @version 0.2.0
+ * @version 0.2.1
  */
-export class Table {
-  public Sto: Dexie.Table<ITable<unknown>, string>;
+export class Table<TPre = any> {
+  public readonly Sto: Dexie.Table<ITable<TPre>, string>;
 
   public constructor(public readonly DB: Dexie, public readonly Name: string) {
     this.Sto = this.DB.table(this.Name);
@@ -37,7 +37,7 @@ export class Table {
    * @version 0.2.0
    * @param cancel 对象失效规则
    */
-  public async Get<T>(key: string, cancel?: (x?: ITable<T>) => Promise<boolean>): Promise<T | null> {
+  public async Get<T extends TPre = TPre>(key: string, cancel?: (x?: ITable<T>) => Promise<boolean>): Promise<T | null> {
     const find = await this.Sto.get(key) as ITable<T> | undefined;
     if (find) {
       if ((cancel && await cancel(find)) ||
@@ -62,7 +62,12 @@ export class Table {
    * @param exp 过期时间
    * @returns 工厂创建的结果
    */
-  public async GetOrSet<T>(key: string, fac: () => Promise<T>, exp?: Dayjs | null, cancel?: (x?: ITable<T>) => Promise<boolean>): Promise<T> {
+  public async GetOrSet<T extends TPre = TPre>(
+    key: string,
+    fac: () => Promise<T>,
+    exp?: Dayjs | null,
+    cancel?: (x?: ITable<T>) => Promise<boolean>
+  ): Promise<T> {
     const res = await this.Get<T>(key, cancel);
     if (res) return res;
     return this.Set<T>(key, await fac(), exp);
@@ -79,7 +84,7 @@ export class Table {
    * @param exp 过期Token
    * @returns val
    */
-  public async Set<T>(id: string, val: T, exp?: Dayjs | null): Promise<T> {
+  public async Set<T extends TPre = TPre>(id: string, val: T, exp?: Dayjs | null): Promise<T> {
     if (!val)
       throw `val is null or undefined`;
 

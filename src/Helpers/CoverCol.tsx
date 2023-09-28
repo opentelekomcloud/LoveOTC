@@ -22,13 +22,13 @@ const useStyle = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 export function MakeCoverCol(Size: number) {
   const w = { width: `${Size}px` };
 
   return createTableColumn<{
-    Image: string;
+    Cover: string;
   }>({
     columnId: "Cover",
     renderHeaderCell: () => {
@@ -48,7 +48,7 @@ export function MakeCoverCol(Size: number) {
           <Image
             className={style.img}
             style={w}
-            src={item.Image}
+            src={item.Cover}
           />
         </DataGridCell>
       )
