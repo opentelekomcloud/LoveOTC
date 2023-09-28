@@ -1,11 +1,12 @@
-import { Button, Field, Label, Textarea, makeStyles, tokens } from "@fluentui/react-components";
+import { Button, Field, Textarea, makeStyles, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { DismissRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
-import { ColFlex, Flex } from "~/Helpers/Styles";
+import { ColFlex } from "~/Helpers/Styles";
 import { DelegateDataGrid } from "../DataGrid/Delegate";
 import { CartColumns } from "./Columns";
 import { useShopCart } from "./Context";
+import { ConfirmPersona } from "./Persona";
 
 /**
  * @author Aloento
@@ -17,12 +18,6 @@ export const useStyles = makeStyles({
     ...ColFlex,
     rowGap: tokens.spacingVerticalL
   },
-  person: Flex,
-  inf: {
-    ...ColFlex,
-    flexBasis: "50%",
-    rowGap: tokens.spacingVerticalM
-  },
   sub: {
     width: "fit-content",
     alignSelf: "flex-end"
@@ -32,7 +27,7 @@ export const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.3.0
+ * @version 0.3.1
  */
 export function Confirm() {
   const [open, { toggle }] = useBoolean();
@@ -65,23 +60,7 @@ export function Confirm() {
 
       <DrawerBody>
         <div className={style.body}>
-          <div className={style.person}>
-            <div className={style.inf}>
-              <Field label="Name" size="large">
-                <Label>Aloento</Label>
-              </Field>
-            </div>
-
-            <div className={style.inf}>
-              <Field label="Phone" size="large">
-                <Label>123456789</Label>
-              </Field>
-            </div>
-          </div>
-
-          <Field label="Address" size="large">
-            <Label>Some Address Address Address Address Address Address Address</Label>
-          </Field>
+          <ConfirmPersona />
 
           <DelegateDataGrid Items={List} Columns={CartColumns} NoHeader />
 

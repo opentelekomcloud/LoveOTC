@@ -1,6 +1,6 @@
-import { Body1, Popover, PopoverSurface, PopoverTrigger, ToggleButton, makeStyles, tokens } from "@fluentui/react-components";
+import { Body1, Popover, PopoverSurface, PopoverTrigger, ToggleButton, Tooltip, makeStyles, shorthands, tokens } from "@fluentui/react-components";
 import { CartRegular } from "@fluentui/react-icons";
-import { useBoolean } from "ahooks";
+import { useBoolean, useUpdateEffect } from "ahooks";
 import { Flex } from "~/Helpers/Styles";
 import { DelegateDataGrid } from "../DataGrid/Delegate";
 import { CartColumns } from "./Columns";
@@ -20,7 +20,12 @@ const useStyles = makeStyles({
     justifyContent: "space-between",
     marginTop: tokens.spacingVerticalS,
     columnGap: tokens.spacingHorizontalL
-  }
+  },
+  tooltip: {
+    backgroundColor: tokens.colorBrandBackground,
+    color: tokens.colorNeutralForegroundInverted,
+    ...shorthands.borderRadius(tokens.borderRadiusCircular)
+  },
 });
 
 /**
@@ -40,17 +45,38 @@ export interface ICartItem {
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.2.1
+ * @version 0.2.2
  */
 export function ShopCart() {
   const [open, { toggle }] = useBoolean();
+  const [visi, { toggle: toggleVisi }] = useBoolean();
+
   const style = useStyles();
   const { List } = useShopCart();
+
+  useUpdateEffect(() => {
+    if (open) return;
+
+    toggleVisi();
+    const i = setTimeout(toggleVisi, 2000);
+
+    return () => clearTimeout(i);
+  }, [List]);
 
   return (
     <Popover withArrow open={open} onOpenChange={toggle}>
       <PopoverTrigger disableButtonEnhancement>
-        <ToggleButton icon={<CartRegular />} appearance="subtle" size="large" checked={open} />
+        <Tooltip
+          visible={visi}
+          withArrow
+          content={{
+            children: "↑",
+            className: style.tooltip
+          }}
+          relationship="inaccessible"
+        >
+          <ToggleButton icon={<CartRegular />} appearance="subtle" size="large" checked={open} />
+        </Tooltip>
       </PopoverTrigger>
 
       <PopoverSurface>

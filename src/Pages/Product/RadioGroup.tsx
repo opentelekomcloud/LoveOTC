@@ -1,7 +1,8 @@
 import { Title3, ToggleButton, makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import { useRequest } from "ahooks";
 import { useMemo } from "react";
 import { ColFlex, Flex } from "~/Helpers/Styles";
-import { IComboItem } from "../Admin/Product/Combo";
+import { Hub } from "~/ShopNet";
 import { useRadioGroup } from "./Context";
 
 /**
@@ -30,28 +31,22 @@ const useStyle = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.1.1
  */
-interface IRadioGroup {
-  Combos?: Omit<IComboItem, "Id">[];
-}
-
-/**
- * @author Aloento
- * @since 0.5.0
- * @version 0.1.0
- */
-export function ProductRadioList({ Combos }: IRadioGroup) {
-  if (!Combos)
-    return null;
+export function ProductRadioList({ ProdId }: { ProdId: number }) {
+  const { data } = useRequest(Hub.Product.Get.Combo, {
+    defaultParams: [ProdId],
+  });
 
   const { Update } = useRadioGroup();
 
   const variants = useMemo(() => {
+    if (!data) return {};
+
     const variant: Record<string, Set<string>> = {};
     const cur: Record<string, string> = {};
 
-    for (const i of Combos)
+    for (const i of data)
       for (const c of i.Combo)
         if (variant.hasOwnProperty(c.Variant))
           variant[c.Variant].add(c.Type);
@@ -62,7 +57,7 @@ export function ProductRadioList({ Combos }: IRadioGroup) {
 
     Update(cur);
     return variant;
-  }, [Combos]);
+  }, [data]);
 
   return Object.keys(variants).map((val, i) => <VariRadioGroup key={i} Variant={val} Types={variants[val]} />);
 }
@@ -80,7 +75,7 @@ interface IVariRadioGroup {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
+ * @version 0.2.1
  */
 function VariRadioGroup({ Variant, Types }: IVariRadioGroup) {
   const style = useStyle();
@@ -89,7 +84,7 @@ function VariRadioGroup({ Variant, Types }: IVariRadioGroup) {
   return (
     <div className={style.vari}>
       <Title3 className={style.fore}>
-        SELECT {Variant}: SHORT SLEEVE
+        SELECT {Variant}: {Current[Variant]}
       </Title3>
 
       <div className={style.radio}>

@@ -1,18 +1,17 @@
-import { Divider, LargeTitle, SpinButton, Title3, makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import { Divider, LargeTitle, SpinButton, Title3, makeStyles, tokens } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import { useState } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { useRouter } from "~/Components/Router";
 import { BaseCard, Col, ColFlex, Flex } from "~/Helpers/Styles";
 import { useLimit } from "~/Helpers/useLimit";
-import { Lexical } from "~/Lexical";
 import { Hub } from "~/ShopNet";
 import { IComboItem } from "../Admin/Product/Combo";
 import { ProductAddCart } from "./AddCart";
 import { ProductCarousel } from "./Carousel";
 import { RadioGroupContext } from "./Context";
+import { ProductLexicalRender } from "./Lexical";
 import { ProductRadioList } from "./RadioGroup";
-import demo from "./demo.json";
 
 /**
  * @author Aloento
@@ -49,10 +48,6 @@ const useStyle = makeStyles({
     justifyContent: "space-between",
     columnGap: tokens.spacingHorizontalM
   },
-  lex: {
-    ...BaseCard,
-    ...shorthands.padding(tokens.spacingHorizontalXL)
-  }
 })
 
 /**
@@ -68,14 +63,14 @@ export interface IProduct {
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.2
+ * @version 0.1.3
  */
 export function Product() {
   const style = useStyle();
   const { Nav, Paths } = useRouter();
   const id = parseInt(Paths.at(1)!);
 
-  const { data } = useRequest(Hub.Product.Get.Detail, {
+  const { data } = useRequest(Hub.Product.Get.Basic, {
     defaultParams: [id],
     onBefore() {
       isNaN(id) && Nav("/");
@@ -85,7 +80,7 @@ export function Product() {
     }
   });
 
-  const [dis, max] = useLimit(id);
+  const [_, max] = useLimit(id);
   const [quantity, setQuantity] = useState(1);
 
   return (
@@ -101,7 +96,7 @@ export function Product() {
 
             <Divider />
 
-            <ProductRadioList Combos={data?.Combos} />
+            <ProductRadioList ProdId={id} />
 
             <Divider />
 
@@ -129,9 +124,7 @@ export function Product() {
           </div>
         </div>
 
-        <div className={style.lex}>
-          <Lexical Display State={JSON.stringify(demo.editorState)} />
-        </div>
+        <ProductLexicalRender ProdId={id} />
       </div>
     </RadioGroupContext>
   )

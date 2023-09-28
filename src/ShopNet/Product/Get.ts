@@ -1,6 +1,7 @@
 import { random } from "lodash-es";
-import { ProductInfo } from "~/Pages/Gallery";
-import { IProduct } from "~/Pages/Product";
+import { IComboItem } from "~/Pages/Admin/Product/Combo";
+import { IProductInfo } from "~/Pages/Gallery";
+import demo from "./demo.json";
 
 /**
  * @author Aloento
@@ -13,7 +14,7 @@ export class ProductGet {
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static async Basic(id: number): Promise<ProductInfo> {
+  public static async Basic(id: number): Promise<IProductInfo> {
     return {
       Cover: `https://picsum.photos/${random(500, 1000)}`,
       Name: `Product ${id}`
@@ -34,66 +35,63 @@ export class ProductGet {
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static async Detail(id: number): Promise<IProduct> {
+  public static async Combo(id: number): Promise<Omit<IComboItem, "Id">[]> {
     if (id > 100) throw null;
 
-    return {
-      Name: "OTC SHIRT - GREY",
-      Combos: [
-        {
-          Combo: [
-            {
-              Variant: "Sleeve",
-              Type: "Short"
-            },
-            {
-              Variant: "Size",
-              Type: "S"
-            }
-          ],
-          Stock: 8
-        },
-        {
-          Combo: [
-            {
-              Variant: "Sleeve",
-              Type: "Short"
-            },
-            {
-              Variant: "Size",
-              Type: "L"
-            }
-          ],
-          Stock: 6
-        },
-        {
-          Combo: [
-            {
-              Variant: "Sleeve",
-              Type: "Long"
-            },
-            {
-              Variant: "Size",
-              Type: "S"
-            }
-          ],
-          Stock: 10
-        },
-        {
-          Combo: [
-            {
-              Variant: "Sleeve",
-              Type: "Long"
-            },
-            {
-              Variant: "Size",
-              Type: "L"
-            }
-          ],
-          Stock: 4
-        },
-      ]
-    }
+    return [
+      {
+        Combo: [
+          {
+            Variant: "Sleeve",
+            Type: "Short"
+          },
+          {
+            Variant: "Size",
+            Type: "S"
+          }
+        ],
+        Stock: 8
+      },
+      {
+        Combo: [
+          {
+            Variant: "Sleeve",
+            Type: "Short"
+          },
+          {
+            Variant: "Size",
+            Type: "L"
+          }
+        ],
+        Stock: 6
+      },
+      {
+        Combo: [
+          {
+            Variant: "Sleeve",
+            Type: "Long"
+          },
+          {
+            Variant: "Size",
+            Type: "S"
+          }
+        ],
+        Stock: 10
+      },
+      {
+        Combo: [
+          {
+            Variant: "Sleeve",
+            Type: "Long"
+          },
+          {
+            Variant: "Size",
+            Type: "L"
+          }
+        ],
+        Stock: 4
+      },
+    ]
   }
 
   /**
@@ -104,5 +102,14 @@ export class ProductGet {
   public static async Carousel(id: number): Promise<string[]> {
     return Array(random(3, 8)).fill(0)
       .map(() => `https://picsum.photos/${random(500, 1000)}`)
+  }
+
+  /**
+   * @author Aloento
+   * @since 0.5.0
+   * @version 0.1.0
+   */
+  public static async Lexical(id: number): Promise<string> {
+    return JSON.stringify(demo.editorState);
   }
 }

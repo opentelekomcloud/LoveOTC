@@ -60,7 +60,7 @@ export const CartColumns: TableColumnDefinition<ICartItem>[] = [
             defaultValue={item.Quantity}
             min={1}
             max={max}
-            value={List.find(x => x.Id === item.Id)!.Quantity}
+            value={List.find(x => x.Id === item.Id)?.Quantity}
             onChange={(_, v) => {
               const i = List.find(x => x.Id === item.Id)!;
               if (dis && v.value! >= i.Quantity) return;
