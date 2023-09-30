@@ -1,4 +1,5 @@
 import { Gallery } from "./Gallery";
+import { Order } from "./Order";
 import { Product } from "./Product";
 import { User } from "./User";
 
@@ -11,4 +12,5 @@ export const Hub = {
   Gallery: Gallery,
   Product: Product,
   User: User,
+  Order: Order,
 }

@@ -1,4 +1,4 @@
-import { BrandVariants, FluentProvider, createLightTheme } from "@fluentui/react-components";
+import { BrandVariants, FluentProvider, Toaster, createLightTheme } from "@fluentui/react-components";
 import ReactDOM from "react-dom/client";
 import { Layout } from "./Components/Layout";
 import { BrowserRouter } from "./Components/Router";
@@ -31,10 +31,11 @@ const Magenta: BrandVariants = {
 
 ReactDOM.createRoot(document.getElementById("LoveOTC")!).render(
   <BrowserRouter>
-    <FluentProvider applyStylesToPortals theme={createLightTheme(Magenta)}>
+    <FluentProvider theme={createLightTheme(Magenta)}>
       <ShopCartContext>
         <Layout>
           <EShopContent />
+          <Toaster pauseOnHover />
         </Layout>
       </ShopCartContext>
     </FluentProvider>

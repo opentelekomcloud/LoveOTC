@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@fluentui/react-components": "^9.32.3",
-    "@fluentui/react-hooks": "^8.6.29",
+    "@fluentui/react-hooks": "^8.6.30",
     "@fluentui/react-icons": "^2.0.218",
     "@griffel/react": "^1.5.15",
     "@lexical/clipboard": "^0.12.2",
