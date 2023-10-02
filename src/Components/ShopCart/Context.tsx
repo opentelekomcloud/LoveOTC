@@ -1,34 +1,8 @@
 import { useRequest } from "ahooks";
-import { random } from "lodash-es";
 import { createContext, useContext, useState } from "react";
 import { Hub } from "~/ShopNet";
 import { CartTable } from "~/ShopNet/Database";
 import { ICartItem } from ".";
-
-const items: ICartItem[] = [
-  {
-    Id: 1,
-    ProdId: random(1, 10),
-    Cover: "https://picsum.photos/550",
-    Name: "OTC SHIRT - GREY",
-    Type: {
-      Color: "White",
-      Size: "S"
-    },
-    Quantity: 1
-  },
-  {
-    Id: 2,
-    ProdId: random(1, 10),
-    Cover: "https://picsum.photos/600",
-    Name: "OTC Cap - Cap and Cap",
-    Type: {
-      Color: "Red",
-      Size: "Long and Long"
-    },
-    Quantity: 1
-  }
-]
 
 /**
  * @author Aloento

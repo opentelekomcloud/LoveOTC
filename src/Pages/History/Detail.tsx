@@ -1,15 +1,15 @@
-import { Button, Field, Label, makeStyles, tokens } from "@fluentui/react-components";
+import { Body1Strong, Button, Caption1, DataGridCell, DataGridHeaderCell, Field, Label, Link, TableColumnDefinition, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { DismissRegular, OpenRegular } from "@fluentui/react-icons";
-import { useBoolean, useRequest } from "ahooks";
+import { useBoolean, useMount, useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { useRouter } from "~/Components/Router";
-import { useShopCart } from "~/Components/ShopCart/Context";
+import { ICartItem } from "~/Components/ShopCart";
 import { PersonaInfo } from "~/Components/ShopCart/Persona";
+import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { ColFlex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
 import { OrderAppend } from "./Append";
-import { DetailColumns } from "./DetailColumns";
 
 /**
  * @author Aloento
@@ -21,6 +21,16 @@ export const useStyles = makeStyles({
     ...ColFlex,
     rowGap: tokens.spacingVerticalL
   },
+  prod: {
+    ...ColFlex,
+    alignItems: "flex-start",
+    justifyContent: "center",
+  },
+  qua: {
+    flexBasis: "10%",
+    flexGrow: 0,
+    justifyContent: "center"
+  },
 });
 
 /**
@@ -28,29 +38,69 @@ export const useStyles = makeStyles({
  * @since 0.5.0
  * @version 0.1.0
  */
-export function OrderDetail() {
-  const [open, { toggle }] = useBoolean();
+const columns: TableColumnDefinition<ICartItem>[] = [
+  MakeCoverCol(44),
+  createTableColumn<ICartItem>({
+    columnId: "Product",
+    renderHeaderCell() {
+      return <DataGridHeaderCell>Product Name & Types</DataGridHeaderCell>;
+    },
+    renderCell(item) {
+      return (
+        <DataGridCell className={useStyles().prod}>
+          <Link href={`/Product/${item.ProdId}`} appearance="subtle">
+            <Body1Strong>{item.Name}</Body1Strong>
+          </Link>
 
-  const { Nav, Paths } = useRouter();
-  const id = parseInt(Paths.at(2)!);
+          <Caption1>{Object.values(item.Type).reduce((prev, curr) => `${prev} ${curr},`, "")}</Caption1>
+        </DataGridCell>
+      );
+    }
+  }),
+  createTableColumn<ICartItem>({
+    columnId: "Quantity",
+    renderHeaderCell() {
+      return <DataGridHeaderCell className={useStyles().qua}>Quantity</DataGridHeaderCell>;
+    },
+    renderCell(item) {
+      return (
+        <DataGridCell className={useStyles().qua}>
+          {item.Quantity}
+        </DataGridCell>
+      );
+    }
+  })
+];
 
-  const { List, Update } = useShopCart();
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.2.0
+ */
+export function OrderDetail({ OrderId }: { OrderId: number }) {
   const style = useStyles();
+  const { Nav, Paths } = useRouter();
+  const [open, { toggle, setTrue }] = useBoolean();
 
   const { data, run } = useRequest(Hub.Order.Get.Detail, {
-    onBefore() {
-      isNaN(id) && Nav("/History");
-    },
     onError() {
       throw Nav("/History");
     },
     manual: true
   })
 
+  useMount(() => {
+    if (parseInt(Paths.at(1)!) === OrderId) {
+      run(OrderId);
+      setTrue();
+    }
+  });
+
   return <>
     <Button appearance="subtle" icon={<OpenRegular />} onClick={() => {
-      run(id);
-      toggle();
+      Nav(`/History/${OrderId}`);
+      run(OrderId);
+      setTrue();
     }} />
 
     <Drawer
@@ -66,7 +116,10 @@ export function OrderDetail() {
             <Button
               appearance="subtle"
               icon={<DismissRegular />}
-              onClick={toggle}
+              onClick={() => {
+                Nav("/History");
+                toggle();
+              }}
             />
           }
         >
@@ -78,13 +131,13 @@ export function OrderDetail() {
         <div className={style.body}>
           <PersonaInfo />
 
-          <DelegateDataGrid Items={List} Columns={DetailColumns} />
+          <DelegateDataGrid Items={data?.ShopCart || []} Columns={columns} />
 
           <Field label="Comment" size="large">
-            <Label>{""}</Label>
+            <Label>{data?.Comment}</Label>
           </Field>
 
-          <OrderAppend OrderId={id} Refresh={() => run(id)} />
+          <OrderAppend OrderId={OrderId} Refresh={run} />
         </div>
       </DrawerBody>
     </Drawer>

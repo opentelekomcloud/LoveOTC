@@ -34,4 +34,13 @@ export class OrderPost {
   public static async Append(id: number, cmt: string): Promise<true> {
     throw new Error("TODO");
   }
+
+  /**
+   * @author Aloento
+   * @since 0.5.0
+   * @version 0.1.0
+   */
+  public static async Cancel(id: number, reason: string): Promise<true> {
+    throw new Error("TODO");
+  }
 }

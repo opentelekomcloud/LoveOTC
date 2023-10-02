@@ -20,9 +20,9 @@ export const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
+ * @version 0.2.1
  */
-export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: () => void }) {
+export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: (id: number) => void }) {
   const style = useStyles();
   const [cmt, setCmt] = useState<string>();
 
@@ -45,7 +45,28 @@ export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: ()
         { intent: "success" }
       );
 
-      Refresh();
+      Refresh(OrderId);
+    },
+  });
+
+  const { run: cancel } = useRequest(Hub.Order.Post.Cancel, {
+    manual: true,
+    onFinally([req], _, e) {
+      if (e)
+        dispatchError({
+          Message: "Failed Cancel",
+          Request: req,
+          Error: e
+        });
+
+      dispatchToast(
+        <Toast>
+          <ToastTitle>Order Canceled</ToastTitle>
+        </Toast>,
+        { intent: "success" }
+      );
+
+      Refresh(OrderId);
     },
   });
 
@@ -55,7 +76,7 @@ export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: ()
     </Field>
 
     <div className={style.body}>
-      <Button>
+      <Button onClick={() => cancel(OrderId, cmt!)}>
         Cancel Order with Reason
       </Button>
 
