@@ -30,7 +30,7 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.3.0
+ * @version 0.3.1
  */
 export const CartColumns: TableColumnDefinition<ICartItem>[] = [
   MakeCoverCol(44),
@@ -57,15 +57,14 @@ export const CartColumns: TableColumnDefinition<ICartItem>[] = [
       return (
         <DataGridCell className={useStyles().qua}>
           <SpinButton
-            defaultValue={item.Quantity}
             min={1}
             max={max}
-            value={List.find(x => x.Id === item.Id)?.Quantity}
+            value={item.Quantity}
             onChange={(_, v) => {
-              const i = List.find(x => x.Id === item.Id)!;
-              if (dis && v.value! >= i.Quantity) return;
+              if (dis && v.value! >= item.Quantity)
+                return;
 
-              i.Quantity = v.value!;
+              item.Quantity = v.value!;
               Update(List);
             }} />
         </DataGridCell>

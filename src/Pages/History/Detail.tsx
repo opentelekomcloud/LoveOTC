@@ -1,17 +1,17 @@
-import { Button, Field, Textarea, Toast, ToastBody, ToastTitle, makeStyles, tokens, useToastController } from "@fluentui/react-components";
+import { Button, Field, Label, Toast, ToastBody, ToastTitle, makeStyles, tokens, useToastController } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
-import { DismissRegular } from "@fluentui/react-icons";
+import { DismissRegular, OpenRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
-import { useState } from "react";
+import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
+import { useRouter } from "~/Components/Router";
+import { useShopCart } from "~/Components/ShopCart/Context";
+import { PersonaInfo } from "~/Components/ShopCart/Persona";
 import { WarpError } from "~/Helpers/Error";
 import { ColFlex } from "~/Helpers/Styles";
 import { use500Toast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
-import { DelegateDataGrid } from "../DataGrid/Delegate";
-import { useRouter } from "../Router";
-import { CartColumns } from "./Columns";
-import { useShopCart } from "./Context";
-import { PersonaInfo } from "./Persona";
+import { OrderAppend } from "./Append";
+import { DetailColumns } from "./Columns";
 
 /**
  * @author Aloento
@@ -23,19 +23,14 @@ export const useStyles = makeStyles({
     ...ColFlex,
     rowGap: tokens.spacingVerticalL
   },
-  sub: {
-    width: "fit-content",
-    alignSelf: "flex-end"
-  }
 });
 
 /**
  * @author Aloento
- * @since 0.1.0
- * @version 0.4.0
+ * @since 0.5.0
+ * @version 0.1.0
  */
-export function Confirm() {
-  const [cmt, setCmt] = useState<string>();
+export function OrderDetail() {
   const [open, { toggle }] = useBoolean();
 
   const { List, Update } = useShopCart();
@@ -49,14 +44,14 @@ export function Confirm() {
     onFinally([req], data, e) {
       if (e)
         dispatchError(new WarpError({
-          Message: "Failed Create Order",
+          Message: "Cannot Create Order",
           Request: req,
           Error: e
         }));
 
       dispatchToast(
         <Toast>
-          <ToastTitle>Order Placed</ToastTitle>
+          <ToastTitle>Order Canceled</ToastTitle>
           <ToastBody>Order Id: {data}</ToastBody>
         </Toast>,
         { intent: "success" }
@@ -70,7 +65,7 @@ export function Confirm() {
   })
 
   return <>
-    <Button appearance="primary" onClick={toggle} disabled={!List.length}>Checkout</Button>
+    <Button appearance="subtle" icon={<OpenRegular />} onClick={toggle} />
 
     <Drawer
       open={open}
@@ -89,7 +84,7 @@ export function Confirm() {
             />
           }
         >
-          Confirm Order
+          Order Detail
         </DrawerHeaderTitle>
       </DrawerHeader>
 
@@ -97,23 +92,13 @@ export function Confirm() {
         <div className={style.body}>
           <PersonaInfo />
 
-          <DelegateDataGrid Items={List} Columns={CartColumns} NoHeader />
+          <DelegateDataGrid Items={List} Columns={DetailColumns} />
 
           <Field label="Comment" size="large">
-            <Textarea value={cmt} onChange={(_, v) => setCmt(v.value)} maxLength={1000} />
+            <Label>{""}</Label>
           </Field>
 
-          <Button
-            appearance="primary"
-            className={style.sub}
-            disabled={!List.length}
-            onClick={() => run({
-              ShopCart: List,
-              Comment: cmt
-            })}
-          >
-            Submit
-          </Button>
+          <OrderAppend />
         </div>
       </DrawerBody>
     </Drawer>

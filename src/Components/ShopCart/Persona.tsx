@@ -25,6 +25,7 @@ export const useStyles = makeStyles({
 export interface IPersona {
   Name: string;
   Phone: string;
+  EMail: string;
   Address: string;
 }
 
@@ -33,7 +34,7 @@ export interface IPersona {
  * @since 0.5.0
  * @version 0.1.0
  */
-export function ConfirmPersona() {
+export function PersonaInfo() {
   const style = useStyles();
   const { data } = useRequest(Hub.User.Get.Me);
 
@@ -51,6 +52,10 @@ export function ConfirmPersona() {
         </Field>
       </div>
     </div>
+
+    <Field label="E-Mail" size="large">
+      <Label>{data?.EMail}</Label>
+    </Field>
 
     <Field label="Address" size="large">
       <Label>{data?.Address}</Label>

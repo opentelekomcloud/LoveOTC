@@ -40,7 +40,7 @@ let reload = false;
 /**
  * @author Aloento
  * @since 0.5.0 MusiLand
- * @version 0.1.0
+ * @version 0.1.1
  */
 export function BrowserRouter({ children }: { children: JSX.Element }): JSX.Element {
   const [router, setRouter] = useState<IRouter>(() => ({
@@ -66,6 +66,10 @@ export function BrowserRouter({ children }: { children: JSX.Element }): JSX.Elem
   });
 
   useMount(() => {
+    if (location.pathname === "/")
+      if (location.search.startsWith("?/"))
+        rep(location.search.substring(2));
+
     addEventListener("click", e => {
       const target = (e.target as HTMLElement)?.closest("a");
 

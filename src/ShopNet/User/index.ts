@@ -1,4 +1,5 @@
 import { UserGet } from "./Get";
+import { UserPost } from "./Post";
 
 /**
  * @author Aloento
@@ -6,5 +7,6 @@ import { UserGet } from "./Get";
  * @version 0.1.0
  */
 export const User = {
-  Get: UserGet
+  Get: UserGet,
+  Post: UserPost
 }

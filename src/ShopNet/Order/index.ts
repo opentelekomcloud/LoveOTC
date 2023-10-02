@@ -1,3 +1,4 @@
+import { OrderGet } from "./Get";
 import { OrderPost } from "./Post";
 
 /**
@@ -6,5 +7,6 @@ import { OrderPost } from "./Post";
  * @version 0.1.0
  */
 export const Order = {
+  Get: OrderGet,
   Post: OrderPost
 }

@@ -16,6 +16,7 @@ export class UserGet {
     return {
       Name: "Aloento",
       Phone: "+36 300000000",
+      EMail: "Aloento@T-Systems.com",
       Address: Array(10).fill(0).map(() => createUID()).reduce((prev, curr) => prev + curr, ""),
     }
   }

@@ -6,7 +6,7 @@ import { ICartItem } from "~/Components/ShopCart";
  * @since 0.5.0
  * @version 0.1.0
  */
-interface INew {
+export interface INetOrder {
   ShopCart: ICartItem[];
   Comment?: string;
 }
@@ -22,7 +22,7 @@ export class OrderPost {
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static async New(req: INew): Promise<number> {
+  public static async New(req: INetOrder): Promise<number> {
     return random(1, 100);
   }
 }

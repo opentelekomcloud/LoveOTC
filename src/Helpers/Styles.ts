@@ -36,6 +36,15 @@ export const BaseCard: GriffelStyle = {
 
 /**
  * @author Aloento
+ * @since 0.2.0 MusiLand
+ * @version 0.1.0
+ */
+export const PreLine: GriffelStyle = {
+  whiteSpace: "pre-line"
+}
+
+/**
+ * @author Aloento
  * @since 0.1.0 MusiLand
  * @version 0.1.0
  */
