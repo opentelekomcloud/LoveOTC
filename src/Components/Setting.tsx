@@ -1,7 +1,6 @@
-import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Input, Label, Toast, ToastBody, ToastTitle, makeStyles, tokens, useToastController } from "@fluentui/react-components";
+import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Input, Label, Toast, ToastBody, ToastTitle, makeStyles, tokens } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import { useState } from "react";
-import { WarpError } from "~/Helpers/Error";
 import { ColFlex, Flex } from "~/Helpers/Styles";
 import { use500Toast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
@@ -54,18 +53,17 @@ export function Setting({ Open, Toggle }: ISetting) {
     }
   });
 
-  const { dispatchToast } = useToastController();
-  const dispatchError = use500Toast();
+  const { dispatchError, dispatchToast } = use500Toast();
 
   const { run } = useRequest(Hub.User.Post.Update, {
     manual: true,
     onFinally([req], _, e) {
       if (e)
-        dispatchError(new WarpError({
+        dispatchError({
           Message: "Failed Update Info",
           Error: e,
           Request: req
-        }));
+        });
 
       dispatchToast(
         <Toast>

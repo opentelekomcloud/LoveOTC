@@ -2,7 +2,8 @@ import { Button, DataGridCell, DataGridHeaderCell, TableColumnDefinition, create
 import { OpenRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
-import { HistoryColumns, IHistoryItem } from "~/Pages/History";
+import { IHistoryItem } from "~/Pages/History";
+import { HistoryColumns } from "~/Pages/History/HistoryColumns";
 import { AdminOrderEdit } from "./Edit";
 
 /**

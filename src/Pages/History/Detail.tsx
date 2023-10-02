@@ -1,4 +1,4 @@
-import { Button, Field, Label, Toast, ToastBody, ToastTitle, makeStyles, tokens, useToastController } from "@fluentui/react-components";
+import { Button, Field, Label, makeStyles, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { DismissRegular, OpenRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
@@ -6,12 +6,10 @@ import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { useRouter } from "~/Components/Router";
 import { useShopCart } from "~/Components/ShopCart/Context";
 import { PersonaInfo } from "~/Components/ShopCart/Persona";
-import { WarpError } from "~/Helpers/Error";
 import { ColFlex } from "~/Helpers/Styles";
-import { use500Toast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
 import { OrderAppend } from "./Append";
-import { DetailColumns } from "./Columns";
+import { DetailColumns } from "./DetailColumns";
 
 /**
  * @author Aloento
@@ -33,39 +31,27 @@ export const useStyles = makeStyles({
 export function OrderDetail() {
   const [open, { toggle }] = useBoolean();
 
+  const { Nav, Paths } = useRouter();
+  const id = parseInt(Paths.at(2)!);
+
   const { List, Update } = useShopCart();
-  const { Nav } = useRouter();
   const style = useStyles();
 
-  const { dispatchToast } = useToastController();
-  const dispatchError = use500Toast();
-
-  const { run } = useRequest(Hub.Order.Post.New, {
-    onFinally([req], data, e) {
-      if (e)
-        dispatchError(new WarpError({
-          Message: "Cannot Create Order",
-          Request: req,
-          Error: e
-        }));
-
-      dispatchToast(
-        <Toast>
-          <ToastTitle>Order Canceled</ToastTitle>
-          <ToastBody>Order Id: {data}</ToastBody>
-        </Toast>,
-        { intent: "success" }
-      );
-
-      Update([]);
-      toggle();
-      Nav("History", `${data}`);
+  const { data, run } = useRequest(Hub.Order.Get.Detail, {
+    onBefore() {
+      isNaN(id) && Nav("/History");
     },
-    manual: true,
+    onError() {
+      throw Nav("/History");
+    },
+    manual: true
   })
 
   return <>
-    <Button appearance="subtle" icon={<OpenRegular />} onClick={toggle} />
+    <Button appearance="subtle" icon={<OpenRegular />} onClick={() => {
+      run(id);
+      toggle();
+    }} />
 
     <Drawer
       open={open}
@@ -98,7 +84,7 @@ export function OrderDetail() {
             <Label>{""}</Label>
           </Field>
 
-          <OrderAppend />
+          <OrderAppend OrderId={id} Refresh={() => run(id)} />
         </div>
       </DrawerBody>
     </Drawer>

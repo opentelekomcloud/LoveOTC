@@ -1,5 +1,4 @@
 import { Text, Toast, ToastBody, ToastTitle, makeStyles, useToastController } from "@fluentui/react-components";
-import { WarpError } from "./Error";
 import { PreLine } from "./Styles";
 
 /**
@@ -14,35 +13,49 @@ export const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
+ * @version 0.1.0
+ */
+interface Cause<T = any> {
+  Message: string
+  Request: T;
+  Error: Error;
+}
+
+/**
+ * @author Aloento
+ * @since 0.5.0
  * @version 0.2.0
  */
-export function use500Toast() {
+export function use500Toast<T>() {
   const style = useStyles();
   const { dispatchToast } = useToastController();
 
-  return (e: WarpError) => {
-    dispatchToast(
-      <Toast>
-        <ToastTitle>Internal Error</ToastTitle>
+  return {
+    dispatchError: (e: Cause<T>) => {
+      dispatchToast(
+        <Toast>
+          <ToastTitle>Internal Error</ToastTitle>
 
-        <ToastBody subtitle={
-          <Text className={style.pre}>
-            {e.Error.message}
-            <br />
-            More Info, See Console
-          </Text>
-        }>
+          <ToastBody subtitle={
+            <Text className={style.pre}>
+              {e.Error.message}
+              <br />
+              More Info, See Console
+            </Text>
+          }>
 
-          <Text className={style.pre}>
-            {e.message}
-          </Text>
+            <Text className={style.pre}>
+              {e.Message}
+            </Text>
 
-        </ToastBody>
-      </Toast>,
-      { intent: "error", timeout: 5000 }
-    );
+          </ToastBody>
+        </Toast>,
+        { intent: "error", timeout: 5000 }
+      );
 
-    console.error(e.Error);
-    throw e.Request;
+      console.error(e.Error);
+      throw e.Request;
+    },
+    dispatchToast
   };
 }
