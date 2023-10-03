@@ -1,5 +1,6 @@
 import { random } from "lodash-es";
 import { createUID } from "~/Lexical/Utils/createUID";
+import { IHistoryItem } from "~/Pages/History";
 import { INetOrder } from "./Post";
 
 /**
@@ -8,6 +9,32 @@ import { INetOrder } from "./Post";
  * @version 0.1.0
  */
 export class OrderGet {
+  /**
+   * @author Aloento
+   * @since 0.5.0
+   * @version 0.1.0
+   */
+  public static async List(): Promise<IHistoryItem[]> {
+    return [
+      {
+        Id: 1,
+        Orders: ["OTC SHIRT - GREY", "OTC Cap - Cap and Cap"],
+        Quantity: 2,
+        OrderDate: new Date(),
+        TrackNumber: "Number123456789",
+        Status: "Finished"
+      },
+      {
+        Id: 2,
+        Orders: ["OTC Cap - Cap and Cap"],
+        Quantity: 1,
+        OrderDate: new Date(),
+        TrackNumber: "Number123456789",
+        Status: "Finished"
+      },
+    ];
+  }
+
   /**
    * @author Aloento
    * @since 0.5.0
@@ -41,5 +68,23 @@ export class OrderGet {
       ],
       Comment: Array(10).fill(0).map(() => createUID()).reduce((prev, curr) => prev + curr, "")
     }
+  }
+
+  /**
+   * @author Aloento
+   * @since 0.5.0
+   * @version 0.1.0
+   */
+  public static async Status(orderId: number): Promise<string> {
+    return "Shipped";
+  }
+
+  /**
+   * @author Aloento
+   * @since 0.5.0
+   * @version 0.1.0
+   */
+  public static async Track(orderId: number): Promise<string> {
+    return "Number123456789";
   }
 }

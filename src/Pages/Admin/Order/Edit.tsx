@@ -1,19 +1,65 @@
-import { Button, Field, Input, Label, tokens } from "@fluentui/react-components";
+import { Button, Field, Label, makeStyles, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
-import { DismissRegular, EditRegular } from "@fluentui/react-icons";
-import { ColFlex, Flex } from "~/Helpers/Styles";
+import { DismissRegular, OpenRegular } from "@fluentui/react-icons";
+import { useBoolean, useMount, useRequest } from "ahooks";
+import { useRouter } from "~/Components/Router";
+import { ColFlex } from "~/Helpers/Styles";
+import { Hub } from "~/ShopNet";
+import { OrderPersona } from "../../History/Persona";
+import { AdminOrderAppend } from "./Append";
 import { AdminOrderList } from "./List";
+import { Shipment } from "./Ship";
 
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.1.0
  */
-export function AdminOrderEdit({ Open, Toggle }: { Open: boolean; Toggle: () => void }) {
-  return (
+const useStyles = makeStyles({
+  body: {
+    ...ColFlex,
+    rowGap: tokens.spacingVerticalXL
+  }
+});
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.2.0
+ */
+export function AdminOrderEdit({ OrderId }: { OrderId: number; }) {
+  const style = useStyles();
+  const [open, { toggle, setTrue }] = useBoolean();
+  const { Nav, Paths } = useRouter();
+
+  const { data, run } = useRequest(Hub.Order.Get.Detail, {
+    onError() {
+      throw Nav("/Admin/Order");
+    },
+    manual: true
+  })
+
+  useMount(() => {
+    if (parseInt(Paths.at(2)!) === OrderId) {
+      run(OrderId);
+      setTrue();
+    }
+  });
+
+  return <>
+    <Button
+      appearance="subtle"
+      icon={<OpenRegular />}
+      onClick={() => {
+        Nav(`/Admin/Order/${OrderId}`);
+        run(OrderId);
+        setTrue();
+      }}
+    />
+
     <Drawer
-      open={Open}
-      onOpenChange={Toggle}
+      open={open}
+      onOpenChange={toggle}
       position="end"
       size="medium"
       modalType="alert"
@@ -23,88 +69,31 @@ export function AdminOrderEdit({ Open, Toggle }: { Open: boolean; Toggle: () => 
           <Button
             appearance="subtle"
             icon={<DismissRegular />}
-            onClick={Toggle}
+            onClick={() => {
+              Nav("/Admin/Order");
+              toggle();
+            }}
           />}
         >
           Order Detail
         </DrawerHeaderTitle>
       </DrawerHeader>
 
-      <DrawerBody style={{
-        ...ColFlex,
-        rowGap: tokens.spacingVerticalXL
-      }}>
-        <div style={Flex}>
-          <div style={{
-            ...ColFlex,
-            flexBasis: "50%",
-            rowGap: tokens.spacingVerticalM
-          }}>
-            <Field label="Name" size="large">
-              <Label>Aloento</Label>
-            </Field>
-          </div>
+      <DrawerBody className={style.body}>
+        <OrderPersona OrderId={OrderId} Admin />
 
-          <div style={{
-            ...ColFlex,
-            flexBasis: "50%",
-            rowGap: tokens.spacingVerticalM
-          }}>
-            <Field label="Phone" size="large">
-              <Label>Aloento</Label>
-            </Field>
-          </div>
-        </div>
-
-        <div style={Flex}>
-          <div style={{
-            ...ColFlex,
-            flexBasis: "50%",
-            rowGap: tokens.spacingVerticalM
-          }}>
-            <Field label="E-Mail" size="large">
-              <Label>Aloento@T-Systems.com</Label>
-            </Field>
-          </div>
-
-          <div style={{
-            ...ColFlex,
-            flexBasis: "50%",
-            rowGap: tokens.spacingVerticalM
-          }}>
-            <Field label="Status" size="large">
-              <Label>Shipped</Label>
-            </Field>
-          </div>
-        </div>
-
-        <Field label="Address" size="large">
-          <Label>Some Address Address Address Address Address Address Address</Label>
+        <Field label="Required Products" size="large">
+          <AdminOrderList Items={data?.ShopCart} />
         </Field>
+
+        <Shipment OrderId={OrderId} Refresh={run} />
 
         <Field label="Comment" size="large">
           <Label>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</Label>
         </Field>
 
-        <Field label="Required Products" size="large">
-          <AdminOrderList />
-        </Field>
-
-        <Field label="Shipment" size="large">
-          <Input
-            appearance="underline"
-            defaultValue="Number123456789"
-            contentAfter={<Button appearance="subtle" icon={<EditRegular />} />}
-          />
-        </Field>
-
-        <div style={{
-          ...Flex,
-          columnGap: tokens.spacingVerticalM
-        }}>
-          <Button appearance="primary">Force Close</Button>
-        </div>
+        <AdminOrderAppend OrderId={OrderId} Refresh={run} />
       </DrawerBody>
     </Drawer>
-  )
+  </>
 }

@@ -3,7 +3,7 @@ import { useRequest } from "ahooks";
 import { useState } from "react";
 import { Flex } from "~/Helpers/Styles";
 import { use500Toast } from "~/Helpers/useToast";
-import { Hub } from "~/ShopNet";
+import { AdminHub } from "~/ShopNet/Admin";
 
 /**
  * @author Aloento
@@ -20,15 +20,15 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.1
+ * @version 0.2.0
  */
-export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: (id: number) => void }) {
+export function AdminOrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: (id: number) => void }) {
   const style = useStyles();
   const [cmt, setCmt] = useState<string>();
 
   const { dispatchError, dispatchToast } = use500Toast();
 
-  const { run: append } = useRequest(Hub.Order.Post.Append, {
+  const { run: append } = useRequest(AdminHub.Order.Post.Append, {
     manual: true,
     onFinally([req], _, e) {
       if (e)
@@ -49,19 +49,19 @@ export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: (i
     },
   });
 
-  const { run: cancel } = useRequest(Hub.Order.Post.Cancel, {
+  const { run: close } = useRequest(AdminHub.Order.Post.Close, {
     manual: true,
     onFinally([req], _, e) {
       if (e)
         dispatchError({
-          Message: "Failed Cancel",
+          Message: "Failed Close",
           Request: req,
           Error: e
         });
 
       dispatchToast(
         <Toast>
-          <ToastTitle>Order Canceled</ToastTitle>
+          <ToastTitle>Order Closed</ToastTitle>
         </Toast>,
         { intent: "success" }
       );
@@ -76,8 +76,8 @@ export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: (i
     </Field>
 
     <div className={style.body}>
-      <Button onClick={() => cancel(OrderId, cmt!)}>
-        Cancel Order with Reason
+      <Button onClick={() => close(OrderId, cmt!)}>
+        Force Close with Reason
       </Button>
 
       <Button appearance="primary" onClick={() => append(OrderId, cmt!)}>

@@ -1,15 +1,32 @@
-import { Button, DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
-import { OpenRegular } from "@fluentui/react-icons";
-import { useBoolean } from "ahooks";
+import { DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
+import { useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { IHistoryItem } from "~/Pages/History";
-import { HistoryColumns } from "~/Pages/History/HistoryColumns";
+import { HistoryColumns } from "~/Pages/History/Columns";
+import { AdminHub } from "~/ShopNet/Admin";
 import { AdminOrderEdit } from "./Edit";
 
 /**
  * @author Aloento
- * @since 0.1.0
+ * @since 0.5.0
  * @version 0.1.0
+ */
+const useStyles = makeStyles({
+  two: {
+    flexBasis: "2.5%",
+    flexGrow: 0
+  },
+  twoc: {
+    flexBasis: "2.5%",
+    flexGrow: 0,
+    justifyContent: "center"
+  }
+});
+
+/**
+ * @author Aloento
+ * @since 0.1.0
+ * @version 0.1.1
  */
 const columns: TableColumnDefinition<IHistoryItem>[] = [
   ...HistoryColumns.slice(0, -1),
@@ -17,97 +34,30 @@ const columns: TableColumnDefinition<IHistoryItem>[] = [
     columnId: "Action",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "2.5%", flexGrow: 0 }}>
+        <DataGridHeaderCell className={useStyles().two}>
           Action
         </DataGridHeaderCell>
       )
     },
     renderCell(item) {
-      const [open, { toggle }] = useBoolean();
-
       return (
-        <DataGridCell style={{ flexBasis: "2.5%", flexGrow: 0, justifyContent: "center" }}>
-          <Button
-            appearance="subtle"
-            icon={<OpenRegular />}
-            onClick={toggle}
-          />
-
-          <AdminOrderEdit Open={open} Toggle={toggle} />
+        <DataGridCell className={useStyles().twoc}>
+          <AdminOrderEdit OrderId={item.Id} />
         </DataGridCell>
       )
     },
   })
 ]
 
-const items: IHistoryItem[] = [
-  {
-    Id: 1,
-    Orders: [
-      {
-        Name: "OTC SHIRT - GREY",
-        Type: [
-          {
-            Variant: "Color",
-            Type: "Red"
-          },
-          {
-            Variant: "Size",
-            Type: "S"
-          }
-        ],
-        Quantity: 1
-      },
-      {
-        Name: "OTC Cap - Cap and Cap",
-        Type: [
-          {
-            Variant: "Color",
-            Type: "Red"
-          },
-          {
-            Variant: "Size",
-            Type: "Long and Long"
-          }
-        ],
-        Quantity: 1
-      }
-    ],
-    OrderDate: new Date(),
-    TrackNumber: "Number123456789",
-    Status: "Finished"
-  },
-  {
-    Id: 2,
-    Orders: [
-      {
-        Name: "OTC Cap - Cap and Cap",
-        Type: [
-          {
-            Variant: "Color",
-            Type: "Red"
-          },
-          {
-            Variant: "Size",
-            Type: "Long and Long"
-          }
-        ],
-        Quantity: 1
-      }
-    ],
-    OrderDate: new Date(),
-    TrackNumber: "Number123456789",
-    Status: "Finished"
-  },
-]
-
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 export function AdminOrder() {
+  const { data } = useRequest(AdminHub.Order.Get.List);
+
   return (
-    <DelegateDataGrid Items={items} Columns={columns} />
+    <DelegateDataGrid Items={data || []} Columns={columns} />
   )
 }

@@ -1,23 +1,26 @@
-import { DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
+import { DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
-import { IOrder } from "~/Pages/History";
+import { ICartItem } from "~/Components/ShopCart";
 
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.1.0
  */
-interface IOrderItem extends IOrder {
-  Id: number;
-}
+const useStyles = makeStyles({
+  ten: {
+    flexBasis: "10%",
+    flexGrow: 0
+  },
+});
 
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.2.0
  */
-const columns: TableColumnDefinition<IOrderItem>[] = [
-  createTableColumn<IOrderItem>({
+const columns: TableColumnDefinition<ICartItem>[] = [
+  createTableColumn<ICartItem>({
     columnId: "Product",
     renderHeaderCell() {
       return <DataGridHeaderCell>Name</DataGridHeaderCell>
@@ -26,27 +29,27 @@ const columns: TableColumnDefinition<IOrderItem>[] = [
       return <DataGridCell>{item.Name}</DataGridCell>
     }
   }),
-  createTableColumn<IOrderItem>({
+  createTableColumn<ICartItem>({
     columnId: "Type",
     renderHeaderCell() {
       return <DataGridHeaderCell>Type</DataGridHeaderCell>
     },
     renderCell(item) {
-      return <DataGridCell>{item.Type.reduce((prev, curr) => `${prev} ${curr.Variant} : ${curr.Type} ;`, "")}</DataGridCell>
+      return <DataGridCell>{Object.entries(item.Type).reduce((prev, curr) => `${prev} ${curr[0]} : ${curr[1]} ;`, "")}</DataGridCell>
     }
   }),
-  createTableColumn<IOrderItem>({
+  createTableColumn<ICartItem>({
     columnId: "Quantity",
     renderHeaderCell() {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "10%", flexGrow: 0 }}>
+        <DataGridHeaderCell className={useStyles().ten}>
           Quantity
         </DataGridHeaderCell>
       )
     },
     renderCell(item) {
       return (
-        <DataGridCell style={{ flexBasis: "10%", flexGrow: 0 }}>
+        <DataGridCell className={useStyles().ten}>
           {item.Quantity}
         </DataGridCell>
       )
@@ -54,46 +57,13 @@ const columns: TableColumnDefinition<IOrderItem>[] = [
   }),
 ]
 
-const items: IOrderItem[] = [
-  {
-    Id: 0,
-    Name: "OTC Cap - Cap and Cap",
-    Type: [
-      {
-        Variant: "Color",
-        Type: "Red"
-      },
-      {
-        Variant: "Size",
-        Type: "S"
-      }
-    ],
-    Quantity: 1
-  },
-  {
-    Id: 1,
-    Name: "OTC SHIRT - GREY",
-    Type: [
-      {
-        Variant: "Color",
-        Type: "Red"
-      },
-      {
-        Variant: "Size",
-        Type: "S"
-      }
-    ],
-    Quantity: 1
-  }
-]
-
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.2.0
  */
-export function AdminOrderList() {
+export function AdminOrderList({ Items }: { Items?: ICartItem[] }) {
   return (
-    <DelegateDataGrid Items={items} Columns={columns} />
+    <DelegateDataGrid Items={Items || []} Columns={columns} />
   )
 }

@@ -5,18 +5,18 @@ import { useBoolean, useMount, useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { useRouter } from "~/Components/Router";
 import { ICartItem } from "~/Components/ShopCart";
-import { PersonaInfo } from "~/Components/ShopCart/Persona";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { ColFlex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
 import { OrderAppend } from "./Append";
+import { OrderPersona } from "./Persona";
 
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.1.0
  */
-export const useStyles = makeStyles({
+const useStyles = makeStyles({
   body: {
     ...ColFlex,
     rowGap: tokens.spacingVerticalL
@@ -129,7 +129,7 @@ export function OrderDetail({ OrderId }: { OrderId: number }) {
 
       <DrawerBody>
         <div className={style.body}>
-          <PersonaInfo />
+          <OrderPersona OrderId={OrderId} />
 
           <DelegateDataGrid Items={data?.ShopCart || []} Columns={columns} />
 
