@@ -24,12 +24,8 @@ export function Admin() {
       case "User":
         return <AdminUser />;
 
-      case "":
-      case undefined:
-        return <AdminProduct />;
-
       default:
-        return <div>404</div>
+        return <AdminProduct />;
     }
   }, [path])
 }

@@ -94,7 +94,7 @@ const items: IVariantItem[] = [
  * @since 0.5.0
  * @version 0.1.0
  */
-export function AdminProductVariant() {
+export function AdminProductVariant({ ProdId }: { ProdId: number }) {
   return (
     <div>
       <div style={{

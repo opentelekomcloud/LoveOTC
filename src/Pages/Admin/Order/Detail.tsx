@@ -2,10 +2,10 @@ import { Button, Field, Label, makeStyles, tokens } from "@fluentui/react-compon
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { DismissRegular, OpenRegular } from "@fluentui/react-icons";
 import { useBoolean, useMount, useRequest } from "ahooks";
+import { OrderPersona } from "~/Components/Persona";
 import { useRouter } from "~/Components/Router";
 import { ColFlex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
-import { OrderPersona } from "../../History/Persona";
 import { AdminOrderAppend } from "./Append";
 import { AdminOrderList } from "./List";
 import { Shipment } from "./Ship";
@@ -27,7 +27,7 @@ const useStyles = makeStyles({
  * @since 0.5.0
  * @version 0.2.0
  */
-export function AdminOrderEdit({ OrderId }: { OrderId: number; }) {
+export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
   const style = useStyles();
   const [open, { toggle, setTrue }] = useBoolean();
   const { Nav, Paths } = useRouter();
@@ -89,7 +89,7 @@ export function AdminOrderEdit({ OrderId }: { OrderId: number; }) {
         <Shipment OrderId={OrderId} Refresh={run} />
 
         <Field label="Comment" size="large">
-          <Label>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</Label>
+          <Label>{data?.Comment}</Label>
         </Field>
 
         <AdminOrderAppend OrderId={OrderId} Refresh={run} />

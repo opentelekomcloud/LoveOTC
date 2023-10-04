@@ -1,6 +1,6 @@
 import { random } from "lodash-es";
 import { createUID } from "~/Lexical/Utils/createUID";
-import { IHistoryItem } from "~/Pages/History";
+import { IOrderExtension, IOrderItem } from "~/Pages/History";
 import { INetOrder } from "./Post";
 
 /**
@@ -14,7 +14,7 @@ export class OrderGet {
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static async List(): Promise<IHistoryItem[]> {
+  public static async List(): Promise<IOrderItem[]> {
     return [
       {
         Id: 1,
@@ -75,16 +75,11 @@ export class OrderGet {
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static async Status(orderId: number): Promise<string> {
-    return "Shipped";
-  }
-
-  /**
-   * @author Aloento
-   * @since 0.5.0
-   * @version 0.1.0
-   */
-  public static async Track(orderId: number): Promise<string> {
-    return "Number123456789";
+  public static async Extension(orderId: number): Promise<IOrderExtension> {
+    return {
+      OrderDate: new Date(),
+      TrackNumber: "Number123456789",
+      Status: "Finished"
+    };
   }
 }

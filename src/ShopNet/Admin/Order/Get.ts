@@ -1,4 +1,4 @@
-import { IHistoryItem } from "~/Pages/History";
+import { IOrderItem } from "~/Pages/History";
 
 /**
  * @author Aloento
@@ -11,7 +11,7 @@ export class AdminOrderGet {
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static async List(): Promise<IHistoryItem[]> {
+  public static async List(): Promise<IOrderItem[]> {
     return [
       {
         Id: 1,

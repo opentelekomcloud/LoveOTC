@@ -1,5 +1,5 @@
 import { DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
-import { IHistoryItem } from ".";
+import { IOrderItem } from ".";
 import { OrderDetail } from "./Detail";
 
 /**
@@ -27,8 +27,8 @@ const useStyles = makeStyles({
  * @since 0.1.0
  * @version 0.3.0
  */
-export const HistoryColumns: TableColumnDefinition<IHistoryItem>[] = [
-  createTableColumn<IHistoryItem>({
+export const HistoryColumns: TableColumnDefinition<IOrderItem>[] = [
+  createTableColumn<IOrderItem>({
     columnId: "OrderId",
     renderHeaderCell: () => {
       return (
@@ -45,7 +45,7 @@ export const HistoryColumns: TableColumnDefinition<IHistoryItem>[] = [
       );
     }
   }),
-  createTableColumn<IHistoryItem>({
+  createTableColumn<IOrderItem>({
     columnId: "Products",
     renderHeaderCell: () => {
       return <DataGridHeaderCell>Products</DataGridHeaderCell>;
@@ -58,16 +58,16 @@ export const HistoryColumns: TableColumnDefinition<IHistoryItem>[] = [
       );
     }
   }),
-  createTableColumn<IHistoryItem>({
+  createTableColumn<IOrderItem>({
     columnId: "OrderDate",
     renderHeaderCell: () => {
       return <DataGridHeaderCell>Order Date</DataGridHeaderCell>;
     },
     renderCell(item) {
-      return <DataGridHeaderCell>{item.OrderDate.toDateString()}</DataGridHeaderCell>;
+      return <DataGridHeaderCell>{item.OrderDate.toLocaleDateString()}</DataGridHeaderCell>;
     }
   }),
-  createTableColumn<IHistoryItem>({
+  createTableColumn<IOrderItem>({
     columnId: "TrackNumber",
     renderHeaderCell: () => {
       return <DataGridHeaderCell>Track Number</DataGridHeaderCell>;
@@ -76,7 +76,7 @@ export const HistoryColumns: TableColumnDefinition<IHistoryItem>[] = [
       return <DataGridCell>{item.TrackNumber}</DataGridCell>;
     }
   }),
-  createTableColumn<IHistoryItem>({
+  createTableColumn<IOrderItem>({
     columnId: "Quantity",
     renderHeaderCell: () => {
       return (
@@ -93,7 +93,7 @@ export const HistoryColumns: TableColumnDefinition<IHistoryItem>[] = [
       );
     }
   }),
-  createTableColumn<IHistoryItem>({
+  createTableColumn<IOrderItem>({
     columnId: "Status",
     renderHeaderCell: () => {
       return (
@@ -110,7 +110,7 @@ export const HistoryColumns: TableColumnDefinition<IHistoryItem>[] = [
       );
     }
   }),
-  createTableColumn<IHistoryItem>({
+  createTableColumn<IOrderItem>({
     columnId: "Detail",
     renderHeaderCell: () => {
       return (

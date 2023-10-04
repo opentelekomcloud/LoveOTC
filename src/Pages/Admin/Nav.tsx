@@ -26,7 +26,7 @@ const useStyle = makeStyles({
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 export function AdminTopNav() {
   const style = useStyle();
@@ -40,7 +40,7 @@ export function AdminTopNav() {
     <div className={style.box}>
       <Text size={600} font="monospace" className={style.div}>|</Text>
 
-      <TabList defaultSelectedValue={path2} >
+      <TabList selectedValue={path2} >
         <Link appearance="subtle" href="/Admin" className={style.link}>
           <Tab value="Product">Product List</Tab>
         </Link>

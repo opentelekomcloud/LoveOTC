@@ -18,7 +18,7 @@
     "@fluentui/react-components": "^9.33.0",
     "@fluentui/react-hooks": "^8.6.30",
     "@fluentui/react-icons": "^2.0.218",
-    "@griffel/react": "^1.5.15",
+    "@griffel/react": "^1.5.16",
     "@lexical/clipboard": "^0.12.2",
     "@lexical/code": "^0.12.2",
     "@lexical/file": "^0.12.2",
@@ -50,6 +50,6 @@
     "@types/react-dom": "^18.2.8",
     "@vitejs/plugin-react-swc": "^3.4.0",
     "typescript": "^5.2.2",
-    "vite": "^4.4.9"
+    "vite": "^4.4.10"
   }
 }

@@ -79,7 +79,7 @@ const items: IPhotoItem[] = [
  * @since 0.5.0
  * @version 0.1.0
  */
-export function AdminProductPhoto() {
+export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
   return (
     <div>
       <div style={{

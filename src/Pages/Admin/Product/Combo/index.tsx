@@ -120,7 +120,7 @@ const items: IComboItem[] = [
  * @since 0.5.0
  * @version 0.1.0
  */
-export function AdminProductCombo() {
+export function AdminProductCombo({ ProdId }: { ProdId: number }) {
   return (
     <div>
       <div style={{
