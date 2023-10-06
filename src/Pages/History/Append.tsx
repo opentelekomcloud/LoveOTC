@@ -30,7 +30,7 @@ export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: (i
 
   const { run: append } = useRequest(Hub.Order.Post.Append, {
     manual: true,
-    onFinally([req], _, e) {
+    onFinally(req, _, e) {
       if (e)
         dispatchError({
           Message: "Failed Append Comment",
@@ -51,7 +51,7 @@ export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: (i
 
   const { run: cancel } = useRequest(Hub.Order.Post.Cancel, {
     manual: true,
-    onFinally([req], _, e) {
+    onFinally(req, _, e) {
       if (e)
         dispatchError({
           Message: "Failed Cancel",

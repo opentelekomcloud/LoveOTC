@@ -15,7 +15,7 @@
     "update": "npx npm-check-updates -u"
   },
   "dependencies": {
-    "@fluentui/react-components": "^9.33.0",
+    "@fluentui/react-components": "^9.34.0",
     "@fluentui/react-hooks": "^8.6.30",
     "@fluentui/react-icons": "^2.0.218",
     "@griffel/react": "^1.5.16",
@@ -46,10 +46,10 @@
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.9",
-    "@types/react": "^18.2.24",
-    "@types/react-dom": "^18.2.8",
+    "@types/react": "^18.2.25",
+    "@types/react-dom": "^18.2.10",
     "@vitejs/plugin-react-swc": "^3.4.0",
     "typescript": "^5.2.2",
-    "vite": "^4.4.10"
+    "vite": "^4.4.11"
   }
 }

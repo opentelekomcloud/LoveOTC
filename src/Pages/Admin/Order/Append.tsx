@@ -30,7 +30,7 @@ export function AdminOrderAppend({ OrderId, Refresh }: { OrderId: number; Refres
 
   const { run: append } = useRequest(AdminHub.Order.Post.Append, {
     manual: true,
-    onFinally([req], _, e) {
+    onFinally(req, _, e) {
       if (e)
         dispatchError({
           Message: "Failed Append Comment",
@@ -51,7 +51,7 @@ export function AdminOrderAppend({ OrderId, Refresh }: { OrderId: number; Refres
 
   const { run: close } = useRequest(AdminHub.Order.Post.Close, {
     manual: true,
-    onFinally([req], _, e) {
+    onFinally(req, _, e) {
       if (e)
         dispatchError({
           Message: "Failed Close",

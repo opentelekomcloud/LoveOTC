@@ -33,7 +33,7 @@ export function AdminProductAddButton() {
 
   const { run } = useRequest(AdminHub.Product.Post.Create, {
     manual: true,
-    onFinally([req], data, e) {
+    onFinally(req, data, e) {
       if (e)
         dispatchError({
           Message: "Failed Create",

@@ -30,7 +30,7 @@ export function AdminProductName({ ProdId }: { ProdId: number; }) {
 
   const { run } = useRequest(AdminHub.Product.Post.Name, {
     manual: true,
-    onFinally([req], _, e) {
+    onFinally(req, _, e) {
       if (e)
         dispatchError({
           Message: "Failed Update Name",

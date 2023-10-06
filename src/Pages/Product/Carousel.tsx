@@ -30,7 +30,7 @@ export function ProductCarousel({ Id }: { Id: number; }) {
 
   return (
     <Carousel showArrows>
-      {data?.map((val, i) => <img key={i} className={style.img} src={val} />)}
+      {data?.map((val, i) => <img key={i} className={style.img} src={val.Cover} />)}
     </Carousel>
   );
 }

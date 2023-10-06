@@ -1,13 +1,108 @@
-import { Button, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Image, Input, tokens } from "@fluentui/react-components";
+import { Button, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Image, Input, Toast, ToastTitle, makeStyles, tokens } from "@fluentui/react-components";
 import { DismissRegular, EditRegular } from "@fluentui/react-icons";
+import { useRequest } from "ahooks";
+import { useState } from "react";
 import { ColFlex, Cover, Flex } from "~/Helpers/Styles";
+import { use500Toast } from "~/Helpers/useToast";
+import { AdminHub } from "~/ShopNet/Admin";
+import { IPhotoItem } from ".";
 
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.1.0
  */
-export function AdminProductPhotoEdit() {
+const useStyles = makeStyles({
+  box: {
+    ...Flex,
+    columnGap: tokens.spacingHorizontalL
+  },
+  img: {
+    ...Cover,
+    aspectRatio: "1",
+    width: "50%"
+  },
+  cap: {
+    ...ColFlex,
+    flexGrow: 1,
+    rowGap: tokens.spacingVerticalL
+  }
+});
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.3.0
+ */
+export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }: { Photo: IPhotoItem; Refresh: () => void; }) {
+  const style = useStyles();
+  const [cap, setCap] = useState(Caption || "");
+
+  const { dispatchError, dispatchToast } = use500Toast();
+
+  const { run: updateCaption } = useRequest(AdminHub.Product.Post.Caption, {
+    manual: true,
+    onFinally(req, _, e) {
+      if (e)
+        dispatchError({
+          Message: "Failed Update Caption",
+          Request: req,
+          Error: e
+        });
+
+      dispatchToast(
+        <Toast>
+          <ToastTitle>Caption Updated</ToastTitle>
+        </Toast>,
+        { intent: "success" }
+      );
+
+      Refresh();
+    },
+  });
+
+  const { run: updateFile } = useRequest(AdminHub.Product.Post.UploadPhoto, {
+    manual: true,
+    onFinally(req, _, e) {
+      if (e)
+        dispatchError({
+          Message: "Failed Update Caption",
+          Request: req,
+          Error: e
+        });
+
+      dispatchToast(
+        <Toast>
+          <ToastTitle>Caption Updated</ToastTitle>
+        </Toast>,
+        { intent: "success" }
+      );
+
+      Refresh();
+    },
+  });
+
+  const { run: deletePhoto } = useRequest(AdminHub.Product.Delete.Photo, {
+    manual: true,
+    onFinally(req, _, e) {
+      if (e)
+        dispatchError({
+          Message: "Failed Delete Photo",
+          Request: req,
+          Error: e
+        });
+
+      dispatchToast(
+        <Toast>
+          <ToastTitle>Photo Deleted</ToastTitle>
+        </Toast>,
+        { intent: "success" }
+      );
+
+      Refresh();
+    },
+  });
+
   return (
     <Dialog>
       <DialogTrigger disableButtonEnhancement>
@@ -27,34 +122,39 @@ export function AdminProductPhotoEdit() {
             Image Detail
           </DialogTitle>
 
-          <DialogContent style={{
-            ...Flex,
-            columnGap: tokens.spacingHorizontalL
-          }}>
+          <DialogContent className={style.box}>
             <Image
               shape="rounded"
-              style={{
-                ...Cover,
-                aspectRatio: "1",
-                width: "50%"
-              }}
-              src={"https://picsum.photos/650"}
+              className={style.img}
+              src={Cover}
             />
 
-            <div style={{
-              ...ColFlex,
-              flexGrow: 1,
-              rowGap: tokens.spacingVerticalL
-            }}>
+            <div className={style.cap}>
               <Field label="Caption">
-                <Input />
+                <Input value={cap} onChange={(_, e) => setCap(e.value)} />
               </Field>
 
-              <Button>Save Caption</Button>
+              <Button onClick={() => updateCaption(Id, cap)}>
+                Save Caption
+              </Button>
 
-              <Button>Replace</Button>
+              <Button onClick={() => {
+                const input = document.createElement("input");
+                input.type = "file";
+                input.accept = "image/*";
 
-              <Button appearance="primary">Delete</Button>
+                input.onchange = () => {
+                  if (input.files)
+                    updateFile(Id, input.files[0]);
+                };
+                input.click();
+              }}>
+                Replace
+              </Button>
+
+              <Button appearance="primary" onClick={() => deletePhoto(Id)}>
+                Delete
+              </Button>
             </div>
           </DialogContent>
         </DialogBody>

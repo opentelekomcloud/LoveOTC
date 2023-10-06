@@ -50,7 +50,7 @@ export function use500Toast<T>() {
 
           </ToastBody>
         </Toast>,
-        { intent: "error", timeout: 5000 }
+        { intent: "error", timeout: 10000 }
       );
 
       console.error(e.Error);

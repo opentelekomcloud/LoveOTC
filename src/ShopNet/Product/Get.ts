@@ -1,5 +1,6 @@
 import { random } from "lodash-es";
 import { IComboItem } from "~/Pages/Admin/Product/Combo";
+import { IPhotoItem } from "~/Pages/Admin/Product/Photo";
 import { IProductInfo } from "~/Pages/Gallery";
 import demo from "./demo.json";
 
@@ -97,11 +98,23 @@ export class ProductGet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.1.0
+   * @version 0.2.0
    */
-  public static async Carousel(id: number): Promise<string[]> {
-    return Array(random(3, 8)).fill(0)
-      .map(() => `https://picsum.photos/${random(500, 1000)}`)
+  public static async Carousel(prodId: number): Promise<IPhotoItem[]> {
+    const items: IPhotoItem[] = [
+      {
+        Id: 0,
+        Cover: "https://picsum.photos/550",
+        Caption: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+      },
+      {
+        Id: 1,
+        Cover: "https://picsum.photos/650",
+        Caption: "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      }
+    ]
+
+    return items;
   }
 
   /**

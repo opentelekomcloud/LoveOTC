@@ -26,7 +26,7 @@ export function Shipment({ OrderId, Refresh }: { OrderId: number; Refresh: (id: 
 
   const { run } = useRequest(AdminHub.Order.Post.Ship, {
     manual: true,
-    onFinally([req], _, e) {
+    onFinally(req, _, e) {
       if (e)
         dispatchError({
           Message: "Failed Update Tracking Number",
