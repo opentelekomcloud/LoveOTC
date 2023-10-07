@@ -1,16 +1,20 @@
-import { Button, DataGridCell, DataGridHeaderCell, Subtitle1, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
-import { AddRegular, DeleteRegular } from "@fluentui/react-icons";
+import { DataGridCell, DataGridHeaderCell, Subtitle1, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
+import { useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { Flex } from "~/Helpers/Styles";
+import { AdminHub } from "~/ShopNet/Admin";
+import { AdminProductVariantDelete } from "./Delete";
 import { AdminProductVariantEdit } from "./Edit";
+import { AdminProductAddVariant } from "./New";
 
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.1.0
  */
-interface IVariantItem {
-  Id: string;
+export interface IVariantItem {
+  Id: number;
+  Name: string;
   Types: string[];
 }
 
@@ -19,20 +23,61 @@ interface IVariantItem {
  * @since 0.5.0
  * @version 0.1.0
  */
+const useStyles = makeStyles({
+  body: {
+    ...Flex,
+    justifyContent: "space-between"
+  },
+  four: {
+    flexBasis: "4%",
+    flexGrow: 0
+  },
+  seven: {
+    flexBasis: "7%",
+    flexGrow: 0
+  },
+  twelve: {
+    flexBasis: "12%",
+    flexGrow: 0
+  }
+});
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.2.0
+ */
 const columns: TableColumnDefinition<IVariantItem>[] = [
+  createTableColumn<IVariantItem>({
+    columnId: "Id",
+    renderHeaderCell: () => {
+      return (
+        <DataGridHeaderCell className={useStyles().four}>
+          Id
+        </DataGridHeaderCell>
+      )
+    },
+    renderCell(item) {
+      return (
+        <DataGridCell className={useStyles().four}>
+          {item.Id}
+        </DataGridCell>
+      )
+    }
+  }),
   createTableColumn<IVariantItem>({
     columnId: "Name",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "12%", flexGrow: 0 }}>
+        <DataGridHeaderCell className={useStyles().twelve}>
           Name
         </DataGridHeaderCell>
       )
     },
     renderCell(item) {
       return (
-        <DataGridCell style={{ flexBasis: "12%", flexGrow: 0 }}>
-          {item.Id}
+        <DataGridCell className={useStyles().twelve}>
+          {item.Name}
         </DataGridCell>
       )
     }
@@ -58,35 +103,20 @@ const columns: TableColumnDefinition<IVariantItem>[] = [
     columnId: "Action",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "7%", flexGrow: 0 }}>
+        <DataGridHeaderCell className={useStyles().seven}>
           Action
         </DataGridHeaderCell>
       )
     },
     renderCell(item) {
       return (
-        <DataGridCell style={{ flexBasis: "7%", flexGrow: 0 }}>
-          <AdminProductVariantEdit />
-
-          <Button
-            appearance="subtle"
-            icon={<DeleteRegular />}
-          />
+        <DataGridCell className={useStyles().seven}>
+          <AdminProductVariantEdit VariantId={item.Id} Refresh={refreshVariant} />
+          <AdminProductVariantDelete VariantId={item.Id} Refresh={refreshVariant} />
         </DataGridCell>
       )
     }
   })
-]
-
-const items: IVariantItem[] = [
-  {
-    Id: "Color",
-    Types: ["White", "Red"]
-  },
-  {
-    Id: "Size",
-    Types: ["Big", "Small"]
-  }
 ]
 
 /**
@@ -94,16 +124,28 @@ const items: IVariantItem[] = [
  * @since 0.5.0
  * @version 0.1.0
  */
+let refreshVariant: () => void;
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.2.0
+ */
 export function AdminProductVariant({ ProdId }: { ProdId: number }) {
+  const style = useStyles();
+
+  const { data, run } = useRequest(AdminHub.Product.Get.Variants, {
+    defaultParams: [ProdId]
+  });
+
+  refreshVariant = () => run(ProdId);
+
   return <>
-    <div style={{
-      ...Flex,
-      justifyContent: "space-between"
-    }}>
+    <div className={style.body}>
       <Subtitle1>Variant</Subtitle1>
-      <Button appearance="primary" icon={<AddRegular />}>New Variant</Button>
+      <AdminProductAddVariant ProdId={ProdId} Update={run} />
     </div>
 
-    <DelegateDataGrid Items={items} Columns={columns} />
+    <DelegateDataGrid Items={data || []} Columns={columns} />
   </>
 }

@@ -5,6 +5,7 @@ import { useBoolean } from "ahooks";
 import { useEffect } from "react";
 import { useRouter } from "~/Components/Router";
 import { ColFlex } from "~/Helpers/Styles";
+import { AdminProductCategory } from "./Category";
 import { AdminProductCombo } from "./Combo";
 import { AdminProductName } from "./Name";
 import { AdminProductPhoto } from "./Photo";
@@ -71,9 +72,13 @@ export function AdminProductDetail({ ProdId }: { ProdId: number }) {
 
       <DrawerBody className={style.body}>
         <AdminProductName ProdId={ProdId} />
+        <AdminProductCategory ProdId={ProdId} />
+
         <AdminProductPhoto ProdId={ProdId} />
         <AdminProductVariant ProdId={ProdId} />
         <AdminProductCombo ProdId={ProdId} />
+
+        Rich Text Editor is temporarily unavailable.
       </DrawerBody>
     </Drawer>
   </>

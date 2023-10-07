@@ -66,14 +66,14 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
     onFinally(req, _, e) {
       if (e)
         dispatchError({
-          Message: "Failed Update Caption",
+          Message: "Failed Update Photo",
           Request: req,
           Error: e
         });
 
       dispatchToast(
         <Toast>
-          <ToastTitle>Caption Updated</ToastTitle>
+          <ToastTitle>Photo Updated</ToastTitle>
         </Toast>,
         { intent: "success" }
       );

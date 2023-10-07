@@ -1,4 +1,4 @@
-import { Button, DataGridCell, DataGridHeaderCell, Subtitle1, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
+import { Button, DataGridCell, DataGridHeaderCell, Subtitle1, TableColumnDefinition, Toast, ToastTitle, createTableColumn, makeStyles } from "@fluentui/react-components";
 import { AddRegular, ArrowDownRegular, ArrowUpRegular } from "@fluentui/react-icons";
 import { useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
@@ -109,7 +109,7 @@ let refreshCarousel: () => void;
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
+ * @version 0.3.0
  */
 export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
   const { data, run } = useRequest(Hub.Product.Get.Carousel, {
@@ -118,10 +118,50 @@ export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
 
   refreshCarousel = () => run(ProdId);
 
+  const { dispatchError, dispatchToast } = use500Toast();
+
+  const { run: newPhoto } = useRequest(AdminHub.Product.Post.UploadPhoto, {
+    manual: true,
+    onFinally(req, _, e) {
+      if (e)
+        dispatchError({
+          Message: "Failed Upload Photo",
+          Request: req,
+          Error: e
+        });
+
+      dispatchToast(
+        <Toast>
+          <ToastTitle>Photo Uploaded</ToastTitle>
+        </Toast>,
+        { intent: "success" }
+      );
+
+      refreshCarousel();
+    },
+  });
+
   return <>
     <div className={useStyles().box}>
       <Subtitle1>Photos</Subtitle1>
-      <Button appearance="primary" icon={<AddRegular />}>New Image</Button>
+
+      <Button
+        appearance="primary"
+        icon={<AddRegular />}
+        onClick={() => {
+          const input = document.createElement("input");
+          input.type = "file";
+          input.accept = "image/*";
+
+          input.onchange = () => {
+            if (input.files)
+              newPhoto(null, input.files[0]);
+          };
+          input.click();
+        }}
+      >
+        New Image
+      </Button>
     </div>
 
     <DelegateDataGrid Items={data || []} Columns={columns} />

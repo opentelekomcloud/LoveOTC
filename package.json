@@ -15,7 +15,7 @@
     "update": "npx npm-check-updates -u"
   },
   "dependencies": {
-    "@fluentui/react-components": "^9.34.0",
+    "@fluentui/react-components": "^9.34.1",
     "@fluentui/react-hooks": "^8.6.30",
     "@fluentui/react-icons": "^2.0.218",
     "@griffel/react": "^1.5.16",
