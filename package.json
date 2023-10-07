@@ -17,7 +17,7 @@
   "dependencies": {
     "@fluentui/react-components": "^9.34.1",
     "@fluentui/react-hooks": "^8.6.30",
-    "@fluentui/react-icons": "^2.0.218",
+    "@fluentui/react-icons": "^2.0.219",
     "@griffel/react": "^1.5.16",
     "@lexical/clipboard": "^0.12.2",
     "@lexical/code": "^0.12.2",
@@ -47,7 +47,7 @@
   "devDependencies": {
     "@types/lodash-es": "^4.17.9",
     "@types/react": "^18.2.25",
-    "@types/react-dom": "^18.2.10",
+    "@types/react-dom": "^18.2.11",
     "@vitejs/plugin-react-swc": "^3.4.0",
     "typescript": "^5.2.2",
     "vite": "^4.4.11"

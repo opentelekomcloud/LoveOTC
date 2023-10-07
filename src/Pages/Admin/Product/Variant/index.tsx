@@ -111,7 +111,8 @@ const columns: TableColumnDefinition<IVariantItem>[] = [
     renderCell(item) {
       return (
         <DataGridCell className={useStyles().seven}>
-          <AdminProductVariantEdit VariantId={item.Id} Refresh={refreshVariant} />
+          <AdminProductVariantEdit Variant={item} Refresh={refreshVariant} />
+
           <AdminProductVariantDelete VariantId={item.Id} Refresh={refreshVariant} />
         </DataGridCell>
       )

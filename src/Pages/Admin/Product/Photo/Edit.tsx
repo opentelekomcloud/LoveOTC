@@ -40,7 +40,7 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
 
   const { dispatchError, dispatchToast } = use500Toast();
 
-  const { run: updateCaption } = useRequest(AdminHub.Product.Post.Caption, {
+  const { run: updateCaption } = useRequest(AdminHub.Product.Patch.Caption, {
     manual: true,
     onFinally(req, _, e) {
       if (e)
@@ -61,7 +61,7 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
     },
   });
 
-  const { run: updateFile } = useRequest(AdminHub.Product.Post.UploadPhoto, {
+  const { run: updateFile } = useRequest(AdminHub.Product.Patch.Photo, {
     manual: true,
     onFinally(req, _, e) {
       if (e)

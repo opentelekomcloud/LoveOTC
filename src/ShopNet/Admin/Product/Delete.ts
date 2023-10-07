@@ -22,4 +22,13 @@ export class AdminProductDelete {
   public static async Variant(variantId: number) {
     throw new Error("TODO");
   }
+
+  /**
+   * @author Aloento
+   * @since 0.5.0
+   * @version 0.1.0
+   */
+  public static async Type(variantId: number, type: string) {
+    throw new Error("TODO");
+  }
 }

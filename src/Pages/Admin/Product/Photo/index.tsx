@@ -120,7 +120,7 @@ export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
 
   const { dispatchError, dispatchToast } = use500Toast();
 
-  const { run: newPhoto } = useRequest(AdminHub.Product.Post.UploadPhoto, {
+  const { run: newPhoto } = useRequest(AdminHub.Product.Post.Photo, {
     manual: true,
     onFinally(req, _, e) {
       if (e)
@@ -155,7 +155,7 @@ export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
 
           input.onchange = () => {
             if (input.files)
-              newPhoto(null, input.files[0]);
+              newPhoto(input.files[0]);
           };
           input.click();
         }}

@@ -10,32 +10,24 @@ import { AdminHub } from "~/ShopNet/Admin";
  * @since 0.5.0
  * @version 0.1.0
  */
-export function AdminProductCategory({ ProdId }: { ProdId: number; }) {
-  const [cate, setCate] = useState("");
+export function AdminProductVariantName({ Id, Name }: { Id: number; Name: string; }) {
+  const [name, setName] = useState(Name);
   const [edit, { setTrue, setFalse }] = useBoolean();
-
-  useRequest(AdminHub.Product.Get.Category, {
-    defaultParams: [ProdId],
-    onSuccess(data) {
-      setCate(data);
-    }
-  });
-
   const { dispatchError, dispatchToast } = use500Toast();
 
-  const { run } = useRequest(AdminHub.Product.Patch.Category, {
+  const { run } = useRequest(AdminHub.Product.Patch.VariantName, {
     manual: true,
     onFinally(req, _, e) {
       if (e)
         dispatchError({
-          Message: "Failed Update Category",
+          Message: "Failed Update Variant Name",
           Request: req,
           Error: e
         });
 
       dispatchToast(
         <Toast>
-          <ToastTitle>Category Updated</ToastTitle>
+          <ToastTitle>Variant Name Updated</ToastTitle>
         </Toast>,
         { intent: "success" }
       );
@@ -47,13 +39,13 @@ export function AdminProductCategory({ ProdId }: { ProdId: number; }) {
   return (
     <Input
       size="large"
-      value={cate}
+      value={name}
       disabled={!edit}
       appearance="underline"
-      onChange={(_, v) => setCate(v.value)}
-      contentBefore={<Subtitle2>Category</Subtitle2>}
+      onChange={(_, v) => setName(v.value)}
+      contentBefore={<Subtitle2>Name</Subtitle2>}
       contentAfter={edit
-        ? <Button appearance="subtle" icon={<SendRegular />} onClick={() => run(ProdId, cate)} />
+        ? <Button appearance="subtle" icon={<SendRegular />} onClick={() => run(Id, name)} />
         : <Button appearance="subtle" icon={<EditRegular />} onClick={setTrue} />}
     />
   );

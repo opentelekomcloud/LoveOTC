@@ -1,5 +1,6 @@
 import { AdminProductDelete } from "./Delete";
 import { AdminProductGet } from "./Get";
+import { AdminProductPatch } from "./Patch";
 import { AdminProductPost } from "./Post";
 
 /**
@@ -10,5 +11,6 @@ import { AdminProductPost } from "./Post";
 export const AdminProduct = {
   Get: AdminProductGet,
   Post: AdminProductPost,
+  Patch: AdminProductPatch,
   Delete: AdminProductDelete,
 }
