@@ -21,9 +21,9 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.1.1
  */
-export function AdminProductAddVariant({ ProdId, Update }: { ProdId: number; Update: (prodId: number) => void }) {
+export function AdminProductNewVariant({ ProdId, Refresh }: { ProdId: number; Refresh: (prodId: number) => void }) {
   const style = useStyles();
   const [open, { toggle }] = useBoolean();
   const [name, setName] = useState("");
@@ -47,7 +47,7 @@ export function AdminProductAddVariant({ ProdId, Update }: { ProdId: number; Upd
         { intent: "success" }
       );
 
-      Update(ProdId);
+      Refresh(ProdId);
       setName("");
       toggle();
     },
@@ -62,7 +62,7 @@ export function AdminProductAddVariant({ ProdId, Update }: { ProdId: number; Upd
       </PopoverTrigger>
 
       <PopoverSurface className={style.body}>
-        <Field label="Variant Name">
+        <Field required label="Variant Name">
           <Input value={name} onChange={(_, e) => setName(e.value)} />
         </Field>
 

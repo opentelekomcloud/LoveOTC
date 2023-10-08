@@ -15,9 +15,6 @@ export function Admin() {
 
   return useMemo(() => {
     switch (path) {
-      case "Product":
-        return <AdminProduct />;
-
       case "Order":
         return <AdminOrder />;
 

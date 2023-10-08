@@ -1,5 +1,5 @@
 import { Button, DataGridCell, DataGridHeaderCell, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Label, SpinButton, TableColumnDefinition, createTableColumn, tokens } from "@fluentui/react-components";
-import { AddRegular, DeleteRegular, DismissRegular, EditRegular } from "@fluentui/react-icons";
+import { AddRegular, DismissRegular, EditRegular } from "@fluentui/react-icons";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { Flex } from "~/Helpers/Styles";
 import { IType } from ".";
@@ -41,22 +41,17 @@ const columns: TableColumnDefinition<IComboDetailItem>[] = [
     columnId: "Action",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "12%", flexGrow: 0 }}>
+        <DataGridHeaderCell style={{ flexBasis: "8%", flexGrow: 0 }}>
           Action
         </DataGridHeaderCell>
       )
     },
     renderCell(item) {
       return (
-        <DataGridCell style={{ flexBasis: "12%", flexGrow: 0 }}>
+        <DataGridCell style={{ flexBasis: "8%", flexGrow: 0 }}>
           <Button
             appearance="subtle"
             icon={<EditRegular />}
-          />
-
-          <Button
-            appearance="subtle"
-            icon={<DeleteRegular />}
           />
         </DataGridCell>
       )
@@ -82,7 +77,7 @@ const items: IComboDetailItem[] = [
  * @since 0.5.0
  * @version 0.1.0
  */
-export function AdminProductComboEdit() {
+export function AdminProductComboDetail() {
   return (
     <Dialog>
       <DialogTrigger disableButtonEnhancement>

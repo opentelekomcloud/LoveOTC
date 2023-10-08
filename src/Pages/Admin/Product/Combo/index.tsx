@@ -1,8 +1,11 @@
-import { Button, DataGridCell, DataGridHeaderCell, Subtitle1, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
-import { AddRegular, DeleteRegular } from "@fluentui/react-icons";
+import { Button, DataGridCell, DataGridHeaderCell, Subtitle1, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
+import { DeleteRegular } from "@fluentui/react-icons";
+import { useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { Flex } from "~/Helpers/Styles";
-import { AdminProductComboEdit } from "./Edit";
+import { Hub } from "~/ShopNet";
+import { AdminProductComboDetail } from "./Detail";
+import { AdminProductNewCombo } from "./New";
 
 /**
  * @author Aloento
@@ -30,19 +33,43 @@ export interface IType {
  * @since 0.5.0
  * @version 0.1.0
  */
+const useStyles = makeStyles({
+  body: {
+    ...Flex,
+    justifyContent: "space-between"
+  },
+  four: {
+    flexBasis: "4%",
+    flexGrow: 0
+  },
+  seven: {
+    flexBasis: "7%",
+    flexGrow: 0
+  },
+  five: {
+    flexBasis: "5%",
+    flexGrow: 0
+  }
+});
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.1.0
+ */
 const columns: TableColumnDefinition<IComboItem>[] = [
   createTableColumn<IComboItem>({
     columnId: "Id",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "4%", flexGrow: 0 }}>
+        <DataGridHeaderCell className={useStyles().four}>
           Id
         </DataGridHeaderCell>
       )
     },
     renderCell(item) {
       return (
-        <DataGridCell style={{ flexBasis: "4%", flexGrow: 0 }}>
+        <DataGridCell className={useStyles().four}>
           {item.Id}
         </DataGridCell>
       )
@@ -61,14 +88,14 @@ const columns: TableColumnDefinition<IComboItem>[] = [
     columnId: "Stock",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "5%", flexGrow: 0 }}>
+        <DataGridHeaderCell className={useStyles().five}>
           Stock
         </DataGridHeaderCell>
       )
     },
     renderCell(item) {
       return (
-        <DataGridCell style={{ flexBasis: "5%", flexGrow: 0 }}>
+        <DataGridCell className={useStyles().five}>
           {item.Stock}
         </DataGridCell>
       )
@@ -78,15 +105,15 @@ const columns: TableColumnDefinition<IComboItem>[] = [
     columnId: "Action",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "7%", flexGrow: 0 }}>
+        <DataGridHeaderCell className={useStyles().seven}>
           Action
         </DataGridHeaderCell>
       )
     },
     renderCell(item) {
       return (
-        <DataGridCell style={{ flexBasis: "7%", flexGrow: 0 }}>
-          <AdminProductComboEdit />
+        <DataGridCell className={useStyles().seven}>
+          <AdminProductComboDetail />
 
           <Button
             appearance="subtle"
@@ -98,38 +125,22 @@ const columns: TableColumnDefinition<IComboItem>[] = [
   })
 ]
 
-const items: IComboItem[] = [
-  {
-    Id: 0,
-    Combo: [
-      {
-        Variant: "Color",
-        Type: "Red"
-      },
-      {
-        Variant: "Size",
-        Type: "Big"
-      }
-    ],
-    Stock: 10
-  },
-]
-
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 export function AdminProductCombo({ ProdId }: { ProdId: number }) {
+  const { data, run } = useRequest(Hub.Product.Get.Combo, {
+    defaultParams: [ProdId]
+  });
+
   return <>
-    <div style={{
-      ...Flex,
-      justifyContent: "space-between"
-    }}>
+    <div className={useStyles().body}>
       <Subtitle1>Combo</Subtitle1>
-      <Button appearance="primary" icon={<AddRegular />}>New Combo</Button>
+      <AdminProductNewCombo ProdId={ProdId} Refresh={run} />
     </div>
 
-    <DelegateDataGrid Items={items} Columns={columns} />
+    <DelegateDataGrid Items={data?.map((v, i) => ({ Id: i, ...v })) || []} Columns={columns} />
   </>
 }

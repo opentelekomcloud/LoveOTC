@@ -5,7 +5,7 @@ import { Flex } from "~/Helpers/Styles";
 import { AdminHub } from "~/ShopNet/Admin";
 import { AdminProductVariantDelete } from "./Delete";
 import { AdminProductVariantEdit } from "./Edit";
-import { AdminProductAddVariant } from "./New";
+import { AdminProductNewVariant } from "./New";
 
 /**
  * @author Aloento
@@ -144,7 +144,7 @@ export function AdminProductVariant({ ProdId }: { ProdId: number }) {
   return <>
     <div className={style.body}>
       <Subtitle1>Variant</Subtitle1>
-      <AdminProductAddVariant ProdId={ProdId} Update={run} />
+      <AdminProductNewVariant ProdId={ProdId} Refresh={run} />
     </div>
 
     <DelegateDataGrid Items={data || []} Columns={columns} />

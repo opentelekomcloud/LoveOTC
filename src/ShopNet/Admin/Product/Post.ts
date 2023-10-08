@@ -44,11 +44,20 @@ export class AdminProductPost {
   }
 
   /**
-    * @author Aloento
-    * @since 0.5.0
-    * @version 0.1.0
-    */
+   * @author Aloento
+   * @since 0.5.0
+   * @version 0.1.0
+   */
   public static async Type(variantId: number, name: string): Promise<true> {
+    throw new Error("TODO");
+  }
+
+  /**
+   * @author Aloento
+   * @since 0.5.0
+   * @version 0.1.0
+   */
+  public static async Combo(prodId: number, combo: Record<string, string>, stock: number): Promise<true> {
     throw new Error("TODO");
   }
 }
