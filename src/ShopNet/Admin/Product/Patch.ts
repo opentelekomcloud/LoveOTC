@@ -53,11 +53,20 @@ export class AdminProductPatch {
   }
 
   /**
-    * @author Aloento
-    * @since 0.5.0
-    * @version 0.1.0
-    */
+   * @author Aloento
+   * @since 0.5.0
+   * @version 0.1.0
+   */
   public static async Type(variantId: number, oldName: string, newName: string): Promise<true> {
+    throw new Error("TODO");
+  }
+
+  /**
+   * @author Aloento
+   * @since 0.5.0
+   * @version 0.1.0
+   */
+  public static async Combo(comboId: number, combo: Record<string, string>, stock: number): Promise<true> {
     throw new Error("TODO");
   }
 }

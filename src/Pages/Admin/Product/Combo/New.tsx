@@ -75,7 +75,7 @@ const useStyles = makeStyles({
 export function AdminProductNewCombo({ ProdId, Refresh }: { ProdId: number; Refresh: (prodId: number) => void }) {
   const [open, { toggle }] = useBoolean();
   const [combo, setCombo] = useState<Record<string, string>>({});
-  const [stock, setStock] = useState(0);
+  const [stock, setStock] = useState(1);
 
   const { data: varis } = useRequest(AdminHub.Product.Get.Variants, {
     defaultParams: [ProdId],
@@ -132,7 +132,6 @@ export function AdminProductNewCombo({ ProdId, Refresh }: { ProdId: number; Refr
           <DialogContent>
             <DelegateDataGrid
               Items={varis?.map(x => ({
-                Current: combo,
                 Update(type: string) {
                   combo[x.Name] = type;
                   setCombo({ ...combo });
@@ -155,7 +154,7 @@ export function AdminProductNewCombo({ ProdId, Refresh }: { ProdId: number; Refr
                 }
               }} />
 
-              <Button appearance="primary" onClick={() => run(ProdId, combo, stock)}>Submit</Button>
+              <Button appearance="primary" onClick={() => run(ProdId, combo, stock)}>Create</Button>
             </div>
           </DialogContent>
         </DialogBody>

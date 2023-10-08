@@ -4,28 +4,18 @@ import { useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { Flex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
-import { AdminProductComboDetail } from "./Detail";
+import { AdminProductComboDetail, IDetailComboItem } from "./Detail";
 import { AdminProductNewCombo } from "./New";
 
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 export interface IComboItem {
   Id: number;
-  Combo: IType[];
+  Combo: Record<string, string>;
   Stock: number;
-}
-
-/**
- * @author Aloento
- * @since 0.5.0
- * @version 0.1.0
- */
-export interface IType {
-  Variant: string;
-  Type: string;
 }
 
 /**
@@ -57,8 +47,8 @@ const useStyles = makeStyles({
  * @since 0.5.0
  * @version 0.1.0
  */
-const columns: TableColumnDefinition<IComboItem>[] = [
-  createTableColumn<IComboItem>({
+const columns: TableColumnDefinition<IDetailComboItem>[] = [
+  createTableColumn<IDetailComboItem>({
     columnId: "Id",
     renderHeaderCell: () => {
       return (
@@ -75,16 +65,16 @@ const columns: TableColumnDefinition<IComboItem>[] = [
       )
     }
   }),
-  createTableColumn<IComboItem>({
+  createTableColumn<IDetailComboItem>({
     columnId: "Combo",
     renderHeaderCell: () => {
       return <DataGridHeaderCell>Combo</DataGridHeaderCell>
     },
     renderCell(item) {
-      return <DataGridCell>{item.Combo.reduce((prev, curr) => `${prev} ${curr.Variant} : ${curr.Type} ;`, "")}</DataGridCell>
+      return <DataGridCell>{Object.entries(item.Combo).reduce((prev, curr) => `${prev} ${curr[0]} : ${curr[1]} ;`, "")}</DataGridCell>
     }
   }),
-  createTableColumn<IComboItem>({
+  createTableColumn<IDetailComboItem>({
     columnId: "Stock",
     renderHeaderCell: () => {
       return (
@@ -101,7 +91,7 @@ const columns: TableColumnDefinition<IComboItem>[] = [
       )
     }
   }),
-  createTableColumn<IComboItem>({
+  createTableColumn<IDetailComboItem>({
     columnId: "Action",
     renderHeaderCell: () => {
       return (
@@ -113,7 +103,7 @@ const columns: TableColumnDefinition<IComboItem>[] = [
     renderCell(item) {
       return (
         <DataGridCell className={useStyles().seven}>
-          <AdminProductComboDetail />
+          <AdminProductComboDetail {...item} />
 
           <Button
             appearance="subtle"
@@ -141,6 +131,6 @@ export function AdminProductCombo({ ProdId }: { ProdId: number }) {
       <AdminProductNewCombo ProdId={ProdId} Refresh={run} />
     </div>
 
-    <DelegateDataGrid Items={data?.map((v, i) => ({ Id: i, ...v })) || []} Columns={columns} />
+    <DelegateDataGrid Items={data?.map(x => ({ ProdId, Refresh: run, ...x })) || []} Columns={columns} />
   </>
 }

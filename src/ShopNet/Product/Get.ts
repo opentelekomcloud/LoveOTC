@@ -34,62 +34,42 @@ export class ProductGet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.1.0
+   * @version 0.2.0
    */
-  public static async Combo(id: number): Promise<Omit<IComboItem, "Id">[]> {
+  public static async Combo(id: number): Promise<IComboItem[]> {
     if (id > 100) throw null;
 
     return [
       {
-        Combo: [
-          {
-            Variant: "Sleeve",
-            Type: "Short"
-          },
-          {
-            Variant: "Size",
-            Type: "S"
-          }
-        ],
+        Id: 1,
+        Combo: {
+          Color: "White",
+          Size: "Big"
+        },
         Stock: 8
       },
       {
-        Combo: [
-          {
-            Variant: "Sleeve",
-            Type: "Short"
-          },
-          {
-            Variant: "Size",
-            Type: "L"
-          }
-        ],
+        Id: 2,
+        Combo: {
+          Color: "Red",
+          Size: "Small"
+        },
         Stock: 6
       },
       {
-        Combo: [
-          {
-            Variant: "Sleeve",
-            Type: "Long"
-          },
-          {
-            Variant: "Size",
-            Type: "S"
-          }
-        ],
+        Id: 3,
+        Combo: {
+          Color: "White",
+          Size: "Big"
+        },
         Stock: 10
       },
       {
-        Combo: [
-          {
-            Variant: "Sleeve",
-            Type: "Long"
-          },
-          {
-            Variant: "Size",
-            Type: "L"
-          }
-        ],
+        Id: 4,
+        Combo: {
+          Color: "Red",
+          Size: "Small"
+        },
         Stock: 4
       },
     ]

@@ -39,7 +39,7 @@ export class AdminProductPost {
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static async Variant(prodId: number, name: string): Promise<true> {
+  public static async Variant(prodId: number, name: string): Promise<number> {
     throw new Error("TODO");
   }
 
@@ -57,7 +57,7 @@ export class AdminProductPost {
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static async Combo(prodId: number, combo: Record<string, string>, stock: number): Promise<true> {
+  public static async Combo(prodId: number, combo: Record<string, string>, stock: number): Promise<number> {
     throw new Error("TODO");
   }
 }

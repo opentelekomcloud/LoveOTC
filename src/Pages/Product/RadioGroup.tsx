@@ -31,7 +31,7 @@ const useStyle = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.1
+ * @version 0.2.0
  */
 export function ProductRadioList({ ProdId }: { ProdId: number }) {
   const { data } = useRequest(Hub.Product.Get.Combo, {
@@ -47,12 +47,12 @@ export function ProductRadioList({ ProdId }: { ProdId: number }) {
     const cur: Record<string, string> = {};
 
     for (const i of data)
-      for (const c of i.Combo)
-        if (variant.hasOwnProperty(c.Variant))
-          variant[c.Variant].add(c.Type);
+      for (const [vari, type] of Object.entries(i.Combo))
+        if (variant.hasOwnProperty(vari))
+          variant[vari].add(type);
         else {
-          variant[c.Variant] = new Set([c.Type]);
-          cur[c.Variant] = c.Type;
+          variant[vari] = new Set([type]);
+          cur[vari] = type;
         }
 
     Update(cur);
