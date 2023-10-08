@@ -1,25 +1,37 @@
-import { Button, Checkbox, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
-import { DeleteRegular } from "@fluentui/react-icons";
+import { TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
+import { useRequest } from "ahooks";
 import { DefaultDataGrid } from "~/Components/DataGrid";
+import { AdminHub } from "~/ShopNet/Admin";
+import { AdminUserAdmin } from "./Admin";
+import { AdminUserDelete } from "./Delete";
 
 /**
  * @author Aloento
  * @since 0.1.0
  * @version 0.1.0
  */
-interface IUserItem {
+export interface IUserItem {
   Id: number;
   Name: string;
   Email: string;
-  Admin?: boolean;
+  Admin?: true;
 }
 
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 const columns: TableColumnDefinition<IUserItem>[] = [
+  createTableColumn<IUserItem>({
+    columnId: "Id",
+    renderHeaderCell: () => {
+      return "Id";
+    },
+    renderCell(item) {
+      return item.Id;
+    }
+  }),
   createTableColumn<IUserItem>({
     columnId: "Name",
     renderHeaderCell: () => {
@@ -44,7 +56,7 @@ const columns: TableColumnDefinition<IUserItem>[] = [
       return "Admin";
     },
     renderCell(item) {
-      return <Checkbox defaultChecked={item.Admin} />
+      return <AdminUserAdmin UserId={item.Id} Admin={item.Admin} Refresh={refreshUser} />
     },
   }),
   createTableColumn<IUserItem>({
@@ -53,24 +65,17 @@ const columns: TableColumnDefinition<IUserItem>[] = [
       return "Delete";
     },
     renderCell(item) {
-      return <Button appearance="subtle" icon={<DeleteRegular />} />
+      return <AdminUserDelete UserId={item.Id} Refresh={refreshUser} />
     },
   })
 ]
 
-const items: IUserItem[] = [
-  {
-    Id: 1,
-    Name: "Aloento",
-    Email: "Aloento@T-Systems.com",
-    Admin: true
-  },
-  {
-    Id: 2,
-    Name: "SomeOne",
-    Email: "SomeOne@T-Systems.com",
-  },
-]
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.1.0
+ */
+let refreshUser: () => void;
 
 /**
  * @author Aloento
@@ -78,7 +83,11 @@ const items: IUserItem[] = [
  * @version 0.2.0
  */
 export function AdminUser() {
+  const { data, run } = useRequest(AdminHub.User.Get.List);
+
+  refreshUser = run;
+
   return (
-    <DefaultDataGrid Items={items} Columns={columns} />
+    <DefaultDataGrid Items={data || []} Columns={columns} />
   )
 }

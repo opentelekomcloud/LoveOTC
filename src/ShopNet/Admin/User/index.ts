@@ -1,4 +1,6 @@
+import { AdminUserDelete } from "./Delete";
 import { AdminUserGet } from "./Get";
+import { AdminUserPost } from "./Post";
 
 /**
  * @author Aloento
@@ -7,4 +9,6 @@ import { AdminUserGet } from "./Get";
  */
 export const AdminUser = {
   Get: AdminUserGet,
+  Post: AdminUserPost,
+  Delete: AdminUserDelete,
 }

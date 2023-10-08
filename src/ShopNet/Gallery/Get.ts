@@ -5,7 +5,7 @@ import { random } from "lodash-es";
  * @since 0.5.0
  * @version 0.1.0
  */
-class GalleryGet {
+export class GalleryGet {
   /**
    * @author Aloento
    * @since 0.5.0
@@ -30,15 +30,6 @@ class GalleryGet {
     return [
       nums,
       4 - (len % 4)
-    ]
+    ];
   }
-}
-
-/**
- * @author Aloento
- * @since 0.5.0
- * @version 0.1.0
- */
-export const Gallery = {
-  Get: GalleryGet
 }
