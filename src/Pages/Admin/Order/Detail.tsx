@@ -34,7 +34,7 @@ export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
 
   const { data, run } = useRequest(Hub.Order.Get.Detail, {
     onError() {
-      throw Nav("/Admin/Order");
+      throw Nav("Admin", "Order");
     },
     manual: true
   })
@@ -51,7 +51,7 @@ export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
       appearance="subtle"
       icon={<OpenRegular />}
       onClick={() => {
-        Nav(`/Admin/Order/${OrderId}`);
+        Nav("Admin", "Order", OrderId);
         run(OrderId);
         setTrue();
       }}
@@ -70,7 +70,7 @@ export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
             appearance="subtle"
             icon={<DismissRegular />}
             onClick={() => {
-              Nav("/Admin/Order");
+              Nav("Admin", "Order");
               toggle();
             }}
           />}

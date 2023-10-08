@@ -62,7 +62,7 @@ export function Confirm() {
 
       Update([]);
       toggle();
-      Nav("History", `${data}`);
+      Nav("History", data);
     },
     manual: true,
   })

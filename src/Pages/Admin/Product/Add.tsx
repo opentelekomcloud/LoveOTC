@@ -48,7 +48,7 @@ export function AdminProductAddButton() {
         { intent: "success" }
       );
 
-      Nav(`/Admin/${data}`);
+      Nav("Admin", data);
     },
   });
 

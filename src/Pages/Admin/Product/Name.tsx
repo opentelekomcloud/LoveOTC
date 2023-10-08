@@ -22,7 +22,7 @@ export function AdminProductName({ ProdId }: { ProdId: number; }) {
       setName(data);
     },
     onError() {
-      throw Nav("/Admin");
+      throw Nav("Admin");
     },
   });
 

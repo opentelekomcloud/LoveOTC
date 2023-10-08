@@ -1,9 +1,9 @@
-import { Button, DataGridCell, DataGridHeaderCell, Subtitle1, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
-import { DeleteRegular } from "@fluentui/react-icons";
+import { DataGridCell, DataGridHeaderCell, Subtitle1, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { Flex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
+import { AdminProductComboDelete } from "./Delete";
 import { AdminProductComboDetail, IDetailComboItem } from "./Detail";
 import { AdminProductNewCombo } from "./New";
 
@@ -105,10 +105,7 @@ const columns: TableColumnDefinition<IDetailComboItem>[] = [
         <DataGridCell className={useStyles().seven}>
           <AdminProductComboDetail {...item} />
 
-          <Button
-            appearance="subtle"
-            icon={<DeleteRegular />}
-          />
+          <AdminProductComboDelete ComboId={item.Id} Refresh={() => item.Refresh(item.ProdId)} />
         </DataGridCell>
       )
     }

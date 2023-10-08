@@ -1,8 +1,8 @@
 import { Image, Link, Portal, Text, makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import { AdminSearch } from "~/Components/Search";
 import { Flex, NavH, NavW } from "~/Helpers/Styles";
 import { AdminTopNav } from "~/Pages/Admin/Nav";
 import { AdminProductAddButton } from "~/Pages/Admin/Product/Add";
-import { AdminUserSearch } from "~/Pages/Admin/User/Search";
 import { AvatarMenu } from "./AvatarMenu";
 import { ShopCart } from "./ShopCart";
 
@@ -43,7 +43,7 @@ const useStyle = makeStyles({
 /**
  * @author Aloento
  * @since 0.1.0 MusiLand
- * @version 0.1.0
+ * @version 0.1.1
  */
 export function TopNavBar() {
   const style = useStyle();
@@ -62,7 +62,7 @@ export function TopNavBar() {
 
           <div className={style.logoBox}>
             <AdminProductAddButton />
-            <AdminUserSearch />
+            <AdminSearch />
 
             <ShopCart />
             <AvatarMenu />

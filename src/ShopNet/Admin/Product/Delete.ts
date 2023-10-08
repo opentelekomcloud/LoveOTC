@@ -10,7 +10,7 @@ export class AdminProductDelete {
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static async Photo(photoId: number) {
+  public static async Photo(photoId: number): Promise<true> {
     throw new Error("TODO");
   }
 
@@ -19,7 +19,7 @@ export class AdminProductDelete {
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static async Variant(variantId: number) {
+  public static async Variant(variantId: number): Promise<true> {
     throw new Error("TODO");
   }
 
@@ -28,7 +28,16 @@ export class AdminProductDelete {
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static async Type(variantId: number, type: string) {
+  public static async Type(variantId: number, type: string): Promise<true> {
+    throw new Error("TODO");
+  }
+
+  /**
+   * @author Aloento
+   * @since 0.5.0
+   * @version 0.1.0
+   */
+  public static async Combo(comboId: number): Promise<true> {
     throw new Error("TODO");
   }
 }

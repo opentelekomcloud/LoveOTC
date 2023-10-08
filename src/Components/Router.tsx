@@ -1,17 +1,19 @@
-import { useMemoizedFn, useMount } from "ahooks";
+import { useMount } from "ahooks";
 import { createContext, useContext, useState } from "react";
 import { Combine } from "~/Helpers/Path";
 
 /**
  * @author Aloento
  * @since 0.5.0 MusiLand
- * @version 0.1.0
+ * @version 0.2.1
  */
 interface IRouter {
   Paths: readonly string[],
-  Nav: (...paths: (string | false | undefined)[]) => void,
-  Rep: (...paths: (string | false | undefined)[]) => void,
-  Reload: (bool: boolean) => void,
+  Search: URLSearchParams,
+  readonly Put: (search: URLSearchParams) => void,
+  readonly Nav: (...paths: readonly any[]) => void,
+  readonly Rep: (...paths: readonly any[]) => void,
+  readonly Reload: (bool: boolean) => void,
 }
 
 /**
@@ -40,30 +42,39 @@ let reload = false;
 /**
  * @author Aloento
  * @since 0.5.0 MusiLand
- * @version 0.1.1
+ * @version 0.2.2
  */
 export function BrowserRouter({ children }: { children: JSX.Element }): JSX.Element {
   const [router, setRouter] = useState<IRouter>(() => ({
     Paths: location.pathname.split("/").filter(x => x),
+    Search: new URLSearchParams(location.search),
+    Put: put,
     Nav: (...p) => nav(Combine(p)),
     Rep: (...p) => rep(Combine(p)),
     Reload: (bool) => reload = bool
   }));
 
-  const update = useMemoizedFn((path: string) => {
-    router.Paths = path.split("/").filter(x => x);
+  function put(search: URLSearchParams) {
+    history.replaceState(null, "", `${location.pathname}${search.size ? "?" : ""}${search.toString()}`);
+    router.Search = new URLSearchParams(search);
     setRouter({ ...router });
-  });
+  }
 
-  const nav = useMemoizedFn((path: string) => {
+  function update(path: string) {
+    router.Paths = path.split("/").filter(x => x);
+    router.Search = new URLSearchParams(location.search);
+    setRouter({ ...router });
+  }
+
+  function nav(path: string) {
     history.pushState(null, "", path);
     update(path);
-  });
+  }
 
-  const rep = useMemoizedFn((path: string) => {
+  function rep(path: string) {
     history.replaceState(null, "", path);
     update(path);
-  });
+  }
 
   useMount(() => {
     if (location.pathname === "/")
@@ -97,7 +108,7 @@ export function BrowserRouter({ children }: { children: JSX.Element }): JSX.Elem
   });
 
   return (
-    <Router.Provider value={{ ...router }}>
+    <Router.Provider value={router}>
       {children}
     </Router.Provider>
   );

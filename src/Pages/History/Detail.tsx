@@ -84,7 +84,7 @@ export function OrderDetail({ OrderId }: { OrderId: number }) {
 
   const { data, run } = useRequest(Hub.Order.Get.Detail, {
     onError() {
-      throw Nav("/History");
+      throw Nav("History");
     },
     manual: true
   })
@@ -98,7 +98,7 @@ export function OrderDetail({ OrderId }: { OrderId: number }) {
 
   return <>
     <Button appearance="subtle" icon={<OpenRegular />} onClick={() => {
-      Nav(`/History/${OrderId}`);
+      Nav("History", OrderId);
       run(OrderId);
       setTrue();
     }} />
@@ -117,7 +117,7 @@ export function OrderDetail({ OrderId }: { OrderId: number }) {
               appearance="subtle"
               icon={<DismissRegular />}
               onClick={() => {
-                Nav("/History");
+                Nav("History");
                 toggle();
               }}
             />

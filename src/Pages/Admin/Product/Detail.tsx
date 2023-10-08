@@ -43,7 +43,7 @@ export function AdminProductDetail({ ProdId }: { ProdId: number }) {
       appearance="subtle"
       icon={<OpenRegular />}
       onClick={() => {
-        Nav(`/Admin/${ProdId}`);
+        Nav("Admin", ProdId);
         setTrue();
       }}
     />
@@ -61,7 +61,7 @@ export function AdminProductDetail({ ProdId }: { ProdId: number }) {
             appearance="subtle"
             icon={<DismissRegular />}
             onClick={() => {
-              Nav(`/Admin`);
+              Nav("Admin");
               toggle();
             }}
           />}
