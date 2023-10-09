@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <UserSecretsId>aspnet-SoarCraft.LoveOTC-bd8aa786-efde-410a-8112-20d0e37af1c6</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer"
+      Version="8.0.0-rc.1.23421.29" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect"
+      Version="8.0.0-rc.1.23421.29" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Message Text="Start Build React" Importance="high" />
+    <Exec Command="cd ..  &amp; pnpm build" />
+
+    <ItemGroup>
+      <DistFiles Include="../dist/**/*" />
+      <WWWDir Include="wwwroot" />
+    </ItemGroup>
+
+    <Message Text="Remove Current wwwroot" Importance="high" />
+    <RemoveDir Directories="@(WWWDir)" />
+
+    <Message Text="Copy dist to wwwroot" Importance="high" />
+    <Copy SourceFiles="@(DistFiles)"
+      DestinationFiles="@(DistFiles->'wwwroot\%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
+
+</Project>

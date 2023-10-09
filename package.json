@@ -1,7 +1,7 @@
 {
   "name": "loveotc",
   "private": true,
-  "version": "0.5.0",
+  "version": "1.0.0",
   "type": "module",
   "author": {
     "name": "Aloento",
@@ -15,7 +15,7 @@
     "update": "npx npm-check-updates -u"
   },
   "dependencies": {
-    "@fluentui/react-components": "^9.34.1",
+    "@fluentui/react-components": "^9.34.2",
     "@fluentui/react-hooks": "^8.6.30",
     "@fluentui/react-icons": "^2.0.219",
     "@griffel/react": "^1.5.16",
@@ -46,8 +46,8 @@
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.9",
-    "@types/react": "^18.2.25",
-    "@types/react-dom": "^18.2.11",
+    "@types/react": "^18.2.27",
+    "@types/react-dom": "^18.2.12",
     "@vitejs/plugin-react-swc": "^3.4.0",
     "typescript": "^5.2.2",
     "vite": "^4.4.11"
