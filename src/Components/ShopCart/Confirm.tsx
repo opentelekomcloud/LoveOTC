@@ -105,10 +105,7 @@ export function Confirm() {
             appearance="primary"
             className={style.sub}
             disabled={!List.length}
-            onClick={() => run({
-              ShopCart: List,
-              Comment: cmt
-            })}
+            onClick={() => run(List, cmt)}
           >
             Submit
           </Button>

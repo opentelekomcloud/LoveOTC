@@ -24,7 +24,7 @@ const useStyle = makeStyles({
  */
 export function ProductCarousel({ Id }: { Id: number; }) {
   const style = useStyle();
-  const { data } = useRequest(Hub.Product.Get.Carousel, {
+  const { data } = useRequest(Hub.Product.Get.Carousel.bind(Hub.Product.Get), {
     defaultParams: [Id]
   });
 

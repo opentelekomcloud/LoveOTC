@@ -53,7 +53,7 @@ export const HistoryColumns: TableColumnDefinition<IOrderItem>[] = [
     renderCell(item) {
       return (
         <DataGridCell>
-          {item.Orders[0]} {item.Orders.length > 1 && `& +${item.Orders.length - 1}`}
+          {item.Items[0]} {item.Items.length > 1 && `& +${item.Items.length - 1}`}
         </DataGridCell>
       );
     }

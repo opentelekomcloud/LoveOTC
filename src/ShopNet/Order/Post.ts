@@ -7,23 +7,13 @@ import { ShopNet } from "../ShopNet";
  * @since 0.5.0
  * @version 0.1.0
  */
-export interface INetOrder {
-  ShopCart: ICartItem[];
-  Comment?: string;
-}
-
-/**
- * @author Aloento
- * @since 0.5.0
- * @version 0.1.0
- */
 export class OrderPost extends ShopNet {
   /**
    * @author Aloento
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static async New(req: INetOrder): Promise<number> {
+  public static async New(cart: ICartItem[], cmt?: string): Promise<number> {
     return random(1, 100);
   }
 

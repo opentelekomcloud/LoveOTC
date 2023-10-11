@@ -1,4 +1,4 @@
-﻿namespace SoarCraft.LoveOTC; 
+﻿namespace SoarCraft.LoveOTC;
 
 public static class Shared {
 #if DEBUG

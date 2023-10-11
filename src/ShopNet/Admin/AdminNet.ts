@@ -8,6 +8,11 @@ import { accessTokenFactory } from "../ShopNet";
  * @version 0.1.0
  */
 export class AdminNet {
+  /**
+   * @author Aloento
+   * @since 1.0.0
+   * @version 0.1.0
+   */
   public static readonly Hub = new HubConnectionBuilder()
     .withUrl(import.meta.env.DEV ? "https://localhost/AdminHub" : "/AdminHub",
       {
@@ -16,10 +21,10 @@ export class AdminNet {
         logMessageContent: import.meta.env.DEV,
         accessTokenFactory() {
           const token = accessTokenFactory();
-          if (!token) {
-            throw new Error("Please Login First");
+          if (token) {
+            return token;
           }
-          return token;
+          throw new Error("Please Login First");
         },
       })
     .withAutomaticReconnect()

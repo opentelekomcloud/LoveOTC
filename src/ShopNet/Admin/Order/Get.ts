@@ -16,7 +16,7 @@ export class AdminOrderGet extends AdminNet {
     return [
       {
         Id: 1,
-        Orders: ["OTC SHIRT - GREY", "OTC Cap - Cap and Cap"],
+        Items: ["OTC SHIRT - GREY", "OTC Cap - Cap and Cap"],
         Quantity: 2,
         OrderDate: new Date(),
         TrackNumber: "Number123456789",
@@ -24,7 +24,7 @@ export class AdminOrderGet extends AdminNet {
       },
       {
         Id: 2,
-        Orders: ["OTC Cap - Cap and Cap"],
+        Items: ["OTC Cap - Cap and Cap"],
         Quantity: 1,
         OrderDate: new Date(),
         TrackNumber: "Number123456789",

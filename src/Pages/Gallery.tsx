@@ -50,7 +50,7 @@ export interface IProductInfo {
  */
 export function Gallery() {
   const style = useStyles();
-  const { data } = useRequest(() => Hub.Gallery.Get.Categories());
+  const { data } = useRequest(Hub.Gallery.Get.Categories.bind(Hub.Gallery.Get));
 
   return (
     <div className={style.main}>
@@ -68,7 +68,7 @@ export function Gallery() {
  */
 function GalleryCategory({ Category }: { Category: string }) {
   const style = useStyles();
-  const { data } = useRequest(Hub.Gallery.Get.Products, {
+  const { data } = useRequest(Hub.Gallery.Get.Products.bind(Hub.Gallery.Get), {
     defaultParams: [Category]
   });
   const list = data || [[], 0];
@@ -95,7 +95,7 @@ function GalleryCategory({ Category }: { Category: string }) {
  */
 function GalleryCard({ Id }: { Id: number }) {
   const style = useStyles();
-  const { data } = useRequest(Hub.Product.Get.Basic, {
+  const { data } = useRequest(Hub.Product.Get.Basic.bind(Hub.Product.Get), {
     defaultParams: [Id]
   })
 

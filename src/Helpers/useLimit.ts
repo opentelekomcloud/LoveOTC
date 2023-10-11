@@ -10,7 +10,7 @@ import { Hub } from "~/ShopNet";
  */
 export function useLimit(prodId: number): [boolean, number] {
   const { List } = useShopCart();
-  const { data } = useRequest(Hub.Product.Get.Limit, {
+  const { data } = useRequest(Hub.Product.Get.Limit.bind(Hub.Product.Get), {
     defaultParams: [prodId]
   })
 

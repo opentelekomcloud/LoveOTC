@@ -1,8 +1,8 @@
 import { random } from "lodash-es";
 import { createUID } from "~/Lexical/Utils/createUID";
 import { IOrderExtension, IOrderItem } from "~/Pages/History";
+import { IOrderDetail } from "~/Pages/History/Detail";
 import { ShopNet } from "../ShopNet";
-import { INetOrder } from "./Post";
 
 /**
  * @author Aloento
@@ -19,7 +19,7 @@ export class OrderGet extends ShopNet {
     return [
       {
         Id: 1,
-        Orders: ["OTC SHIRT - GREY", "OTC Cap - Cap and Cap"],
+        Items: ["OTC SHIRT - GREY", "OTC Cap - Cap and Cap"],
         Quantity: 2,
         OrderDate: new Date(),
         TrackNumber: "Number123456789",
@@ -27,7 +27,7 @@ export class OrderGet extends ShopNet {
       },
       {
         Id: 2,
-        Orders: ["OTC Cap - Cap and Cap"],
+        Items: ["OTC Cap - Cap and Cap"],
         Quantity: 1,
         OrderDate: new Date(),
         TrackNumber: "Number123456789",
@@ -41,7 +41,7 @@ export class OrderGet extends ShopNet {
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static async Detail(id: number): Promise<INetOrder> {
+  public static async Detail(id: number): Promise<IOrderDetail> {
     return {
       ShopCart: [
         {
@@ -67,7 +67,7 @@ export class OrderGet extends ShopNet {
           Quantity: 1
         }
       ],
-      Comment: Array(10).fill(0).map(() => createUID()).reduce((prev, curr) => prev + curr, "")
+      Comments: Array(10).fill(0).map(() => createUID())
     }
   }
 

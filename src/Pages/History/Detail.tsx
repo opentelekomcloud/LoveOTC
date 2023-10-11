@@ -74,6 +74,16 @@ const columns: TableColumnDefinition<ICartItem>[] = [
 
 /**
  * @author Aloento
+ * @since 1.0.0
+ * @version 0.1.0
+ */
+export interface IOrderDetail {
+  ShopCart: ICartItem[];
+  Comments?: string[];
+}
+
+/**
+ * @author Aloento
  * @since 0.5.0
  * @version 0.2.0
  */
@@ -134,7 +144,7 @@ export function OrderDetail({ OrderId }: { OrderId: number }) {
           <DelegateDataGrid Items={data?.ShopCart || []} Columns={columns} />
 
           <Field label="Comment" size="large">
-            <Label>{data?.Comment}</Label>
+            <Label>{data?.Comments?.reduce((prev, curr) => prev + curr, "")}</Label>
           </Field>
 
           <OrderAppend OrderId={OrderId} Refresh={run} />

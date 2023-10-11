@@ -1,4 +1,3 @@
-import { random } from "lodash-es";
 import { IComboItem } from "~/Pages/Admin/Product/Combo";
 import { IPhotoItem } from "~/Pages/Admin/Product/Photo";
 import { IProductInfo } from "~/Pages/Gallery";
@@ -16,11 +15,10 @@ export class ProductGet extends ShopNet {
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static async Basic(id: number): Promise<IProductInfo> {
-    return {
-      Cover: `https://picsum.photos/${random(500, 1000)}`,
-      Name: `Product ${id}`
-    }
+  public static async Basic(prodId: number): Promise<IProductInfo> {
+    await this.EnsureConnected();
+    const res = await this.Hub.invoke<IProductInfo>("Basic", prodId);
+    return res;
   }
 
   /**
@@ -28,8 +26,10 @@ export class ProductGet extends ShopNet {
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static async Limit(id: number): Promise<number> {
-    return 3;
+  public static async Limit(prodId: number): Promise<number> {
+    await this.EnsureConnected();
+    const res = await this.Hub.invoke<number>("Limit", prodId);
+    return res;
   }
 
   /**
@@ -37,43 +37,15 @@ export class ProductGet extends ShopNet {
    * @since 0.5.0
    * @version 0.2.0
    */
-  public static async Combo(id: number): Promise<IComboItem[]> {
-    if (id > 100) throw null;
+  public static async Combo(prodId: number): Promise<IComboItem[]> {
+    await this.EnsureConnected();
+    const res = await this.Hub.invoke<Omit<IComboItem & { ComboId: number }, "Id">[]>("Combo", prodId);
 
-    return [
-      {
-        Id: 1,
-        Combo: {
-          Color: "White",
-          Size: "Big"
-        },
-        Stock: 8
-      },
-      {
-        Id: 2,
-        Combo: {
-          Color: "Red",
-          Size: "Small"
-        },
-        Stock: 6
-      },
-      {
-        Id: 3,
-        Combo: {
-          Color: "White",
-          Size: "Big"
-        },
-        Stock: 10
-      },
-      {
-        Id: 4,
-        Combo: {
-          Color: "Red",
-          Size: "Small"
-        },
-        Stock: 4
-      },
-    ]
+    return res.map(x => ({
+      Id: x.ComboId,
+      Combo: x.Combo,
+      Stock: x.Stock,
+    }));
   }
 
   /**
@@ -82,20 +54,14 @@ export class ProductGet extends ShopNet {
    * @version 0.2.0
    */
   public static async Carousel(prodId: number): Promise<IPhotoItem[]> {
-    const items: IPhotoItem[] = [
-      {
-        Id: 0,
-        Cover: "https://picsum.photos/550",
-        Caption: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-      },
-      {
-        Id: 1,
-        Cover: "https://picsum.photos/650",
-        Caption: "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      }
-    ]
+    await this.EnsureConnected();
+    const res = await this.Hub.invoke<Omit<IPhotoItem & { ObjId: number }, "Id">[]>("Carousel", prodId);
 
-    return items;
+    return res.map(x => ({
+      Id: x.ObjId,
+      Cover: x.Cover,
+      Caption: x.Caption,
+    }));
   }
 
   /**
@@ -104,6 +70,8 @@ export class ProductGet extends ShopNet {
    * @version 0.1.0
    */
   public static async Lexical(id: number): Promise<string> {
+    await this.EnsureConnected();
+
     return JSON.stringify(demo.editorState);
   }
 }

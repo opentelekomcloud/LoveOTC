@@ -21,7 +21,7 @@ export interface IOrderExtension {
  */
 export interface IOrderItem extends IOrderExtension {
   Id: number;
-  Orders: string[];
+  Items: string[];
   Quantity: number;
 }
 

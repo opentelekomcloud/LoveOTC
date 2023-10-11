@@ -36,7 +36,7 @@ builder.Services.AddSignalR(x => {
 
 var app = builder.Build();
 
-if (Shared.Dev) { 
+if (Shared.Dev) {
     app.UseDeveloperExceptionPage();
 }
 

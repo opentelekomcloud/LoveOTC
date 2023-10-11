@@ -10,7 +10,6 @@ import { IComboItem } from "../Admin/Product/Combo";
 import { ProductAddCart } from "./AddCart";
 import { ProductCarousel } from "./Carousel";
 import { RadioGroupContext } from "./Context";
-import { ProductLexicalRender } from "./Lexical";
 import { ProductRadioList } from "./RadioGroup";
 
 /**
@@ -70,7 +69,7 @@ export function Product() {
   const { Nav, Paths } = useRouter();
   const id = parseInt(Paths.at(1)!);
 
-  const { data } = useRequest(Hub.Product.Get.Basic, {
+  const { data } = useRequest(Hub.Product.Get.Basic.bind(Hub.Product.Get), {
     defaultParams: [id],
     onBefore() {
       isNaN(id) && Nav("/");
@@ -124,7 +123,7 @@ export function Product() {
           </div>
         </div>
 
-        <ProductLexicalRender ProdId={id} />
+        {/* <ProductLexicalRender ProdId={id} /> */}
       </div>
     </RadioGroupContext>
   )

@@ -1,4 +1,3 @@
-import { random } from "lodash-es";
 import { ShopNet } from "../ShopNet";
 
 /**
@@ -10,27 +9,26 @@ export class GalleryGet extends ShopNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.1.0
+   * @version 0.2.0
    */
   public static async Categories(): Promise<string[]> {
-    return [
-      "T-Shirt",
-      "Cap"
-    ];
+    await this.EnsureConnected();
+    const res = await this.Hub.invoke<string[]>("Categories");
+    return res;
   }
 
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.1.0
+   * @version 0.2.0
    */
   public static async Products(category: string): Promise<[number[], number]> {
-    const len = random(1, 12);
-    const nums: number[] = Array(len).fill(0).map(() => random(1, 100));
+    await this.EnsureConnected();
+    const nums = await this.Hub.invoke<number[]>("Products", category);
 
     return [
       nums,
-      4 - (len % 4)
+      4 - (nums.length % 4)
     ];
   }
 }
