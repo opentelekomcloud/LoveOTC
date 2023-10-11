@@ -1,5 +1,5 @@
 import { useMount } from "ahooks";
-import { createContext, useContext, useState } from "react";
+import { ReactNode, createContext, useContext, useState } from "react";
 import { Combine } from "~/Helpers/Path";
 
 /**
@@ -44,7 +44,7 @@ let reload = false;
  * @since 0.5.0 MusiLand
  * @version 0.2.2
  */
-export function BrowserRouter({ children }: { children: JSX.Element }): JSX.Element {
+export function BrowserRouter({ children }: { children: ReactNode }): ReactNode {
   const [router, setRouter] = useState<IRouter>(() => ({
     Paths: location.pathname.split("/").filter(x => x),
     Search: new URLSearchParams(location.search),

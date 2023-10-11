@@ -1,20 +1,52 @@
-import { useMemo } from "react";
-import { useRouter } from "~/Components/Router";
-import { Admin } from "./Admin";
-import { Gallery } from "./Gallery";
-import { History } from "./History";
-import { Product } from "./Product";
+import { makeStyles, tokens } from "@fluentui/react-components";
+import { ColFlex, NavH, NavW } from "~/Helpers/Styles";
+import { Admin } from "~/Pages/Admin";
+import { Gallery } from "~/Pages/Gallery";
+import { History } from "~/Pages/History";
+import { Product } from "~/Pages/Product";
+import { Footer } from "../Components/Footer";
+import { useRouter } from "../Components/Router";
+import { TopNavBar } from "../Components/TopNavBar";
 
 /**
  * @author Aloento
- * @since 0.1.0
+ * @since 0.2.2 MusiLand
  * @version 0.1.0
  */
-export function EShopContent() {
+const useStyle = makeStyles({
+  body: {
+    ...ColFlex,
+    minWidth: "1024px",
+    position: "absolute",
+    marginTop: `${NavH}px`,
+    width: "100%",
+    minHeight: "-webkit-fill-available",
+    justifyContent: "space-between",
+    backgroundColor: tokens.colorNeutralBackground2
+  },
+  content: {
+    ...ColFlex,
+    maxWidth: NavW,
+    width: "-webkit-fill-available",
+    marginLeft: "auto",
+    marginRight: "auto",
+    paddingLeft: tokens.spacingHorizontalM,
+    paddingRight: tokens.spacingHorizontalM,
+    paddingTop: tokens.spacingVerticalXXXL
+  }
+});
+
+/**
+ * @author Aloento
+ * @since 0.2.2 MusiLand
+ * @version 0.2.0
+ */
+export function Layout() {
+  const style = useStyle();
   const { Paths } = useRouter();
   const path = Paths.at(0);
 
-  return useMemo(() => {
+  function Matcher() {
     switch (path) {
       case "Product":
         return <Product />;
@@ -30,7 +62,19 @@ export function EShopContent() {
         return <Gallery />;
 
       default:
-        return <div>404</div>
+        return <div>404</div>;
     }
-  }, [path])
+  }
+
+  return <>
+    <TopNavBar />
+
+    <div className={style.body}>
+      <main className={style.content}>
+        <Matcher />
+      </main>
+
+      <Footer />
+    </div>
+  </>
 }

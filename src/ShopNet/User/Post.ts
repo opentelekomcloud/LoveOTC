@@ -1,11 +1,12 @@
+import { IPersona } from "~/Components/ShopCart/Persona";
+
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.1.0
  */
-interface IPostPersona {
-  Phone?: string;
-  Address?: string;
+interface IPostPersona extends Partial<IPersona> {
+  UID?: string;
 }
 
 /**

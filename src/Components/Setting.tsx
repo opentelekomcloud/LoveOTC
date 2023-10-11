@@ -1,6 +1,7 @@
 import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Input, Label, Toast, ToastBody, ToastTitle, makeStyles, tokens } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import { useState } from "react";
+import { useAuth } from "react-oidc-context";
 import { ColFlex, Flex } from "~/Helpers/Styles";
 import { use500Toast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
@@ -25,29 +26,28 @@ const useStyles = makeStyles({
     ...ColFlex,
     rowGap: tokens.spacingVerticalM
   },
-  flex: Flex,
   one: {
-    ...ColFlex,
-    flexBasis: "50%",
-    rowGap: tokens.spacingVerticalM
+    ...Flex,
+    columnGap: tokens.spacingVerticalXXXL
   },
-  col: ColFlex,
-
 });
 
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.2
+ * @version 0.2.0
  */
 export function Setting({ Open, Toggle }: ISetting) {
   const style = useStyles();
+  const auth = useAuth();
 
+  const [name, setName] = useState<string>();
   const [phone, setPhone] = useState<string>();
   const [address, setAddress] = useState<string>();
 
-  const { data } = useRequest(Hub.User.Get.Me, {
-    onSuccess({ Address, Phone }) {
+  useRequest(Hub.User.Get.Me, {
+    onSuccess({ Name, Address, Phone }) {
+      setName(Name);
       setPhone(Phone);
       setAddress(Address);
     }
@@ -69,6 +69,8 @@ export function Setting({ Open, Toggle }: ISetting) {
         <Toast>
           <ToastTitle>Info Updated</ToastTitle>
           <ToastBody>
+            {req.Name}
+            <br />
             {req.Phone}
             <br />
             {req.Address}
@@ -88,21 +90,19 @@ export function Setting({ Open, Toggle }: ISetting) {
           <DialogTitle>Personal Information</DialogTitle>
 
           <DialogContent className={style.box}>
-            <div className={style.flex}>
-              <div className={style.one}>
-                <Field label="Name" size="large">
-                  <Label>{data?.Name}</Label>
-                </Field>
+            <div className={style.one}>
+              <Field label="Name" size="large" required>
+                <Input size="medium" value={name} maxLength={20} onChange={(_, v) => setName(v.value)} />
+              </Field>
 
-                <Field label="E-Mail" size="large">
-                  <Label>{data?.EMail}</Label>
-                </Field>
-              </div>
-
-              <Field label="Phone" size="large" required className={style.col}>
+              <Field label="Phone" size="large" required>
                 <Input size="medium" value={phone} maxLength={20} onChange={(_, v) => setPhone(v.value)} />
               </Field>
             </div>
+
+            <Field label="E-Mail" size="large">
+              <Label>{auth.user?.profile.email}</Label>
+            </Field>
 
             <Field label="Address" size="large" required>
               <Input size="medium" value={address} maxLength={100} onChange={(_, v) => setAddress(v.value)} />
@@ -114,6 +114,9 @@ export function Setting({ Open, Toggle }: ISetting) {
               <Button appearance="secondary">Cancel</Button>
             </DialogTrigger>
             <Button appearance="primary" onClick={() => run({
+              UID: auth.user?.profile.sub,
+              EMail: auth.user?.profile.email,
+              Name: name,
               Address: address,
               Phone: phone
             })}>

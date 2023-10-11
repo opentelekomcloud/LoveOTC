@@ -53,8 +53,7 @@ export function use500Toast<T>() {
         { intent: "error", timeout: 10000 }
       );
 
-      console.error(e.Error);
-      throw e.Request;
+      console.error(e);
     },
     dispatchToast
   };
