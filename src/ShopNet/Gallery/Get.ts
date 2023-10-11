@@ -1,11 +1,12 @@
 import { random } from "lodash-es";
+import { ShopNet } from "../ShopNet";
 
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.1.0
  */
-export class GalleryGet {
+export class GalleryGet extends ShopNet {
   /**
    * @author Aloento
    * @since 0.5.0

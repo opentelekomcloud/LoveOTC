@@ -1,4 +1,5 @@
 import { IPersona } from "~/Components/ShopCart/Persona";
+import { ShopNet } from "../ShopNet";
 
 /**
  * @author Aloento
@@ -14,7 +15,7 @@ interface IPostPersona extends Partial<IPersona> {
  * @since 0.5.0
  * @version 0.1.0
  */
-export class UserPost {
+export class UserPost extends ShopNet {
   /**
    * @author Aloento
    * @since 0.5.0

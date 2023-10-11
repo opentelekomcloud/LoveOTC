@@ -2,6 +2,7 @@ import { random } from "lodash-es";
 import { IComboItem } from "~/Pages/Admin/Product/Combo";
 import { IPhotoItem } from "~/Pages/Admin/Product/Photo";
 import { IProductInfo } from "~/Pages/Gallery";
+import { ShopNet } from "../ShopNet";
 import demo from "./demo.json";
 
 /**
@@ -9,7 +10,7 @@ import demo from "./demo.json";
  * @since 0.5.0
  * @version 0.1.0
  */
-export class ProductGet {
+export class ProductGet extends ShopNet {
   /**
    * @author Aloento
    * @since 0.5.0

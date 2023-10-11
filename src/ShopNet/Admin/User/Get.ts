@@ -1,13 +1,14 @@
 import { IPersona } from "~/Components/ShopCart/Persona";
 import { createUID } from "~/Lexical/Utils/createUID";
 import { IUserItem } from "~/Pages/Admin/User";
+import { AdminNet } from "../AdminNet";
 
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.1.0
  */
-export class AdminUserGet {
+export class AdminUserGet extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0

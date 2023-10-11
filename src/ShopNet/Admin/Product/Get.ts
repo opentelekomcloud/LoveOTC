@@ -1,12 +1,13 @@
 import { IProductItem } from "~/Pages/Admin/Product";
 import { IVariantItem } from "~/Pages/Admin/Product/Variant";
+import { AdminNet } from "../AdminNet";
 
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.1.0
  */
-export class AdminProductGet {
+export class AdminProductGet extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0

@@ -1,5 +1,6 @@
 import { Body1, Card, CardFooter, CardPreview, Image, Link, Title3, makeStyles, tokens } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
+import { random } from "lodash-es";
 import { ColFlex, Cover, Flex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
 
@@ -45,7 +46,7 @@ export interface IProductInfo {
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 export function Gallery() {
   const style = useStyles();
@@ -54,7 +55,7 @@ export function Gallery() {
   return (
     <div className={style.main}>
       {
-        data?.map(x => <GalleryCategory Category={x} />)
+        data?.map((x, i) => <GalleryCategory key={i} Category={x} />)
       }
     </div>
   )
@@ -63,7 +64,7 @@ export function Gallery() {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 function GalleryCategory({ Category }: { Category: string }) {
   const style = useStyles();
@@ -77,8 +78,11 @@ function GalleryCategory({ Category }: { Category: string }) {
 
     <div className={style.cate}>
       {
-        list[0].map(x => <GalleryCard Id={x} />)
-          .concat(Array(list[1]).fill(<div className={style.card} />))
+        list[0].map((x, i) => <GalleryCard key={i} Id={x} />)
+          .concat(
+            Array(list[1]).fill(null)
+              .map((_, i) => <div key={i + random(10, 100)} className={style.card} />)
+          )
       }
     </div>
   </>

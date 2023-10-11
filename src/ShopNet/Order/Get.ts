@@ -1,6 +1,7 @@
 import { random } from "lodash-es";
 import { createUID } from "~/Lexical/Utils/createUID";
 import { IOrderExtension, IOrderItem } from "~/Pages/History";
+import { ShopNet } from "../ShopNet";
 import { INetOrder } from "./Post";
 
 /**
@@ -8,7 +9,7 @@ import { INetOrder } from "./Post";
  * @since 0.5.0
  * @version 0.1.0
  */
-export class OrderGet {
+export class OrderGet extends ShopNet {
   /**
    * @author Aloento
    * @since 0.5.0

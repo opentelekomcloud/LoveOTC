@@ -1,9 +1,11 @@
+import { AdminNet } from "../AdminNet";
+
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.1.0
  */
-export class AdminProductPatch {
+export class AdminProductPatch extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0

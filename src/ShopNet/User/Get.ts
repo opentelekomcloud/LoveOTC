@@ -1,12 +1,13 @@
 import { IPersona } from "~/Components/ShopCart/Persona";
 import { createUID } from "~/Lexical/Utils/createUID";
+import { ShopNet } from "../ShopNet";
 
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.1.0
  */
-export class UserGet {
+export class UserGet extends ShopNet {
   /**
    * @author Aloento
    * @since 0.5.0

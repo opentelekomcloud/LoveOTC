@@ -36,3 +36,14 @@ export const Shared = new Table(DB, "Shared");
  * @version 0.1.0
  */
 export const CartTable = DB.table<Omit<ICartItem, "Name" | "Cover">, never>("ShopCart");
+
+/**
+ * @author Aloento
+ * @since 1.0.0
+ * @version 0.1.0
+ */
+export const OIDC = localStorage.getItem(
+  import.meta.env.DEV
+    ? "oidc.user:http://localhost:8080/realms/loveotc:loveotc"
+    : "oidc.user:https://keycloak.eco.tsi-dev.otc-service.com/realms/eco:loveotc"
+);
