@@ -25,7 +25,7 @@ const useStyles = makeStyles({
  */
 export function OrderPersona({ OrderId, Admin }: { OrderId: number; Admin?: true }) {
   const style = useStyles();
-  const { data } = useRequest(Admin ? AdminHub.User.Get.OrderUser : Hub.User.Get.Me, {
+  const { data } = useRequest(Admin ? AdminHub.User.Get.OrderUser : Hub.User.Get.Me.bind(Hub.User.Get), {
     defaultParams: [OrderId]
   });
 

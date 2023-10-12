@@ -45,7 +45,7 @@ export function Setting({ Open, Toggle }: ISetting) {
   const [phone, setPhone] = useState<string>();
   const [address, setAddress] = useState<string>();
 
-  useRequest(Hub.User.Get.Me, {
+  useRequest(Hub.User.Get.Me.bind(Hub.User.Get), {
     onSuccess({ Name, Address, Phone }) {
       setName(Name);
       setPhone(Phone);

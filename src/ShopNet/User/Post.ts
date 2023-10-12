@@ -22,6 +22,10 @@ export class UserPost extends ShopNet {
    * @version 0.1.0
    */
   public static async Update(req: IPostPersona): Promise<true> {
-    throw new Error("some");
+    this.EnsureLogin();
+    await this.EnsureConnected();
+
+    const res = await this.Hub.invoke<true>("UserPostUpdate", req);
+    return res;
   }
 }

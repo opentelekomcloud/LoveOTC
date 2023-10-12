@@ -28,7 +28,7 @@ export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: (i
 
   const { dispatchError, dispatchToast } = use500Toast();
 
-  const { run: append } = useRequest(Hub.Order.Post.Append, {
+  const { run: append } = useRequest(Hub.Order.Post.Append.bind(Hub.Order.Post), {
     manual: true,
     onFinally(req, _, e) {
       if (e)
@@ -49,7 +49,7 @@ export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: (i
     },
   });
 
-  const { run: cancel } = useRequest(Hub.Order.Post.Cancel, {
+  const { run: cancel } = useRequest(Hub.Order.Post.Cancel.bind(Hub.Order.Post), {
     manual: true,
     onFinally(req, _, e) {
       if (e)

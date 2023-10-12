@@ -33,13 +33,13 @@ export class AdminUserGet extends AdminNet {
       {
         Id: 1,
         Name: "Aloento",
-        Email: "Aloento@T-Systems.com",
+        EMail: "Aloento@T-Systems.com",
         Admin: true
       },
       {
         Id: 2,
         Name: "SomeOne",
-        Email: "SomeOne@T-Systems.com",
+        EMail: "SomeOne@T-Systems.com",
       },
     ]
 

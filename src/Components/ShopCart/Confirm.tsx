@@ -43,7 +43,7 @@ export function Confirm() {
 
   const { dispatchError, dispatchToast } = use500Toast();
 
-  const { run } = useRequest(Hub.Order.Post.New, {
+  const { run } = useRequest(Hub.Order.Post.New.bind(Hub.Order.Post), {
     onFinally([req], data, e) {
       if (e)
         dispatchError({

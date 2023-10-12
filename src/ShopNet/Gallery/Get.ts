@@ -13,7 +13,7 @@ export class GalleryGet extends ShopNet {
    */
   public static async Categories(): Promise<string[]> {
     await this.EnsureConnected();
-    const res = await this.Hub.invoke<string[]>("Categories");
+    const res = await this.Hub.invoke<string[]>("GalleryGetCategories");
     return res;
   }
 
@@ -24,7 +24,7 @@ export class GalleryGet extends ShopNet {
    */
   public static async Products(category: string): Promise<[number[], number]> {
     await this.EnsureConnected();
-    const nums = await this.Hub.invoke<number[]>("Products", category);
+    const nums = await this.Hub.invoke<number[]>("GalleryGetProducts", category);
 
     return [
       nums,

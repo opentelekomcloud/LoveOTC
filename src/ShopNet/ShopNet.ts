@@ -1,26 +1,11 @@
 import { HttpTransportType, HubConnectionBuilder, HubConnectionState, LogLevel } from "@microsoft/signalr";
 import { MessagePackHubProtocol } from "@microsoft/signalr-protocol-msgpack";
-import { User } from "oidc-client-ts";
-import { OIDC } from "./Database";
+import { AuthUser } from "./Database";
 
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.1.0
- */
-export function accessTokenFactory(): string {
-  if (OIDC) {
-    const user = User.fromStorageString(OIDC);
-    return user.access_token;
-  }
-
-  return "";
-}
-
-/**
- * @author Aloento
- * @since 1.0.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 export class ShopNet {
   /**
@@ -34,7 +19,12 @@ export class ShopNet {
         skipNegotiation: true,
         transport: HttpTransportType.WebSockets,
         logMessageContent: import.meta.env.DEV,
-        accessTokenFactory
+        accessTokenFactory() {
+          if (AuthUser)
+            return AuthUser.access_token;
+
+          return "";
+        },
       })
     .withAutomaticReconnect()
     .withHubProtocol(new MessagePackHubProtocol())
@@ -49,7 +39,17 @@ export class ShopNet {
   public static async EnsureConnected() {
     if (this.Hub.state === HubConnectionState.Disconnected
       || this.Hub.state === HubConnectionState.Disconnecting) {
-      await this.Hub.start();
+      return this.Hub.start();
     }
+  }
+
+  /**
+   * @author Aloento
+   * @since 1.0.0
+   * @version 0.1.0
+   */
+  public static EnsureLogin() {
+    if (AuthUser?.expired)
+      throw new Error("Please Login First");
   }
 }

@@ -13,7 +13,7 @@ import { AdminUserDelete } from "./Delete";
 export interface IUserItem {
   Id: number;
   Name: string;
-  Email: string;
+  EMail: string;
   Admin?: true;
 }
 
@@ -47,7 +47,7 @@ const columns: TableColumnDefinition<IUserItem>[] = [
       return "E-Mail";
     },
     renderCell(item) {
-      return item.Email;
+      return item.EMail;
     }
   }),
   createTableColumn<IUserItem>({

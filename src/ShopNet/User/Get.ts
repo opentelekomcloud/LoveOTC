@@ -1,5 +1,4 @@
 import { IPersona } from "~/Components/ShopCart/Persona";
-import { createUID } from "~/Lexical/Utils/createUID";
 import { ShopNet } from "../ShopNet";
 
 /**
@@ -14,11 +13,10 @@ export class UserGet extends ShopNet {
    * @version 0.1.0
    */
   public static async Me(): Promise<IPersona> {
-    return {
-      Name: "Aloento",
-      Phone: "+36 300000000",
-      EMail: "Aloento@T-Systems.com",
-      Address: Array(10).fill(0).map(() => createUID()).reduce((prev, curr) => prev + curr, ""),
-    }
+    this.EnsureLogin();
+    await this.EnsureConnected();
+
+    const res = await this.Hub.invoke<IPersona>("UserGetMe");
+    return res;
   }
 }

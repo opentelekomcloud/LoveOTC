@@ -1,6 +1,6 @@
 import { HttpTransportType, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { MessagePackHubProtocol } from "@microsoft/signalr-protocol-msgpack";
-import { accessTokenFactory } from "../ShopNet";
+import { AuthUser } from "../Database";
 
 /**
  * @author Aloento
@@ -20,10 +20,9 @@ export class AdminNet {
         transport: HttpTransportType.WebSockets,
         logMessageContent: import.meta.env.DEV,
         accessTokenFactory() {
-          const token = accessTokenFactory();
-          if (token) {
-            return token;
-          }
+          if (AuthUser?.expired === false)
+            return AuthUser.access_token;
+
           throw new Error("Please Login First");
         },
       })

@@ -1,4 +1,5 @@
 import Dexie from "dexie";
+import { User } from "oidc-client-ts";
 import { ICartItem } from "~/Components/ShopCart";
 import { Table } from "./Table";
 
@@ -42,8 +43,15 @@ export const CartTable = DB.table<Omit<ICartItem, "Name" | "Cover">, never>("Sho
  * @since 1.0.0
  * @version 0.1.0
  */
-export const OIDC = localStorage.getItem(
+const OIDC = localStorage.getItem(
   import.meta.env.DEV
     ? "oidc.user:http://localhost:8080/realms/loveotc:loveotc"
     : "oidc.user:https://keycloak.eco.tsi-dev.otc-service.com/realms/eco:loveotc"
 );
+
+/**
+ * @author Aloento
+ * @since 1.0.0
+ * @version 0.1.0
+ */
+export const AuthUser = OIDC ? User.fromStorageString(OIDC) : null;
