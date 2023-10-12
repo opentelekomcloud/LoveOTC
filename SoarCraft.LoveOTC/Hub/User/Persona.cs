@@ -29,5 +29,5 @@ internal class Persona {
  * </remarks>
  */
 internal class PostPersona : Persona {
-    public required Guid UID { get; set; }
+    public required Guid UId { get; set; }
 }

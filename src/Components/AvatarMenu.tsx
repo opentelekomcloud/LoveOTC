@@ -50,6 +50,8 @@ export function AvatarMenu() {
       </MenuPopover>
     </Menu>
 
-    <Setting Open={isModal} Toggle={toggleModal} />
+    <WithAuth>
+      <Setting Open={isModal} Toggle={toggleModal} />
+    </WithAuth>
   </>
 }

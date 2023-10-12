@@ -11,7 +11,7 @@ import { AdminHub } from "~/ShopNet/Admin";
 export function AdminUserAdmin({ UserId, Admin, Refresh }: { UserId: number; Admin?: true; Refresh: () => void }) {
   const { dispatchError, dispatchToast } = use500Toast();
 
-  const { run: grant } = useRequest(AdminHub.User.Post.Admin, {
+  const { run: grant } = useRequest(AdminHub.User.Post.Admin.bind(AdminHub.User.Post), {
     manual: true,
     onFinally(req, _, e) {
       if (e)
@@ -32,7 +32,7 @@ export function AdminUserAdmin({ UserId, Admin, Refresh }: { UserId: number; Adm
     },
   });
 
-  const { run: revoke } = useRequest(AdminHub.User.Delete.Admin, {
+  const { run: revoke } = useRequest(AdminHub.User.Delete.Admin.bind(AdminHub.User.Delete), {
     manual: true,
     onFinally(req, _, e) {
       if (e)

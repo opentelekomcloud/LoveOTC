@@ -83,7 +83,7 @@ let refreshUser: () => void;
  * @version 0.2.0
  */
 export function AdminUser() {
-  const { data, run } = useRequest(AdminHub.User.Get.List);
+  const { data, run } = useRequest(AdminHub.User.Get.List.bind(AdminHub.User.Get));
 
   refreshUser = run;
 

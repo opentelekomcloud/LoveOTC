@@ -114,7 +114,7 @@ export function Setting({ Open, Toggle }: ISetting) {
               <Button appearance="secondary">Cancel</Button>
             </DialogTrigger>
             <Button appearance="primary" onClick={() => run({
-              UID: auth.user?.profile.sub,
+              UId: auth.user?.profile.sub,
               EMail: auth.user?.profile.email,
               Name: name,
               Address: address,

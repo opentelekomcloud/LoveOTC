@@ -12,6 +12,8 @@ export class AdminUserPost extends AdminNet {
    * @version 0.1.0
    */
   public static async Admin(userId: number): Promise<true> {
-    throw new Error("TODO");
+    await this.EnsureAdmin();
+    const res = await this.Hub.invoke<true>("UserPostAdmin", userId);
+    return res;
   }
 }

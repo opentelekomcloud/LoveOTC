@@ -1,6 +1,6 @@
 import { HubConnectionState } from "@microsoft/signalr";
 import type { AdminNet } from "./Admin/AdminNet";
-import { AuthUser } from "./Database";
+import { Auth } from "./Database";
 import type { ShopNet } from "./ShopNet";
 
 /**
@@ -40,7 +40,7 @@ export class SignalR {
    * @version 0.1.0
    */
   public static EnsureLogin() {
-    if (AuthUser?.expired) {
+    if (Auth.User?.expired) {
       throw new Error("Please Login First");
     }
   }

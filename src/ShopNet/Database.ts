@@ -43,15 +43,22 @@ export const CartTable = DB.table<Omit<ICartItem, "Name" | "Cover">, never>("Sho
  * @since 1.0.0
  * @version 0.1.0
  */
-const OIDC = localStorage.getItem(
-  import.meta.env.DEV
-    ? "oidc.user:http://localhost:8080/realms/loveotc:loveotc"
-    : "oidc.user:https://keycloak.eco.tsi-dev.otc-service.com/realms/eco:loveotc"
-);
+class auth {
+  public get User(): User | null {
+    const str = localStorage.getItem(
+      import.meta.env.DEV
+        ? "oidc.user:http://localhost:8080/realms/loveotc:loveotc"
+        : "oidc.user:https://keycloak.eco.tsi-dev.otc-service.com/realms/eco:loveotc"
+    );
+
+    if (!str) return null;
+    return User.fromStorageString(str);
+  }
+}
 
 /**
  * @author Aloento
  * @since 1.0.0
  * @version 0.1.0
  */
-export const AuthUser = OIDC ? User.fromStorageString(OIDC) : null;
+export const Auth = new auth();

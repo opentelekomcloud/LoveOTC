@@ -7,7 +7,7 @@ import { ShopNet } from "../ShopNet";
  * @version 0.1.0
  */
 interface IPostPersona extends Partial<IPersona> {
-  UID?: string;
+  UId?: string;
 }
 
 /**
