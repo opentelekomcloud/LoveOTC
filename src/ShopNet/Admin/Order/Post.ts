@@ -11,8 +11,10 @@ export class AdminOrderPost extends AdminNet {
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static async Append(id: number, cmt: string): Promise<true> {
-    throw new Error("TODO");
+  public static async Append(orderId: number, cmt: string): Promise<true> {
+    await this.EnsureAdmin();
+    const res = await this.Hub.invoke<true>("OrderPostAppend", orderId, cmt);
+    return res;
   }
 
   /**
@@ -20,8 +22,10 @@ export class AdminOrderPost extends AdminNet {
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static async Close(id: number, reason: string): Promise<true> {
-    throw new Error("TODO");
+  public static async Close(orderId: number, reason: string): Promise<true> {
+    await this.EnsureAdmin();
+    const res = await this.Hub.invoke<true>("OrderPostClose", orderId, reason);
+    return res;
   }
 
   /**
@@ -29,7 +33,9 @@ export class AdminOrderPost extends AdminNet {
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static async Ship(id: number, track: string): Promise<true> {
-    throw new Error("TODO");
+  public static async Ship(orderId: number, track: string): Promise<true> {
+    await this.EnsureAdmin();
+    const res = await this.Hub.invoke<true>("OrderPostShip", orderId, track);
+    return res;
   }
 }

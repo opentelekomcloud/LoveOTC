@@ -28,7 +28,7 @@ export function AdminOrderAppend({ OrderId, Refresh }: { OrderId: number; Refres
 
   const { dispatchError, dispatchToast } = use500Toast();
 
-  const { run: append } = useRequest(AdminHub.Order.Post.Append, {
+  const { run: append } = useRequest(AdminHub.Order.Post.Append.bind(AdminHub.Order.Post), {
     manual: true,
     onFinally(req, _, e) {
       if (e)
@@ -49,7 +49,7 @@ export function AdminOrderAppend({ OrderId, Refresh }: { OrderId: number; Refres
     },
   });
 
-  const { run: close } = useRequest(AdminHub.Order.Post.Close, {
+  const { run: close } = useRequest(AdminHub.Order.Post.Close.bind(AdminHub.Order.Post), {
     manual: true,
     onFinally(req, _, e) {
       if (e)

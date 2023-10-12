@@ -1,13 +1,14 @@
-import { HttpTransportType, HubConnectionBuilder, HubConnectionState, LogLevel } from "@microsoft/signalr";
+import { HttpTransportType, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { MessagePackHubProtocol } from "@microsoft/signalr-protocol-msgpack";
 import { AuthUser } from "./Database";
+import { SignalR } from "./SignalR";
 
 /**
  * @author Aloento
  * @since 1.0.0
  * @version 0.1.1
  */
-export class ShopNet {
+export class ShopNet extends SignalR {
   /**
    * @author Aloento
    * @since 1.0.0
@@ -30,26 +31,4 @@ export class ShopNet {
     .withHubProtocol(new MessagePackHubProtocol())
     .configureLogging(import.meta.env.DEV ? LogLevel.Debug : LogLevel.Information)
     .build();
-
-  /**
-   * @author Aloento
-   * @since 1.0.0
-   * @version 0.1.0
-   */
-  public static async EnsureConnected() {
-    if (this.Hub.state === HubConnectionState.Disconnected
-      || this.Hub.state === HubConnectionState.Disconnecting) {
-      return this.Hub.start();
-    }
-  }
-
-  /**
-   * @author Aloento
-   * @since 1.0.0
-   * @version 0.1.0
-   */
-  public static EnsureLogin() {
-    if (AuthUser?.expired)
-      throw new Error("Please Login First");
-  }
 }

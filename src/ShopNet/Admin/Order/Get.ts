@@ -13,23 +13,15 @@ export class AdminOrderGet extends AdminNet {
    * @version 0.1.0
    */
   public static async List(): Promise<IOrderItem[]> {
-    return [
-      {
-        Id: 1,
-        Items: ["OTC SHIRT - GREY", "OTC Cap - Cap and Cap"],
-        Quantity: 2,
-        OrderDate: new Date(),
-        TrackNumber: "Number123456789",
-        Status: "Finished"
-      },
-      {
-        Id: 2,
-        Items: ["OTC Cap - Cap and Cap"],
-        Quantity: 1,
-        OrderDate: new Date(),
-        TrackNumber: "Number123456789",
-        Status: "Finished"
-      },
-    ];
+    await this.EnsureAdmin();
+    const res = await this.Hub.invoke<Omit<IOrderItem & { OrderId: number }, "Id">[]>("OrderGetList");
+
+    return res.map(x => {
+      const { OrderId, ...rest } = x;
+      return {
+        Id: OrderId,
+        ...rest
+      };
+    });
   }
 }

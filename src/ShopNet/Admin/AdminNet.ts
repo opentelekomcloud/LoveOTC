@@ -1,13 +1,14 @@
 import { HttpTransportType, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { MessagePackHubProtocol } from "@microsoft/signalr-protocol-msgpack";
 import { AuthUser } from "../Database";
+import { SignalR } from "../SignalR";
 
 /**
  * @author Aloento
  * @since 1.0.0
  * @version 0.1.0
  */
-export class AdminNet {
+export class AdminNet extends SignalR {
   /**
    * @author Aloento
    * @since 1.0.0
@@ -30,4 +31,14 @@ export class AdminNet {
     .withHubProtocol(new MessagePackHubProtocol())
     .configureLogging(import.meta.env.DEV ? LogLevel.Debug : LogLevel.Information)
     .build();
+
+  /**
+   * @author Aloento
+   * @since 1.0.0
+   * @version 0.1.0
+   */
+  public static async EnsureAdmin() {
+    this.EnsureLogin();
+    await this.EnsureConnected();
+  }
 }

@@ -1,5 +1,6 @@
 namespace SoarCraft.LoveOTC.AdminHub;
 
+using Hub;
 using JetBrains.Annotations;
 
 internal partial class AdminHub {
@@ -11,7 +12,24 @@ internal partial class AdminHub {
      * </remarks>
      */
     [PublicAPI]
-    public async Task<object?> OrderGetList() {
-        return null;
+    public async Task<List<OrderItem>> OrderGetList() {
+        return new() {
+            new() {
+                OrderId = 1,
+                Items = new() { "OTC SHIRT - GREY", "OTC Cap - Cap and Cap" },
+                Quantity = 2,
+                OrderDate = DateTime.Now,
+                TrackNumber = "Number123456789",
+                Status = Enum.GetName(OrderStatus.Finished)!
+            },
+            new() {
+                OrderId = 2,
+                Items = new() { "OTC Cap - Cap and Cap" },
+                Quantity = 1,
+                OrderDate = DateTime.Now,
+                TrackNumber = "Number123456789",
+                Status = Enum.GetName(OrderStatus.Finished)!
+            },
+        };
     }
 }

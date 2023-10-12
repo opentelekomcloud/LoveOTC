@@ -55,7 +55,7 @@ const columns: TableColumnDefinition<IOrderItem>[] = [
  * @version 0.2.0
  */
 export function AdminOrder() {
-  const { data } = useRequest(AdminHub.Order.Get.List);
+  const { data } = useRequest(AdminHub.Order.Get.List.bind(AdminHub.Order.Get));
 
   return (
     <DelegateDataGrid Items={data || []} Columns={columns} />
