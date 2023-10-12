@@ -1,7 +1,6 @@
 namespace SoarCraft.LoveOTC.AdminHub;
 
 using Hub;
-using JetBrains.Annotations;
 
 internal partial class AdminHub {
     /**
@@ -11,7 +10,6 @@ internal partial class AdminHub {
      * @version 0.1.0
      * </remarks>
      */
-    [PublicAPI]
     public async Task<List<OrderItem>> OrderGetList() {
         return new() {
             new() {

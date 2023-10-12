@@ -1,5 +1,6 @@
 namespace SoarCraft.LoveOTC.Hub;
 
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.SignalR;
 
 /**
@@ -9,5 +10,6 @@ using Microsoft.AspNetCore.SignalR;
  * @version 0.1.0
  * </remarks>
  */
+[PublicAPI]
 internal partial class ShopHub : Hub<INetClient> {
 }

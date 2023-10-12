@@ -1,7 +1,5 @@
 namespace SoarCraft.LoveOTC.Hub;
 
-using JetBrains.Annotations;
-
 internal partial class ShopHub {
     /**
      * <remarks>
@@ -10,7 +8,6 @@ internal partial class ShopHub {
      * @version 0.1.0
      * </remarks>
      */
-    [PublicAPI]
     public async Task<ProductInfo> ProdGetBasic(uint prodId) {
         return new() {
             Cover = $"https://picsum.photos/{Random.Shared.Next(500, 1000)}",
@@ -25,7 +22,6 @@ internal partial class ShopHub {
      * @version 0.1.0
      * </remarks>
      */
-    [PublicAPI]
     public async Task<byte> ProdGetLimit(uint prodId) {
         return (byte)Random.Shared.Next(10);
     }
@@ -37,7 +33,6 @@ internal partial class ShopHub {
      * @version 0.1.0
      * </remarks>
      */
-    [PublicAPI]
     public async Task<List<ComboItem>> ProdGetCombo(uint prodId) {
         if (prodId > 100)
             throw new KeyNotFoundException("Product Not Found");
@@ -85,7 +80,6 @@ internal partial class ShopHub {
      * @version 0.1.0
      * </remarks>
      */
-    [PublicAPI]
     public async Task<List<PhotoItem>> ProdGetCarousel(uint prodId) {
         return new() {
             new() {

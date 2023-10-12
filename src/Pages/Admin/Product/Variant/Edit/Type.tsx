@@ -30,7 +30,7 @@ export function AdminProductType({ VariantId, Type, Refresh, New }: { VariantId:
 
   const { dispatchError, dispatchToast } = use500Toast();
 
-  const { run } = useRequest(New ? AdminHub.Product.Post.Type : AdminHub.Product.Patch.Type, {
+  const { run } = useRequest(New ? AdminHub.Product.Post.Type.bind(AdminHub.Product.Post) : AdminHub.Product.Patch.Type.bind(AdminHub.Product.Patch), {
     manual: true,
     onFinally(req, _, e) {
       if (e)

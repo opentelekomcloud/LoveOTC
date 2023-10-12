@@ -9,7 +9,7 @@ import { AdminHub } from "~/ShopNet/Admin";
  * @since 0.5.0
  * @version 0.1.0
  */
-export function AdminUserDelete({ UserId, Refresh }: { UserId: number; Refresh: () => void }) {
+export function AdminUserDelete({ UserId, Refresh }: { UserId: string; Refresh: () => void }) {
   const { dispatchError, dispatchToast } = use500Toast();
 
   const { run } = useRequest(AdminHub.User.Delete.User, {

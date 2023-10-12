@@ -12,7 +12,9 @@ export class AdminProductPatch extends AdminNet {
    * @version 0.1.0
    */
   public static async Name(prodId: number, name: string): Promise<true> {
-    throw new Error("TODO");
+    await this.EnsureAdmin();
+    const res = await this.Hub.invoke<true>("ProductPatchName", prodId, name);
+    return res;
   }
 
   /**
@@ -21,7 +23,9 @@ export class AdminProductPatch extends AdminNet {
    * @version 0.1.0
    */
   public static async Category(prodId: number, name: string): Promise<true> {
-    throw new Error("TODO");
+    await this.EnsureAdmin();
+    const res = await this.Hub.invoke<true>("ProductPatchCategory", prodId, name);
+    return res;
   }
 
   /**
@@ -33,7 +37,9 @@ export class AdminProductPatch extends AdminNet {
     if (!file.type.startsWith("image/"))
       throw new TypeError("File is not an image");
 
-    throw new Error("TODO");
+    await this.EnsureAdmin();
+    const res = await this.Hub.invoke<true>("ProductPatchPhoto", photoId, file);
+    return res;
   }
 
   /**
@@ -42,7 +48,9 @@ export class AdminProductPatch extends AdminNet {
    * @version 0.1.0
    */
   public static async Caption(photoId: number, caption: string): Promise<true> {
-    throw new Error("TODO");
+    await this.EnsureAdmin();
+    const res = await this.Hub.invoke<true>("ProductPatchCaption", photoId, caption);
+    return res;
   }
 
   /**
@@ -51,7 +59,9 @@ export class AdminProductPatch extends AdminNet {
    * @version 0.1.0
    */
   public static async VariantName(variantId: number, name: string): Promise<true> {
-    throw new Error("TODO");
+    await this.EnsureAdmin();
+    const res = await this.Hub.invoke<true>("ProductPatchVariantName", variantId, name);
+    return res;
   }
 
   /**
@@ -60,7 +70,9 @@ export class AdminProductPatch extends AdminNet {
    * @version 0.1.0
    */
   public static async Type(variantId: number, oldName: string, newName: string): Promise<true> {
-    throw new Error("TODO");
+    await this.EnsureAdmin();
+    const res = await this.Hub.invoke<true>("ProductPatchType", variantId, oldName, newName);
+    return res;
   }
 
   /**
@@ -69,6 +81,8 @@ export class AdminProductPatch extends AdminNet {
    * @version 0.1.0
    */
   public static async Combo(comboId: number, combo: Record<string, string>, stock: number): Promise<true> {
-    throw new Error("TODO");
+    await this.EnsureAdmin();
+    const res = await this.Hub.invoke<true>("ProductPatchCombo", comboId, combo, stock);
+    return res;
   }
 }

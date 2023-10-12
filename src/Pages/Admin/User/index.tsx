@@ -11,7 +11,7 @@ import { AdminUserDelete } from "./Delete";
  * @version 0.1.0
  */
 export interface IUserItem {
-  Id: number;
+  Id: string;
   Name: string;
   EMail: string;
   Admin?: true;

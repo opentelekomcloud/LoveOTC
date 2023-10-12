@@ -135,7 +135,7 @@ let refreshVariant: () => void;
 export function AdminProductVariant({ ProdId }: { ProdId: number }) {
   const style = useStyles();
 
-  const { data, run } = useRequest(AdminHub.Product.Get.Variants, {
+  const { data, run } = useRequest(AdminHub.Product.Get.Variants.bind(AdminHub.Product.Get), {
     defaultParams: [ProdId]
   });
 

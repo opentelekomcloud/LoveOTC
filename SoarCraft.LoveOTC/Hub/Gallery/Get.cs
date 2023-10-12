@@ -1,7 +1,5 @@
 namespace SoarCraft.LoveOTC.Hub;
 
-using JetBrains.Annotations;
-
 internal partial class ShopHub {
     /**
      * <remarks>
@@ -10,7 +8,6 @@ internal partial class ShopHub {
      * @version 0.1.0
      * </remarks>
      */
-    [PublicAPI]
     public async Task<List<string>> GalleryGetCategories() {
         return new(){
             "T-Shirt",
@@ -25,7 +22,6 @@ internal partial class ShopHub {
      * @version 0.1.0
      * </remarks>
      */
-    [PublicAPI]
     public async Task<List<uint>> GalleryGetProducts(string category) {
         var len = Random.Shared.Next(1, 12);
         var nums = new List<uint>(len);

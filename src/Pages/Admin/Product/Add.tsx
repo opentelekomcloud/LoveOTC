@@ -31,7 +31,7 @@ export function AdminProductAddButton() {
 
   const { dispatchError, dispatchToast } = use500Toast();
 
-  const { run } = useRequest(AdminHub.Product.Post.Create, {
+  const { run } = useRequest(AdminHub.Product.Post.Create.bind(AdminHub.Product.Post), {
     manual: true,
     onFinally(req, data, e) {
       if (e)

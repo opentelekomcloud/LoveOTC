@@ -12,7 +12,9 @@ export class AdminProductDelete extends AdminNet {
    * @version 0.1.0
    */
   public static async Photo(photoId: number): Promise<true> {
-    throw new Error("TODO");
+    await this.EnsureAdmin();
+    const res = await this.Hub.invoke<true>("ProductDeletePhoto", photoId);
+    return res;
   }
 
   /**
@@ -21,7 +23,9 @@ export class AdminProductDelete extends AdminNet {
    * @version 0.1.0
    */
   public static async Variant(variantId: number): Promise<true> {
-    throw new Error("TODO");
+    await this.EnsureAdmin();
+    const res = await this.Hub.invoke<true>("ProductDeleteVariant", variantId);
+    return res;
   }
 
   /**
@@ -30,7 +34,9 @@ export class AdminProductDelete extends AdminNet {
    * @version 0.1.0
    */
   public static async Type(variantId: number, type: string): Promise<true> {
-    throw new Error("TODO");
+    await this.EnsureAdmin();
+    const res = await this.Hub.invoke<true>("ProductDeleteType", variantId, type);
+    return res;
   }
 
   /**
@@ -39,6 +45,8 @@ export class AdminProductDelete extends AdminNet {
    * @version 0.1.0
    */
   public static async Combo(comboId: number): Promise<true> {
-    throw new Error("TODO");
+    await this.EnsureAdmin();
+    const res = await this.Hub.invoke<true>("ProductDeleteCombo", comboId);
+    return res;
   }
 }

@@ -64,7 +64,7 @@ const columns: TableColumnDefinition<IPhotoItem>[] = [
     renderCell(item) {
       const { dispatchError } = use500Toast();
 
-      const { run } = useRequest(AdminHub.Product.Post.MovePhoto, {
+      const { run } = useRequest(AdminHub.Product.Post.MovePhoto.bind(AdminHub.Product.Post), {
         manual: true,
         onFinally(req, _, e) {
           if (e)
@@ -120,7 +120,7 @@ export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
 
   const { dispatchError, dispatchToast } = use500Toast();
 
-  const { run: newPhoto } = useRequest(AdminHub.Product.Post.Photo, {
+  const { run: newPhoto } = useRequest(AdminHub.Product.Post.Photo.bind(AdminHub.Product.Post), {
     manual: true,
     onFinally(req, _, e) {
       if (e)

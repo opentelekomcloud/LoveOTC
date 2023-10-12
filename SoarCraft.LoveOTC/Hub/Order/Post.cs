@@ -1,6 +1,5 @@
 namespace SoarCraft.LoveOTC.Hub;
 
-using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 
 internal partial class ShopHub {
@@ -11,7 +10,6 @@ internal partial class ShopHub {
      * @version 0.1.0
      * </remarks>
      */
-    [PublicAPI]
     [Authorize]
     public async Task<uint> OrderPostNew(List<CartItem> cart, string? cmt) {
         return (uint)Random.Shared.Next(100);
@@ -24,7 +22,6 @@ internal partial class ShopHub {
      * @version 0.1.0
      * </remarks>
      */
-    [PublicAPI]
     public async Task<bool> OrderPostAppend(string orderId, string cmt) {
         throw new NotImplementedException();
     }
@@ -36,7 +33,6 @@ internal partial class ShopHub {
      * @version 0.1.0
      * </remarks>
      */
-    [PublicAPI]
     [Authorize]
     public async Task<bool> OrderPostCancel(string orderId, string reason) {
         throw new NotImplementedException();

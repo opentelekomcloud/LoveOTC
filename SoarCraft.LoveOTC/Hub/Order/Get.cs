@@ -1,7 +1,6 @@
 namespace SoarCraft.LoveOTC.Hub;
 
 using System;
-using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 
 internal partial class ShopHub {
@@ -12,7 +11,6 @@ internal partial class ShopHub {
      * @version 0.1.0
      * </remarks>
      */
-    [PublicAPI]
     [Authorize]
     public async Task<List<OrderItem>> OrderGetList() {
         return new() {
@@ -42,7 +40,6 @@ internal partial class ShopHub {
      * @version 0.1.0
      * </remarks>
      */
-    [PublicAPI]
     [Authorize]
     public async Task<OrderDetail> OrderGetDetail(uint orderId) {
         var shopCart = new List<CartItem>
@@ -86,7 +83,6 @@ internal partial class ShopHub {
      * @version 0.1.0
      * </remarks>
      */
-    [PublicAPI]
     [Authorize]
     public async Task<OrderExtension> OrderGetExtension(uint orderId) {
         return new() {

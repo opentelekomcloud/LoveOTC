@@ -14,26 +14,16 @@ export class AdminProductGet extends AdminNet {
    * @version 0.1.0
    */
   public static async List(): Promise<IProductItem[]> {
-    return [
-      {
-        Id: 1,
-        Cover: "https://picsum.photos/550",
-        Name: "OTC SHIRT - GREY",
-        Category: "Clothes",
-        Variant: 2,
-        Type: 4,
-        Stock: 10,
-      },
-      {
-        Id: 2,
-        Cover: "https://picsum.photos/600",
-        Name: "OTC Cap - Cap and Cap",
-        Category: "Hat",
-        Variant: 2,
-        Type: 4,
-        Stock: 20,
-      }
-    ];
+    await this.EnsureAdmin();
+    const res = await this.Hub.invoke<Omit<IProductItem & { ProductId: number }, "Id">[]>("ProductGetList");
+
+    return res.map(x => {
+      const { ProductId, ...rest } = x;
+      return {
+        Id: ProductId,
+        ...rest
+      };
+    });
   }
 
   /**
@@ -42,7 +32,9 @@ export class AdminProductGet extends AdminNet {
    * @version 0.1.0
    */
   public static async Name(prodId: number): Promise<string> {
-    return "OTC SHIRT - GREY";
+    await this.EnsureAdmin();
+    const res = await this.Hub.invoke<string>("ProductGetName", prodId);
+    return res;
   }
 
   /**
@@ -51,7 +43,9 @@ export class AdminProductGet extends AdminNet {
    * @version 0.1.0
    */
   public static async Category(prodId: number): Promise<string> {
-    return "Clothes";
+    await this.EnsureAdmin();
+    const res = await this.Hub.invoke<string>("ProductGetCategory", prodId);
+    return res;
   }
 
   /**
@@ -60,19 +54,15 @@ export class AdminProductGet extends AdminNet {
    * @version 0.1.0
    */
   public static async Variants(prodId: number): Promise<IVariantItem[]> {
-    const items: IVariantItem[] = [
-      {
-        Id: 1,
-        Name: "Color",
-        Types: ["White", "Red"]
-      },
-      {
-        Id: 2,
-        Name: "Size",
-        Types: ["Big", "Small"]
-      }
-    ]
+    await this.EnsureAdmin();
+    const res = await this.Hub.invoke<Omit<IVariantItem & { VariantId: number }, "Id">[]>("ProductGetVariants", prodId);
 
-    return items;
+    return res.map(x => {
+      const { VariantId, ...rest } = x;
+      return {
+        Id: VariantId,
+        ...rest
+      };
+    });
   }
 }

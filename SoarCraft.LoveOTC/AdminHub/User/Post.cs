@@ -1,7 +1,5 @@
 namespace SoarCraft.LoveOTC.AdminHub;
 
-using JetBrains.Annotations;
-
 internal partial class AdminHub {
     /**
      * <remarks>
@@ -10,7 +8,6 @@ internal partial class AdminHub {
      * @version 0.1.0
      * </remarks>
      */
-    [PublicAPI]
     public async Task<bool> UserPostAdmin(Guid userId) {
         throw new NotImplementedException();
     }

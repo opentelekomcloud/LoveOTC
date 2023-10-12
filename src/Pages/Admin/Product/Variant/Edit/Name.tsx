@@ -15,7 +15,7 @@ export function AdminProductVariantName({ Id, Name }: { Id: number; Name: string
   const [edit, { setTrue, setFalse }] = useBoolean();
   const { dispatchError, dispatchToast } = use500Toast();
 
-  const { run } = useRequest(AdminHub.Product.Patch.VariantName, {
+  const { run } = useRequest(AdminHub.Product.Patch.VariantName.bind(AdminHub.Product.Patch), {
     manual: true,
     onFinally(req, _, e) {
       if (e)

@@ -12,7 +12,7 @@ import { AdminHub } from "~/ShopNet/Admin";
 export function AdminProductComboDelete({ ComboId, Refresh }: { ComboId: number; Refresh: () => void }) {
   const { dispatchError, dispatchToast } = use500Toast();
 
-  const { run } = useRequest(AdminHub.Product.Delete.Combo, {
+  const { run } = useRequest(AdminHub.Product.Delete.Combo.bind(AdminHub.Product.Delete), {
     manual: true,
     onFinally(req, _, e) {
       if (e)

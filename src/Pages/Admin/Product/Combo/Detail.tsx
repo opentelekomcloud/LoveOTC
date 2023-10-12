@@ -93,13 +93,13 @@ export function AdminProductComboDetail({ Id, ProdId, Combo, Stock, Refresh }: I
   const [combo, setCombo] = useState(Combo);
   const [stock, setStock] = useState(Stock);
 
-  const { data: varis } = useRequest(AdminHub.Product.Get.Variants, {
+  const { data: varis } = useRequest(AdminHub.Product.Get.Variants.bind(AdminHub.Product.Get), {
     defaultParams: [ProdId]
   });
 
   const { dispatchError, dispatchToast } = use500Toast();
 
-  const { run } = useRequest(AdminHub.Product.Patch.Combo, {
+  const { run } = useRequest(AdminHub.Product.Patch.Combo.bind(AdminHub.Product.Patch), {
     manual: true,
     onFinally(req, _, e) {
       if (e)

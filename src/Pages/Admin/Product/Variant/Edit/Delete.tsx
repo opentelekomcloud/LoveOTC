@@ -12,7 +12,7 @@ import { AdminHub } from "~/ShopNet/Admin";
 export function AdminProductTypeDelete({ VariantId, Type, Refresh }: { VariantId: number; Type: string; Refresh: () => void }) {
   const { dispatchError, dispatchToast } = use500Toast();
 
-  const { run } = useRequest(AdminHub.Product.Delete.Type, {
+  const { run } = useRequest(AdminHub.Product.Delete.Type.bind(AdminHub.Product.Delete), {
     manual: true,
     onFinally(req, _, e) {
       if (e)

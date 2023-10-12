@@ -1,6 +1,5 @@
 namespace SoarCraft.LoveOTC.Hub;
 
-using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 
 internal partial class ShopHub {
@@ -11,7 +10,6 @@ internal partial class ShopHub {
      * @version 0.1.0
      * </remarks>
      */
-    [PublicAPI]
     [Authorize]
     public async Task<bool> UserPostUpdate(PostPersona req) {
         throw new NotImplementedException();

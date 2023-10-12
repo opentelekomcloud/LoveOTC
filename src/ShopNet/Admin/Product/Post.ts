@@ -12,7 +12,9 @@ export class AdminProductPost extends AdminNet {
    * @version 0.1.0
    */
   public static async Create(name: string): Promise<number> {
-    throw new Error("TODO");
+    await this.EnsureAdmin();
+    const res = await this.Hub.invoke<number>("ProductPostCreate", name);
+    return res;
   }
 
   /**
@@ -21,7 +23,9 @@ export class AdminProductPost extends AdminNet {
    * @version 0.1.0
    */
   public static async MovePhoto(photoId: number, up: boolean): Promise<true> {
-    throw new Error("TODO");
+    await this.EnsureAdmin();
+    const res = await this.Hub.invoke<true>("ProductPostMovePhoto", photoId, up);
+    return res;
   }
 
   /**
@@ -33,7 +37,9 @@ export class AdminProductPost extends AdminNet {
     if (!file.type.startsWith("image/"))
       throw new TypeError("File is not an image");
 
-    throw new Error("TODO");
+    await this.EnsureAdmin();
+    const res = await this.Hub.invoke<true>("ProductPostPhoto", "");
+    return res;
   }
 
   /**
@@ -42,7 +48,9 @@ export class AdminProductPost extends AdminNet {
    * @version 0.1.0
    */
   public static async Variant(prodId: number, name: string): Promise<number> {
-    throw new Error("TODO");
+    await this.EnsureAdmin();
+    const res = await this.Hub.invoke<number>("ProductPostVariant", prodId, name);
+    return res;
   }
 
   /**
@@ -51,7 +59,9 @@ export class AdminProductPost extends AdminNet {
    * @version 0.1.0
    */
   public static async Type(variantId: number, name: string): Promise<true> {
-    throw new Error("TODO");
+    await this.EnsureAdmin();
+    const res = await this.Hub.invoke<true>("ProductPostType", variantId, name);
+    return res;
   }
 
   /**
@@ -60,6 +70,8 @@ export class AdminProductPost extends AdminNet {
    * @version 0.1.0
    */
   public static async Combo(prodId: number, combo: Record<string, string>, stock: number): Promise<number> {
-    throw new Error("TODO");
+    await this.EnsureAdmin();
+    const res = await this.Hub.invoke<number>("ProductPostCombo", prodId, combo, stock);
+    return res;
   }
 }
