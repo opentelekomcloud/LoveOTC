@@ -1,5 +1,4 @@
-import { random } from "lodash-es";
-import { createUID } from "~/Lexical/Utils/createUID";
+import { ICartItem } from "~/Components/ShopCart";
 import { IOrderExtension, IOrderItem } from "~/Pages/History";
 import { IOrderDetail } from "~/Pages/History/Detail";
 import { ShopNet } from "../ShopNet";
@@ -16,24 +15,16 @@ export class OrderGet extends ShopNet {
    * @version 0.1.0
    */
   public static async List(): Promise<IOrderItem[]> {
-    return [
-      {
-        Id: 1,
-        Items: ["OTC SHIRT - GREY", "OTC Cap - Cap and Cap"],
-        Quantity: 2,
-        OrderDate: new Date(),
-        TrackNumber: "Number123456789",
-        Status: "Finished"
-      },
-      {
-        Id: 2,
-        Items: ["OTC Cap - Cap and Cap"],
-        Quantity: 1,
-        OrderDate: new Date(),
-        TrackNumber: "Number123456789",
-        Status: "Finished"
-      },
-    ];
+    await this.EnsureConnected();
+    const res = await this.Hub.invoke<Omit<IOrderItem & { OrderId: number }, "Id">[]>("OrderGetList");
+
+    return res.map(x => {
+      const { OrderId, ...rest } = x;
+      return {
+        Id: OrderId,
+        ...rest
+      };
+    });
   }
 
   /**
@@ -42,33 +33,24 @@ export class OrderGet extends ShopNet {
    * @version 0.1.0
    */
   public static async Detail(id: number): Promise<IOrderDetail> {
+    await this.EnsureConnected();
+
+    const { ShopCart, Comments } = await this.Hub.invoke<
+      Omit<IOrderDetail, "ShopCart"> & {
+        ShopCart: Omit<ICartItem & { OrderId: number }, "Id">[];
+      }
+    >("OrderGetDetail", id);
+
     return {
-      ShopCart: [
-        {
-          Id: 1,
-          ProdId: random(1, 10),
-          Cover: "https://picsum.photos/550",
-          Name: "OTC SHIRT - GREY",
-          Type: {
-            Color: "White",
-            Size: "S"
-          },
-          Quantity: 1
-        },
-        {
-          Id: 2,
-          ProdId: random(1, 10),
-          Cover: "https://picsum.photos/600",
-          Name: "OTC Cap - Cap and Cap",
-          Type: {
-            Color: "Red",
-            Size: "Long and Long"
-          },
-          Quantity: 1
-        }
-      ],
-      Comments: Array(10).fill(0).map(() => createUID())
-    }
+      ShopCart: ShopCart.map(x => {
+        const { OrderId, ...rest } = x;
+        return {
+          Id: OrderId,
+          ...rest
+        };
+      }),
+      Comments
+    };
   }
 
   /**
@@ -77,10 +59,8 @@ export class OrderGet extends ShopNet {
    * @version 0.1.0
    */
   public static async Extension(orderId: number): Promise<IOrderExtension> {
-    return {
-      OrderDate: new Date(),
-      TrackNumber: "Number123456789",
-      Status: "Finished"
-    };
+    await this.EnsureConnected();
+    const res = await this.Hub.invoke<IOrderExtension>("OrderGetExtension", orderId);
+    return res;
   }
 }

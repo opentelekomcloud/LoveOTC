@@ -2,7 +2,7 @@ import { IComboItem } from "~/Pages/Admin/Product/Combo";
 import { IPhotoItem } from "~/Pages/Admin/Product/Photo";
 import { IProductInfo } from "~/Pages/Gallery";
 import { ShopNet } from "../ShopNet";
-import demo from "./demo.json";
+// import demo from "./demo.json";
 
 /**
  * @author Aloento
@@ -17,7 +17,7 @@ export class ProductGet extends ShopNet {
    */
   public static async Basic(prodId: number): Promise<IProductInfo> {
     await this.EnsureConnected();
-    const res = await this.Hub.invoke<IProductInfo>("Basic", prodId);
+    const res = await this.Hub.invoke<IProductInfo>("ProdGetBasic", prodId);
     return res;
   }
 
@@ -28,7 +28,7 @@ export class ProductGet extends ShopNet {
    */
   public static async Limit(prodId: number): Promise<number> {
     await this.EnsureConnected();
-    const res = await this.Hub.invoke<number>("Limit", prodId);
+    const res = await this.Hub.invoke<number>("ProdGetLimit", prodId);
     return res;
   }
 
@@ -39,13 +39,15 @@ export class ProductGet extends ShopNet {
    */
   public static async Combo(prodId: number): Promise<IComboItem[]> {
     await this.EnsureConnected();
-    const res = await this.Hub.invoke<Omit<IComboItem & { ComboId: number }, "Id">[]>("Combo", prodId);
+    const res = await this.Hub.invoke<Omit<IComboItem & { ComboId: number }, "Id">[]>("ProdGetCombo", prodId);
 
-    return res.map(x => ({
-      Id: x.ComboId,
-      Combo: x.Combo,
-      Stock: x.Stock,
-    }));
+    return res.map(x => {
+      const { ComboId, ...rest } = x;
+      return {
+        Id: ComboId,
+        ...rest,
+      };
+    });
   }
 
   /**
@@ -55,13 +57,15 @@ export class ProductGet extends ShopNet {
    */
   public static async Carousel(prodId: number): Promise<IPhotoItem[]> {
     await this.EnsureConnected();
-    const res = await this.Hub.invoke<Omit<IPhotoItem & { ObjId: number }, "Id">[]>("Carousel", prodId);
+    const res = await this.Hub.invoke<Omit<IPhotoItem & { ObjId: number }, "Id">[]>("ProdGetCarousel", prodId);
 
-    return res.map(x => ({
-      Id: x.ObjId,
-      Cover: x.Cover,
-      Caption: x.Caption,
-    }));
+    return res.map(x => {
+      const { ObjId, ...rest } = x;
+      return {
+        Id: ObjId,
+        ...rest,
+      };
+    });
   }
 
   /**
@@ -72,6 +76,7 @@ export class ProductGet extends ShopNet {
   public static async Lexical(id: number): Promise<string> {
     await this.EnsureConnected();
 
-    return JSON.stringify(demo.editorState);
+    // return JSON.stringify(demo.editorState);
+    return "This is a demo";
   }
 }

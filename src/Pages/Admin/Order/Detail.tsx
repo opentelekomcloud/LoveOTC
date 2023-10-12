@@ -32,7 +32,7 @@ export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
   const [open, { toggle, setTrue }] = useBoolean();
   const { Nav, Paths } = useRouter();
 
-  const { data, run } = useRequest(Hub.Order.Get.Detail, {
+  const { data, run } = useRequest(Hub.Order.Get.Detail.bind(Hub.Order.Get), {
     onError() {
       throw Nav("Admin", "Order");
     },
@@ -89,7 +89,7 @@ export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
         <Shipment OrderId={OrderId} Refresh={run} />
 
         <Field label="Comment" size="large">
-          <Label>{data?.Comment}</Label>
+          <Label>{data?.Comments?.reduce((prev, curr) => prev + curr, "")}</Label>
         </Field>
 
         <AdminOrderAppend OrderId={OrderId} Refresh={run} />

@@ -17,7 +17,7 @@ export function Shipment({ OrderId, Refresh }: { OrderId: number; Refresh: (id: 
 
   const { dispatchError, dispatchToast } = use500Toast();
 
-  useRequest(Hub.Order.Get.Extension, {
+  useRequest(Hub.Order.Get.Extension.bind(Hub.Order.Get.bind(Hub.Order.Get)), {
     defaultParams: [OrderId],
     onSuccess(data) {
       setTrack(data.TrackNumber);

@@ -11,7 +11,7 @@ internal partial class ShopHub {
      * </remarks>
      */
     [PublicAPI]
-    public async Task<ProductInfo> Basic(uint prodId) {
+    public async Task<ProductInfo> ProdGetBasic(uint prodId) {
         return new() {
             Cover = $"https://picsum.photos/{Random.Shared.Next(500, 1000)}",
             Name = $"Product {prodId}"
@@ -26,7 +26,7 @@ internal partial class ShopHub {
      * </remarks>
      */
     [PublicAPI]
-    public async Task<byte> Limit(uint prodId) {
+    public async Task<byte> ProdGetLimit(uint prodId) {
         return (byte)Random.Shared.Next(10);
     }
 
@@ -38,7 +38,7 @@ internal partial class ShopHub {
      * </remarks>
      */
     [PublicAPI]
-    public async Task<List<ComboItem>> Combo(uint prodId) {
+    public async Task<List<ComboItem>> ProdGetCombo(uint prodId) {
         if (prodId > 100)
             throw new KeyNotFoundException("Product Not Found");
 
@@ -86,7 +86,7 @@ internal partial class ShopHub {
      * </remarks>
      */
     [PublicAPI]
-    public async Task<List<PhotoItem>> Carousel(uint prodId) {
+    public async Task<List<PhotoItem>> ProdGetCarousel(uint prodId) {
         return new() {
             new() {
                 ObjId = 0,

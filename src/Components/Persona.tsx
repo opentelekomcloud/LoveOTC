@@ -29,7 +29,7 @@ export function OrderPersona({ OrderId, Admin }: { OrderId: number; Admin?: true
     defaultParams: [OrderId]
   });
 
-  const { data: ext } = useRequest(Hub.Order.Get.Extension, {
+  const { data: ext } = useRequest(Hub.Order.Get.Extension.bind(Hub.Order.Get), {
     defaultParams: [OrderId]
   });
 

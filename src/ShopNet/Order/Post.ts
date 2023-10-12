@@ -1,4 +1,3 @@
-import { random } from "lodash-es";
 import { ICartItem } from "~/Components/ShopCart";
 import { ShopNet } from "../ShopNet";
 
@@ -14,7 +13,9 @@ export class OrderPost extends ShopNet {
    * @version 0.1.0
    */
   public static async New(cart: ICartItem[], cmt?: string): Promise<number> {
-    return random(1, 100);
+    await this.EnsureConnected();
+    const res = await this.Hub.invoke<number>("OrderPostNew", cart, cmt);
+    return res;
   }
 
   /**
@@ -22,8 +23,10 @@ export class OrderPost extends ShopNet {
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static async Append(id: number, cmt: string): Promise<true> {
-    throw new Error("TODO");
+  public static async Append(orderId: number, cmt: string): Promise<true> {
+    await this.EnsureConnected();
+    const res = await this.Hub.invoke<true>("OrderPostNew", orderId, cmt);
+    return res;
   }
 
   /**
@@ -31,7 +34,9 @@ export class OrderPost extends ShopNet {
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static async Cancel(id: number, reason: string): Promise<true> {
-    throw new Error("TODO");
+  public static async Cancel(orderId: number, reason: string): Promise<true> {
+    await this.EnsureConnected();
+    const res = await this.Hub.invoke<true>("OrderPostCancel", orderId, reason);
+    return res;
   }
 }

@@ -39,7 +39,7 @@
     </Content>
   </ItemGroup>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="'$(Configuration)'=='Release'">
     <Message Text="Start Build React" Importance="high" />
     <Exec Command="cd ..  &amp; pnpm build" />
 

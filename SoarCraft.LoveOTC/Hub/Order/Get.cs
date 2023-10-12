@@ -12,7 +12,7 @@ internal partial class ShopHub {
      * </remarks>
      */
     [PublicAPI]
-    public async Task<List<OrderItem>> List() {
+    public async Task<List<OrderItem>> OrderGetList() {
         return new() {
            new() {
                OrderId = 1,
@@ -41,7 +41,7 @@ internal partial class ShopHub {
      * </remarks>
      */
     [PublicAPI]
-    public async Task<OrderDetail> Detail(uint orderId) {
+    public async Task<OrderDetail> OrderGetDetail(uint orderId) {
         var shopCart = new List<CartItem>
         {
             new() {
@@ -84,7 +84,7 @@ internal partial class ShopHub {
      * </remarks>
      */
     [PublicAPI]
-    public async Task<OrderExtension> Extension(uint orderId) {
+    public async Task<OrderExtension> OrderGetExtension(uint orderId) {
         return new() {
             OrderDate = DateTime.Now,
             TrackNumber = "Number123456789",

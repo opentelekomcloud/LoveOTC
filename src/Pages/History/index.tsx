@@ -31,7 +31,7 @@ export interface IOrderItem extends IOrderExtension {
  * @version 0.2.0
  */
 export function History() {
-  const { data } = useRequest(Hub.Order.Get.List);
+  const { data } = useRequest(Hub.Order.Get.List.bind(Hub.Order.Get));
 
   return (
     <DelegateDataGrid Items={data || []} Columns={HistoryColumns} />

@@ -92,7 +92,7 @@ export function OrderDetail({ OrderId }: { OrderId: number }) {
   const { Nav, Paths } = useRouter();
   const [open, { toggle, setTrue }] = useBoolean();
 
-  const { data, run } = useRequest(Hub.Order.Get.Detail, {
+  const { data, run } = useRequest(Hub.Order.Get.Detail.bind(Hub.Order.Get), {
     onError() {
       throw Nav("History");
     },
