@@ -8,18 +8,10 @@ namespace TSystems.LoveOTC.Models;
  * @version 0.1.0
  * </remarks>
  */
-internal class Product {
+internal class Category {
     public uint Id { get; set; }
-
-    public Guid? CoverId { get; set; }
-
-    public Storage? Cover { get; set; }
 
     public string Name { get; set; }
 
-    public uint? CategoryId { get; set; }
-
-    public Category? Category { get; set; }
-
-    public ICollection<Variant> Variants { get; }
+    public ICollection<Product> Products { get; }
 }
