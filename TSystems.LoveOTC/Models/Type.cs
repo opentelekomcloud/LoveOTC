@@ -1,4 +1,4 @@
-// ReSharper disable UnassignedGetOnlyAutoProperty
+﻿// ReSharper disable UnassignedGetOnlyAutoProperty
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 namespace TSystems.LoveOTC.Models;
 
@@ -9,10 +9,14 @@ namespace TSystems.LoveOTC.Models;
  * @version 0.1.0
  * </remarks>
  */
-internal class Category {
-    public uint Id { get; set; }
+internal class Type {
+    public uint TypeId { get; set; }
 
     public string Name { get; set; }
 
-    public ICollection<Product> Products { get; }
+    public uint VariantId { get; set; }
+
+    public Variant Variant { get; set; }
+
+    public ICollection<Combo> Combos { get; }
 }

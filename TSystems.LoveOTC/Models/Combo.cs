@@ -9,14 +9,14 @@ namespace TSystems.LoveOTC.Models;
  * @version 0.1.0
  * </remarks>
  */
-internal class Variant {
-    public uint VariantId { get; set; }
+internal class Combo {
+    public uint ComboId { get; set; }
 
-    public string Name { get; set; }
-
-    public ICollection<Type> Types { get; }
+    public ushort Stock { get; set; }
 
     public uint ProductId { get; set; }
 
     public Product Product { get; set; }
+
+    public ICollection<Type> Types { get; }
 }
