@@ -12,7 +12,7 @@ import { AdminHub } from "~/ShopNet/Admin";
 export function AdminUserDelete({ UserId, Refresh }: { UserId: string; Refresh: () => void }) {
   const { dispatchError, dispatchToast } = use500Toast();
 
-  const { run } = useRequest(AdminHub.User.Delete.User, {
+  const { run } = useRequest(AdminHub.User.Delete.User.bind(AdminHub.User.Delete), {
     manual: true,
     onFinally(req, _, e) {
       if (e)
