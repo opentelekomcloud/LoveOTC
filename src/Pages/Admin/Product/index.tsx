@@ -16,7 +16,7 @@ export interface IProductItem {
   Name: string;
   Category: string;
   Variant: number;
-  Type: number;
+  Combo: number;
   Stock: number;
 }
 
@@ -80,12 +80,12 @@ const columns: TableColumnDefinition<IProductItem>[] = [
     }
   }),
   createTableColumn<IProductItem>({
-    columnId: "Type",
+    columnId: "Combo",
     renderHeaderCell: () => {
-      return <DataGridHeaderCell>Type</DataGridHeaderCell>
+      return <DataGridHeaderCell>Combo</DataGridHeaderCell>
     },
     renderCell(item) {
-      return <DataGridCell>{item.Type}</DataGridCell>
+      return <DataGridCell>{item.Combo}</DataGridCell>
     }
   }),
   createTableColumn<IProductItem>({
