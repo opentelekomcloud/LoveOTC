@@ -1,3 +1,4 @@
+// ReSharper disable UnassignedGetOnlyAutoProperty
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 namespace TSystems.LoveOTC;
 
@@ -12,11 +13,21 @@ using Models;
  * </remarks>
  */
 internal class ShopContext(DbContextOptions<ShopContext> opts) : DbContext(opts) {
-    public DbSet<Storage> Objects { get; set; }
+    public DbSet<Storage> Objects { get; }
 
     #region Product
 
-    public DbSet<Product> Products { get; set; }
+    public DbSet<Product> Products { get; }
+
+    public DbSet<Category> Categories { get; }
+
+    public DbSet<Photo> Photos { get; }
+
+    public DbSet<Variant> Variants { get; }
+
+    public DbSet<Type> Types { get; }
+
+    public DbSet<Combo> Combos { get; }
 
     #endregion
 
