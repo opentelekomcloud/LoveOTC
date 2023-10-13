@@ -13,5 +13,7 @@ internal class Storage {
 
     public DateTime? Expires { get; set; }
 
+    public string Hash { get; set; }
+
     public byte[] Data { get; set; }
 }
