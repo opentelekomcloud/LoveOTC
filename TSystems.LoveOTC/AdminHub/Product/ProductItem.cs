@@ -18,7 +18,7 @@ public record ProductItem {
 
     public required byte Variant { get; init; }
 
-    public required byte Type { get; init; }
+    public required byte Combo { get; init; }
 
     public required ushort Stock { get; init; }
 }
