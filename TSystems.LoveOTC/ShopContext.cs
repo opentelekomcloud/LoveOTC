@@ -45,5 +45,10 @@ internal class ShopContext(DbContextOptions<ShopContext> opts) : DbContext(opts)
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         modelBuilder.UseHiLo();
+
+        modelBuilder.Entity<Order>()
+            .HasMany(e => e.Combos)
+            .WithMany(e => e.Orders)
+            .UsingEntity<OrderCombo>();
     }
 }
