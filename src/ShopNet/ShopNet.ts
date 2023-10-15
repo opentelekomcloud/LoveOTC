@@ -39,5 +39,5 @@ export class ShopNet extends SignalR {
  * @version 0.1.1
  */
 ShopNet.Hub.on("OnNewUser", () => {
-
+  debugger
 });

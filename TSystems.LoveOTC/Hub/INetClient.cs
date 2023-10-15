@@ -7,6 +7,6 @@ namespace TSystems.LoveOTC.Hub;
  * @version 0.1.0
  * </remarks>
  */
-internal interface INetClient {
+public interface INetClient {
     Task OnNewUser();
 }
