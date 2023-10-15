@@ -21,7 +21,7 @@ namespace TSystems.LoveOTC.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false)
+                    Name = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -47,10 +47,10 @@ namespace TSystems.LoveOTC.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    EMail = table.Column<string>(type: "text", nullable: false),
-                    Phone = table.Column<string>(type: "text", nullable: false),
-                    Address = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    EMail = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Phone = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: false),
+                    Address = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Admin = table.Column<bool>(type: "boolean", nullable: true)
                 },
                 constraints: table =>
@@ -63,7 +63,7 @@ namespace TSystems.LoveOTC.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: false),
                     CategoryId = table.Column<long>(type: "bigint", nullable: true),
                     Description = table.Column<JsonElement>(type: "jsonb", nullable: true)
                 },
@@ -85,7 +85,7 @@ namespace TSystems.LoveOTC.Migrations
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    TrackingNumber = table.Column<string>(type: "text", nullable: true)
+                    TrackingNumber = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -123,7 +123,7 @@ namespace TSystems.LoveOTC.Migrations
                 {
                     PhotoId = table.Column<long>(type: "bigint", nullable: false),
                     Cover = table.Column<bool>(type: "boolean", nullable: true),
-                    Caption = table.Column<string>(type: "text", nullable: true),
+                    Caption = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     Order = table.Column<byte>(type: "smallint", nullable: false),
                     ObjectId = table.Column<Guid>(type: "uuid", nullable: false),
                     ProductId = table.Column<long>(type: "bigint", nullable: false)
@@ -150,7 +150,7 @@ namespace TSystems.LoveOTC.Migrations
                 columns: table => new
                 {
                     VariantId = table.Column<long>(type: "bigint", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: false),
                     ProductId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
@@ -169,7 +169,7 @@ namespace TSystems.LoveOTC.Migrations
                 columns: table => new
                 {
                     CommentId = table.Column<long>(type: "bigint", nullable: false),
-                    Content = table.Column<string>(type: "text", nullable: false),
+                    Content = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreateAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     OrderId = table.Column<long>(type: "bigint", nullable: false)
@@ -220,7 +220,7 @@ namespace TSystems.LoveOTC.Migrations
                 columns: table => new
                 {
                     TypeId = table.Column<long>(type: "bigint", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: false),
                     VariantId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>

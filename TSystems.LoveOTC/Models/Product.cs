@@ -2,6 +2,7 @@
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 namespace TSystems.LoveOTC.Models;
 
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
 /**
@@ -14,6 +15,7 @@ using System.Text.Json;
 internal class Product {
     public uint Id { get; set; }
 
+    [StringLength(15)]
     public string Name { get; set; }
 
     public uint? CategoryId { get; set; }

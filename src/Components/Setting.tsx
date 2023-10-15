@@ -107,7 +107,7 @@ export function Setting({ Open, Toggle, New }: ISetting) {
             </Field>
 
             <Field label="Address" size="large" required>
-              <Input size="medium" value={address} maxLength={100} onChange={(_, v) => setAddress(v.value)} />
+              <Input size="medium" value={address} maxLength={100} minLength={20} onChange={(_, v) => setAddress(v.value)} />
             </Field>
           </DialogContent>
 
