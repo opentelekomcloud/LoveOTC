@@ -15,7 +15,7 @@ internal partial class ShopHub {
      * </remarks>
      */
     [Authorize]
-    public async Task<bool> UserPostUpdate(PostPersona req) {
+    public async Task<bool> UserPostUpdate(Persona req) {
         var validCtx = new ValidationContext(req);
         var validRes = new List<ValidationResult>();
 

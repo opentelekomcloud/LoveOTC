@@ -119,7 +119,6 @@ export function Setting({ Open, Toggle, New }: ISetting) {
             )}
 
             <Button appearance="primary" onClick={() => run({
-              UId: auth.user?.profile.sub,
               EMail: auth.user?.profile.email,
               Name: name,
               Address: address,
