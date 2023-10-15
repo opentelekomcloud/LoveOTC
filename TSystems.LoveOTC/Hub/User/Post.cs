@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 
 internal partial class ShopHub {
     /**
@@ -28,7 +29,8 @@ internal partial class ShopHub {
         if (hasNew && isNew is true) {
             var email = this.Context.User!.FindFirstValue(ClaimTypes.Email);
 
-            if (email is null || string.IsNullOrWhiteSpace(email) || !email.Equals(req.EMail, StringComparison.OrdinalIgnoreCase)) {
+            if (email is null || string.IsNullOrWhiteSpace(email) ||
+                !email.Equals(req.EMail, StringComparison.OrdinalIgnoreCase)) {
                 this.Context.Abort();
                 return false;
             }
@@ -37,23 +39,22 @@ internal partial class ShopHub {
                 Name = req.Name!,
                 EMail = req.EMail!,
                 Phone = req.Phone!,
-                Address = req.Address!,
+                Address = req.Address!
             });
 
             this.Context.Items.Remove("NewUser");
             return true;
         }
 
-        this.Db.Users.Where(x => x.UserId == Guid.Parse(this.Context.UserIdentifier!))
+        var row = await this.Db.Users
+            .Where(x => x.UserId == this.UserId)
+            .ExecuteUpdateAsync(x => x
+                .SetProperty(u => u.Name, req.Name!)
+                .SetProperty(u => u.EMail, req.EMail!)
+                .SetProperty(u => u.Phone, req.Phone!)
+                .SetProperty(u => u.Address, req.Address!)
+            );
 
-        await this.Db.Users.SingleUpdateAsync(new() {
-            UserId = Guid.Parse(this.Context.UserIdentifier!),
-            Name = req.Name!,
-            EMail = req.EMail!,
-            Phone = req.Phone!,
-            Address = req.Address!
-        });
-
-        throw new HubException();
+        return row == 0 ? throw new HubException("Operation is invalid.") : true;
     }
 }
