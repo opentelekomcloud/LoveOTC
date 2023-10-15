@@ -1,6 +1,7 @@
 namespace TSystems.LoveOTC.Hub;
 
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
@@ -23,6 +24,36 @@ internal partial class ShopHub {
             throw new HubException(string.Join("; ", msg));
         }
 
-        throw new NotImplementedException();
+        var hasNew = this.Context.Items.TryGetValue("NewUser", out var isNew);
+        if (hasNew && isNew is true) {
+            var email = this.Context.User!.FindFirstValue(ClaimTypes.Email);
+
+            if (email is null || string.IsNullOrWhiteSpace(email) || !email.Equals(req.EMail, StringComparison.OrdinalIgnoreCase)) {
+                this.Context.Abort();
+                return false;
+            }
+
+            await this.Db.Users.SingleInsertAsync(new() {
+                Name = req.Name!,
+                EMail = req.EMail!,
+                Phone = req.Phone!,
+                Address = req.Address!,
+            });
+
+            this.Context.Items.Remove("NewUser");
+            return true;
+        }
+
+        this.Db.Users.Where(x => x.UserId == Guid.Parse(this.Context.UserIdentifier!))
+
+        await this.Db.Users.SingleUpdateAsync(new() {
+            UserId = Guid.Parse(this.Context.UserIdentifier!),
+            Name = req.Name!,
+            EMail = req.EMail!,
+            Phone = req.Phone!,
+            Address = req.Address!
+        });
+
+        throw new HubException();
     }
 }
