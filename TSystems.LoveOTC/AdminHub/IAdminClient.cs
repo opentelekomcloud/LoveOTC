@@ -1,5 +1,5 @@
 namespace TSystems.LoveOTC.AdminHub;
 
-internal partial interface IAdminClient {
+internal interface IAdminClient {
 
 }

@@ -1,5 +1,12 @@
-namespace TSystems.LoveOTC.Hub; 
+namespace TSystems.LoveOTC.Hub;
 
-internal partial interface INetClient {
-    
+/**
+ * <remarks>
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.1.0
+ * </remarks>
+ */
+internal interface INetClient {
+    Task OnNewUser();
 }

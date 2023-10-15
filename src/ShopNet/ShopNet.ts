@@ -32,3 +32,12 @@ export class ShopNet extends SignalR {
     .configureLogging(import.meta.env.DEV ? LogLevel.Debug : LogLevel.Information)
     .build();
 }
+
+/**
+ * @author Aloento
+ * @since 1.0.0
+ * @version 0.1.1
+ */
+ShopNet.Hub.on("OnNewUser", () => {
+
+});
