@@ -1,6 +1,10 @@
 namespace TSystems.LoveOTC.Hub;
 
+using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 
 internal partial class ShopHub {
     /**
@@ -11,7 +15,46 @@ internal partial class ShopHub {
      * </remarks>
      */
     [Authorize]
-    public async Task<bool> UserPostUpdate(PostPersona req) {
-        throw new NotImplementedException();
+    public async Task<bool> UserPostUpdate(Persona req) {
+        var validCtx = new ValidationContext(req);
+        var validRes = new List<ValidationResult>();
+
+        var isValid = Validator.TryValidateObject(req, validCtx, validRes, true);
+        if (!isValid) {
+            var msg = validRes.Select(x => x.ErrorMessage);
+            throw new HubException(string.Join("; ", msg));
+        }
+
+        var hasNew = this.Context.Items.TryGetValue("NewUser", out var isNew);
+        if (hasNew && isNew is true) {
+            var email = this.Context.User!.FindFirstValue(ClaimTypes.Email);
+
+            if (email is null || string.IsNullOrWhiteSpace(email) ||
+                !email.Equals(req.EMail, StringComparison.OrdinalIgnoreCase)) {
+                this.Context.Abort();
+                return false;
+            }
+
+            await this.Db.Users.SingleInsertAsync(new() {
+                Name = req.Name!,
+                EMail = req.EMail!,
+                Phone = req.Phone!,
+                Address = req.Address!
+            });
+
+            this.Context.Items.Remove("NewUser");
+            return true;
+        }
+
+        var row = await this.Db.Users
+            .Where(x => x.UserId == this.UserId)
+            .ExecuteUpdateAsync(x => x
+                .SetProperty(u => u.Name, req.Name!)
+                .SetProperty(u => u.EMail, req.EMail!)
+                .SetProperty(u => u.Phone, req.Phone!)
+                .SetProperty(u => u.Address, req.Address!)
+            );
+
+        return row == 0 ? throw new HubException("Operation is invalid.") : true;
     }
 }

@@ -35,7 +35,7 @@ export function AdminProductAddButton() {
     manual: true,
     onFinally(req, data, e) {
       if (e)
-        dispatchError({
+        return dispatchError({
           Message: "Failed Create",
           Request: req,
           Error: e

@@ -1,5 +1,4 @@
-﻿#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-namespace TSystems.LoveOTC.Models;
+﻿namespace TSystems.LoveOTC.Models;
 
 using System.ComponentModel.DataAnnotations;
 
@@ -13,15 +12,19 @@ using System.ComponentModel.DataAnnotations;
 internal class User {
     public Guid UserId { get; set; }
 
-    public string Name { get; set; }
+    [StringLength(50, MinimumLength = 2)]
+    public required string Name { get; set; }
 
     [EmailAddress]
-    public string EMail { get; set; }
+    [StringLength(100, MinimumLength = 6)]
+    public required string EMail { get; set; }
 
     [Phone]
-    public string Phone { get; set; }
+    [StringLength(15, MinimumLength = 7)]
+    public required string Phone { get; set; }
 
-    public string Address { get; set; }
+    [StringLength(100, MinimumLength = 20)]
+    public required string Address { get; set; }
 
     public bool? Admin { get; set; }
 }

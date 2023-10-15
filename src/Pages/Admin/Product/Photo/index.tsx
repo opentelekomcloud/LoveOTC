@@ -68,7 +68,7 @@ const columns: TableColumnDefinition<IPhotoItem>[] = [
         manual: true,
         onFinally(req, _, e) {
           if (e)
-            dispatchError({
+            return dispatchError({
               Message: "Failed Update Order",
               Request: req,
               Error: e
@@ -124,7 +124,7 @@ export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        dispatchError({
+        return dispatchError({
           Message: "Failed Upload Photo",
           Request: req,
           Error: e

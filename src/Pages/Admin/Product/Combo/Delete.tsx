@@ -16,7 +16,7 @@ export function AdminProductComboDelete({ ComboId, Refresh }: { ComboId: number;
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        dispatchError({
+        return dispatchError({
           Message: "Failed Delete Combo",
           Request: req,
           Error: e

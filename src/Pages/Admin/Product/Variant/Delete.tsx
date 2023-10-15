@@ -16,7 +16,7 @@ export function AdminProductVariantDelete({ VariantId, Refresh }: { VariantId: n
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        dispatchError({
+        return dispatchError({
           Message: "Failed Delete Variant",
           Request: req,
           Error: e

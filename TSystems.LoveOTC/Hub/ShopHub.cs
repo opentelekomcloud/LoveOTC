@@ -13,16 +13,26 @@ using Microsoft.EntityFrameworkCore;
  */
 [PublicAPI]
 internal partial class ShopHub(ShopContext db, ILogger<ShopHub> logger) : CraftHub<ShopHub, INetClient>(db, logger) {
+    /**
+     * <remarks>
+     * @author Aloento
+     * @since 0.5.0
+     * @version 0.1.0
+     * </remarks>
+     */
     public override async Task OnConnectedAsync() {
         var ok = Guid.TryParse(this.Context.UserIdentifier, out var uid);
 
         if (ok) {
+            this.Context.Items.Add("UID", uid);
             var exist = await this.Db.Users.AnyAsync(x => x.UserId == uid);
 
             if (exist)
                 this.Logger.UserLogin(this.Name, this.Context.UserIdentifier, this.Context.ConnectionId);
-            else
+            else {
                 await this.Clients.Caller.OnNewUser();
+                this.Context.Items.Add("NewUser", true);
+            }
         }
     }
 

@@ -16,7 +16,7 @@ export function AdminProductTypeDelete({ VariantId, Type, Refresh }: { VariantId
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        dispatchError({
+        return dispatchError({
           Message: "Failed Delete Type",
           Request: req,
           Error: e

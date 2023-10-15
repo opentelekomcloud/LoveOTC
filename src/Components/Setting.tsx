@@ -61,7 +61,7 @@ export function Setting({ Open, Toggle, New }: ISetting) {
     manual: true,
     onFinally([req], _, e) {
       if (e)
-        dispatchError({
+        return dispatchError({
           Message: `Failed ${New ? "Create" : "Update"} Info`,
           Error: e,
           Request: req
@@ -107,7 +107,7 @@ export function Setting({ Open, Toggle, New }: ISetting) {
             </Field>
 
             <Field label="Address" size="large" required>
-              <Input size="medium" value={address} maxLength={100} onChange={(_, v) => setAddress(v.value)} />
+              <Input size="medium" value={address} maxLength={100} minLength={20} onChange={(_, v) => setAddress(v.value)} />
             </Field>
           </DialogContent>
 
@@ -119,7 +119,6 @@ export function Setting({ Open, Toggle, New }: ISetting) {
             )}
 
             <Button appearance="primary" onClick={() => run({
-              UId: auth.user?.profile.sub,
               EMail: auth.user?.profile.email,
               Name: name,
               Address: address,

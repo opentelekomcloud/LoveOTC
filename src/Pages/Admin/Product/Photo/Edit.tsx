@@ -44,7 +44,7 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        dispatchError({
+        return dispatchError({
           Message: "Failed Update Caption",
           Request: req,
           Error: e
@@ -65,7 +65,7 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        dispatchError({
+        return dispatchError({
           Message: "Failed Update Photo",
           Request: req,
           Error: e
@@ -86,7 +86,7 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        dispatchError({
+        return dispatchError({
           Message: "Failed Delete Photo",
           Request: req,
           Error: e

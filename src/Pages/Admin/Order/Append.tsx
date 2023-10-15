@@ -32,7 +32,7 @@ export function AdminOrderAppend({ OrderId, Refresh }: { OrderId: number; Refres
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        dispatchError({
+        return dispatchError({
           Message: "Failed Append Comment",
           Request: req,
           Error: e
@@ -53,7 +53,7 @@ export function AdminOrderAppend({ OrderId, Refresh }: { OrderId: number; Refres
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        dispatchError({
+        return dispatchError({
           Message: "Failed Close",
           Request: req,
           Error: e

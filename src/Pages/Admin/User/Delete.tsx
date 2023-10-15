@@ -16,7 +16,7 @@ export function AdminUserDelete({ UserId, Refresh }: { UserId: string; Refresh: 
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        dispatchError({
+        return dispatchError({
           Message: "Failed Delete User",
           Request: req,
           Error: e

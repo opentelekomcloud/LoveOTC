@@ -34,7 +34,7 @@ export function AdminProductType({ VariantId, Type, Refresh, New }: { VariantId:
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        dispatchError({
+        return dispatchError({
           Message: `Failed ${New ? "Create" : "Update"} Type`,
           Request: req,
           Error: e

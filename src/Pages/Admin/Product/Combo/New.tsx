@@ -93,7 +93,7 @@ export function AdminProductNewCombo({ ProdId, Refresh }: { ProdId: number; Refr
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        dispatchError({
+        return dispatchError({
           Message: "Failed Create Combo",
           Request: req,
           Error: e

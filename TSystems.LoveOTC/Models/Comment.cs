@@ -1,6 +1,8 @@
 ﻿#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 namespace TSystems.LoveOTC.Models;
 
+using System.ComponentModel.DataAnnotations;
+
 /**
  * <remarks>
  * @author Aloento
@@ -11,6 +13,7 @@ namespace TSystems.LoveOTC.Models;
 internal class Comment {
     public uint CommentId { get; set; }
 
+    [StringLength(1000)]
     public string Content { get; set; }
 
     public Guid? UserId { get; set; }

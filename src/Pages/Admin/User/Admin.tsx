@@ -15,7 +15,7 @@ export function AdminUserAdmin({ UserId, Admin, Refresh }: { UserId: string; Adm
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        dispatchError({
+        return dispatchError({
           Message: "Failed Grant Admin",
           Request: req,
           Error: e
@@ -36,7 +36,7 @@ export function AdminUserAdmin({ UserId, Admin, Refresh }: { UserId: string; Adm
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        dispatchError({
+        return dispatchError({
           Message: "Failed Revoke Admin",
           Request: req,
           Error: e

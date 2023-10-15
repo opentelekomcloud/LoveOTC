@@ -28,7 +28,7 @@ export function Shipment({ OrderId, Refresh }: { OrderId: number; Refresh: (id: 
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        dispatchError({
+        return dispatchError({
           Message: "Failed Update Tracking Number",
           Request: req,
           Error: e

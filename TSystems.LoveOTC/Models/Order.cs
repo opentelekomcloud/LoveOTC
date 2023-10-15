@@ -2,6 +2,7 @@
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 namespace TSystems.LoveOTC.Models;
 
+using System.ComponentModel.DataAnnotations;
 using Entities;
 
 /**
@@ -22,6 +23,7 @@ internal class Order {
 
     public DateTime CreateAt { get; set; }
 
+    [StringLength(50)]
     public string? TrackingNumber { get; set; }
 
     public virtual ICollection<Combo> Combos { get; }

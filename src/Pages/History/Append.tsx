@@ -32,7 +32,7 @@ export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: (i
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        dispatchError({
+        return dispatchError({
           Message: "Failed Append Comment",
           Request: req,
           Error: e
@@ -53,7 +53,7 @@ export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: (i
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        dispatchError({
+        return dispatchError({
           Message: "Failed Cancel",
           Request: req,
           Error: e

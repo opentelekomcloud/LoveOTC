@@ -1,6 +1,8 @@
 ﻿#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 namespace TSystems.LoveOTC.Models;
 
+using System.ComponentModel.DataAnnotations;
+
 /**
  * <remarks>
  * @author Aloento
@@ -13,6 +15,7 @@ internal class Photo {
 
     public bool? Cover { get; set; }
 
+    [StringLength(50)]
     public string? Caption { get; set; }
 
     public byte Order { get; set; }
