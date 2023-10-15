@@ -34,7 +34,7 @@ internal abstract class CraftHub<TSelf, TClient>(ShopContext db, ILogger<TSelf> 
                 throw new InvalidCredentialException();
             }
 
-            this.Context.Items.Add("UID", parse);
+            this.Context.Items.TryAdd("UID", parse);
             return parse;
         }
     }

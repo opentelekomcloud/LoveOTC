@@ -24,14 +24,14 @@ internal partial class ShopHub(ShopContext db, ILogger<ShopHub> logger) : CraftH
         var ok = Guid.TryParse(this.Context.UserIdentifier, out var uid);
 
         if (ok) {
-            this.Context.Items.Add("UID", uid);
+            this.Context.Items.TryAdd("UID", uid);
             var exist = await this.Db.Users.AnyAsync(x => x.UserId == uid);
 
             if (exist)
                 this.Logger.UserLogin(this.Name, this.Context.UserIdentifier, this.Context.ConnectionId);
             else {
                 await this.Clients.Caller.OnNewUser();
-                this.Context.Items.Add("NewUser", true);
+                this.Context.Items.TryAdd("NewUser", true);
             }
         }
     }
