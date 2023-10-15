@@ -57,12 +57,12 @@ export class ProductGet extends ShopNet {
    */
   public static async Carousel(prodId: number): Promise<IPhotoItem[]> {
     await this.EnsureConnected();
-    const res = await this.Hub.invoke<Omit<IPhotoItem & { ObjId: number }, "Id">[]>("ProdGetCarousel", prodId);
+    const res = await this.Hub.invoke<Omit<IPhotoItem & { PhotoId: number }, "Id">[]>("ProdGetCarousel", prodId);
 
     return res.map(x => {
-      const { ObjId, ...rest } = x;
+      const { PhotoId, ...rest } = x;
       return {
-        Id: ObjId,
+        Id: PhotoId,
         ...rest,
       };
     });

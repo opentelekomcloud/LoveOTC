@@ -83,13 +83,13 @@ internal partial class ShopHub {
     public async Task<List<PhotoItem>> ProdGetCarousel(uint prodId) {
         return new() {
             new() {
-                ObjId = 0,
-                Cover = "https://picsum.photos/550",
+                PhotoId = 0,
+                Cover = Guid.NewGuid(),
                 Caption = "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
             },
             new() {
-                ObjId = 1,
-                Cover = "https://picsum.photos/650",
+                PhotoId = 1,
+                Cover = Guid.NewGuid(),
                 Caption = "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
             }
         };

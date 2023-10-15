@@ -47,6 +47,7 @@ export function Setting({ Open, Toggle, New }: ISetting) {
   const [address, setAddress] = useState<string>();
 
   useRequest(Hub.User.Get.Me.bind(Hub.User.Get), {
+    manual: New,
     onSuccess({ Name, Address, Phone }) {
       setName(Name);
       setPhone(Phone);
@@ -56,7 +57,7 @@ export function Setting({ Open, Toggle, New }: ISetting) {
 
   const { dispatchError, dispatchToast } = use500Toast();
 
-  const { run } = useRequest(Hub.User.Post.Update, {
+  const { run } = useRequest(Hub.User.Post.Update.bind(Hub.User.Post), {
     manual: true,
     onFinally([req], _, e) {
       if (e)

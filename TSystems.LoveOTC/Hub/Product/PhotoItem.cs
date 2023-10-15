@@ -8,9 +8,9 @@ namespace TSystems.LoveOTC.Hub;
  * </remarks>
  */
 internal record PhotoItem {
-    public required uint ObjId { get; init; }
+    public required uint PhotoId { get; init; }
 
-    public required string Cover { get; init; }
+    public required Guid Cover { get; init; }
 
     public string? Caption { get; init; }
 }

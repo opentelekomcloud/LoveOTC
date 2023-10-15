@@ -25,4 +25,25 @@ internal partial class ShopHub(ShopContext db, ILogger<ShopHub> logger) : CraftH
                 await this.Clients.Caller.OnNewUser();
         }
     }
+
+    /**
+     * <remarks>
+     * @author Aloento
+     * @since 0.5.0
+     * @version 0.1.0
+     * </remarks>
+     */
+    public async IAsyncEnumerable<byte[]> ObjectStorageGet(Guid objId) {
+        var imageUrl = "https://source.unsplash.com/random";
+        using var httpClient = new HttpClient();
+        using var response = await httpClient.GetAsync(imageUrl, HttpCompletionOption.ResponseHeadersRead);
+        response.EnsureSuccessStatusCode();
+
+        await using var stream = await response.Content.ReadAsStreamAsync();
+        var buffer = new byte[30 * 1024];
+
+        int bytesRead;
+        while ((bytesRead = await stream.ReadAsync(buffer)) > 0)
+            yield return buffer[..bytesRead];
+    }
 }
