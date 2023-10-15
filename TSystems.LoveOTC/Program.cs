@@ -25,8 +25,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddDbContext<ShopContext>(x =>
-    x.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<ShopContext>(x => {
+    x.UseLazyLoadingProxies();
+    x.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
 if (Shared.Dev)
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();

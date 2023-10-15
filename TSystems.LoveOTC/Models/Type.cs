@@ -16,7 +16,7 @@ internal class Type {
 
     public uint VariantId { get; set; }
 
-    public Variant Variant { get; set; }
+    public virtual Variant Variant { get; set; }
 
-    public ICollection<Combo> Combos { get; }
+    public virtual ICollection<Combo> Combos { get; }
 }

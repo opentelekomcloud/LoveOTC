@@ -16,11 +16,11 @@ internal class Combo {
 
     public uint ProductId { get; set; }
 
-    public Product Product { get; set; }
+    public virtual Product Product { get; set; }
 
-    public ICollection<Type> Types { get; }
+    public virtual ICollection<Type> Types { get; }
 
-    public ICollection<Order> Orders { get; }
+    public virtual ICollection<Order> Orders { get; }
 
-    public ICollection<OrderCombo> OrderCombos { get; }
+    public virtual ICollection<OrderCombo> OrderCombos { get; }
 }

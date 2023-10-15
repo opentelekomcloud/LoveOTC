@@ -19,9 +19,9 @@ internal class Photo {
 
     public Guid ObjectId { get; set; }
 
-    public Storage Object { get; set; }
+    public virtual Storage Object { get; set; }
 
     public uint ProductId { get; set; }
 
-    public Product Product { get; set; }
+    public virtual Product Product { get; set; }
 }

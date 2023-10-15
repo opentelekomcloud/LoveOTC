@@ -16,7 +16,7 @@ internal class Order {
 
     public Guid UserId { get; set; }
 
-    public User User { get; set; }
+    public virtual User User { get; set; }
 
     public OrderStatus Status { get; set; }
 
@@ -24,9 +24,9 @@ internal class Order {
 
     public string? TrackingNumber { get; set; }
 
-    public ICollection<Combo> Combos { get; }
+    public virtual ICollection<Combo> Combos { get; }
 
-    public ICollection<OrderCombo> OrderCombos { get; }
+    public virtual ICollection<OrderCombo> OrderCombos { get; }
 
-    public ICollection<Comment> Comments { get; }
+    public virtual ICollection<Comment> Comments { get; }
 }

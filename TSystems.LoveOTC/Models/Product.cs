@@ -18,13 +18,13 @@ internal class Product {
 
     public uint? CategoryId { get; set; }
 
-    public Category? Category { get; set; }
+    public virtual Category? Category { get; set; }
 
-    public ICollection<Photo> Photos { get; }
+    public virtual ICollection<Photo> Photos { get; }
 
     public JsonElement? Description { get; set; }
 
-    public ICollection<Variant> Variants { get; }
+    public virtual ICollection<Variant> Variants { get; }
 
-    public ICollection<Combo> Combos { get; }
+    public virtual ICollection<Combo> Combos { get; }
 }

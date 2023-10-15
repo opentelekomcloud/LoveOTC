@@ -14,5 +14,5 @@ internal class Category {
 
     public string Name { get; set; }
 
-    public ICollection<Product> Products { get; }
+    public virtual ICollection<Product> Products { get; }
 }
