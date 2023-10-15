@@ -1,5 +1,6 @@
 import { HttpTransportType, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { MessagePackHubProtocol } from "@microsoft/signalr-protocol-msgpack";
+import { OnNewUserSubject } from "~/Components/NewUser";
 import { Auth } from "./Database";
 import { SignalR } from "./SignalR";
 
@@ -39,5 +40,8 @@ export class ShopNet extends SignalR {
  * @version 0.1.1
  */
 ShopNet.Hub.on("OnNewUser", () => {
-  debugger
+  OnNewUserSubject.next(true);
+  console.debug("OnNewUser");
+  OnNewUserSubject.complete();
+  OnNewUserSubject.closed = true;
 });

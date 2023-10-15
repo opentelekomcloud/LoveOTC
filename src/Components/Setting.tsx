@@ -14,6 +14,7 @@ import { Hub } from "~/ShopNet";
 interface ISetting {
   Open: boolean;
   Toggle: () => void;
+  New?: true;
 }
 
 /**
@@ -35,9 +36,9 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.2.0
+ * @version 0.3.0
  */
-export function Setting({ Open, Toggle }: ISetting) {
+export function Setting({ Open, Toggle, New }: ISetting) {
   const style = useStyles();
   const auth = useAuth();
 
@@ -60,14 +61,14 @@ export function Setting({ Open, Toggle }: ISetting) {
     onFinally([req], _, e) {
       if (e)
         dispatchError({
-          Message: "Failed Update Info",
+          Message: `Failed ${New ? "Create" : "Update"} Info`,
           Error: e,
           Request: req
         });
 
       dispatchToast(
         <Toast>
-          <ToastTitle>Info Updated</ToastTitle>
+          <ToastTitle>Info {New ? "Created" : "Updated"}</ToastTitle>
           <ToastBody>
             {req.Name}
             <br />
@@ -84,10 +85,10 @@ export function Setting({ Open, Toggle }: ISetting) {
   });
 
   return (
-    <Dialog open={Open} onOpenChange={Toggle}>
+    <Dialog open={Open} onOpenChange={Toggle} modalType={New ? "alert" : "modal"}>
       <DialogSurface>
         <DialogBody>
-          <DialogTitle>Personal Information</DialogTitle>
+          <DialogTitle>{New ? "Welcome! Fill in your info to get started." : "Personal Information"}</DialogTitle>
 
           <DialogContent className={style.box}>
             <div className={style.one}>
@@ -110,9 +111,12 @@ export function Setting({ Open, Toggle }: ISetting) {
           </DialogContent>
 
           <DialogActions>
-            <DialogTrigger disableButtonEnhancement>
-              <Button appearance="secondary">Cancel</Button>
-            </DialogTrigger>
+            {!New && (
+              <DialogTrigger disableButtonEnhancement>
+                <Button appearance="secondary">Cancel</Button>
+              </DialogTrigger>
+            )}
+
             <Button appearance="primary" onClick={() => run({
               UId: auth.user?.profile.sub,
               EMail: auth.user?.profile.email,
