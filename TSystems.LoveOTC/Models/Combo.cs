@@ -19,4 +19,8 @@ internal class Combo {
     public Product Product { get; set; }
 
     public ICollection<Type> Types { get; }
+
+    public ICollection<Order> Orders { get; }
+
+    public ICollection<OrderCombo> OrderCombos { get; }
 }

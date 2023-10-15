@@ -15,6 +15,8 @@ using Models;
 internal class ShopContext(DbContextOptions<ShopContext> opts) : DbContext(opts) {
     public DbSet<Storage> Objects { get; }
 
+    public DbSet<User> Users { get; }
+
     #region Product
 
     public DbSet<Product> Products { get; }
@@ -28,6 +30,16 @@ internal class ShopContext(DbContextOptions<ShopContext> opts) : DbContext(opts)
     public DbSet<Type> Types { get; }
 
     public DbSet<Combo> Combos { get; }
+
+    #endregion
+
+    #region Order
+
+    public DbSet<Order> Orders { get; }
+
+    public DbSet<OrderCombo> OrdersCombo { get; }
+
+    public DbSet<Comment> Comments { get; }
 
     #endregion
 

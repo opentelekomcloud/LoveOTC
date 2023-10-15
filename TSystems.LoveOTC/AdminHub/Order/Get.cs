@@ -1,5 +1,6 @@
 namespace TSystems.LoveOTC.AdminHub;
 
+using Entities;
 using Hub;
 
 internal partial class AdminHub {

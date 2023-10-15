@@ -1,4 +1,4 @@
-namespace TSystems.LoveOTC.Hub;
+namespace TSystems.LoveOTC.Entities;
 
 /**
  * <remarks>
