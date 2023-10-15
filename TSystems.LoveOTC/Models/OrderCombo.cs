@@ -11,11 +11,11 @@ namespace TSystems.LoveOTC.Models;
 internal class OrderCombo {
     public uint OrderId { get; set; }
 
-    public Order Order { get; set; }
+    public virtual Order Order { get; set; }
 
     public uint ComboId { get; set; }
 
-    public Combo Combo { get; set; }
+    public virtual Combo Combo { get; set; }
 
     public byte Quantity { get; set; }
 }

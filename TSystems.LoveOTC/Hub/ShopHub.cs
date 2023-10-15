@@ -1,7 +1,8 @@
 namespace TSystems.LoveOTC.Hub;
 
+using Helpers;
 using JetBrains.Annotations;
-using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 
 /**
  * <remarks>
@@ -11,5 +12,38 @@ using Microsoft.AspNetCore.SignalR;
  * </remarks>
  */
 [PublicAPI]
-internal partial class ShopHub : Hub<INetClient> {
+internal partial class ShopHub(ShopContext db, ILogger<ShopHub> logger) : CraftHub<ShopHub, INetClient>(db, logger) {
+    public override async Task OnConnectedAsync() {
+        var ok = Guid.TryParse(this.Context.UserIdentifier, out var uid);
+
+        if (ok) {
+            var exist = await this.Db.Users.AnyAsync(x => x.UserId == uid);
+
+            if (exist)
+                this.Logger.UserLogin(this.Name, this.Context.UserIdentifier, this.Context.ConnectionId);
+            else
+                await this.Clients.Caller.OnNewUser();
+        }
+    }
+
+    /**
+     * <remarks>
+     * @author Aloento
+     * @since 0.5.0
+     * @version 0.1.0
+     * </remarks>
+     */
+    public async IAsyncEnumerable<byte[]> ObjectStorageGet(Guid objId) {
+        var imageUrl = "https://source.unsplash.com/random";
+        using var httpClient = new HttpClient();
+        using var response = await httpClient.GetAsync(imageUrl, HttpCompletionOption.ResponseHeadersRead);
+        response.EnsureSuccessStatusCode();
+
+        await using var stream = await response.Content.ReadAsStreamAsync();
+        var buffer = new byte[30 * 1024];
+
+        int bytesRead;
+        while ((bytesRead = await stream.ReadAsync(buffer)) > 0)
+            yield return buffer[..bytesRead];
+    }
 }

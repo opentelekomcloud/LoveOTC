@@ -1,4 +1,5 @@
 import { makeStyles, tokens } from "@fluentui/react-components";
+import { NewUser } from "~/Components/NewUser";
 import { ColFlex, NavH, NavW } from "~/Helpers/Styles";
 import { Admin } from "~/Pages/Admin";
 import { Gallery } from "~/Pages/Gallery";
@@ -76,5 +77,7 @@ export function Layout() {
 
       <Footer />
     </div>
+
+    <NewUser />
   </>
 }

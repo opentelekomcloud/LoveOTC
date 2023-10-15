@@ -1,4 +1,5 @@
 import { Gallery } from "./Gallery";
+import { ObjectStorage } from "./ObjectStorage";
 import { Order } from "./Order";
 import { Product } from "./Product";
 import { User } from "./User";
@@ -13,4 +14,5 @@ export const Hub = {
   Product: Product,
   User: User,
   Order: Order,
+  Storage: ObjectStorage
 }

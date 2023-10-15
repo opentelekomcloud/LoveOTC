@@ -15,11 +15,11 @@ internal class Comment {
 
     public Guid? UserId { get; set; }
 
-    public User? User { get; set; }
+    public virtual User? User { get; set; }
 
     public DateTime CreateAt { get; set; }
 
     public uint OrderId { get; set; }
 
-    public Order Order { get; set; }
+    public virtual Order Order { get; set; }
 }

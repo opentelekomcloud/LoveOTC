@@ -10,15 +10,19 @@ using System.ComponentModel.DataAnnotations;
  * </remarks>
  */
 internal class Persona {
-    public required string Name { get; set; }
+    [Required]
+    public string? Name { get; set; }
 
+    [Required]
     [Phone]
-    public required string Phone { get; set; }
+    public string? Phone { get; set; }
 
+    [Required]
     [EmailAddress]
-    public required string EMail { get; set; }
+    public string? EMail { get; set; }
 
-    public required string Address { get; set; }
+    [Required]
+    public string? Address { get; set; }
 }
 
 /**
@@ -29,5 +33,6 @@ internal class Persona {
  * </remarks>
  */
 internal class PostPersona : Persona {
-    public required Guid UId { get; set; }
+    [Required]
+    public Guid? UId { get; set; }
 }

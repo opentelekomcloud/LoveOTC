@@ -14,9 +14,9 @@ internal class Variant {
 
     public string Name { get; set; }
 
-    public ICollection<Type> Types { get; }
+    public virtual ICollection<Type> Types { get; }
 
     public uint ProductId { get; set; }
 
-    public Product Product { get; set; }
+    public virtual Product Product { get; set; }
 }
