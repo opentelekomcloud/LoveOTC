@@ -20,7 +20,7 @@ internal partial class ShopHub {
         var isValid = Validator.TryValidateObject(req, validCtx, validRes, true);
         if (!isValid) {
             var msg = validRes.Select(x => x.ErrorMessage);
-            throw new HubException(string.Join(", ", msg));
+            throw new HubException(string.Join("; ", msg));
         }
 
         throw new NotImplementedException();

@@ -19,7 +19,7 @@ export function AdminProductVariantName({ Id, Name }: { Id: number; Name: string
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        dispatchError({
+        return dispatchError({
           Message: "Failed Update Variant Name",
           Request: req,
           Error: e

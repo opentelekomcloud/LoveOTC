@@ -68,7 +68,7 @@ function AuthHandler() {
 
   useEffect(() => {
     if (auth.error) {
-      dispatchError({
+      return dispatchError({
         Message: "Failed Authenticate",
         Request: auth,
         Error: auth.error

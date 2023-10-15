@@ -34,7 +34,7 @@ export function AdminProductNewVariant({ ProdId, Refresh }: { ProdId: number; Re
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        dispatchError({
+        return dispatchError({
           Message: "Failed Create Variant",
           Request: req,
           Error: e

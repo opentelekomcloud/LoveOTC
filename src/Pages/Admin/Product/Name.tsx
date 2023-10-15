@@ -32,7 +32,7 @@ export function AdminProductName({ ProdId }: { ProdId: number; }) {
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        dispatchError({
+        return dispatchError({
           Message: "Failed Update Name",
           Request: req,
           Error: e

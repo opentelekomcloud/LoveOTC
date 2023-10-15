@@ -103,7 +103,7 @@ export function AdminProductComboDetail({ Id, ProdId, Combo, Stock, Refresh }: I
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        dispatchError({
+        return dispatchError({
           Message: "Failed Update Combo",
           Request: req,
           Error: e

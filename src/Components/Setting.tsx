@@ -61,7 +61,7 @@ export function Setting({ Open, Toggle, New }: ISetting) {
     manual: true,
     onFinally([req], _, e) {
       if (e)
-        dispatchError({
+        return dispatchError({
           Message: `Failed ${New ? "Create" : "Update"} Info`,
           Error: e,
           Request: req

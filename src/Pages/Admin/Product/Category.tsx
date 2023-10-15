@@ -27,7 +27,7 @@ export function AdminProductCategory({ ProdId }: { ProdId: number; }) {
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        dispatchError({
+        return dispatchError({
           Message: "Failed Update Category",
           Request: req,
           Error: e

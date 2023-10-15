@@ -46,7 +46,7 @@ export function Confirm() {
   const { run } = useRequest(Hub.Order.Post.New.bind(Hub.Order.Post), {
     onFinally([req], data, e) {
       if (e)
-        dispatchError({
+        return dispatchError({
           Message: "Failed Create Order",
           Request: req,
           Error: e
