@@ -27,4 +27,6 @@ internal class Order {
     public ICollection<Combo> Combos { get; }
 
     public ICollection<OrderCombo> OrderCombos { get; }
+
+    public ICollection<Comment> Comments { get; }
 }
