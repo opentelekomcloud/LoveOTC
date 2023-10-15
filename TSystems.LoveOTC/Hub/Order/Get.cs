@@ -1,6 +1,6 @@
 namespace TSystems.LoveOTC.Hub;
 
-using System;
+using Entities;
 using Microsoft.AspNetCore.Authorization;
 
 internal partial class ShopHub {
@@ -14,23 +14,23 @@ internal partial class ShopHub {
     [Authorize]
     public async Task<List<OrderItem>> OrderGetList() {
         return new() {
-           new() {
-               OrderId = 1,
-               Items = new() { "OTC SHIRT - GREY", "OTC Cap - Cap and Cap" },
-               Quantity = 2,
-               OrderDate = DateTime.Now,
-               TrackNumber = "Number123456789",
-               Status = Enum.GetName(OrderStatus.Finished)!
-           },
-           new() {
+            new() {
+                OrderId = 1,
+                Items = new() { "OTC SHIRT - GREY", "OTC Cap - Cap and Cap" },
+                Quantity = 2,
+                OrderDate = DateTime.Now,
+                TrackNumber = "Number123456789",
+                Status = Enum.GetName(OrderStatus.Finished)!
+            },
+            new() {
                 OrderId = 2,
                 Items = new() { "OTC Cap - Cap and Cap" },
                 Quantity = 1,
                 OrderDate = DateTime.Now,
                 TrackNumber = "Number123456789",
                 Status = Enum.GetName(OrderStatus.Finished)!
-              },
-       };
+            }
+        };
     }
 
     /**
@@ -42,8 +42,7 @@ internal partial class ShopHub {
      */
     [Authorize]
     public async Task<OrderDetail> OrderGetDetail(uint orderId) {
-        var shopCart = new List<CartItem>
-        {
+        var shopCart = new List<CartItem> {
             new() {
                 OrderId = 1,
                 ProdId = (uint)Random.Shared.Next(1, 10),
