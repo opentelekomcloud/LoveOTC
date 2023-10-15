@@ -2,6 +2,7 @@ namespace TSystems.LoveOTC.Hub;
 
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
+using Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -43,6 +44,7 @@ internal partial class ShopHub {
             });
 
             this.Context.Items.Remove("NewUser");
+            this.Logger.NewUser(req.Name, this.Context.UserIdentifier, this.Context.ConnectionId);
             return true;
         }
 
