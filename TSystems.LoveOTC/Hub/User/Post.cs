@@ -45,7 +45,7 @@ internal partial class ShopHub {
             });
 
             this.Context.Items.Remove("NewUser");
-            this.Logger.NewUser(req.Name, this.Context.UserIdentifier, this.Context.ConnectionId);
+            this.Logger.NewUser(req.Name, this.Context);
             return true;
         }
 
