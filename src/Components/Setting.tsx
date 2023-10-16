@@ -5,6 +5,7 @@ import { useAuth } from "react-oidc-context";
 import { ColFlex, Flex } from "~/Helpers/Styles";
 import { use500Toast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
+import { OnNewUserSubject } from "./NewUser";
 
 /**
  * @author Aloento
@@ -36,7 +37,7 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.3.0
+ * @version 0.3.1
  */
 export function Setting({ Open, Toggle, New }: ISetting) {
   const style = useStyles();
@@ -80,6 +81,12 @@ export function Setting({ Open, Toggle, New }: ISetting) {
         </Toast>,
         { intent: "success" }
       );
+
+      if (New) {
+        OnNewUserSubject.next(false);
+        OnNewUserSubject.complete();
+        OnNewUserSubject.closed = true;
+      }
 
       Toggle();
     },

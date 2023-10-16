@@ -11,7 +11,7 @@ internal partial class ShopHub {
     /**
      * <remarks>
      * @author Aloento
-     * @since 0.1.0
+     * @since 0.5.0
      * @version 0.1.0
      * </remarks>
      */
@@ -37,6 +37,7 @@ internal partial class ShopHub {
             }
 
             await this.Db.Users.SingleInsertAsync(new() {
+                UserId = this.UserId,
                 Name = req.Name!,
                 EMail = req.EMail!,
                 Phone = req.Phone!,
