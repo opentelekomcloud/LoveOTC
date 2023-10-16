@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations;
  * @version 0.1.0
  * </remarks>
  */
-internal class User {
+public class User {
     public Guid UserId { get; set; }
 
     [StringLength(50, MinimumLength = 2)]

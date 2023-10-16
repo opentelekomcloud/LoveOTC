@@ -12,7 +12,7 @@ using System.Text.Json;
  * @version 0.1.0
  * </remarks>
  */
-internal class Product {
+public class Product {
     public uint ProductId { get; set; }
 
     [StringLength(50, MinimumLength = 1)]

@@ -10,7 +10,7 @@ using System.ComponentModel.DataAnnotations;
  * @version 0.1.0
  * </remarks>
  */
-internal class Comment {
+public class Comment {
     public uint CommentId { get; set; }
 
     [StringLength(1000)]

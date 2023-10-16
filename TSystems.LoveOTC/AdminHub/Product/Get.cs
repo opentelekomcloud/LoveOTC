@@ -12,7 +12,7 @@ internal partial class AdminHub {
         return new() {
             new() {
                 ProductId = 1,
-                Cover = "https://picsum.photos/550",
+                Cover = Guid.NewGuid(),
                 Name = "OTC SHIRT - GREY",
                 Category = "Clothes",
                 Variant = 2,
@@ -21,7 +21,7 @@ internal partial class AdminHub {
             },
             new() {
                 ProductId = 2,
-                Cover = "https://picsum.photos/600",
+                Cover = Guid.NewGuid(),
                 Name = "OTC Cap - Cap and Cap",
                 Category = "Hat",
                 Variant = 2,

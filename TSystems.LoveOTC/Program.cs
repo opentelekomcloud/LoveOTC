@@ -37,6 +37,7 @@ builder.Services.AddSignalR(x => {
     x.HandshakeTimeout = TimeSpan.FromSeconds(5);
     x.SupportedProtocols = new[] { "messagepack" };
     x.EnableDetailedErrors = Shared.Dev;
+    x.MaximumParallelInvocationsPerClient = 3;
 }).AddMessagePackProtocol(x => {
     x.SerializerOptions = MessagePackSerializerOptions.Standard
         .WithSecurity(MessagePackSecurity.UntrustedData)

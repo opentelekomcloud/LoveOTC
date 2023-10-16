@@ -10,7 +10,7 @@ using System.ComponentModel.DataAnnotations;
  * @version 0.1.0
  * </remarks>
  */
-internal class Storage {
+public class Storage {
     public Guid Id { get; set; }
 
     public DateTime? Expires { get; set; }

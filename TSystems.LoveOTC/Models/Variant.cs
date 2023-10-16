@@ -11,7 +11,7 @@ using System.ComponentModel.DataAnnotations;
  * @version 0.1.0
  * </remarks>
  */
-internal class Variant {
+public class Variant {
     public uint VariantId { get; set; }
 
     [StringLength(15)]

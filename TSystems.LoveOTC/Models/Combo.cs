@@ -9,7 +9,7 @@ namespace TSystems.LoveOTC.Models;
  * @version 0.1.0
  * </remarks>
  */
-internal class Combo {
+public class Combo {
     public uint ComboId { get; set; }
 
     public ushort Stock { get; set; }

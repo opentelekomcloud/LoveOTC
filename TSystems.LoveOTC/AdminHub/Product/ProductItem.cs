@@ -10,7 +10,7 @@ namespace TSystems.LoveOTC.AdminHub;
 public record ProductItem {
     public required uint ProductId { get; init; }
 
-    public required string Cover { get; init; }
+    public required Guid Cover { get; init; }
 
     public required string Name { get; init; }
 

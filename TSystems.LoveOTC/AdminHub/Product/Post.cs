@@ -31,12 +31,41 @@ internal partial class AdminHub {
     /**
      * <remarks>
      * @author Aloento
-     * @since 0.1.0
+     * @since 1.0.0
      * @version 0.1.0
      * </remarks>
      */
     public async Task<bool> ProductPostMovePhoto(uint photoId, bool up) {
-        throw new NotImplementedException();
+        var orders = await this.Db.Photos
+            .Where(x => x.ProductId == this.Db.Photos
+                .Where(y => y.PhotoId == photoId)
+                .Select(z => z.ProductId)
+                .Single())
+            .OrderBy(x => x.Order)
+            .ToListAsync();
+
+        var index = orders.FindIndex(x => x.PhotoId == photoId);
+        var current = orders[index].Order;
+
+        if (up) {
+            if (current == 1)
+                throw new HubException("Photo already at top");
+
+            orders[index - 1].Order = current;
+            orders[index].Order = (byte)(current - 1);
+        } else {
+            if (current == orders.Last().Order)
+                throw new HubException("Photo already at bottom");
+
+            orders[index + 1].Order = current;
+            orders[index].Order = (byte)(current + 1);
+        }
+
+        for (byte i = 0; i < orders.Count; i++)
+            orders[i].Order = (byte)(i + 1);
+
+        var row = await this.Db.SaveChangesAsync();
+        return row < 1 ? throw new HubException("Failed to Move Photo") : true;
     }
 
     /**
@@ -68,7 +97,8 @@ internal partial class AdminHub {
         using var img = await Image.LoadAsync(buffer);
 
         if (img.Width < 1600 || img.Height < 1600 || img.Width != img.Height)
-            throw new HubException($"Image should be larger than 1600px and 1:1 ratio, currently {img.Width} : {img.Height}");
+            throw new HubException(
+                $"Image should be larger than 1600px and 1:1 ratio, currently {img.Width} : {img.Height}");
 
         using var output = new MemoryStream();
         await img.SaveAsWebpAsync(output);
@@ -96,7 +126,7 @@ internal partial class AdminHub {
      * @version 0.1.0
      * </remarks>
      */
-    public async Task<uint> ProductPostVariant(string prodId, string name) {
+    public async Task<uint> ProductPostVariant(uint prodId, string name) {
         throw new NotImplementedException();
     }
 
@@ -118,7 +148,7 @@ internal partial class AdminHub {
      * @version 0.1.0
      * </remarks>
      */
-    public async Task<uint> ProductPostCombo(string prodId, Dictionary<string, string> combo, ushort stock) {
+    public async Task<uint> ProductPostCombo(uint prodId, Dictionary<string, string> combo, ushort stock) {
         throw new NotImplementedException();
     }
 }

@@ -10,7 +10,7 @@ using System.ComponentModel.DataAnnotations;
  * @version 0.1.0
  * </remarks>
  */
-internal class Photo {
+public class Photo {
     public uint PhotoId { get; set; }
 
     public bool? Cover { get; set; }

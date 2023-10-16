@@ -8,7 +8,7 @@ namespace TSystems.LoveOTC.Models;
  * @version 0.1.0
  * </remarks>
  */
-internal class OrderCombo {
+public class OrderCombo {
     public uint OrderId { get; set; }
 
     public virtual Order Order { get; set; }
