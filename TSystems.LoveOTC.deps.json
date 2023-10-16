@@ -18,6 +18,7 @@
           "Microsoft.EntityFrameworkCore.Proxies": "8.0.0-rc.2.23480.1",
           "Microsoft.EntityFrameworkCore.Tools": "8.0.0-rc.2.23480.1",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "8.0.0-rc.2",
+          "SixLabors.ImageSharp": "3.0.2",
           "Z.EntityFramework.Plus.EFCore": "8.0.0-rc.1.23419.6-03",
           "runtimepack.Microsoft.NETCore.App.Runtime.linux-x64": "8.0.0-rc.2.23479.6",
           "runtimepack.Microsoft.AspNetCore.App.Runtime.linux-x64": "8.0.0-rc.2.23480.2"
@@ -1748,6 +1749,14 @@
           "runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0"
         }
       },
+      "SixLabors.ImageSharp/3.0.2": {
+        "runtime": {
+          "lib/net6.0/SixLabors.ImageSharp.dll": {
+            "assemblyVersion": "3.0.0.0",
+            "fileVersion": "3.0.2.0"
+          }
+        }
+      },
       "System.Buffers/4.3.0": {
         "dependencies": {
           "System.Diagnostics.Debug": "4.3.0",
@@ -2775,6 +2784,13 @@
       "sha512": "sha512-zQiTBVpiLftTQZW8GFsV0gjYikB1WMkEPIxF5O6RkUrSV/OgvRRTYgeFQha/0keBpuS0HYweraGRwhfhJ7dj7w==",
       "path": "runtime.unix.system.runtime.extensions/4.3.0",
       "hashPath": "runtime.unix.system.runtime.extensions.4.3.0.nupkg.sha512"
+    },
+    "SixLabors.ImageSharp/3.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-PlwUHnLZ67G1i0xXDYQJYbFiJsvXiEFWtKdV0QvY9j+dFasYbl+vWXXY42/asTsNjchsH5BLuoRzlf8Fa8lzpg==",
+      "path": "sixlabors.imagesharp/3.0.2",
+      "hashPath": "sixlabors.imagesharp.3.0.2.nupkg.sha512"
     },
     "System.Buffers/4.3.0": {
       "type": "package",
