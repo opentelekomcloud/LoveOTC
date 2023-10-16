@@ -42,7 +42,7 @@ internal partial class AdminHub {
     /**
      * <remarks>
      * @author Aloento
-     * @since 0.1.0
+     * @since 1.0.0
      * @version 0.1.0
      * </remarks>
      */
@@ -73,7 +73,17 @@ internal partial class AdminHub {
         using var output = new MemoryStream();
         await img.SaveAsWebpAsync(output);
 
-        return true;
+        var obj = await this.Db.Objects.AddAsync(new() {
+            Data = output.ToArray()
+        });
+
+        await this.Db.Photos.AddAsync(new() {
+            ProductId = prodId,
+            ObjectId = obj.Entity.Id
+        });
+
+        var row = await this.Db.SaveChangesAsync();
+        return row < 1 ? throw new HubException("Failed to save data") : true;
     }
 
     /**

@@ -179,7 +179,10 @@ namespace TSystems.LoveOTC.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<byte>("Order")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("smallint");
+
+                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<byte>("Order"));
 
                     b.Property<long>("ProductId")
                         .HasColumnType("bigint");
@@ -232,10 +235,6 @@ namespace TSystems.LoveOTC.Migrations
 
                     b.Property<DateTime?>("Expires")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Hash")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

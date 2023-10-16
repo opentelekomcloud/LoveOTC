@@ -34,7 +34,6 @@ namespace TSystems.LoveOTC.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Expires = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    Hash = table.Column<string>(type: "text", nullable: false),
                     Data = table.Column<byte[]>(type: "bytea", maxLength: 10485760, nullable: false)
                 },
                 constraints: table =>
