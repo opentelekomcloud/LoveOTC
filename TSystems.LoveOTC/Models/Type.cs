@@ -11,7 +11,7 @@ using System.ComponentModel.DataAnnotations;
  * @version 0.1.0
  * </remarks>
  */
-internal class Type {
+public class Type {
     public uint TypeId { get; set; }
 
     [StringLength(15)]

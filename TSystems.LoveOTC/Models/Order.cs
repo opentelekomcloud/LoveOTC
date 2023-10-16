@@ -12,7 +12,7 @@ using Entities;
  * @version 0.1.0
  * </remarks>
  */
-internal class Order {
+public class Order {
     public uint OrderId { get; set; }
 
     public Guid UserId { get; set; }

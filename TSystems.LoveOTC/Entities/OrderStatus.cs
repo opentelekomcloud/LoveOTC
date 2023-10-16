@@ -7,7 +7,7 @@ namespace TSystems.LoveOTC.Entities;
  * @version 0.1.0
  * </remarks>
  */
-internal enum OrderStatus {
+public enum OrderStatus {
     Pending,
     Processing,
     Shipping,
