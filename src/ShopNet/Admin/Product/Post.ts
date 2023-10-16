@@ -35,7 +35,7 @@ export class AdminProductPost extends AdminNet {
    * @since 0.5.0
    * @version 1.0.0
    */
-  public static async Photo(prodId: number, file: File): Promise<[number, IStreamResult<true>]> {
+  public static async Photo(prodId: number, file: File): Promise<IStreamResult<true>> {
     if (!file.type.startsWith("image/"))
       throw new TypeError("File is not an image");
 
@@ -68,11 +68,12 @@ export class AdminProductPost extends AdminNet {
       });
 
       subject.next(buffer);
+      console.debug(`Sent chunk ${index + 1}/${chunks}`);
       index++;
     }
 
     subject.complete();
-    return [chunks, res];
+    return res;
   }
 
   /**
