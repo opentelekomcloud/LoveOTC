@@ -21,21 +21,26 @@ const useStyle = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.1
+ * @version 0.2.2
  */
 export function ProductCarousel({ Id }: { Id: number; }) {
   const style = useStyle();
-  const [imgs, setImgs] = useState<string[]>([]);
+  const [imgs, setImgs] = useState<string[]>(["https://placehold.co/400?text=Loading..."]);
 
   useRequest(Hub.Product.Get.Carousel.bind(Hub.Product.Get), {
     defaultParams: [Id],
     async onSuccess(data) {
-      for (const i of data) {
-        Hub.Storage.GetBySlice(i.Cover).then(slice => {
-          setImgs(x => [
-            ...x,
-            URL.createObjectURL(new Blob(slice))
-          ]);
+      setImgs(Array<string>(data.length).fill("https://placehold.co/400?text=Loading..."));
+
+      for (let i = 0; i < data.length; i++) {
+        const e = data[i];
+
+        Hub.Storage.GetBySlice(e.Cover).then(slice => {
+          setImgs(x => {
+            const n = [...x];
+            n[i] = URL.createObjectURL(new Blob(slice));
+            return n;
+          });
         });
       }
     },

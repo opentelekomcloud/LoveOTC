@@ -33,6 +33,7 @@ export class ObjectStorage extends ShopNet {
           },
           next(value) {
             slice.push(value);
+            console.debug("Received Slice", objId, slice.length);
           },
           complete() {
             resolve(slice);

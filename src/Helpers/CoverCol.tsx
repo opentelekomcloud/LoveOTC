@@ -1,6 +1,5 @@
-import { DataGridCell, DataGridHeaderCell, Image, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
-import { useRequest } from "ahooks";
-import { Hub } from "~/ShopNet";
+import { DataGridCell, DataGridHeaderCell, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
+import { GuidImage } from "./GuidImage";
 import { Cover } from "./Styles";
 
 /**
@@ -44,16 +43,13 @@ export function MakeCoverCol(Size: number) {
     },
     renderCell(item) {
       const style = useStyle();
-      const { data } = useRequest(Hub.Storage.GetBySlice.bind(Hub.Storage), {
-        defaultParams: [item.Cover]
-      });
 
       return (
         <DataGridCell className={style.unset}>
-          <Image
+          <GuidImage
             className={style.img}
             style={w}
-            src={URL.createObjectURL(new Blob(data))}
+            Guid={item.Cover}
           />
         </DataGridCell>
       )

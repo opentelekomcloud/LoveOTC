@@ -169,8 +169,8 @@ namespace TSystems.LoveOTC.Migrations
                     NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<long>("PhotoId"));
 
                     b.Property<string>("Caption")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<bool?>("Cover")
                         .HasColumnType("boolean");
@@ -195,11 +195,11 @@ namespace TSystems.LoveOTC.Migrations
 
             modelBuilder.Entity("TSystems.LoveOTC.Models.Product", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<long>("ProductId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<long>("ProductId"));
 
                     b.Property<long?>("CategoryId")
                         .HasColumnType("bigint");
@@ -212,7 +212,7 @@ namespace TSystems.LoveOTC.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.HasKey("Id");
+                    b.HasKey("ProductId");
 
                     b.HasIndex("CategoryId");
 
@@ -227,14 +227,11 @@ namespace TSystems.LoveOTC.Migrations
 
                     b.Property<byte[]>("Data")
                         .IsRequired()
+                        .HasMaxLength(10485760)
                         .HasColumnType("bytea");
 
                     b.Property<DateTime?>("Expires")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Hash")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

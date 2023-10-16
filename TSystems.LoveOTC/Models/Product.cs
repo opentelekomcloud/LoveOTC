@@ -13,7 +13,7 @@ using System.Text.Json;
  * </remarks>
  */
 internal class Product {
-    public uint Id { get; set; }
+    public uint ProductId { get; set; }
 
     [StringLength(50, MinimumLength = 1)]
     public string Name { get; set; }
