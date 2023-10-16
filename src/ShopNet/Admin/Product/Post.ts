@@ -1,3 +1,5 @@
+import { IStreamResult } from "@microsoft/signalr";
+import { Subject } from "rxjs";
 import { AdminNet } from "../AdminNet";
 
 /**
@@ -31,14 +33,42 @@ export class AdminProductPost extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.1.0
+   * @version 1.0.0
    */
-  public static async Photo(file: File): Promise<true> {
+  public static async Photo(file: File): Promise<IStreamResult<true>> {
     if (!file.type.startsWith("image/"))
       throw new TypeError("File is not an image");
 
     await this.EnsureAdmin();
-    const res = await this.Hub.invoke<true>("ProductPostPhoto", "");
+
+    const chunkSize = 30 * 1024;
+    const chunks = Math.ceil(file.size / chunkSize);
+    let index = 0;
+
+    const subject = new Subject<Uint8Array>();
+    const res = this.Hub.stream<true>("ProductPostPhoto", subject);
+
+    while (index < chunks) {
+      const start = index * chunkSize;
+      const end = Math.min(start + chunkSize, file.size);
+      const chunk = file.slice(start, end);
+
+      const reader = new FileReader();
+      const buffer = await new Promise<Uint8Array>((resolve, reject) => {
+        reader.onload = () => {
+          resolve(new Uint8Array(reader.result as ArrayBuffer));
+        };
+        reader.onerror = () => {
+          reject(reader.error);
+        };
+        reader.readAsArrayBuffer(chunk);
+      });
+
+      subject.next(buffer);
+      index++;
+    }
+
+    subject.complete();
     return res;
   }
 
