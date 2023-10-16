@@ -38,7 +38,7 @@ internal partial class AdminHub {
      * @version 0.1.0
      * </remarks>
      */
-    public async Task<string> ProductGetName(string prodId) {
+    public async Task<string> ProductGetName(uint prodId) {
         return "OTC SHIRT - GREY";
     }
 
@@ -49,7 +49,7 @@ internal partial class AdminHub {
      * @version 0.1.0
      * </remarks>
      */
-    public async Task<string> ProductGetCategory(string prodId) {
+    public async Task<string> ProductGetCategory(uint prodId) {
         return "Clothes";
     }
 
@@ -60,7 +60,7 @@ internal partial class AdminHub {
      * @version 0.1.0
      * </remarks>
      */
-    public async Task<List<VariantItem>> ProductGetVariants(string prodId) {
+    public async Task<List<VariantItem>> ProductGetVariants(uint prodId) {
         return new() {
             new() {
                 VariantId = 1,

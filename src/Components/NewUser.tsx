@@ -9,18 +9,18 @@ import { Setting } from "./Setting";
  * @since 1.0.0
  * @version 0.1.0
  */
-export const OnNewUserSubject = new Subject<true>();
+export const OnNewUserSubject = new Subject<boolean>();
 
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 export function NewUser() {
   const [open, { toggle }] = useBoolean();
 
   useEffect(() => {
-    OnNewUserSubject.subscribe(toggle);
+    OnNewUserSubject.subscribe(x => x && toggle());
   }, []);
 
   return (

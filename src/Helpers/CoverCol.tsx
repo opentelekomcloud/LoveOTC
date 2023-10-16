@@ -1,4 +1,6 @@
 import { DataGridCell, DataGridHeaderCell, Image, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
+import { useRequest } from "ahooks";
+import { Hub } from "~/ShopNet";
 import { Cover } from "./Styles";
 
 /**
@@ -22,7 +24,7 @@ const useStyle = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.1
+ * @version 0.2.0
  */
 export function MakeCoverCol(Size: number) {
   const w = { width: `${Size}px` };
@@ -42,13 +44,16 @@ export function MakeCoverCol(Size: number) {
     },
     renderCell(item) {
       const style = useStyle();
+      const { data } = useRequest(Hub.Storage.GetBySlice.bind(Hub.Storage), {
+        defaultParams: [item.Cover]
+      });
 
       return (
         <DataGridCell className={style.unset}>
           <Image
             className={style.img}
             style={w}
-            src={item.Cover}
+            src={URL.createObjectURL(new Blob(data))}
           />
         </DataGridCell>
       )

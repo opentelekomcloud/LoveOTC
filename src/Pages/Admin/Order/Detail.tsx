@@ -33,8 +33,9 @@ export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
   const { Nav, Paths } = useRouter();
 
   const { data, run } = useRequest(Hub.Order.Get.Detail.bind(Hub.Order.Get), {
-    onError() {
-      throw Nav("Admin", "Order");
+    onError(e) {
+      Nav("Admin", "Order");
+      console.error(e);
     },
     manual: true
   })

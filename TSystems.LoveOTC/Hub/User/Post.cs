@@ -2,6 +2,7 @@ namespace TSystems.LoveOTC.Hub;
 
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
+using Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,7 @@ internal partial class ShopHub {
     /**
      * <remarks>
      * @author Aloento
-     * @since 0.1.0
+     * @since 0.5.0
      * @version 0.1.0
      * </remarks>
      */
@@ -36,6 +37,7 @@ internal partial class ShopHub {
             }
 
             await this.Db.Users.SingleInsertAsync(new() {
+                UserId = this.UserId,
                 Name = req.Name!,
                 EMail = req.EMail!,
                 Phone = req.Phone!,
@@ -43,6 +45,7 @@ internal partial class ShopHub {
             });
 
             this.Context.Items.Remove("NewUser");
+            this.Logger.NewUser(req.Name, this.Context.UserIdentifier, this.Context.ConnectionId);
             return true;
         }
 

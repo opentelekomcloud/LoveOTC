@@ -15,7 +15,7 @@ using System.Text.Json;
 internal class Product {
     public uint Id { get; set; }
 
-    [StringLength(15)]
+    [StringLength(50, MinimumLength = 1)]
     public string Name { get; set; }
 
     public uint? CategoryId { get; set; }

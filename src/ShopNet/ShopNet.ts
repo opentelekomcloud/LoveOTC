@@ -42,6 +42,4 @@ export class ShopNet extends SignalR {
 ShopNet.Hub.on("OnNewUser", () => {
   OnNewUserSubject.next(true);
   console.debug("OnNewUser");
-  OnNewUserSubject.complete();
-  OnNewUserSubject.closed = true;
 });

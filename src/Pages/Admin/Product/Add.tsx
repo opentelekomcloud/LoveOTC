@@ -67,6 +67,7 @@ export function AdminProductAddButton() {
               required
               size="large"
               value={name}
+              maxLength={15}
               appearance="underline"
               onChange={(_, v) => setName(v.value)}
               contentBefore={<Subtitle2>Give A Name</Subtitle2>}

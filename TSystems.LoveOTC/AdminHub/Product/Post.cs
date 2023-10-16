@@ -1,15 +1,30 @@
 namespace TSystems.LoveOTC.AdminHub;
 
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
+using Microsoft.AspNetCore.SignalR;
+using Models;
+
 internal partial class AdminHub {
     /**
      * <remarks>
      * @author Aloento
-     * @since 0.1.0
+     * @since 0.5.0
      * @version 0.1.0
      * </remarks>
      */
     public async Task<uint> ProductPostCreate(string name) {
-        throw new NotImplementedException();
+        var prop = typeof(Product).GetProperty(nameof(Product.Name))!;
+        var valid = prop.GetCustomAttribute<StringLengthAttribute>()!;
+
+        if (!valid.IsValid(name))
+            throw new HubException(valid.FormatErrorMessage("Name"));
+
+        var temp = await this.Db.Products.AddAsync(new() {
+            Name = name
+        });
+
+        return temp.Entity.Id;
     }
 
     /**

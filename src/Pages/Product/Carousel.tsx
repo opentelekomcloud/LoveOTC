@@ -21,7 +21,7 @@ const useStyle = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
+ * @version 0.2.1
  */
 export function ProductCarousel({ Id }: { Id: number; }) {
   const style = useStyle();
@@ -31,23 +31,12 @@ export function ProductCarousel({ Id }: { Id: number; }) {
     defaultParams: [Id],
     async onSuccess(data) {
       for (const i of data) {
-        const slice: Uint8Array[] = [];
-
-        Hub.Storage.Get(i.Cover).then(x =>
-          x.subscribe({
-            error(err) {
-              throw err;
-            },
-            next(value) {
-              slice.push(value);
-            },
-            complete() {
-              const blob = new Blob(slice);
-              const url = URL.createObjectURL(blob);
-              setImgs(x => [...x, url]);
-            },
-          })
-        );
+        Hub.Storage.GetBySlice(i.Cover).then(slice => {
+          setImgs(x => [
+            ...x,
+            URL.createObjectURL(new Blob(slice))
+          ]);
+        });
       }
     },
   });

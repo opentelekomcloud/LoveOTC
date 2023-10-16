@@ -21,8 +21,9 @@ export function AdminProductName({ ProdId }: { ProdId: number; }) {
     onSuccess(data) {
       setName(data);
     },
-    onError() {
-      throw Nav("Admin");
+    onError(e) {
+      Nav("Admin");
+      console.error(e);
     },
   });
 

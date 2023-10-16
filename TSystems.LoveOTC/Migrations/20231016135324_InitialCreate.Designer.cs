@@ -13,7 +13,7 @@ using TSystems.LoveOTC;
 namespace TSystems.LoveOTC.Migrations
 {
     [DbContext(typeof(ShopContext))]
-    [Migration("20231015212637_InitialCreate")]
+    [Migration("20231016135324_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -212,8 +212,8 @@ namespace TSystems.LoveOTC.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("character varying(15)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
 
