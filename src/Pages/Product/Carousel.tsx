@@ -21,7 +21,7 @@ const useStyle = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
+ * @version 0.2.1
  */
 export function ProductCarousel({ Id }: { Id: number; }) {
   const style = useStyle();
@@ -32,9 +32,10 @@ export function ProductCarousel({ Id }: { Id: number; }) {
     async onSuccess(data) {
       for (const i of data) {
         Hub.Storage.GetBySlice(i.Cover).then(slice => {
-          const blob = new Blob(slice);
-          const url = URL.createObjectURL(blob);
-          setImgs(x => [...x, url]);
+          setImgs(x => [
+            ...x,
+            URL.createObjectURL(new Blob(slice))
+          ]);
         });
       }
     },
