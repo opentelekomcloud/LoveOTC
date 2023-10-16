@@ -155,7 +155,7 @@ export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
 
           input.onchange = () => {
             if (input.files)
-              newPhoto(input.files[0]);
+              newPhoto(ProdId, input.files[0]);
           };
           input.click();
         }}

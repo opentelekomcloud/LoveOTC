@@ -35,9 +35,12 @@ export class AdminProductPost extends AdminNet {
    * @since 0.5.0
    * @version 1.0.0
    */
-  public static async Photo(file: File): Promise<IStreamResult<true>> {
+  public static async Photo(prodId: number, file: File): Promise<[number, IStreamResult<true>]> {
     if (!file.type.startsWith("image/"))
       throw new TypeError("File is not an image");
+
+    if (file.size > 10 * 1024 * 1024)
+      throw new RangeError("File is too large, max 10MB");
 
     await this.EnsureAdmin();
 
@@ -46,7 +49,7 @@ export class AdminProductPost extends AdminNet {
     let index = 0;
 
     const subject = new Subject<Uint8Array>();
-    const res = this.Hub.stream<true>("ProductPostPhoto", subject);
+    const res = this.Hub.stream<true>("ProductPostPhoto", prodId, subject);
 
     while (index < chunks) {
       const start = index * chunkSize;
@@ -69,7 +72,7 @@ export class AdminProductPost extends AdminNet {
     }
 
     subject.complete();
-    return res;
+    return [chunks, res];
   }
 
   /**

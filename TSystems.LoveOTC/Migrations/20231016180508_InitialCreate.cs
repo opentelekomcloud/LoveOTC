@@ -35,7 +35,7 @@ namespace TSystems.LoveOTC.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Expires = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Hash = table.Column<string>(type: "text", nullable: false),
-                    Data = table.Column<byte[]>(type: "bytea", nullable: false)
+                    Data = table.Column<byte[]>(type: "bytea", maxLength: 10485760, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -62,14 +62,14 @@ namespace TSystems.LoveOTC.Migrations
                 name: "Products",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false),
+                    ProductId = table.Column<long>(type: "bigint", nullable: false),
                     Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     CategoryId = table.Column<long>(type: "bigint", nullable: true),
                     Description = table.Column<JsonElement>(type: "jsonb", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products", x => x.Id);
+                    table.PrimaryKey("PK_Products", x => x.ProductId);
                     table.ForeignKey(
                         name: "FK_Products_Categories_CategoryId",
                         column: x => x.CategoryId,
@@ -113,7 +113,7 @@ namespace TSystems.LoveOTC.Migrations
                         name: "FK_Combos_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
-                        principalColumn: "Id",
+                        principalColumn: "ProductId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -141,7 +141,7 @@ namespace TSystems.LoveOTC.Migrations
                         name: "FK_Photos_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
-                        principalColumn: "Id",
+                        principalColumn: "ProductId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -160,7 +160,7 @@ namespace TSystems.LoveOTC.Migrations
                         name: "FK_Variants_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
-                        principalColumn: "Id",
+                        principalColumn: "ProductId",
                         onDelete: ReferentialAction.Cascade);
                 });
 

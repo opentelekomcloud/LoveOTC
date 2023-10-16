@@ -3,6 +3,7 @@ namespace TSystems.LoveOTC.AdminHub;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Models;
 
 internal partial class AdminHub {
@@ -24,7 +25,7 @@ internal partial class AdminHub {
             Name = name
         });
 
-        return temp.Entity.Id;
+        return temp.Entity.ProductId;
     }
 
     /**
@@ -45,8 +46,34 @@ internal partial class AdminHub {
      * @version 0.1.0
      * </remarks>
      */
-    public async Task<bool> ProductPostPhoto(string file) {
-        throw new NotImplementedException();
+    public async Task<bool> ProductPostPhoto(uint prodId, IAsyncEnumerable<byte[]> input) {
+        var exist = await this.Db.Products.AnyAsync(x => x.ProductId == prodId);
+        if (!exist)
+            throw new HubException($"Product {prodId} not found");
+
+        const int maxSize = 10 * 1024 * 1024;
+
+        var current = 0;
+        using var buffer = new MemoryStream();
+
+        await foreach (var chunk in input) {
+            current += chunk.Length;
+            if (current > maxSize)
+                throw new HubException("File too large, max 10MB");
+
+            await buffer.WriteAsync(chunk);
+        }
+
+        buffer.Seek(0, SeekOrigin.Begin);
+        using var img = await Image.LoadAsync(buffer);
+
+        if (img.Width < 1600 || img.Height < 1600 || img.Width != img.Height)
+            throw new HubException("Image should be larger than 1600px and 1:1 ratio");
+
+        using var output = new MemoryStream();
+        await img.SaveAsWebpAsync(output);
+
+        return true;
     }
 
     /**
