@@ -169,8 +169,8 @@ namespace TSystems.LoveOTC.Migrations
                     NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<long>("PhotoId"));
 
                     b.Property<string>("Caption")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<bool?>("Cover")
                         .HasColumnType("boolean");

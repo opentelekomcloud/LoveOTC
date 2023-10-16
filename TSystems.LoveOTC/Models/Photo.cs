@@ -15,7 +15,7 @@ internal class Photo {
 
     public bool? Cover { get; set; }
 
-    [StringLength(50)]
+    [StringLength(100)]
     public string? Caption { get; set; }
 
     public byte Order { get; set; }

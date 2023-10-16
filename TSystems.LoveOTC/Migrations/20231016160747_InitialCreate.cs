@@ -123,7 +123,7 @@ namespace TSystems.LoveOTC.Migrations
                 {
                     PhotoId = table.Column<long>(type: "bigint", nullable: false),
                     Cover = table.Column<bool>(type: "boolean", nullable: true),
-                    Caption = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    Caption = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     Order = table.Column<byte>(type: "smallint", nullable: false),
                     ObjectId = table.Column<Guid>(type: "uuid", nullable: false),
                     ProductId = table.Column<long>(type: "bigint", nullable: false)

@@ -13,7 +13,7 @@ using TSystems.LoveOTC;
 namespace TSystems.LoveOTC.Migrations
 {
     [DbContext(typeof(ShopContext))]
-    [Migration("20231016135324_InitialCreate")]
+    [Migration("20231016160747_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -172,8 +172,8 @@ namespace TSystems.LoveOTC.Migrations
                     NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<long>("PhotoId"));
 
                     b.Property<string>("Caption")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<bool?>("Cover")
                         .HasColumnType("boolean");
