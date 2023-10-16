@@ -1,4 +1,3 @@
-import { IStreamResult } from "@microsoft/signalr";
 import { Subject } from "rxjs";
 import { AdminNet } from "../AdminNet";
 
@@ -35,7 +34,7 @@ export class AdminProductPost extends AdminNet {
    * @since 0.5.0
    * @version 1.0.0
    */
-  public static async Photo(prodId: number, file: File): Promise<IStreamResult<true>> {
+  public static async Photo(prodId: number, file: File): Promise<true> {
     if (!file.type.startsWith("image/"))
       throw new TypeError("File is not an image");
 
@@ -49,7 +48,7 @@ export class AdminProductPost extends AdminNet {
     let index = 0;
 
     const subject = new Subject<Uint8Array>();
-    const res = this.Hub.stream<true>("ProductPostPhoto", prodId, subject);
+    const res = this.Hub.invoke<true>("ProductPostPhoto", prodId, subject);
 
     while (index < chunks) {
       const start = index * chunkSize;

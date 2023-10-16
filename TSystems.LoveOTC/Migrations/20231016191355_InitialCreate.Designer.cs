@@ -13,7 +13,7 @@ using TSystems.LoveOTC;
 namespace TSystems.LoveOTC.Migrations
 {
     [DbContext(typeof(ShopContext))]
-    [Migration("20231016182740_InitialCreate")]
+    [Migration("20231016191355_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -182,10 +182,7 @@ namespace TSystems.LoveOTC.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<byte>("Order")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("smallint");
-
-                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<byte>("Order"));
 
                     b.Property<long>("ProductId")
                         .HasColumnType("bigint");

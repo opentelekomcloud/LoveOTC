@@ -122,7 +122,7 @@ export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
 
   const { run: newPhoto } = useRequest(AdminHub.Product.Post.Photo.bind(AdminHub.Product.Post), {
     manual: true,
-    onFinally(req, data, e) {
+    onFinally(req, _, e) {
       if (e)
         return dispatchError({
           Message: "Failed Upload Photo",
@@ -130,26 +130,14 @@ export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
           Error: e
         });
 
-      data!.subscribe({
-        error(err) {
-          dispatchError({
-            Message: "Failed Upload Photo",
-            Request: req,
-            Error: err
-          });
-        },
-        next() {
-          dispatchToast(
-            <Toast>
-              <ToastTitle>Photo Uploaded</ToastTitle>
-            </Toast>,
-            { intent: "success" }
-          );
-        },
-        complete() {
-          refreshCarousel();
-        },
-      });
+      dispatchToast(
+        <Toast>
+          <ToastTitle>Photo Uploaded</ToastTitle>
+        </Toast>,
+        { intent: "success" }
+      );
+
+      refreshCarousel();
     },
   });
 

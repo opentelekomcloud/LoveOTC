@@ -68,7 +68,7 @@ internal partial class AdminHub {
         using var img = await Image.LoadAsync(buffer);
 
         if (img.Width < 1600 || img.Height < 1600 || img.Width != img.Height)
-            throw new HubException("Image should be larger than 1600px and 1:1 ratio");
+            throw new HubException($"Image should be larger than 1600px and 1:1 ratio, currently {img.Width} : {img.Height}");
 
         using var output = new MemoryStream();
         await img.SaveAsWebpAsync(output);
@@ -77,9 +77,12 @@ internal partial class AdminHub {
             Data = output.ToArray()
         });
 
+        var next = (byte)(await this.Db.Photos.CountAsync(x => x.ProductId == prodId) + 1);
+
         await this.Db.Photos.AddAsync(new() {
             ProductId = prodId,
-            ObjectId = obj.Entity.Id
+            Object = obj.Entity,
+            Order = next
         });
 
         var row = await this.Db.SaveChangesAsync();

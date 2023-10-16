@@ -2,7 +2,6 @@
 namespace TSystems.LoveOTC.Models;
 
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 /**
  * <remarks>
@@ -19,7 +18,6 @@ internal class Photo {
     [StringLength(100)]
     public string? Caption { get; set; }
 
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public byte Order { get; set; }
 
     public Guid ObjectId { get; set; }
