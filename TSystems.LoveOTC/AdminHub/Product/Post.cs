@@ -31,7 +31,7 @@ internal partial class AdminHub {
     /**
      * <remarks>
      * @author Aloento
-     * @since 0.1.0
+     * @since 1.0.0
      * @version 0.1.0
      * </remarks>
      */
@@ -61,8 +61,8 @@ internal partial class AdminHub {
             orders[index].Order = (byte)(current + 1);
         }
 
-        for (byte i = 1; i < orders.Count; i++)
-            orders[i].Order = i;
+        for (byte i = 0; i < orders.Count; i++)
+            orders[i].Order = (byte)(i + 1);
 
         var row = await this.Db.SaveChangesAsync();
         return row < 1 ? throw new HubException("Failed to Move Photo") : true;
@@ -126,7 +126,7 @@ internal partial class AdminHub {
      * @version 0.1.0
      * </remarks>
      */
-    public async Task<uint> ProductPostVariant(string prodId, string name) {
+    public async Task<uint> ProductPostVariant(uint prodId, string name) {
         throw new NotImplementedException();
     }
 
@@ -148,7 +148,7 @@ internal partial class AdminHub {
      * @version 0.1.0
      * </remarks>
      */
-    public async Task<uint> ProductPostCombo(string prodId, Dictionary<string, string> combo, ushort stock) {
+    public async Task<uint> ProductPostCombo(uint prodId, Dictionary<string, string> combo, ushort stock) {
         throw new NotImplementedException();
     }
 }
