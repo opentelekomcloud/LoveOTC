@@ -63,7 +63,7 @@ namespace TSystems.LoveOTC.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false),
-                    Name = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: false),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     CategoryId = table.Column<long>(type: "bigint", nullable: true),
                     Description = table.Column<JsonElement>(type: "jsonb", nullable: true)
                 },
