@@ -74,8 +74,9 @@ export function Product() {
     onBefore() {
       isNaN(id) && Nav("/");
     },
-    onError() {
-      throw Nav("/");
+    onError(e) {
+      Nav("/");
+      console.error(e);
     }
   });
 

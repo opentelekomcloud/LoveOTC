@@ -31,23 +31,11 @@ export function ProductCarousel({ Id }: { Id: number; }) {
     defaultParams: [Id],
     async onSuccess(data) {
       for (const i of data) {
-        const slice: Uint8Array[] = [];
-
-        Hub.Storage.Get(i.Cover).then(x =>
-          x.subscribe({
-            error(err) {
-              throw err;
-            },
-            next(value) {
-              slice.push(value);
-            },
-            complete() {
-              const blob = new Blob(slice);
-              const url = URL.createObjectURL(blob);
-              setImgs(x => [...x, url]);
-            },
-          })
-        );
+        Hub.Storage.GetBySlice(i.Cover).then(slice => {
+          const blob = new Blob(slice);
+          const url = URL.createObjectURL(blob);
+          setImgs(x => [...x, url]);
+        });
       }
     },
   });

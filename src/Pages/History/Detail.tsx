@@ -93,8 +93,9 @@ export function OrderDetail({ OrderId }: { OrderId: number }) {
   const [open, { toggle, setTrue }] = useBoolean();
 
   const { data, run } = useRequest(Hub.Order.Get.Detail.bind(Hub.Order.Get), {
-    onError() {
-      throw Nav("History");
+    onError(e) {
+      Nav("History");
+      console.error(e);
     },
     manual: true
   })
