@@ -14,7 +14,7 @@ using System.ComponentModel.DataAnnotations;
 public class Variant {
     public uint VariantId { get; set; }
 
-    [StringLength(15)]
+    [StringLength(15, MinimumLength = 1)]
     public string Name { get; set; }
 
     public virtual ICollection<Type> Types { get; }

@@ -25,6 +25,7 @@ internal partial class AdminHub {
             Name = name
         });
 
+        this.Context.Items.TryAdd("PendingProduct", temp);
         return temp.Entity.ProductId;
     }
 
@@ -122,12 +123,35 @@ internal partial class AdminHub {
     /**
      * <remarks>
      * @author Aloento
-     * @since 0.1.0
+     * @since 1.0.0
      * @version 0.1.0
      * </remarks>
      */
     public async Task<uint> ProductPostVariant(uint prodId, string name) {
-        throw new NotImplementedException();
+        var prop = typeof(Variant).GetProperty(nameof(Variant.Name))!;
+        var valid = prop.GetCustomAttribute<StringLengthAttribute>()!;
+
+        if (!valid.IsValid(name))
+            throw new HubException(valid.FormatErrorMessage("Name"));
+
+        var exist = await this.Db.Products.AnyAsync(x => x.ProductId == prodId);
+        if (!exist)
+            throw new HubException($"Product {prodId} not found");
+
+        var has = await this.Db.Variants.AnyAsync(x =>
+            x.ProductId == prodId &&
+            x.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+
+        if (has)
+            throw new HubException($"Variant {name} already exist");
+
+        var temp = await this.Db.Variants.AddAsync(new() {
+            ProductId = prodId,
+            Name = name,
+        });
+
+        this.Context.Items.TryAdd("PendingVariant", temp);
+        return temp.Entity.VariantId;
     }
 
     /**
