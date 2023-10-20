@@ -1,4 +1,4 @@
-import { Button, Field, Input, Popover, PopoverSurface, PopoverTrigger, Toast, ToastTitle, makeStyles, tokens } from "@fluentui/react-components";
+import { Button, Field, Input, Popover, PopoverSurface, PopoverTrigger, Toast, ToastBody, ToastTitle, makeStyles, tokens } from "@fluentui/react-components";
 import { AddRegular, EditRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
 import { useState } from "react";
@@ -33,18 +33,17 @@ export function AdminProductType({ VariantId, Type, Refresh, New }: { VariantId:
   const options = {
     manual: true,
     onFinally(req: any[], res?: number | boolean, e?: Error) {
-      const target = New ? res : Type;
-
       if (e)
         return dispatchError({
-          Message: `Failed ${New ? "Create" : "Update"} Type ${target}`,
+          Message: `Failed ${New ? "Create" : "Update"} Type ${res} ${name}`,
           Request: req,
           Error: e
         });
 
       dispatchToast(
         <Toast>
-          <ToastTitle>Type {target} {New ? "Created" : "Updated"}</ToastTitle>
+          <ToastTitle>Type {New ? "Created" : "Updated"}</ToastTitle>
+          <ToastBody>{res} {name}</ToastBody>
         </Toast>,
         { intent: "success" }
       );
