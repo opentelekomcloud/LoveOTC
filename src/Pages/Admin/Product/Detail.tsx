@@ -7,6 +7,7 @@ import { useRouter } from "~/Components/Router";
 import { ColFlex } from "~/Helpers/Styles";
 import { AdminProductCategory } from "./Category";
 import { AdminProductCombo } from "./Combo";
+import { AdminProductDelete } from "./Delete";
 import { AdminProductName } from "./Name";
 import { AdminProductPhoto } from "./Photo";
 import { AdminProductVariant } from "./Variant";
@@ -19,14 +20,15 @@ import { AdminProductVariant } from "./Variant";
 const useStyles = makeStyles({
   body: {
     ...ColFlex,
-    rowGap: tokens.spacingVerticalXL
+    rowGap: tokens.spacingVerticalXL,
+    paddingBottom: tokens.spacingVerticalXXXL
   },
 });
 
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.2.0
+ * @version 0.2.1
  */
 export function AdminProductDetail({ ProdId }: { ProdId: number }) {
   const style = useStyles();
@@ -79,6 +81,8 @@ export function AdminProductDetail({ ProdId }: { ProdId: number }) {
         <AdminProductCombo ProdId={ProdId} />
 
         Rich Text Editor is temporarily unavailable.
+
+        <AdminProductDelete ProdId={ProdId} />
       </DrawerBody>
     </Drawer>
   </>

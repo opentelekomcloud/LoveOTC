@@ -28,9 +28,9 @@ internal partial class AdminHub(ShopContext db, ILogger<AdminHub> logger) : Craf
         var admin = await this.isAdmin;
 
         if (admin is true)
-            this.Logger.AdminLogin(this.Name, this.Context.UserIdentifier, this.Context.ConnectionId);
+            this.Logger.AdminLogin(this.Name, this.Context);
         else {
-            this.Logger.FailedAdminLogin(this.Name, this.Context.UserIdentifier, this.Context.ConnectionId);
+            this.Logger.FailedAdminLogin(this.Name, this.Context);
             this.Context.Abort();
         }
     }

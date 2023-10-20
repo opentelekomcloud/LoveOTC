@@ -13,7 +13,7 @@ using TSystems.LoveOTC;
 namespace TSystems.LoveOTC.Migrations
 {
     [DbContext(typeof(ShopContext))]
-    [Migration("20231016191355_InitialCreate")]
+    [Migration("20231020153313_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -61,6 +61,9 @@ namespace TSystems.LoveOTC.Migrations
                         .HasColumnType("character varying(15)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Categories");
                 });
@@ -219,6 +222,9 @@ namespace TSystems.LoveOTC.Migrations
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Products");
                 });
 
@@ -259,7 +265,8 @@ namespace TSystems.LoveOTC.Migrations
 
                     b.HasKey("TypeId");
 
-                    b.HasIndex("VariantId");
+                    b.HasIndex("VariantId", "Name")
+                        .IsUnique();
 
                     b.ToTable("Types");
                 });
@@ -295,6 +302,9 @@ namespace TSystems.LoveOTC.Migrations
 
                     b.HasKey("UserId");
 
+                    b.HasIndex("EMail")
+                        .IsUnique();
+
                     b.ToTable("Users");
                 });
 
@@ -316,7 +326,8 @@ namespace TSystems.LoveOTC.Migrations
 
                     b.HasKey("VariantId");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductId", "Name")
+                        .IsUnique();
 
                     b.ToTable("Variants");
                 });

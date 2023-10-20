@@ -1,4 +1,4 @@
-import { Button, Field, Input, Popover, PopoverSurface, PopoverTrigger, Toast, ToastTitle, makeStyles, tokens } from "@fluentui/react-components";
+import { Button, Field, Input, Popover, PopoverSurface, PopoverTrigger, Toast, ToastBody, ToastTitle, makeStyles, tokens } from "@fluentui/react-components";
 import { AddRegular, EditRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
 import { useState } from "react";
@@ -21,7 +21,7 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 export function AdminProductType({ VariantId, Type, Refresh, New }: { VariantId: number; Type?: string; Refresh: () => void; New?: true }) {
   const style = useStyles();
@@ -30,12 +30,12 @@ export function AdminProductType({ VariantId, Type, Refresh, New }: { VariantId:
 
   const { dispatchError, dispatchToast } = use500Toast();
 
-  const { run } = useRequest(New ? AdminHub.Product.Post.Type.bind(AdminHub.Product.Post) : AdminHub.Product.Patch.Type.bind(AdminHub.Product.Patch), {
+  const options = {
     manual: true,
-    onFinally(req, _, e) {
+    onFinally(req: any[], res?: number | boolean, e?: Error) {
       if (e)
         return dispatchError({
-          Message: `Failed ${New ? "Create" : "Update"} Type`,
+          Message: `Failed ${New ? "Create" : "Update"} Type ${res} ${name}`,
           Request: req,
           Error: e
         });
@@ -43,6 +43,7 @@ export function AdminProductType({ VariantId, Type, Refresh, New }: { VariantId:
       dispatchToast(
         <Toast>
           <ToastTitle>Type {New ? "Created" : "Updated"}</ToastTitle>
+          <ToastBody>{res} {name}</ToastBody>
         </Toast>,
         { intent: "success" }
       );
@@ -50,8 +51,12 @@ export function AdminProductType({ VariantId, Type, Refresh, New }: { VariantId:
       Refresh();
       setName("");
       toggle();
-    },
-  });
+    }
+  }
+
+  const { run: post } = useRequest(AdminHub.Product.Post.Type.bind(AdminHub.Product.Post), options);
+
+  const { run: patch } = useRequest(AdminHub.Product.Patch.Type.bind(AdminHub.Product.Patch), options);
 
   return (
     <Popover withArrow open={open} onOpenChange={toggle}>
@@ -69,7 +74,7 @@ export function AdminProductType({ VariantId, Type, Refresh, New }: { VariantId:
           <Input value={name} onChange={(_, e) => setName(e.value)} />
         </Field>
 
-        <Button onClick={() => New ? run(VariantId, name, "") : run(VariantId, Type!, name)}>
+        <Button onClick={() => New ? post(VariantId, name) : patch(VariantId, Type!, name)}>
           Submit
         </Button>
       </PopoverSurface>

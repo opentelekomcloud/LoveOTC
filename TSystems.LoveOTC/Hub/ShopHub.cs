@@ -28,7 +28,7 @@ internal partial class ShopHub(ShopContext db, ILogger<ShopHub> logger) : CraftH
             var exist = await this.Db.Users.AnyAsync(x => x.UserId == uid);
 
             if (exist)
-                this.Logger.UserLogin(this.Name, this.Context.UserIdentifier, this.Context.ConnectionId);
+                this.Logger.UserLogin(this.Name, this.Context);
             else {
                 await this.Clients.Caller.OnNewUser();
                 this.Context.Items.TryAdd("NewUser", true);

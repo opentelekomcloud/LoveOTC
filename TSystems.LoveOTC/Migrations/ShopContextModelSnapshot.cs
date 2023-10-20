@@ -59,6 +59,9 @@ namespace TSystems.LoveOTC.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Categories");
                 });
 
@@ -216,6 +219,9 @@ namespace TSystems.LoveOTC.Migrations
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Products");
                 });
 
@@ -256,7 +262,8 @@ namespace TSystems.LoveOTC.Migrations
 
                     b.HasKey("TypeId");
 
-                    b.HasIndex("VariantId");
+                    b.HasIndex("VariantId", "Name")
+                        .IsUnique();
 
                     b.ToTable("Types");
                 });
@@ -292,6 +299,9 @@ namespace TSystems.LoveOTC.Migrations
 
                     b.HasKey("UserId");
 
+                    b.HasIndex("EMail")
+                        .IsUnique();
+
                     b.ToTable("Users");
                 });
 
@@ -313,7 +323,8 @@ namespace TSystems.LoveOTC.Migrations
 
                     b.HasKey("VariantId");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductId", "Name")
+                        .IsUnique();
 
                     b.ToTable("Variants");
                 });

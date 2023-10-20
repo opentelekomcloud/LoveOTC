@@ -40,4 +40,11 @@ internal abstract class CraftHub<TSelf, TClient>(ShopContext db, ILogger<TSelf> 
     }
 
     protected string? Name => this.Context.User?.FindFirstValue("preferred_username");
+
+    protected List<Func<Task>> OnDisconnect { get; } = new();
+
+    public override async Task OnDisconnectedAsync(Exception? _) {
+        foreach (var action in this.OnDisconnect)
+            await action();
+    }
 }
