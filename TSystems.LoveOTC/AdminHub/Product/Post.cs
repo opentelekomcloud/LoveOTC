@@ -1,5 +1,6 @@
 namespace TSystems.LoveOTC.AdminHub;
 
+using System.Collections.Immutable;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using Microsoft.AspNetCore.SignalR;
@@ -194,11 +195,46 @@ internal partial class AdminHub {
     /**
      * <remarks>
      * @author Aloento
-     * @since 0.1.0
-     * @version 0.1.0
+     * @since 0.5.0
+     * @version 1.0.0
      * </remarks>
      */
     public async Task<uint> ProductPostCombo(uint prodId, Dictionary<string, string> combo, ushort stock) {
-        throw new NotImplementedException();
+        var variTypesDb = (await this.Db.Products
+            .Include(x => x.Variants)
+            .ThenInclude(x => x.Types)
+            .Where(x => x.ProductId == prodId)
+            .SelectMany(x => x.Variants)
+            .ToDictionaryAsync(k => k.Name, v => v.Types.Select(x => x.Name)))
+            .ToImmutableSortedDictionary();
+
+        var reqCombo = combo.ToImmutableSortedDictionary();
+
+        if (reqCombo.Count != variTypesDb.Count)
+            throw new HubException($"Mismatched: {variTypesDb.Count} Variants, got {combo.Count} in Combos");
+
+        var comboRawList = await this.Db.Combos
+            .Include(x => x.Types)
+            .ThenInclude(x => x.Variant)
+            .Where(x => x.ProductId == prodId)
+            .Select(x => x.Types)
+            .ToArrayAsync();
+
+        var existCombo = comboRawList
+            .Select(x => x
+                .ToImmutableSortedDictionary(k => k.Variant.Name, v => v.Name))
+            .ToImmutableArray();
+
+        foreach (var (vari, type) in combo) {
+            if (!variTypesDb.TryGetValue(vari, out var types))
+                throw new HubException($"Variant {vari} not found");
+
+            if (!types.Contains(type))
+                throw new HubException($"Type {type} not found in Variant {vari}");
+
+            // TODO
+        }
+
+        return 1;
     }
 }
