@@ -3,14 +3,16 @@
 namespace TSystems.LoveOTC.Models;
 
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 /**
  * <remarks>
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.0
+ * @version 0.1.1
  * </remarks>
  */
+[Index(nameof(ProductId), nameof(Name), IsUnique = true)]
 public class Variant {
     public uint VariantId { get; set; }
 

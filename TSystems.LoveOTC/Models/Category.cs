@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 public class Category {
     public uint Id { get; set; }
 
-    [StringLength(15)]
+    [StringLength(15, MinimumLength = 1)]
     public string Name { get; set; }
 
     public virtual ICollection<Product> Products { get; }

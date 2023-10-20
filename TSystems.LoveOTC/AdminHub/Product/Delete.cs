@@ -43,4 +43,15 @@ internal partial class AdminHub {
     public async Task<bool> ProductDeleteCombo(uint comboId) {
         throw new NotImplementedException();
     }
+
+    /**
+     * <remarks>
+     * @author Aloento
+     * @since 0.5.0
+     * @version 0.1.0
+     * </remarks>
+     */
+    public async Task<bool> ProductDeleteProduct(uint prodId) {
+        return true;
+    }
 }

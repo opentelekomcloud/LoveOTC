@@ -13,7 +13,7 @@ using System.ComponentModel.DataAnnotations;
 public class Comment {
     public uint CommentId { get; set; }
 
-    [StringLength(1000)]
+    [StringLength(1000, MinimumLength = 1)]
     public string Content { get; set; }
 
     public Guid? UserId { get; set; }

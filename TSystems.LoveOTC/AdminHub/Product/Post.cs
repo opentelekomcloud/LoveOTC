@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Models;
 
 internal partial class AdminHub {
@@ -22,22 +21,21 @@ internal partial class AdminHub {
         if (!valid.IsValid(name))
             throw new HubException(valid.FormatErrorMessage("Name"));
 
+        if (await this.Db.Products.AnyAsync(x => EF.Functions.ILike(x.Name, name)))
+            throw new HubException($"Product {name} already exist");
+
         var temp = await this.Db.Products.AddAsync(new() {
             Name = name
         });
 
-        if (this.Context.Items.TryGetValue("PendingProduct", out var list))
-            ((List<EntityEntry<Product>>)list!).Add(temp);
-        else
-            this.Context.Items.Add("PendingProduct", new List<EntityEntry<Product>> { temp });
-
+        await this.Db.SaveChangesAsync();
         return temp.Entity.ProductId;
     }
 
     /**
      * <remarks>
      * @author Aloento
-     * @since 1.0.0
+     * @since 0.5.0
      * @version 0.1.0
      * </remarks>
      */
@@ -70,14 +68,14 @@ internal partial class AdminHub {
         for (byte i = 0; i < orders.Count; i++)
             orders[i].Order = (byte)(i + 1);
 
-        var row = await this.Db.SaveChangesAsync();
-        return row < 1 ? throw new HubException("Failed to Move Photo") : true;
+        await this.Db.SaveChangesAsync();
+        return true;
     }
 
     /**
      * <remarks>
      * @author Aloento
-     * @since 1.0.0
+     * @since 0.5.0
      * @version 0.1.0
      * </remarks>
      */
@@ -121,14 +119,14 @@ internal partial class AdminHub {
             Order = next
         });
 
-        var row = await this.Db.SaveChangesAsync();
-        return row < 1 ? throw new HubException("Failed to save data") : true;
+        await this.Db.SaveChangesAsync();
+        return true;
     }
 
     /**
      * <remarks>
      * @author Aloento
-     * @since 1.0.0
+     * @since 0.5.0
      * @version 0.1.0
      * </remarks>
      */
@@ -145,7 +143,7 @@ internal partial class AdminHub {
 
         var has = await this.Db.Variants.AnyAsync(x =>
             x.ProductId == prodId &&
-            x.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            EF.Functions.ILike(x.Name, name));
 
         if (has)
             throw new HubException($"Variant {name} already exist");
@@ -155,23 +153,42 @@ internal partial class AdminHub {
             Name = name,
         });
 
-        if (this.Context.Items.TryGetValue("PendingVariant", out var list))
-            ((List<EntityEntry<Variant>>)list!).Add(temp);
-        else
-            this.Context.Items.Add("PendingVariant", new List<EntityEntry<Variant>> { temp });
-
-        return temp.Entity.VariantId;
+        await this.Db.SaveChangesAsync();
+        return temp.Entity.ProductId;
     }
 
     /**
      * <remarks>
      * @author Aloento
-     * @since 0.1.0
+     * @since 0.5.0
      * @version 0.1.0
      * </remarks>
      */
-    public async Task<bool> ProductPostType(uint variantId, string name) {
-        throw new NotImplementedException();
+    public async Task<uint> ProductPostType(uint variantId, string name) {
+        var prop = typeof(Type).GetProperty(nameof(Type.Name))!;
+        var valid = prop.GetCustomAttribute<StringLengthAttribute>()!;
+
+        if (!valid.IsValid(name))
+            throw new HubException(valid.FormatErrorMessage("Name"));
+
+        var exist = await this.Db.Variants.AnyAsync(x => x.VariantId == variantId);
+        if (!exist)
+            throw new HubException($"Variant {variantId} not found");
+
+        var has = await this.Db.Types.AnyAsync(x =>
+            x.VariantId == variantId &&
+            EF.Functions.ILike(x.Name, name));
+
+        if (has)
+            throw new HubException($"Type {name} already exist");
+
+        var temp = await this.Db.Types.AddAsync(new() {
+            VariantId = variantId,
+            Name = name
+        });
+
+        await this.Db.SaveChangesAsync();
+        return temp.Entity.VariantId;
     }
 
     /**

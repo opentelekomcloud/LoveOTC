@@ -49,4 +49,15 @@ export class AdminProductDelete extends AdminNet {
     const res = await this.Hub.invoke<true>("ProductDeleteCombo", comboId);
     return res;
   }
+
+  /**
+   * @author Aloento
+   * @since 1.0.0
+   * @version 0.1.0
+   */
+  public static async Product(prodId: number): Promise<true> {
+    await this.EnsureAdmin();
+    const res = await this.Hub.invoke<true>("ProductDeleteProduct", prodId);
+    return res;
+  }
 }
