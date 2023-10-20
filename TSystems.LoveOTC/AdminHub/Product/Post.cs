@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Models;
 
 internal partial class AdminHub {
@@ -25,7 +26,11 @@ internal partial class AdminHub {
             Name = name
         });
 
-        this.Context.Items.TryAdd("PendingProduct", temp);
+        if (this.Context.Items.TryGetValue("PendingProduct", out var list))
+            ((List<EntityEntry<Product>>)list!).Add(temp);
+        else
+            this.Context.Items.Add("PendingProduct", new List<EntityEntry<Product>> { temp });
+
         return temp.Entity.ProductId;
     }
 
@@ -150,7 +155,11 @@ internal partial class AdminHub {
             Name = name,
         });
 
-        this.Context.Items.TryAdd("PendingVariant", temp);
+        if (this.Context.Items.TryGetValue("PendingVariant", out var list))
+            ((List<EntityEntry<Variant>>)list!).Add(temp);
+        else
+            this.Context.Items.Add("PendingVariant", new List<EntityEntry<Variant>> { temp });
+
         return temp.Entity.VariantId;
     }
 

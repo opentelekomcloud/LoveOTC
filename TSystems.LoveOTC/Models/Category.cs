@@ -3,6 +3,7 @@
 namespace TSystems.LoveOTC.Models;
 
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 /**
  * <remarks>
@@ -11,6 +12,7 @@ using System.ComponentModel.DataAnnotations;
  * @version 0.1.0
  * </remarks>
  */
+[Index(nameof(Name), IsUnique = true)]
 public class Category {
     public uint Id { get; set; }
 

@@ -4,6 +4,7 @@ namespace TSystems.LoveOTC.Models;
 
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 
 /**
  * <remarks>
@@ -12,6 +13,7 @@ using System.Text.Json;
  * @version 0.1.0
  * </remarks>
  */
+[Index(nameof(Name), IsUnique = true)]
 public class Product {
     public uint ProductId { get; set; }
 
