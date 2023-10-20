@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTrigger, Input, Subtitle2, Toast, ToastTitle, makeStyles } from "@fluentui/react-components";
+import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTrigger, Input, Subtitle2, Toast, ToastBody, ToastTitle, makeStyles } from "@fluentui/react-components";
 import { AddRegular } from "@fluentui/react-icons";
 import { useRequest } from "ahooks";
 import { useState } from "react";
@@ -19,7 +19,7 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.3.0
+ * @version 0.3.1
  */
 export function AdminProductAddButton() {
   const { Nav, Paths } = useRouter();
@@ -36,7 +36,7 @@ export function AdminProductAddButton() {
     onFinally(req, data, e) {
       if (e)
         return dispatchError({
-          Message: "Failed Create",
+          Message: `Failed Create ${name}`,
           Request: req,
           Error: e
         });
@@ -44,6 +44,7 @@ export function AdminProductAddButton() {
       dispatchToast(
         <Toast>
           <ToastTitle>New Product Created</ToastTitle>
+          <ToastBody>{data} {name}</ToastBody>
         </Toast>,
         { intent: "success" }
       );
