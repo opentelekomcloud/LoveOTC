@@ -21,7 +21,7 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 export function AdminProductType({ VariantId, Type, Refresh, New }: { VariantId: number; Type?: string; Refresh: () => void; New?: true }) {
   const style = useStyles();
@@ -30,6 +30,7 @@ export function AdminProductType({ VariantId, Type, Refresh, New }: { VariantId:
 
   const { dispatchError, dispatchToast } = use500Toast();
 
+  // @ts-expect-error
   const { run } = useRequest(New ? AdminHub.Product.Post.Type.bind(AdminHub.Product.Post) : AdminHub.Product.Patch.Type.bind(AdminHub.Product.Patch), {
     manual: true,
     onFinally(req, _, e) {
@@ -69,7 +70,7 @@ export function AdminProductType({ VariantId, Type, Refresh, New }: { VariantId:
           <Input value={name} onChange={(_, e) => setName(e.value)} />
         </Field>
 
-        <Button onClick={() => New ? run(VariantId, name, "") : run(VariantId, Type!, name)}>
+        <Button onClick={() => New ? run(VariantId, name) : run(VariantId, Type!, name)}>
           Submit
         </Button>
       </PopoverSurface>

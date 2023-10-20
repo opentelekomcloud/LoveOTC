@@ -91,9 +91,9 @@ export class AdminProductPost extends AdminNet {
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static async Type(variantId: number, name: string): Promise<true> {
+  public static async Type(variantId: number, name: string): Promise<number> {
     await this.EnsureAdmin();
-    const res = await this.Hub.invoke<true>("ProductPostType", variantId, name);
+    const res = await this.Hub.invoke<number>("ProductPostType", variantId, name);
     return res;
   }
 
