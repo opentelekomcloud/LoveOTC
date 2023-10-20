@@ -315,9 +315,10 @@ namespace TSystems.LoveOTC.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Types_VariantId",
+                name: "IX_Types_VariantId_Name",
                 table: "Types",
-                column: "VariantId");
+                columns: new[] { "VariantId", "Name" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_EMail",
@@ -326,9 +327,10 @@ namespace TSystems.LoveOTC.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Variants_ProductId",
+                name: "IX_Variants_ProductId_Name",
                 table: "Variants",
-                column: "ProductId");
+                columns: new[] { "ProductId", "Name" },
+                unique: true);
         }
 
         /// <inheritdoc />

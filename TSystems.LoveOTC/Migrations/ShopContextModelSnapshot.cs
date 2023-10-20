@@ -262,7 +262,8 @@ namespace TSystems.LoveOTC.Migrations
 
                     b.HasKey("TypeId");
 
-                    b.HasIndex("VariantId");
+                    b.HasIndex("VariantId", "Name")
+                        .IsUnique();
 
                     b.ToTable("Types");
                 });
@@ -322,7 +323,8 @@ namespace TSystems.LoveOTC.Migrations
 
                     b.HasKey("VariantId");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductId", "Name")
+                        .IsUnique();
 
                     b.ToTable("Variants");
                 });
