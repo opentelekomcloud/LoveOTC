@@ -1,5 +1,6 @@
 namespace TSystems.LoveOTC.AdminHub;
 
+using System.Collections.Immutable;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using Microsoft.AspNetCore.SignalR;
@@ -194,11 +195,56 @@ internal partial class AdminHub {
     /**
      * <remarks>
      * @author Aloento
-     * @since 0.1.0
-     * @version 0.1.0
+     * @since 0.5.0
+     * @version 1.0.0
      * </remarks>
      */
     public async Task<uint> ProductPostCombo(uint prodId, Dictionary<string, string> combo, ushort stock) {
-        throw new NotImplementedException();
+        var variTypesDb = (await this.Db.Products
+            .Include(x => x.Variants)
+            .ThenInclude(x => x.Types)
+            .Where(x => x.ProductId == prodId)
+            .SelectMany(x => x.Variants)
+            .ToDictionaryAsync(k => k.Name, v => v.Types.ToImmutableArray()))
+            .ToImmutableSortedDictionary();
+
+        var reqCombo = combo.ToImmutableSortedDictionary();
+
+        if (reqCombo.Count != variTypesDb.Count)
+            throw new HubException($"Mismatched: {variTypesDb.Count} Variants, got {reqCombo.Count} in Combos");
+
+        var comboRawList = await this.Db.Combos
+            .Include(x => x.Types)
+            .ThenInclude(x => x.Variant)
+            .Where(x => x.ProductId == prodId)
+            .Select(x => x.Types)
+            .ToArrayAsync();
+
+        var existCombo = comboRawList
+            .Select(x => x
+                .ToImmutableSortedDictionary(k => k.Variant.Name, v => v.Name))
+            .ToImmutableArray();
+
+        var reqTypes = new List<Type>();
+
+        foreach (var (vari, type) in reqCombo) {
+            if (!variTypesDb.TryGetValue(vari, out var types))
+                throw new HubException($"Variant {vari} not found");
+
+            var t = types.Single(x => x.Name == type);
+            reqTypes.Add(t);
+        }
+
+        if (existCombo.Any(x => x.SequenceEqual(reqCombo)))
+            throw new HubException("Combo already exist");
+
+        var temp = await this.Db.Combos.AddAsync(new() {
+            ProductId = prodId,
+            Stock = stock,
+            Types = reqTypes
+        });
+
+        await this.Db.SaveChangesAsync();
+        return temp.Entity.ComboId;
     }
 }

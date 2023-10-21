@@ -18,9 +18,9 @@ public class Combo {
 
     public virtual Product Product { get; set; }
 
-    public virtual ICollection<Type> Types { get; }
+    public virtual ICollection<Type> Types { get; init; }
 
-    public virtual ICollection<Order> Orders { get; }
+    public virtual ICollection<Order> Orders { get; init; }
 
-    public virtual ICollection<OrderCombo> OrderCombos { get; }
+    public virtual ICollection<OrderCombo> OrderCombos { get; init; }
 }
