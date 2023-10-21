@@ -205,13 +205,13 @@ internal partial class AdminHub {
             .ThenInclude(x => x.Types)
             .Where(x => x.ProductId == prodId)
             .SelectMany(x => x.Variants)
-            .ToDictionaryAsync(k => k.Name, v => v.Types.Select(x => x.Name)))
+            .ToDictionaryAsync(k => k.Name, v => v.Types.ToImmutableArray()))
             .ToImmutableSortedDictionary();
 
         var reqCombo = combo.ToImmutableSortedDictionary();
 
         if (reqCombo.Count != variTypesDb.Count)
-            throw new HubException($"Mismatched: {variTypesDb.Count} Variants, got {combo.Count} in Combos");
+            throw new HubException($"Mismatched: {variTypesDb.Count} Variants, got {reqCombo.Count} in Combos");
 
         var comboRawList = await this.Db.Combos
             .Include(x => x.Types)
@@ -225,16 +225,26 @@ internal partial class AdminHub {
                 .ToImmutableSortedDictionary(k => k.Variant.Name, v => v.Name))
             .ToImmutableArray();
 
-        foreach (var (vari, type) in combo) {
+        var reqTypes = new HashSet<Type>();
+
+        foreach (var (vari, type) in reqCombo) {
             if (!variTypesDb.TryGetValue(vari, out var types))
                 throw new HubException($"Variant {vari} not found");
 
-            if (!types.Contains(type))
-                throw new HubException($"Type {type} not found in Variant {vari}");
-
-            // TODO
+            var t = types.Single(x => x.Name == type);
+            reqTypes.Add(t);
         }
 
-        return 1;
+        if (existCombo.Any(x => x.SequenceEqual(reqCombo)))
+            throw new HubException("Combo already exist");
+
+        var temp = await this.Db.Combos.AddAsync(new() {
+            ProductId = prodId,
+            Stock = stock,
+            Types = reqTypes
+        });
+
+        await this.Db.SaveChangesAsync();
+        return temp.Entity.ComboId;
     }
 }
