@@ -225,7 +225,7 @@ internal partial class AdminHub {
                 .ToImmutableSortedDictionary(k => k.Variant.Name, v => v.Name))
             .ToImmutableArray();
 
-        var reqTypes = new HashSet<Type>();
+        var reqTypes = new List<Type>();
 
         foreach (var (vari, type) in reqCombo) {
             if (!variTypesDb.TryGetValue(vari, out var types))
