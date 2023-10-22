@@ -44,6 +44,8 @@ builder.Services.AddSignalR(x => {
         .WithResolver(ContractlessStandardResolverAllowPrivate.Instance);
 });
 
+builder.Host.UseSystemd();
+
 var app = builder.Build();
 
 if (Shared.Dev) {

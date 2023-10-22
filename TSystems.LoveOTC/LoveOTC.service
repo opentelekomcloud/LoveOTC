@@ -1,0 +1,9 @@
+[Unit]
+Description=LoveOTC
+
+[Service]
+Type=notify
+ExecStart=/home/aloento/LoveOTC/TSystems.LoveOTC
+
+[Install]
+WantedBy=multi-user.target
