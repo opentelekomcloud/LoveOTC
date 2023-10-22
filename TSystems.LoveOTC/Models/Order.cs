@@ -26,9 +26,9 @@ public class Order {
     [StringLength(50)]
     public string? TrackingNumber { get; set; }
 
-    public virtual ICollection<Combo> Combos { get; }
+    public virtual ICollection<Combo> Combos { get; init; }
 
-    public virtual ICollection<OrderCombo> OrderCombos { get; }
+    public virtual ICollection<OrderCombo> OrderCombos { get; init; }
 
-    public virtual ICollection<Comment> Comments { get; }
+    public virtual ICollection<Comment> Comments { get; init; }
 }
