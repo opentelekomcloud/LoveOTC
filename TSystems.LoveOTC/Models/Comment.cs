@@ -2,6 +2,7 @@
 namespace TSystems.LoveOTC.Models;
 
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 /**
  * <remarks>
@@ -20,6 +21,7 @@ public class Comment {
 
     public virtual User? User { get; set; }
 
+    [Column("timestamp without time zone")]
     public DateTime CreateAt { get; set; }
 
     public uint OrderId { get; set; }

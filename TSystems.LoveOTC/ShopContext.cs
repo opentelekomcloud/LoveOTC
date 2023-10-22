@@ -27,11 +27,17 @@ internal class ShopContext(DbContextOptions<ShopContext> opts) : DbContext(opts)
 
     public DbSet<Photo> Photos { get; init; }
 
+    #endregion
+
+    #region Combo
+
     public DbSet<Variant> Variants { get; init; }
 
     public DbSet<Type> Types { get; init; }
 
     public DbSet<Combo> Combos { get; init; }
+
+    public DbSet<ComboType> ComboTypes { get; init; }
 
     #endregion
 
@@ -39,7 +45,7 @@ internal class ShopContext(DbContextOptions<ShopContext> opts) : DbContext(opts)
 
     public DbSet<Order> Orders { get; init; }
 
-    public DbSet<OrderCombo> OrdersCombo { get; init; }
+    public DbSet<OrderCombo> OrderCombos { get; init; }
 
     public DbSet<Comment> Comments { get; init; }
 
@@ -48,12 +54,23 @@ internal class ShopContext(DbContextOptions<ShopContext> opts) : DbContext(opts)
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         modelBuilder.UseHiLo();
 
+        #region Many
+
         modelBuilder.Entity<Order>()
             .HasMany(e => e.Combos)
             .WithMany(e => e.Orders)
             .UsingEntity<OrderCombo>();
 
+        modelBuilder.Entity<Combo>()
+            .HasMany(e => e.Types)
+            .WithMany(e => e.Combos)
+            .UsingEntity<ComboType>();
+
+        #endregion
+
         #region MockData
+
+        if (!Shared.Dev) return;
 
         modelBuilder.Entity<User>().HasData(new User {
             UserId = Guid.Parse("e2653b80-9be7-41d0-aff0-524ad0e66944"),
@@ -147,67 +164,85 @@ internal class ShopContext(DbContextOptions<ShopContext> opts) : DbContext(opts)
         modelBuilder.Entity<Combo>().HasData(new Combo {
             ComboId = 1,
             Stock = byte.MaxValue,
-            ProductId = 1,
-            Types = new List<Type> {
-                new() { TypeId = 1 },
-                new() { TypeId = 3 }
-            }
+            ProductId = 1
         }, new Combo {
             ComboId = 2,
             Stock = byte.MaxValue,
-            ProductId = 1,
-            Types = new List<Type> {
-                new() { TypeId = 2 },
-                new() { TypeId = 3 }
-            }
+            ProductId = 1
         }, new Combo {
             ComboId = 3,
             Stock = byte.MaxValue,
-            ProductId = 1,
-            Types = new List<Type> {
-                new() { TypeId = 1 },
-                new() { TypeId = 4 }
-            }
+            ProductId = 1
         }, new Combo {
             ComboId = 4,
             Stock = byte.MaxValue,
-            ProductId = 1,
-            Types = new List<Type> {
-                new() { TypeId = 2 },
-                new() { TypeId = 4 }
-            }
+            ProductId = 1
         }, new Combo {
             ComboId = 5,
             Stock = byte.MaxValue,
-            ProductId = 2,
-            Types = new List<Type> {
-                new() { TypeId = 5 },
-                new() { TypeId = 7 }
-            }
+            ProductId = 2
         }, new Combo {
             ComboId = 6,
             Stock = byte.MaxValue,
-            ProductId = 2,
-            Types = new List<Type> {
-                new() { TypeId = 5 },
-                new() { TypeId = 8 }
-            }
+            ProductId = 2
         }, new Combo {
             ComboId = 7,
             Stock = byte.MaxValue,
-            ProductId = 2,
-            Types = new List<Type> {
-                new() { TypeId = 6 },
-                new() { TypeId = 7 }
-            }
+            ProductId = 2
         }, new Combo {
             ComboId = 8,
             Stock = 0,
-            ProductId = 2,
-            Types = new List<Type> {
-                new() { TypeId = 6 },
-                new() { TypeId = 8 }
-            }
+            ProductId = 2
+        });
+
+        modelBuilder.Entity<ComboType>().HasData(new ComboType {
+            ComboId = 1,
+            TypeId = 1
+        }, new ComboType {
+            ComboId = 1,
+            TypeId = 3
+        }, new ComboType {
+            ComboId = 2,
+            TypeId = 2
+        }, new ComboType {
+            ComboId = 2,
+            TypeId = 3
+        }, new ComboType {
+            ComboId = 3,
+            TypeId = 1
+        }, new ComboType {
+            ComboId = 3,
+            TypeId = 4
+        }, new ComboType {
+            ComboId = 4,
+            TypeId = 2
+        }, new ComboType {
+            ComboId = 4,
+            TypeId = 4
+        }, new ComboType {
+            ComboId = 5,
+            TypeId = 5
+        }, new ComboType {
+            ComboId = 5,
+            TypeId = 7
+        }, new ComboType {
+            ComboId = 6,
+            TypeId = 5
+        }, new ComboType {
+            ComboId = 6,
+            TypeId = 8
+        }, new ComboType {
+            ComboId = 7,
+            TypeId = 6
+        }, new ComboType {
+            ComboId = 7,
+            TypeId = 7
+        }, new ComboType {
+            ComboId = 8,
+            TypeId = 6
+        }, new ComboType {
+            ComboId = 8,
+            TypeId = 8
         });
 
         #endregion
@@ -277,7 +312,7 @@ internal class ShopContext(DbContextOptions<ShopContext> opts) : DbContext(opts)
             OrderId = 1,
             UserId = Guid.Parse("e2653b80-9be7-41d0-aff0-524ad0e66944"),
             Status = OrderStatus.Finished,
-            CreateAt = DateTime.Now,
+            CreateAt = DateTime.UtcNow,
             TrackingNumber = "1234567890"
         });
 
@@ -295,7 +330,7 @@ internal class ShopContext(DbContextOptions<ShopContext> opts) : DbContext(opts)
             CommentId = 1,
             Content = "This is a comment",
             UserId = Guid.Parse("e2653b80-9be7-41d0-aff0-524ad0e66944"),
-            CreateAt = DateTime.Now,
+            CreateAt = DateTime.UtcNow,
             OrderId = 1
         });
 
