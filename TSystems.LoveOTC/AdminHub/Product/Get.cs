@@ -1,34 +1,40 @@
 namespace TSystems.LoveOTC.AdminHub;
 
+using Microsoft.EntityFrameworkCore;
+
 internal partial class AdminHub {
     /**
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.1.0
+     * @version 0.2.0
      * </remarks>
      */
     public async Task<List<ProductItem>> ProductGetList() {
-        return new() {
-            new() {
-                ProductId = 1,
-                Cover = Guid.NewGuid(),
-                Name = "OTC SHIRT - GREY",
-                Category = "Clothes",
-                Variant = 2,
-                Combo = 4,
-                Stock = 10
-            },
-            new() {
-                ProductId = 2,
-                Cover = Guid.NewGuid(),
-                Name = "OTC Cap - Cap and Cap",
-                Category = "Hat",
-                Variant = 2,
-                Combo = 4,
-                Stock = 20
-            }
-        };
+        var raw = await this.Db.Products
+            .Select(x => new {
+                x.ProductId,
+                Cover = x.Photos
+                    .Where(p => p.Cover == true)
+                    .Select(p => p.ObjectId)
+                    .SingleOrDefault(),
+                x.Name,
+                x.Category,
+                Variant = (byte)x.Variants.Count,
+                Combo = (byte)x.Combos.Count,
+                Stock = x.Combos.Select(s => s.Stock).ToArray()
+            })
+            .ToListAsync();
+
+        return raw.Select(x => new ProductItem {
+            ProductId = x.ProductId,
+            Cover = x.Cover,
+            Name = x.Name,
+            Category = x.Category?.Name ?? "Pending",
+            Variant = x.Variant,
+            Combo = x.Combo,
+            Stock = x.Stock.Aggregate((uint)0, (prev, curr) => prev + curr)
+        }).ToList();
     }
 
     /**

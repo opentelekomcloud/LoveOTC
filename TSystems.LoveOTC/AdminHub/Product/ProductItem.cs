@@ -20,5 +20,5 @@ public record ProductItem {
 
     public required byte Combo { get; init; }
 
-    public required ushort Stock { get; init; }
+    public required uint Stock { get; init; }
 }
