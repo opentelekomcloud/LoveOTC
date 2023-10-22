@@ -2,6 +2,7 @@ namespace TSystems.LoveOTC.Hub;
 
 using Helpers;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 /**
@@ -40,19 +41,33 @@ internal partial class ShopHub(ShopContext db, ILogger<ShopHub> logger) : CraftH
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 0.1.0
+     * @version 1.0.0
      * </remarks>
      */
     public async IAsyncEnumerable<byte[]> ObjectStorageGet(Guid objId) {
-        var imageUrl = "https://source.unsplash.com/random";
-        using var httpClient = new HttpClient();
-        using var response = await httpClient.GetAsync(imageUrl, HttpCompletionOption.ResponseHeadersRead);
-        response.EnsureSuccessStatusCode();
+        var exp = await this.Db.Objects
+            .Where(x => x.Id == objId)
+            .Select(x => x.Expires)
+            .SingleAsync();
 
-        await using var stream = await response.Content.ReadAsStreamAsync();
+        if (exp is not null && exp > DateTime.UtcNow) {
+            await this.Db.Objects.Where(x => x.Id == objId).ExecuteDeleteAsync();
+            throw new HubException("Object Expired");
+        }
+
+        await using var command = this.Db.Objects
+            .Where(x => x.Id == objId)
+            .Select(x => x.Data)
+            .CreateDbCommand();
+
+        await command.Connection!.OpenAsync();
+        await using var reader = await command.ExecuteReaderAsync();
+        await reader.ReadAsync();
+
         var buffer = new byte[30 * 1024];
-
         int bytesRead;
+
+        await using var stream = reader.GetStream(0);
         while ((bytesRead = await stream.ReadAsync(buffer)) > 0)
             yield return buffer[..bytesRead];
     }
