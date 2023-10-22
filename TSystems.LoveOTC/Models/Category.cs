@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
  */
 [Index(nameof(Name), IsUnique = true)]
 public class Category {
-    public uint Id { get; set; }
+    public uint CategoryId { get; set; }
 
     [StringLength(15, MinimumLength = 1)]
     public string Name { get; set; }
