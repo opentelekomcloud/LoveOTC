@@ -2,6 +2,7 @@
 namespace TSystems.LoveOTC.Models;
 
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 /**
  * <remarks>
@@ -13,6 +14,7 @@ using System.ComponentModel.DataAnnotations;
 public class Storage {
     public Guid Id { get; set; }
 
+    [Column("timestamp without time zone")]
     public DateTime? Expires { get; set; }
 
     [MaxLength(10 * 1024 * 1024)]

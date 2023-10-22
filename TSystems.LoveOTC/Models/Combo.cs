@@ -20,6 +20,8 @@ public class Combo {
 
     public virtual ICollection<Type> Types { get; init; }
 
+    public virtual ICollection<ComboType> ComboTypes { get; init; }
+
     public virtual ICollection<Order> Orders { get; init; }
 
     public virtual ICollection<OrderCombo> OrderCombos { get; init; }

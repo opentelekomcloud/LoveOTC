@@ -3,6 +3,7 @@
 namespace TSystems.LoveOTC.Models;
 
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Entities;
 
 /**
@@ -21,6 +22,7 @@ public class Order {
 
     public OrderStatus Status { get; set; }
 
+    [Column("timestamp without time zone")]
     public DateTime CreateAt { get; set; }
 
     [StringLength(50)]

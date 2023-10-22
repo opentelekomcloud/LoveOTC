@@ -23,5 +23,7 @@ public class Type {
 
     public virtual Variant Variant { get; set; }
 
-    public virtual ICollection<Combo> Combos { get; }
+    public virtual ICollection<Combo> Combos { get; init; }
+
+    public virtual ICollection<ComboType> ComboTypes { get; init; }
 }
