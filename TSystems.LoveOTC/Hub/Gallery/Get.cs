@@ -1,35 +1,28 @@
 namespace TSystems.LoveOTC.Hub;
 
+using Microsoft.EntityFrameworkCore;
+
 internal partial class ShopHub {
     /**
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.1.0
+     * @version 0.2.0
      * </remarks>
      */
-    public async Task<List<string>> GalleryGetCategories() {
-        return new(){
-            "T-Shirt",
-            "Cap"
-        };
-    }
+    public async Task<string[]> GalleryGetCategories() =>
+        await this.Db.Categories.Select(x => x.Name).ToArrayAsync();
 
     /**
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.1.0
+     * @version 0.2.0
      * </remarks>
      */
-    public async Task<List<uint>> GalleryGetProducts(string category) {
-        var len = Random.Shared.Next(1, 12);
-        var nums = new List<uint>(len);
-
-        for (var i = 0; i < len; i++) {
-            nums.Add((uint)Random.Shared.Next(1, 100));
-        }
-
-        return nums;
-    }
+    public async Task<uint[]> GalleryGetProducts(string category) =>
+        await this.Db.Products
+            .Where(x => x.Category!.Name == category)
+            .Select(x => x.ProductId)
+            .ToArrayAsync();
 }
