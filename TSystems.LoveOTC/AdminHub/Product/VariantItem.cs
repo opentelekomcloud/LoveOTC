@@ -12,5 +12,5 @@ public record VariantItem {
 
     public required string Name { get; init; }
 
-    public required List<string> Types { get; init; }
+    public required ICollection<string> Types { get; init; }
 }

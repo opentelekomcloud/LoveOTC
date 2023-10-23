@@ -7,10 +7,10 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.2.0
+     * @version 0.2.1
      * </remarks>
      */
-    public async Task<List<ProductItem>> ProductGetList() {
+    public async Task<ProductItem[]> ProductGetList() {
         var raw = await this.Db.Products
             .Select(x => new {
                 x.ProductId,
@@ -24,7 +24,7 @@ internal partial class AdminHub {
                 Combo = (byte)x.Combos.Count,
                 Stock = x.Combos.Select(s => s.Stock).ToArray()
             })
-            .ToListAsync();
+            .ToArrayAsync();
 
         return raw.Select(x => new ProductItem {
             ProductId = x.ProductId,
@@ -34,7 +34,7 @@ internal partial class AdminHub {
             Variant = x.Variant,
             Combo = x.Combo,
             Stock = x.Stock.Aggregate((uint)0, (prev, curr) => prev + curr)
-        }).ToList();
+        }).ToArray();
     }
 
     /**
@@ -44,12 +44,11 @@ internal partial class AdminHub {
      * @version 0.2.0
      * </remarks>
      */
-    public async Task<string> ProductGetName(uint prodId) {
-        return await this.Db.Products
+    public async Task<string> ProductGetName(uint prodId) =>
+        await this.Db.Products
             .Where(x => x.ProductId == prodId)
             .Select(x => x.Name)
             .SingleAsync();
-    }
 
     /**
      * <remarks>
@@ -71,21 +70,16 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.1.0
+     * @version 0.2.0
      * </remarks>
      */
-    public async Task<List<VariantItem>> ProductGetVariants(uint prodId) {
-        return new() {
-            new() {
-                VariantId = 1,
-                Name = "Color",
-                Types = new() { "White", "Red" }
-            },
-            new() {
-                VariantId = 2,
-                Name = "Size",
-                Types = new() { "Big", "Small" }
-            }
-        };
-    }
+    public async Task<VariantItem[]> ProductGetVariants(uint prodId) =>
+        await this.Db.Variants
+            .Where(x => x.ProductId == prodId)
+            .Select(x => new VariantItem {
+                VariantId = x.VariantId,
+                Name = x.Name,
+                Types = x.Types.Select(t => t.Name).ToArray()
+            })
+            .ToArrayAsync();
 }
