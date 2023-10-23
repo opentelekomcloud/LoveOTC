@@ -1,6 +1,7 @@
-import { Body1, Card, CardFooter, CardPreview, Image, Link, Title3, makeStyles, tokens } from "@fluentui/react-components";
+import { Body1, Card, CardFooter, CardPreview, Link, Title3, makeStyles, tokens } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import { random } from "lodash-es";
+import { GuidImage } from "~/Helpers/GuidImage";
 import { ColFlex, Cover, Flex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
 
@@ -91,7 +92,7 @@ function GalleryCategory({ Category }: { Category: string }) {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 function GalleryCard({ Id }: { Id: number }) {
   const style = useStyles();
@@ -102,7 +103,7 @@ function GalleryCard({ Id }: { Id: number }) {
   return (
     <Card className={style.card}>
       <CardPreview>
-        <Image className={style.img} src={data?.Cover} />
+        <GuidImage className={style.img} Guid={data?.Cover} />
       </CardPreview>
 
       <CardFooter>

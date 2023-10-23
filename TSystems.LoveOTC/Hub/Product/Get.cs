@@ -11,8 +11,8 @@ internal partial class ShopHub {
      * @version 0.2.0
      * </remarks>
      */
-    public async Task<ProductInfo> ProdGetBasic(uint prodId) {
-        return await this.Db.Products
+    public async Task<ProductInfo> ProdGetBasic(uint prodId) =>
+        await this.Db.Products
             .Where(x => x.ProductId == prodId)
             .Select(x => new ProductInfo {
                 Name = x.Name,
@@ -22,7 +22,6 @@ internal partial class ShopHub {
                     .Single()
             })
             .SingleAsync();
-    }
 
     /**
      * <remarks>
@@ -31,9 +30,7 @@ internal partial class ShopHub {
      * @version 0.2.0
      * </remarks>
      */
-    public Task<byte> ProdGetLimit(uint _) {
-        return Task.FromResult<byte>(3);
-    }
+    public Task<byte> ProdGetLimit(uint _) => Task.FromResult<byte>(3);
 
     /**
      * <remarks>
@@ -61,21 +58,17 @@ internal partial class ShopHub {
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.1.0
+     * @version 0.2.0
      * </remarks>
      */
-    public async Task<List<PhotoItem>> ProdGetCarousel(uint prodId) {
-        return new() {
-            new() {
-                PhotoId = 0,
-                Cover = Guid.NewGuid(),
-                Caption = "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
-            },
-            new() {
-                PhotoId = 1,
-                Cover = Guid.NewGuid(),
-                Caption = "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-            }
-        };
-    }
+    public async Task<PhotoItem[]> ProdGetCarousel(uint prodId) =>
+        await this.Db.Photos
+            .Where(x => x.ProductId == prodId)
+            .OrderBy(x => x.Order)
+            .Select(x => new PhotoItem {
+                PhotoId = x.PhotoId,
+                Cover = x.Object.Id,
+                Caption = x.Caption
+            })
+            .ToArrayAsync();
 }
