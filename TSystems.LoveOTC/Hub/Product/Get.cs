@@ -64,6 +64,7 @@ internal partial class ShopHub {
     public async Task<PhotoItem[]> ProdGetCarousel(uint prodId) =>
         await this.Db.Photos
             .Where(x => x.ProductId == prodId)
+            .OrderBy(x => x.Order)
             .Select(x => new PhotoItem {
                 PhotoId = x.PhotoId,
                 Cover = x.Object.Id,
