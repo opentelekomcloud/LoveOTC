@@ -41,22 +41,30 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.1.0
+     * @version 0.2.0
      * </remarks>
      */
     public async Task<string> ProductGetName(uint prodId) {
-        return "OTC SHIRT - GREY";
+        return await this.Db.Products
+            .Where(x => x.ProductId == prodId)
+            .Select(x => x.Name)
+            .SingleAsync();
     }
 
     /**
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.1.0
+     * @version 0.2.0
      * </remarks>
      */
     public async Task<string> ProductGetCategory(uint prodId) {
-        return "Clothes";
+        var cate = await this.Db.Products
+            .Where(x => x.ProductId == prodId)
+            .Select(x => x.Category)
+            .SingleAsync();
+
+        return cate?.Name ?? "Pending";
     }
 
     /**
