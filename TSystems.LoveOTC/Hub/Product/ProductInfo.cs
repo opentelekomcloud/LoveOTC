@@ -8,7 +8,7 @@ namespace TSystems.LoveOTC.Hub;
  * </remarks>
  */
 internal record ProductInfo {
-    public required string Cover { get; init; }
+    public required Guid Cover { get; init; }
 
     public required string Name { get; init; }
 }

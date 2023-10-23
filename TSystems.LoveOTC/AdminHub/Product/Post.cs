@@ -225,6 +225,9 @@ internal partial class AdminHub {
                 .ToImmutableSortedDictionary(k => k.Variant.Name, v => v.Name))
             .ToImmutableArray();
 
+        if (existCombo.Any(x => x.SequenceEqual(reqCombo)))
+            throw new HubException("Combo already exist");
+
         var reqTypes = new List<Type>();
 
         foreach (var (vari, type) in reqCombo) {
@@ -234,9 +237,6 @@ internal partial class AdminHub {
             var t = types.Single(x => x.Name == type);
             reqTypes.Add(t);
         }
-
-        if (existCombo.Any(x => x.SequenceEqual(reqCombo)))
-            throw new HubException("Combo already exist");
 
         var temp = await this.Db.Combos.AddAsync(new() {
             ProductId = prodId,

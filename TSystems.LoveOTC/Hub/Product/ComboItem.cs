@@ -10,7 +10,7 @@ namespace TSystems.LoveOTC.Hub;
 internal record ComboItem {
     public required uint ComboId { get; init; }
 
-    public required Dictionary<string, string> Combo { get; init; }
+    public required IDictionary<string, string> Combo { get; init; }
 
     public required ushort Stock { get; init; }
 }
