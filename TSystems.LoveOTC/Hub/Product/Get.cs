@@ -1,76 +1,60 @@
 namespace TSystems.LoveOTC.Hub;
 
+using System.Collections.Immutable;
+using Microsoft.EntityFrameworkCore;
+
 internal partial class ShopHub {
     /**
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.1.0
+     * @version 0.2.0
      * </remarks>
      */
     public async Task<ProductInfo> ProdGetBasic(uint prodId) {
-        return new() {
-            Cover = $"https://picsum.photos/{Random.Shared.Next(500, 1000)}",
-            Name = $"Product {prodId}"
-        };
+        return await this.Db.Products
+            .Where(x => x.ProductId == prodId)
+            .Select(x => new ProductInfo {
+                Name = x.Name,
+                Cover = x.Photos
+                    .Where(p => p.Cover == true)
+                    .Select(p => p.Object.Id)
+                    .Single()
+            })
+            .SingleAsync();
     }
 
     /**
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.1.0
+     * @version 0.2.0
      * </remarks>
      */
-    public async Task<byte> ProdGetLimit(uint prodId) {
-        return (byte)Random.Shared.Next(10);
+    public Task<byte> ProdGetLimit(uint _) {
+        return Task.FromResult<byte>(3);
     }
 
     /**
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.1.0
+     * @version 1.0.0
      * </remarks>
      */
-    public async Task<List<ComboItem>> ProdGetCombo(uint prodId) {
-        if (prodId > 100)
-            throw new KeyNotFoundException("Product Not Found");
+    public async Task<ComboItem[]> ProdGetCombo(uint prodId) {
+        var comboDb = await this.Db.Combos
+            .Where(x => x.ProductId == prodId)
+            .Include(x => x.Types)
+            .ThenInclude(x => x.Variant)
+            .ToArrayAsync();
 
-        return new() {
-            new() {
-                ComboId = 1,
-                Combo = new() {
-                    {"Color", "White"},
-                    {"Size", "Big"}
-                },
-                Stock = 8
-            },
-            new() {
-                ComboId = 2,
-                Combo = new() {
-                    {"Color", "Red"},
-                    {"Size", "Small"}
-                },
-                Stock = 6
-            },
-            new() {
-                ComboId = 3,
-                Combo = new() {
-                    {"Color", "White"},
-                    {"Size", "Big"}
-                },
-                Stock = 10
-            },
-            new() {
-                ComboId = 4,
-                Combo = new() {
-                    {"Color", "Red"},
-                    {"Size", "Small"}
-                },
-                Stock = 4
-            }
-        };
+        return comboDb.Select(x => new ComboItem {
+            ComboId = x.ComboId,
+            Stock = x.Stock,
+            Combo = x.Types
+                .ToImmutableDictionary(k => k.Variant.Name, v => v.Name)
+        }).ToArray();
     }
 
     /**
