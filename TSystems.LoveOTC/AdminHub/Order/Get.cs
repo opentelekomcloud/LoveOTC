@@ -15,7 +15,7 @@ internal partial class AdminHub {
         return new() {
             new() {
                 OrderId = 1,
-                Items = new() { "OTC SHIRT - GREY", "OTC Cap - Cap and Cap" },
+                Items = new List<string> { "OTC SHIRT - GREY", "OTC Cap - Cap and Cap" },
                 Quantity = 2,
                 OrderDate = DateTime.Now,
                 TrackNumber = "Number123456789",
@@ -23,7 +23,7 @@ internal partial class AdminHub {
             },
             new() {
                 OrderId = 2,
-                Items = new() { "OTC Cap - Cap and Cap" },
+                Items = new List<string> { "OTC Cap - Cap and Cap" },
                 Quantity = 1,
                 OrderDate = DateTime.Now,
                 TrackNumber = "Number123456789",

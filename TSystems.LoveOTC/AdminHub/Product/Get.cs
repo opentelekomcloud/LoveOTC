@@ -7,7 +7,7 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.2.1
+     * @version 0.2.2
      * </remarks>
      */
     public async Task<ProductItem[]> ProductGetList() {
@@ -22,7 +22,7 @@ internal partial class AdminHub {
                 x.Category,
                 Variant = (byte)x.Variants.Count,
                 Combo = (byte)x.Combos.Count,
-                Stock = x.Combos.Select(s => s.Stock).ToArray()
+                Stock = x.Combos.Sum(s => s.Stock)
             })
             .ToArrayAsync();
 
@@ -33,7 +33,7 @@ internal partial class AdminHub {
             Category = x.Category?.Name ?? "Pending",
             Variant = x.Variant,
             Combo = x.Combo,
-            Stock = x.Stock.Aggregate((uint)0, (prev, curr) => prev + curr)
+            Stock = (uint)x.Stock
         }).ToArray();
     }
 

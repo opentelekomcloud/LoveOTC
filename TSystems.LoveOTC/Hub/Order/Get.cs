@@ -2,36 +2,28 @@ namespace TSystems.LoveOTC.Hub;
 
 using Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 internal partial class ShopHub {
     /**
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.1.0
+     * @version 0.2.0
      * </remarks>
      */
     [Authorize]
-    public async Task<List<OrderItem>> OrderGetList() {
-        return new() {
-            new() {
-                OrderId = 1,
-                Items = new() { "OTC SHIRT - GREY", "OTC Cap - Cap and Cap" },
-                Quantity = 2,
-                OrderDate = DateTime.Now,
-                TrackNumber = "Number123456789",
-                Status = Enum.GetName(OrderStatus.Finished)!
-            },
-            new() {
-                OrderId = 2,
-                Items = new() { "OTC Cap - Cap and Cap" },
-                Quantity = 1,
-                OrderDate = DateTime.Now,
-                TrackNumber = "Number123456789",
-                Status = Enum.GetName(OrderStatus.Finished)!
-            }
-        };
-    }
+    public async Task<OrderItem[]> OrderGetList() =>
+        await this.Db.Orders
+            .Select(x => new OrderItem {
+                OrderId = x.OrderId,
+                Items = x.Combos.SelectMany(c => c.Types).Select(c => c.Name).ToArray(),
+                Quantity = (ushort)x.OrderCombos.Sum(o => o.Quantity),
+                OrderDate = x.CreateAt,
+                TrackNumber = x.TrackingNumber,
+                Status = Enum.GetName(x.Status)!
+            })
+            .ToArrayAsync();
 
     /**
      * <remarks>

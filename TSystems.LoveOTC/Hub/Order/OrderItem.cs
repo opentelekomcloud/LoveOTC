@@ -10,7 +10,7 @@ namespace TSystems.LoveOTC.Hub;
 internal record OrderItem : OrderExtension {
     public required uint OrderId { get; init; }
 
-    public required List<string> Items { get; init; }
+    public required ICollection<string> Items { get; init; }
 
-    public required byte Quantity { get; init; }
+    public required ushort Quantity { get; init; }
 }
