@@ -20,7 +20,7 @@
           "Microsoft.Extensions.Hosting.Systemd": "8.0.0-rc.2.23479.6",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "8.0.0-rc.2",
           "SixLabors.ImageSharp": "3.0.2",
-          "Z.EntityFramework.Plus.EFCore": "8.0.0-rc.2.23480.1-01",
+          "Z.EntityFramework.Plus.EFCore": "8.0.0-rc.2.23480.1-02",
           "runtimepack.Microsoft.NETCore.App.Runtime.linux-x64": "8.0.0-rc.2.23479.6",
           "runtimepack.Microsoft.AspNetCore.App.Runtime.linux-x64": "8.0.0-rc.2.23480.2"
         },
@@ -1937,7 +1937,7 @@
         }
       },
       "System.Threading.Channels/6.0.0": {},
-      "Z.EntityFramework.Extensions.EFCore/8.0.0-rc.2.23480.1-01": {
+      "Z.EntityFramework.Extensions.EFCore/8.0.0-rc.2.23480.1-02": {
         "dependencies": {
           "Microsoft.CSharp": "4.7.0",
           "Microsoft.EntityFrameworkCore.Relational": "8.0.0-rc.2.23480.1",
@@ -1952,13 +1952,13 @@
           }
         }
       },
-      "Z.EntityFramework.Plus.EFCore/8.0.0-rc.2.23480.1-01": {
+      "Z.EntityFramework.Plus.EFCore/8.0.0-rc.2.23480.1-02": {
         "dependencies": {
           "Microsoft.CSharp": "4.7.0",
           "Microsoft.EntityFrameworkCore.Relational": "8.0.0-rc.2.23480.1",
           "System.Reflection.Emit": "4.7.0",
           "System.Reflection.TypeExtensions": "4.7.0",
-          "Z.EntityFramework.Extensions.EFCore": "8.0.0-rc.2.23480.1-01",
+          "Z.EntityFramework.Extensions.EFCore": "8.0.0-rc.2.23480.1-02",
           "Z.Expressions.Eval": "5.0.11"
         },
         "runtime": {
@@ -2638,19 +2638,19 @@
       "path": "system.threading.channels/6.0.0",
       "hashPath": "system.threading.channels.6.0.0.nupkg.sha512"
     },
-    "Z.EntityFramework.Extensions.EFCore/8.0.0-rc.2.23480.1-01": {
+    "Z.EntityFramework.Extensions.EFCore/8.0.0-rc.2.23480.1-02": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-5Z6HzYBd4UwldGfa6h6RtSieBSvxXWIIWoX42qZCmxujdb9wGpDYdujeWHUCwKsexBFeBPnE7y33ENfq2taIiA==",
-      "path": "z.entityframework.extensions.efcore/8.0.0-rc.2.23480.1-01",
-      "hashPath": "z.entityframework.extensions.efcore.8.0.0-rc.2.23480.1-01.nupkg.sha512"
+      "sha512": "sha512-VXAzpHCsdQ+lryglAfXKWlagkvNPlXMy6wBO8Td9xpxGiGv093YRG4eZOMp3loHXfIwoLjN0BSwFXy0+S3UHfw==",
+      "path": "z.entityframework.extensions.efcore/8.0.0-rc.2.23480.1-02",
+      "hashPath": "z.entityframework.extensions.efcore.8.0.0-rc.2.23480.1-02.nupkg.sha512"
     },
-    "Z.EntityFramework.Plus.EFCore/8.0.0-rc.2.23480.1-01": {
+    "Z.EntityFramework.Plus.EFCore/8.0.0-rc.2.23480.1-02": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-rFuVISdCd+694dmxHPRGIcjcNGhxTDR0k2ZU/m/3ysf3GhRPGfv/pkpGw7ckeSQKNlLgCSUpQJZvxUNeP0nFLQ==",
-      "path": "z.entityframework.plus.efcore/8.0.0-rc.2.23480.1-01",
-      "hashPath": "z.entityframework.plus.efcore.8.0.0-rc.2.23480.1-01.nupkg.sha512"
+      "sha512": "sha512-9iD0iaZb2y/qVr3JvDwRSYEjKuXa2t0JT9YCrGeMDbFvEZlIUUNso5FpPnSdPA6k3hH04Xh/8D/6MwYgoQB/mQ==",
+      "path": "z.entityframework.plus.efcore/8.0.0-rc.2.23480.1-02",
+      "hashPath": "z.entityframework.plus.efcore.8.0.0-rc.2.23480.1-02.nupkg.sha512"
     },
     "Z.Expressions.Eval/5.0.11": {
       "type": "package",
