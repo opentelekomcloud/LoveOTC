@@ -10,7 +10,7 @@ namespace TSystems.LoveOTC.Hub;
 internal record OrderExtension {
     public required string Status { get; init; }
 
-    public required string TrackNumber { get; init; }
+    public string? TrackNumber { get; init; }
 
     public required DateTime OrderDate { get; init; }
 }

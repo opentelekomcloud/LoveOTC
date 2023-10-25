@@ -25,7 +25,7 @@ export class Table<TPre = any> {
   public readonly Sto: Dexie.Table<ITable<TPre>, string>;
 
   public constructor(public readonly DB: Dexie, public readonly Name: string) {
-    this.Sto = this.DB.table(this.Name);
+    this.Sto = DB.table(Name);
     this.Trim();
   }
 
@@ -39,6 +39,7 @@ export class Table<TPre = any> {
    */
   public async Get<T extends TPre = TPre>(key: string, cancel?: (x?: ITable<T>) => Promise<boolean>): Promise<T | null> {
     const find = await this.Sto.get(key) as ITable<T> | undefined;
+
     if (find) {
       if ((cancel && await cancel(find)) ||
         (typeof find.Exp === "number" && find.Exp < dayjs().unix())) {
@@ -75,7 +76,7 @@ export class Table<TPre = any> {
 
   /**
    * 存储，已存在时会替换
-   * 默认有一个半年的过期时间，但也可以设置为 null
+   * 默认有一月的过期时间，但也可以设置为 null
    * 高并发时不能保证 key 唯一
    *
    * @author Aloento
@@ -97,7 +98,7 @@ export class Table<TPre = any> {
       return val;
     }
 
-    const time = (exp ?? dayjs().add(0.5, "y")).unix();
+    const time = (exp || dayjs().add(1, "M")).unix();
     if (exp && time < dayjs().unix())
       throw "The expiration time cannot be less than the current time";
 

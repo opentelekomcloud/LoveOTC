@@ -1,8 +1,8 @@
 // ReSharper disable UnassignedGetOnlyAutoProperty
-
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 namespace TSystems.LoveOTC;
 
+using Entities;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
@@ -68,7 +68,6 @@ internal class ShopContext(DbContextOptions<ShopContext> opts) : DbContext(opts)
         #endregion
 
         #region MockData
-#if false
 
         modelBuilder.Entity<User>().HasData(new User {
             UserId = Guid.Parse("e2653b80-9be7-41d0-aff0-524ad0e66944"),
@@ -281,22 +280,26 @@ internal class ShopContext(DbContextOptions<ShopContext> opts) : DbContext(opts)
         modelBuilder.Entity<Photo>().HasData(new Photo {
             PhotoId = 1,
             Cover = true,
+            Caption = "Demo Caption",
             Order = 1,
             ObjectId = p1,
             ProductId = 1
         }, new Photo {
             PhotoId = 2,
+            Caption = "Demo Caption",
             Order = 2,
             ObjectId = p2,
             ProductId = 1
         }, new Photo {
             PhotoId = 3,
             Cover = true,
+            Caption = "Demo Caption",
             Order = 1,
             ObjectId = p3,
             ProductId = 2
         }, new Photo {
             PhotoId = 4,
+            Caption = "Demo Caption",
             Order = 2,
             ObjectId = p4,
             ProductId = 2
@@ -334,7 +337,6 @@ internal class ShopContext(DbContextOptions<ShopContext> opts) : DbContext(opts)
 
         #endregion
 
-#endif
         #endregion
     }
 }

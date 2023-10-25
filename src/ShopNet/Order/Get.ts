@@ -40,16 +40,15 @@ export class OrderGet extends ShopNet {
 
     const { ShopCart, Comments } = await this.Hub.invoke<
       Omit<IOrderDetail, "ShopCart"> & {
-        ShopCart: Omit<ICartItem & { OrderId: number }, "Id">[];
+        ShopCart: Omit<ICartItem, "Id">[];
       }
     >("OrderGetDetail", id);
 
     return {
-      ShopCart: ShopCart.map(x => {
-        const { OrderId, ...rest } = x;
+      ShopCart: ShopCart.map((x, i) => {
         return {
-          Id: OrderId,
-          ...rest
+          Id: i,
+          ...x
         };
       }),
       Comments

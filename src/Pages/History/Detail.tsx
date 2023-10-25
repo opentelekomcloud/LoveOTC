@@ -1,4 +1,4 @@
-import { Body1Strong, Button, Caption1, DataGridCell, DataGridHeaderCell, Field, Label, Link, TableColumnDefinition, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
+import { Body1Strong, Button, Caption1, DataGridCell, DataGridHeaderCell, Link, TableColumnDefinition, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { DismissRegular, OpenRegular } from "@fluentui/react-icons";
 import { useBoolean, useMount, useRequest } from "ahooks";
@@ -10,6 +10,7 @@ import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { ColFlex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
 import { OrderAppend } from "./Append";
+import { IComment, OrderComment } from "./Comment";
 
 /**
  * @author Aloento
@@ -75,11 +76,11 @@ const columns: TableColumnDefinition<ICartItem>[] = [
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 export interface IOrderDetail {
   ShopCart: ICartItem[];
-  Comments?: string[];
+  Comments?: IComment[];
 }
 
 /**
@@ -144,9 +145,7 @@ export function OrderDetail({ OrderId }: { OrderId: number }) {
 
           <DelegateDataGrid Items={data?.ShopCart || []} Columns={columns} />
 
-          <Field label="Comment" size="large">
-            <Label>{data?.Comments?.reduce((prev, curr) => prev + curr, "")}</Label>
-          </Field>
+          <OrderComment Comments={data?.Comments} />
 
           <OrderAppend OrderId={OrderId} Refresh={run} />
         </div>
