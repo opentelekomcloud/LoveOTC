@@ -1,10 +1,11 @@
-import { Button, Field, Label, makeStyles, tokens } from "@fluentui/react-components";
+import { Button, Field, makeStyles, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { DismissRegular, OpenRegular } from "@fluentui/react-icons";
 import { useBoolean, useMount, useRequest } from "ahooks";
 import { OrderPersona } from "~/Components/Persona";
 import { useRouter } from "~/Components/Router";
 import { ColFlex } from "~/Helpers/Styles";
+import { OrderComment } from "~/Pages/History/Comment";
 import { Hub } from "~/ShopNet";
 import { AdminOrderAppend } from "./Append";
 import { AdminOrderList } from "./List";
@@ -89,9 +90,7 @@ export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
 
         <Shipment OrderId={OrderId} Refresh={run} />
 
-        <Field label="Comment" size="large">
-          <Label>{data?.Comments?.reduce((prev, curr) => prev + curr, "")}</Label>
-        </Field>
+        <OrderComment Comments={data?.Comments} />
 
         <AdminOrderAppend OrderId={OrderId} Refresh={run} />
       </DrawerBody>

@@ -1,5 +1,6 @@
 namespace TSystems.LoveOTC.Hub;
 
+using System.Collections.Immutable;
 using Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -15,9 +16,10 @@ internal partial class ShopHub {
     [Authorize]
     public async Task<OrderItem[]> OrderGetList() =>
         await this.Db.Orders
+            .Where(x => x.UserId == this.UserId)
             .Select(x => new OrderItem {
                 OrderId = x.OrderId,
-                Items = x.Combos.SelectMany(c => c.Types).Select(c => c.Name).ToArray(),
+                Items = x.Combos.Select(c => c.Product.Name).ToArray(),
                 Quantity = (ushort)x.OrderCombos.Sum(o => o.Quantity),
                 OrderDate = x.CreateAt,
                 TrackNumber = x.TrackingNumber,
@@ -28,42 +30,48 @@ internal partial class ShopHub {
     /**
      * <remarks>
      * @author Aloento
-     * @since 0.1.0
+     * @since 0.5.0
      * @version 0.1.0
      * </remarks>
      */
     [Authorize]
     public async Task<OrderDetail> OrderGetDetail(uint orderId) {
-        var shopCart = new List<CartItem> {
-            new() {
-                OrderId = 1,
-                ProdId = (uint)Random.Shared.Next(1, 10),
-                Cover = "https://picsum.photos/550",
-                Name = "OTC SHIRT - GREY",
-                Type = new() {
-                    { "Color", "White" },
-                    { "Size", "S" }
-                },
-                Quantity = 1
-            },
-            new() {
-                OrderId = 2,
-                ProdId = (uint)Random.Shared.Next(1, 10),
-                Cover = "https://picsum.photos/600",
-                Name = "OTC Cap - Cap and Cap",
-                Type = new() {
-                    { "Color", "Red" },
-                    { "Size", "Long and Long" }
-                },
-                Quantity = 1
-            }
-        };
+        var cartDb = await this.Db.OrderCombos
+            .Where(x => x.OrderId == orderId && x.Order.UserId == this.UserId)
+            .Select(x => new {
+                ProdId = x.Combo.ProductId,
+                Cover = x.Combo.Product.Photos
+                    .Where(p => p.Cover == true)
+                    .Select(p => p.ObjectId)
+                    .Single(),
+                x.Combo.Product.Name,
+                Type = x.Combo.Types
+                    .Select(t => KeyValuePair.Create(t.Variant.Name, t.Name))
+                    .ToArray(),
+                x.Quantity
+            })
+            .ToArrayAsync();
 
-        var comments = Enumerable.Range(0, 10).Select(_ => Guid.NewGuid().ToString()).ToList();
+        var cmtDb = await this.Db.Comments
+            .Where(x => x.OrderId == orderId && x.Order.UserId == this.UserId)
+            .Select(x => new OrderComment {
+                Content = x.Content,
+                Time = x.CreateAt,
+                User = x.User!.Name
+            })
+            .ToArrayAsync();
 
         return new() {
-            ShopCart = shopCart,
-            Comments = comments
+            ShopCart = cartDb
+                .Select(x => new CartItem {
+                    ProdId = x.ProdId,
+                    Cover = x.Cover,
+                    Name = x.Name,
+                    Type = x.Type.ToImmutableDictionary(k => k.Key, v => v.Value),
+                    Quantity = x.Quantity
+                })
+                .ToImmutableArray(),
+            Comments = cmtDb
         };
     }
 

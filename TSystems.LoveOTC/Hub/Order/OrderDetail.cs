@@ -8,7 +8,7 @@ namespace TSystems.LoveOTC.Hub;
  * </remarks>
  */
 internal record OrderDetail {
-    public required List<CartItem> ShopCart { get; init; }
+    public required ICollection<CartItem> ShopCart { get; init; }
 
-    public required List<string> Comments { get; init; }
+    public required ICollection<OrderComment> Comments { get; init; }
 }
