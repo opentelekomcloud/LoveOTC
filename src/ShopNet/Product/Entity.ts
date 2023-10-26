@@ -6,36 +6,17 @@ import { ShopNet } from "../ShopNet";
  * @since 1.0.0
  * @version 0.1.0
  */
-interface IDynamicProduct extends IConcurrency {
-  Name: string;
-  CategoryId?: number;
-  Description?: object;
-}
-
-/**
- * @author Aloento
- * @since 1.0.0
- * @version 0.1.0
- */
-interface IDynamicPhoto extends IConcurrency {
-  Cover?: boolean;
-  Caption?: string;
-  Order: number;
-  ObjectId: string;
-}
-
-/**
- * @author Aloento
- * @since 1.0.0
- * @version 0.1.0
- */
 export abstract class ProductEntity extends ShopNet {
   /**
    * @author Aloento
    * @since 1.0.0
    * @version 0.1.0
    */
-  public static Product(key: number): Promise<IDynamicProduct | void> {
+  public static Product(key: number): Promise<({
+    Name: string;
+    CategoryId?: number;
+    Description?: object;
+  } & IConcurrency) | void> {
     return this.WithVersionCache(key, "ProductEntity");
   }
 
@@ -44,7 +25,35 @@ export abstract class ProductEntity extends ShopNet {
    * @since 1.0.0
    * @version 0.1.0
    */
-  public static Photo(key: number): Promise<IDynamicPhoto | void> {
+  public static Photo(key: number): Promise<({
+    Cover?: boolean;
+    Caption?: string;
+    Order: number;
+    ObjectId: string;
+  } & IConcurrency) | void> {
     return this.WithVersionCache(key, "PhotoEntity");
+  }
+
+  /**
+   * @author Aloento
+   * @since 1.0.0
+   * @version 0.1.0
+   */
+  public static Type(key: number): Promise<({
+    Name: string;
+    VariantId: number;
+  } & IConcurrency) | void> {
+    return this.WithVersionCache(key, "TypeEntity");
+  }
+
+  /**
+   * @author Aloento
+   * @since 1.0.0
+   * @version 0.1.0
+   */
+  public static Variant(key: number): Promise<({
+    Name: string;
+  } & IConcurrency) | void> {
+    return this.WithVersionCache(key, "VariantEntity");
   }
 }

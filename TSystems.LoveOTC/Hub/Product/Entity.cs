@@ -55,4 +55,53 @@ internal partial class ShopHub {
             })
             .SingleOrDefaultAsync();
     }
+
+    /**
+     * <remarks>
+     * @author Aloento
+     * @since 0.5.0
+     * @version 0.1.0
+     * </remarks>
+     */
+    public async Task<dynamic?> TypeEntity(uint key, uint? version) {
+        if (version is not null) {
+            var noChange = await this.Db.Types
+                .AnyAsync(x => x.TypeId == key && x.Version == version);
+
+            if (noChange) return true;
+        }
+
+        return await this.Db.Types
+            .Where(x => x.TypeId == key)
+            .Select(x => new {
+                x.Name,
+                x.VariantId,
+                x.Version
+            })
+            .SingleOrDefaultAsync();
+    }
+
+    /**
+     * <remarks>
+     * @author Aloento
+     * @since 0.5.0
+     * @version 0.1.0
+     * </remarks>
+     */
+    public async Task<dynamic?> VariantEntity(uint key, uint? version) {
+        if (version is not null) {
+            var noChange = await this.Db.Variants
+                .AnyAsync(x => x.VariantId == key && x.Version == version);
+
+            if (noChange) return true;
+        }
+
+        return await this.Db.Variants
+            .Where(x => x.VariantId == key)
+            .Select(x => new {
+                x.Name,
+                x.Version
+            })
+            .SingleOrDefaultAsync();
+    }
 }

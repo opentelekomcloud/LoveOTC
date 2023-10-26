@@ -1,5 +1,5 @@
 import { HubConnectionState } from "@microsoft/signalr";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { AdminNet } from "./Admin/AdminNet";
 import { Auth, IConcurrency, Shared } from "./Database";
 import { ShopNet } from "./ShopNet";
@@ -83,6 +83,27 @@ export abstract class SignalR {
       ...res,
       QueryExp: dayjs().add(1, "m").unix()
     }, null);
+
+    return res;
+  }
+
+  /**
+   * @author Aloento
+   * @since 1.0.0
+   * @version 0.1.0
+   */
+  protected static async WithTimeCache<T extends SubClass, TRes>(
+    this: T, key: string | number, methodName: string, exp: Dayjs
+  ): Promise<TRes> {
+    const res = await Shared.GetOrSet(
+      `${methodName}_${key}`,
+      async () => {
+        await this.EnsureConnected();
+        const db = await this.Hub.invoke<TRes>(methodName, key);
+        return db;
+      },
+      exp
+    );
 
     return res;
   }
