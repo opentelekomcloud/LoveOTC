@@ -1,6 +1,7 @@
 ﻿namespace TSystems.LoveOTC.Models;
 
 using System.ComponentModel.DataAnnotations;
+using Entities;
 using Microsoft.EntityFrameworkCore;
 
 /**
@@ -11,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
  * </remarks>
  */
 [Index(nameof(EMail), IsUnique = true)]
-public class User {
+public class User : Concurrency {
     public Guid UserId { get; set; }
 
     [StringLength(50, MinimumLength = 2)]

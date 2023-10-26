@@ -3,6 +3,7 @@ namespace TSystems.LoveOTC.Models;
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Entities;
 
 /**
  * <remarks>
@@ -11,7 +12,7 @@ using System.ComponentModel.DataAnnotations.Schema;
  * @version 0.1.0
  * </remarks>
  */
-public class Comment {
+public class Comment : Concurrency {
     public uint CommentId { get; set; }
 
     [StringLength(1000, MinimumLength = 1)]

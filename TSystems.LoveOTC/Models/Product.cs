@@ -4,6 +4,7 @@ namespace TSystems.LoveOTC.Models;
 
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
+using Entities;
 using Microsoft.EntityFrameworkCore;
 
 /**
@@ -14,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
  * </remarks>
  */
 [Index(nameof(Name), IsUnique = true)]
-public class Product {
+public class Product : Concurrency {
     public uint ProductId { get; set; }
 
     [StringLength(50, MinimumLength = 1)]

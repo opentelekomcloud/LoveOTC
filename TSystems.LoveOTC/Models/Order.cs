@@ -13,7 +13,7 @@ using Entities;
  * @version 0.1.0
  * </remarks>
  */
-public class Order {
+public class Order : Concurrency {
     public uint OrderId { get; set; }
 
     public Guid UserId { get; set; }

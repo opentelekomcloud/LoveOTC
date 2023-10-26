@@ -8,7 +8,7 @@ import { SignalR } from "../SignalR";
  * @since 1.0.0
  * @version 0.1.0
  */
-export class AdminNet extends SignalR {
+export abstract class AdminNet extends SignalR {
   /**
    * @author Aloento
    * @since 1.0.0

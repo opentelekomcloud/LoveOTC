@@ -2,6 +2,7 @@
 namespace TSystems.LoveOTC.Models;
 
 using System.ComponentModel.DataAnnotations;
+using Entities;
 
 /**
  * <remarks>
@@ -10,7 +11,7 @@ using System.ComponentModel.DataAnnotations;
  * @version 0.1.0
  * </remarks>
  */
-public class Photo {
+public class Photo : Concurrency {
     public uint PhotoId { get; set; }
 
     public bool? Cover { get; set; }

@@ -1,28 +1,34 @@
 import { HubConnectionState } from "@microsoft/signalr";
-import type { AdminNet } from "./Admin/AdminNet";
-import { Auth } from "./Database";
-import type { ShopNet } from "./ShopNet";
+import dayjs from "dayjs";
+import { AdminNet } from "./Admin/AdminNet";
+import { Auth, IConcurrency, Shared } from "./Database";
+import { ShopNet } from "./ShopNet";
 
 /**
  * @author Aloento
  * @since 1.0.0
  * @version 0.1.0
  */
-export class SignalR {
+type SubClass = typeof ShopNet | typeof AdminNet;
+
+/**
+ * @author Aloento
+ * @since 1.0.0
+ * @version 0.1.0
+ */
+export abstract class SignalR {
   /**
    * @author Aloento
    * @since 1.0.0
    * @version 0.1.1
    */
-  public static EnsureConnected<T extends typeof ShopNet | typeof AdminNet>(this: T): Promise<void> {
-    if (this.Hub.state === HubConnectionState.Connected) {
+  public static EnsureConnected<T extends SubClass>(this: T): Promise<void> {
+    if (this.Hub.state === HubConnectionState.Connected)
       return Promise.resolve();
-    }
 
     if (this.Hub.state === HubConnectionState.Disconnected
-      || this.Hub.state === HubConnectionState.Disconnecting) {
+      || this.Hub.state === HubConnectionState.Disconnecting)
       return this.Hub.start();
-    }
 
     return new Promise<void>(resolve => {
       const interval = setInterval(() => {
@@ -40,8 +46,44 @@ export class SignalR {
    * @version 0.1.0
    */
   public static EnsureLogin() {
-    if (Auth.User?.expired) {
+    if (!Auth.User || Auth.User.expired)
       throw new Error("Please Login First");
+  }
+
+  /**
+   * @author Aloento
+   * @since 1.0.0
+   * @version 0.2.0
+   */
+  protected static async WithVersionCache<T extends SubClass, TRes extends IConcurrency>(
+    this: T, key: string | number, methodName: string
+  ): Promise<TRes | void> {
+    const index = `${methodName}_${key}`;
+    const find = await Shared.Get<TRes & { QueryExp: number }>(index);
+
+    if (find && find.QueryExp > dayjs().unix())
+      return find;
+
+    await this.EnsureConnected();
+    const res = await this.Hub.invoke<TRes | true | null>(methodName, key, find?.Version);
+
+    if (res === true) {
+      Shared.Set<TRes & { QueryExp: number }>(index, {
+        ...find!,
+        QueryExp: dayjs().add(1, "m").unix()
+      }, null);
+
+      return find!;
     }
+
+    if (!res)
+      return Shared.Sto.delete(index);
+
+    Shared.Set<TRes & { QueryExp: number }>(index, {
+      ...res,
+      QueryExp: dayjs().add(1, "m").unix()
+    }, null);
+
+    return res;
   }
 }
