@@ -3,6 +3,7 @@ namespace TSystems.LoveOTC.Models;
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Entities;
 
 /**
  * <remarks>
@@ -11,7 +12,7 @@ using System.ComponentModel.DataAnnotations.Schema;
  * @version 0.1.0
  * </remarks>
  */
-public class Storage {
+public class Storage : Concurrency {
     public Guid Id { get; set; }
 
     [Column("timestamp without time zone")]

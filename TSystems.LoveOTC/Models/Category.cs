@@ -3,6 +3,7 @@
 namespace TSystems.LoveOTC.Models;
 
 using System.ComponentModel.DataAnnotations;
+using Entities;
 using Microsoft.EntityFrameworkCore;
 
 /**
@@ -13,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
  * </remarks>
  */
 [Index(nameof(Name), IsUnique = true)]
-public class Category {
+public class Category : Concurrency {
     public uint CategoryId { get; set; }
 
     [StringLength(15, MinimumLength = 1)]
