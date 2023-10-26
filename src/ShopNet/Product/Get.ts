@@ -16,7 +16,7 @@ export class ProductGet extends ShopNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.1.0
+   * @version 1.0.0
    */
   public static async Basic(prodId: number): Promise<IProductInfo> {
     const res = await ProductEntity.Product(prodId);
@@ -26,12 +26,28 @@ export class ProductGet extends ShopNet {
     const list = await this.#ProductGetPhotoList(prodId);
 
     for (const i of list) {
+      const p = await ProductEntity.Photo(i);
 
+      if (p && p.Cover)
+        return {
+          Name: res.Name,
+          Cover: p.ObjectId,
+        };
+    }
+
+    if (list.length > 0) {
+      const p = await ProductEntity.Photo(list[0]);
+
+      if (p)
+        return {
+          Name: res.Name,
+          Cover: p.ObjectId,
+        };
     }
 
     return {
       Name: res.Name,
-      Cover: res.Cover,
+      Cover: "",
     };
   }
 

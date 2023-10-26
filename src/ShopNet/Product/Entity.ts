@@ -6,7 +6,7 @@ import { ShopNet } from "../ShopNet";
  * @since 1.0.0
  * @version 0.1.0
  */
-interface DynamicProduct extends IConcurrency {
+interface IDynamicProduct extends IConcurrency {
   Name: string;
   CategoryId?: number;
   Description?: object;
@@ -17,7 +17,7 @@ interface DynamicProduct extends IConcurrency {
  * @since 1.0.0
  * @version 0.1.0
  */
-interface DynamicPhoto extends IConcurrency {
+interface IDynamicPhoto extends IConcurrency {
   Cover?: boolean;
   Caption?: string;
   Order: number;
@@ -36,7 +36,7 @@ export abstract class ProductEntity extends ShopNet {
    * @since 1.0.0
    * @version 0.1.0
    */
-  public static Product(key: number): Promise<DynamicProduct | void> {
+  public static Product(key: number): Promise<IDynamicProduct | void> {
     return this.WithVersionCache(key, "ProductEntity");
   }
 
@@ -45,7 +45,7 @@ export abstract class ProductEntity extends ShopNet {
    * @since 1.0.0
    * @version 0.1.0
    */
-  public static Photo(key: number): Promise<DynamicPhoto | void> {
+  public static Photo(key: number): Promise<IDynamicPhoto | void> {
     return this.WithVersionCache(key, "PhotoEntity");
   }
 }

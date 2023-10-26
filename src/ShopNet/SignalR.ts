@@ -1,4 +1,5 @@
 import { HubConnectionState } from "@microsoft/signalr";
+import dayjs from "dayjs";
 import { AdminNet } from "./Admin/AdminNet";
 import { Auth, IConcurrency, Shared } from "./Database";
 import { ShopNet } from "./ShopNet";
@@ -9,13 +10,6 @@ import { ShopNet } from "./ShopNet";
  * @version 0.1.0
  */
 type SubClass = typeof ShopNet | typeof AdminNet;
-
-/**
- * @author Aloento
- * @since 1.0.0
- * @version 0.1.0
- */
-type Dynamic<T> = T | true | null;
 
 /**
  * @author Aloento
@@ -59,24 +53,37 @@ export abstract class SignalR {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.1.0
+   * @version 0.2.0
    */
   protected static async WithVersionCache<T extends SubClass, TRes extends IConcurrency>(
     this: T, key: string | number, methodName: string
   ): Promise<TRes | void> {
     const index = `${methodName}_${key}`;
-    const find = await Shared.Get<TRes>(index);
+    const find = await Shared.Get<TRes & { QueryExp: number }>(index);
+
+    if (find && find.QueryExp > dayjs().unix())
+      return find;
 
     await this.EnsureConnected();
-    const res = await this.Hub.invoke<Dynamic<TRes>>(methodName, key, find?.Version);
+    const res = await this.Hub.invoke<TRes | true | null>(methodName, key, find?.Version);
 
-    if (res === true)
+    if (res === true) {
+      Shared.Set<TRes & { QueryExp: number }>(index, {
+        ...find!,
+        QueryExp: dayjs().add(1, "m").unix()
+      }, null);
+
       return find!;
+    }
 
-    if (res === null)
+    if (!res)
       return Shared.Sto.delete(index);
 
-    Shared.Set(index, res, null);
+    Shared.Set<TRes & { QueryExp: number }>(index, {
+      ...res,
+      QueryExp: dayjs().add(1, "m").unix()
+    }, null);
+
     return res;
   }
 }
