@@ -1,4 +1,4 @@
-import { Dynamic, IConcurrency, Shared } from "../Database";
+import { IConcurrency } from "../Database";
 import { ShopNet } from "../ShopNet";
 
 /**
@@ -14,29 +14,38 @@ interface DynamicProduct extends IConcurrency {
 
 /**
  * @author Aloento
- * @since 0.5.0
+ * @since 1.0.0
  * @version 0.1.0
  */
-export class ProductEntity extends ShopNet {
+interface DynamicPhoto extends IConcurrency {
+  Cover?: boolean;
+  Caption?: string;
+  Order: number;
+  ObjectId: string;
+  ProductId: number;
+}
+
+/**
+ * @author Aloento
+ * @since 1.0.0
+ * @version 0.1.0
+ */
+export abstract class ProductEntity extends ShopNet {
   /**
    * @author Aloento
    * @since 1.0.0
    * @version 0.1.0
    */
-  public static async Product(key: number): Promise<DynamicProduct | void> {
-    const index = `Product_${key}`;
-    const prod = await Shared.Get<DynamicProduct>(index);
+  public static Product(key: number): Promise<DynamicProduct | void> {
+    return this.WithVersionCache(key, "ProductEntity");
+  }
 
-    await this.EnsureConnected();
-    const res = await this.Hub.invoke<Dynamic<DynamicProduct>>("ProductEntity", key, prod?.Version);
-
-    if (res === true)
-      return prod!;
-
-    if (res === null)
-      return Shared.Sto.delete(index);
-
-    Shared.Set(index, res);
-    return res;
+  /**
+   * @author Aloento
+   * @since 1.0.0
+   * @version 0.1.0
+   */
+  public static Photo(key: number): Promise<DynamicPhoto | void> {
+    return this.WithVersionCache(key, "PhotoEntity");
   }
 }

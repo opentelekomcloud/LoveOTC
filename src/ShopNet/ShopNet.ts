@@ -9,7 +9,7 @@ import { SignalR } from "./SignalR";
  * @since 1.0.0
  * @version 0.1.1
  */
-export class ShopNet extends SignalR {
+export abstract class ShopNet extends SignalR {
   /**
    * @author Aloento
    * @since 1.0.0

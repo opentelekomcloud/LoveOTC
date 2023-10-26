@@ -1,6 +1,8 @@
+import dayjs from "dayjs";
 import { IComboItem } from "~/Pages/Admin/Product/Combo";
 import { IPhotoItem } from "~/Pages/Admin/Product/Photo";
 import { IProductInfo } from "~/Pages/Gallery";
+import { Shared } from "../Database";
 import { ShopNet } from "../ShopNet";
 import { ProductEntity } from "./Entity";
 // import demo from "./demo.json";
@@ -17,11 +19,20 @@ export class ProductGet extends ShopNet {
    * @version 0.1.0
    */
   public static async Basic(prodId: number): Promise<IProductInfo> {
-    await ProductEntity.Product(prodId);
+    const res = await ProductEntity.Product(prodId);
+    if (!res)
+      throw new Error(`Product ${prodId} Not Found`);
 
-    await this.EnsureConnected();
-    const res = await this.Hub.invoke<IProductInfo>("ProdGetBasic", prodId);
-    return res;
+    const list = await this.#ProductGetPhotoList(prodId);
+
+    for (const i of list) {
+
+    }
+
+    return {
+      Name: res.Name,
+      Cover: res.Cover,
+    };
   }
 
   /**
@@ -81,5 +92,24 @@ export class ProductGet extends ShopNet {
 
     // return JSON.stringify(demo.editorState);
     return "This is a demo";
+  }
+
+  /**
+   * @author Aloento
+   * @since 1.0.0
+   * @version 0.1.0
+   */
+  static async #ProductGetPhotoList(prodId: number): Promise<number[]> {
+    const res = await Shared.GetOrSet(
+      `PhotoList_${prodId}`,
+      async () => {
+        await this.EnsureConnected();
+        const db = await this.Hub.invoke<number[]>("ProductGetPhotoList", prodId);
+        return db;
+      },
+      dayjs().add(1, "m")
+    );
+
+    return res;
   }
 }

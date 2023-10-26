@@ -71,10 +71,3 @@ export const Auth = new auth();
 export interface IConcurrency {
   Version: number;
 }
-
-/**
- * @author Aloento
- * @since 1.0.0
- * @version 0.1.0
- */
-export type Dynamic<T> = T | true | null;
