@@ -35,6 +35,7 @@ export abstract class ProductGet extends ShopNet {
     }
 
     if (list.length > 0) {
+      console.warn(`Product ${prodId} has no cover photo, using first photo instead`);
       const p = await ProductEntity.Photo(list[0]);
 
       if (p)
@@ -44,6 +45,7 @@ export abstract class ProductGet extends ShopNet {
         };
     }
 
+    console.warn(`Product ${prodId} has no photo`);
     return {
       Name: res.Name,
       Cover: "",
@@ -64,19 +66,41 @@ export abstract class ProductGet extends ShopNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.2.0
+   * @version 1.0.0
    */
   public static async Combo(prodId: number): Promise<IComboItem[]> {
-    await this.EnsureConnected();
-    const res = await this.Hub.invoke<Omit<IComboItem & { ComboId: number }, "Id">[]>("ProdGetCombo", prodId);
+    const list = await this.#ComboList(prodId);
+    const items: IComboItem[] = [];
 
-    return res.map(x => {
-      const { ComboId, ...rest } = x;
-      return {
-        Id: ComboId,
-        ...rest,
-      };
-    });
+    for (const combo of list) {
+      const res: Record<string, string> = {};
+
+      for (const typeId of combo.Types) {
+        const type = await ProductEntity.Type(typeId);
+
+        if (!type) {
+          console.error(`ComboList Mismatch: Type ${typeId} not found : Combo ${combo.ComboId} : Product ${prodId}`);
+          continue;
+        }
+
+        const vari = await ProductEntity.Variant(type.VariantId);
+
+        if (!vari) {
+          console.error(`ComboList Mismatch: Variant ${type.VariantId} not found : Combo ${combo.ComboId} : Type ${typeId} : Product ${prodId}`);
+          continue;
+        }
+
+        res[vari.Name] = type.Name;
+      }
+
+      items.push({
+        Id: combo.ComboId,
+        Stock: combo.Stock,
+        Combo: res,
+      });
+    }
+
+    return items;
   }
 
   /**
