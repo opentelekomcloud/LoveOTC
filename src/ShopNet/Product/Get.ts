@@ -2,6 +2,7 @@ import { IComboItem } from "~/Pages/Admin/Product/Combo";
 import { IPhotoItem } from "~/Pages/Admin/Product/Photo";
 import { IProductInfo } from "~/Pages/Gallery";
 import { ShopNet } from "../ShopNet";
+import { ProductEntity } from "./Entity";
 // import demo from "./demo.json";
 
 /**
@@ -16,6 +17,8 @@ export class ProductGet extends ShopNet {
    * @version 0.1.0
    */
   public static async Basic(prodId: number): Promise<IProductInfo> {
+    await ProductEntity.Product(prodId);
+
     await this.EnsureConnected();
     const res = await this.Hub.invoke<IProductInfo>("ProdGetBasic", prodId);
     return res;

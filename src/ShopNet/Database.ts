@@ -62,3 +62,19 @@ class auth {
  * @version 0.1.0
  */
 export const Auth = new auth();
+
+/**
+ * @author Aloento
+ * @since 1.0.0
+ * @version 0.1.0
+ */
+export interface IConcurrency {
+  Version: number;
+}
+
+/**
+ * @author Aloento
+ * @since 1.0.0
+ * @version 0.1.0
+ */
+export type Dynamic<T> = T | true | null;

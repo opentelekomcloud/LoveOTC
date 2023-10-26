@@ -35,13 +35,13 @@ export class Table<TPre = any> {
    * @author Aloento
    * @since 0.1.0 MusiLand
    * @version 0.2.0
-   * @param cancel 对象失效规则
+   * @param expire 对象失效规则
    */
-  public async Get<T extends TPre = TPre>(key: string, cancel?: (x?: ITable<T>) => Promise<boolean>): Promise<T | null> {
+  public async Get<T extends TPre = TPre>(key: string, expire?: (x?: ITable<T>) => Promise<boolean>): Promise<T | null> {
     const find = await this.Sto.get(key) as ITable<T> | undefined;
 
     if (find) {
-      if ((cancel && await cancel(find)) ||
+      if ((expire && await expire(find)) ||
         (typeof find.Exp === "number" && find.Exp < dayjs().unix())) {
         await this.Sto.delete(key);
         return null;
@@ -67,9 +67,9 @@ export class Table<TPre = any> {
     key: string,
     fac: () => Promise<T>,
     exp?: Dayjs | null,
-    cancel?: (x?: ITable<T>) => Promise<boolean>
+    expire?: (x?: ITable<T>) => Promise<boolean>
   ): Promise<T> {
-    const res = await this.Get<T>(key, cancel);
+    const res = await this.Get<T>(key, expire);
     if (res) return res;
     return this.Set<T>(key, await fac(), exp);
   }
