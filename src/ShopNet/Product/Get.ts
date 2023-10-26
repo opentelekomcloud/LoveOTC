@@ -110,8 +110,7 @@ export class ProductGet extends ShopNet {
    * @version 0.1.0
    */
   public static async Lexical(id: number): Promise<string> {
-    await this.EnsureConnected();
-
+    // await this.EnsureConnected();
     // return JSON.stringify(demo.editorState);
     return "This is a demo";
   }
