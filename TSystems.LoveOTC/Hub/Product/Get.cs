@@ -16,11 +16,11 @@ internal partial class ShopHub {
     /**
      * <remarks>
      * @author Aloento
-     * @since 0.1.0
+     * @since 0.5.0
      * @version 1.0.0
      * </remarks>
      */
-    public async Task<ComboItem[]> ProdGetCombo(uint prodId) {
+    public async Task<ComboItem[]> ProductGetComboList(uint prodId) {
         var comboDb = await this.Db.Combos
             .Where(x => x.ProductId == prodId)
             .Include(x => x.Types)

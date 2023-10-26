@@ -2,7 +2,6 @@ import dayjs from "dayjs";
 import { IComboItem } from "~/Pages/Admin/Product/Combo";
 import { IPhotoItem } from "~/Pages/Admin/Product/Photo";
 import { IProductInfo } from "~/Pages/Gallery";
-import { Shared } from "../Database";
 import { ShopNet } from "../ShopNet";
 import { ProductEntity } from "./Entity";
 // import demo from "./demo.json";
@@ -120,17 +119,16 @@ export class ProductGet extends ShopNet {
    * @since 1.0.0
    * @version 0.1.0
    */
-  static async #ProductGetPhotoList(prodId: number): Promise<number[]> {
-    const res = await Shared.GetOrSet(
-      `PhotoList_${prodId}`,
-      async () => {
-        await this.EnsureConnected();
-        const db = await this.Hub.invoke<number[]>("ProductGetPhotoList", prodId);
-        return db;
-      },
-      dayjs().add(1, "m")
-    );
+  static async #ProductGetComboList(prodId: number): Promise<number[]> {
+    return this.WithTimeCache(prodId, "ProductGetComboList", dayjs().add(1, "m"));
+  }
 
-    return res;
+  /**
+   * @author Aloento
+   * @since 1.0.0
+   * @version 0.1.0
+   */
+  static #ProductGetPhotoList(prodId: number): Promise<number[]> {
+    return this.WithTimeCache(prodId, "ProductGetPhotoList", dayjs().add(1, "m"));
   }
 }
