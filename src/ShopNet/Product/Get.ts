@@ -83,19 +83,25 @@ export class ProductGet extends ShopNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.2.0
+   * @version 1.0.0
    */
   public static async Carousel(prodId: number): Promise<IPhotoItem[]> {
-    await this.EnsureConnected();
-    const res = await this.Hub.invoke<Omit<IPhotoItem & { PhotoId: number }, "Id">[]>("ProdGetCarousel", prodId);
+    const list = await this.#ProductGetPhotoList(prodId);
+    const photos: IPhotoItem[] = [];
 
-    return res.map(x => {
-      const { PhotoId, ...rest } = x;
-      return {
-        Id: PhotoId,
-        ...rest,
-      };
-    });
+    for (let i = 0; i < list.length; i++) {
+      const id = list[i];
+      const p = await ProductEntity.Photo(id);
+
+      if (p)
+        photos.push({
+          Id: p.Order,
+          Cover: p.ObjectId,
+          Caption: p.Caption,
+        });
+    }
+
+    return photos.sort((a, b) => a.Id - b.Id);
   }
 
   /**

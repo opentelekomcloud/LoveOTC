@@ -32,6 +32,7 @@ const useStyles = makeStyles({
  */
 export interface IPhotoItem {
   Id: number;
+  /** ObjectId */
   Cover: string;
   Caption?: string;
 }

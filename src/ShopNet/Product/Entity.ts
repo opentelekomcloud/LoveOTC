@@ -22,7 +22,6 @@ interface IDynamicPhoto extends IConcurrency {
   Caption?: string;
   Order: number;
   ObjectId: string;
-  ProductId: number;
 }
 
 /**

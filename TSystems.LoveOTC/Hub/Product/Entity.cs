@@ -51,7 +51,6 @@ internal partial class ShopHub {
                 x.Caption,
                 x.Order,
                 x.ObjectId,
-                x.ProductId,
                 x.Version
             })
             .SingleOrDefaultAsync();
