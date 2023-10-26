@@ -11,7 +11,7 @@ import { ProductEntity } from "./Entity";
  * @since 0.5.0
  * @version 0.1.0
  */
-export class ProductGet extends ShopNet {
+export abstract class ProductGet extends ShopNet {
   /**
    * @author Aloento
    * @since 0.5.0
@@ -22,7 +22,7 @@ export class ProductGet extends ShopNet {
     if (!res)
       throw new Error(`Product ${prodId} Not Found`);
 
-    const list = await this.#ProductGetPhotoList(prodId);
+    const list = await this.#PhotoList(prodId);
 
     for (const i of list) {
       const p = await ProductEntity.Photo(i);
@@ -85,7 +85,7 @@ export class ProductGet extends ShopNet {
    * @version 1.0.0
    */
   public static async Carousel(prodId: number): Promise<IPhotoItem[]> {
-    const list = await this.#ProductGetPhotoList(prodId);
+    const list = await this.#PhotoList(prodId);
     const photos: IPhotoItem[] = [];
 
     for (let i = 0; i < list.length; i++) {
@@ -119,7 +119,11 @@ export class ProductGet extends ShopNet {
    * @since 1.0.0
    * @version 0.1.0
    */
-  static async #ProductGetComboList(prodId: number): Promise<number[]> {
+  static #ComboList(prodId: number): Promise<{
+    ComboId: number;
+    Stock: number;
+    Types: number[];
+  }[]> {
     return this.WithTimeCache(prodId, "ProductGetComboList", dayjs().add(1, "m"));
   }
 
@@ -128,7 +132,7 @@ export class ProductGet extends ShopNet {
    * @since 1.0.0
    * @version 0.1.0
    */
-  static #ProductGetPhotoList(prodId: number): Promise<number[]> {
+  static #PhotoList(prodId: number): Promise<number[]> {
     return this.WithTimeCache(prodId, "ProductGetPhotoList", dayjs().add(1, "m"));
   }
 }

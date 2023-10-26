@@ -19,7 +19,10 @@ export function OIDCProvider({ children }: { children: ReactNode }): ReactNode {
       client_id="loveotc"
       scope="openid profile email address phone"
       userStore={new WebStorageStateStore({ store: window.localStorage })}
-      onSigninCallback={() => Rep("/")}
+      onSigninCallback={() => {
+        Rep("/");
+        location.reload();
+      }}
 
       {...(import.meta.env.DEV ?
         {

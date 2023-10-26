@@ -1,6 +1,5 @@
 namespace TSystems.LoveOTC.Hub;
 
-using System.Collections.Immutable;
 using Microsoft.EntityFrameworkCore;
 
 internal partial class ShopHub {
@@ -20,20 +19,15 @@ internal partial class ShopHub {
      * @version 1.0.0
      * </remarks>
      */
-    public async Task<ComboItem[]> ProductGetComboList(uint prodId) {
-        var comboDb = await this.Db.Combos
+    public async Task<dynamic[]> ProductGetComboList(uint prodId) =>
+        await this.Db.Combos
             .Where(x => x.ProductId == prodId)
-            .Include(x => x.Types)
-            .ThenInclude(x => x.Variant)
+            .Select(x => new {
+                x.ComboId,
+                x.Stock,
+                Types = x.Types.Select(t => t.TypeId).ToArray()
+            })
             .ToArrayAsync();
-
-        return comboDb.Select(x => new ComboItem {
-            ComboId = x.ComboId,
-            Stock = x.Stock,
-            Combo = x.Types
-                .ToImmutableDictionary(k => k.Variant.Name, v => v.Name)
-        }).ToArray();
-    }
 
     /**
      * <remarks>
