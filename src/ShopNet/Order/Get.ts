@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import { ICartItem } from "~/Components/ShopCart";
 import { IOrderItem } from "~/Pages/History";
+import { IComment } from "~/Pages/History/Comment";
 import { IOrderDetail } from "~/Pages/History/Detail";
 import { ProductEntity } from "../Product/Entity";
 import { ProductGet } from "../Product/Get";
@@ -83,7 +84,8 @@ export class OrderGet extends ShopNet {
       }
     >(orderId, "OrderGetDetail", dayjs().add(1, "m"), orderId);
 
-    const items: IOrderItem[] = [];
+    const items: ICartItem[] = [];
+    let index = 0;
 
     for (const combo of meta.Items) {
       const variType: Record<string, string> = {};
@@ -116,24 +118,41 @@ export class OrderGet extends ShopNet {
       }
 
       const list = await ProductGet.PhotoList(prodId);
-      const cover = await this.FindCover(list);
+      const cover = await this.FindCover(list, prodId);
 
+      if (!cover)
+        console.warn(`Product ${prodId} has no photo`);
+
+      items.push({
+        Id: index++,
+        ProdId: prodId,
+        Cover: cover || "",
+        Name: prod.Name,
+        Type: variType,
+        Quantity: combo.Quantity,
+      });
     }
 
-    const { ShopCart, Comments } = await this.Hub.invoke<
-      Omit<IOrderDetail, "ShopCart"> & {
-        ShopCart: Omit<ICartItem, "Id">[];
+    const comments: IComment[] = [];
+
+    for (const cmtId of meta.Comments) {
+      const cmt = await OrderEntity.Comment(cmtId);
+
+      if (!cmt) {
+        console.error(`OrderGetDetail Mismatch: Comment ${cmtId} not found. Order : ${orderId}`);
+        continue;
       }
-    >("OrderGetDetail", orderId);
+
+      comments.push({
+        Content: cmt.Content,
+        Time: cmt.CreateAt,
+        User: cmt.UserId || "You"
+      });
+    }
 
     return {
-      ShopCart: ShopCart.map((x, i) => {
-        return {
-          Id: i,
-          ...x
-        };
-      }),
-      Comments
+      ShopCart: items,
+      Comments: comments
     };
   }
 
