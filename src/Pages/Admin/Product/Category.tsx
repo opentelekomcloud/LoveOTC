@@ -11,13 +11,13 @@ import { AdminHub } from "~/ShopNet/Admin";
  * @version 0.1.0
  */
 export function AdminProductCategory({ ProdId }: { ProdId: number; }) {
-  const [cate, setCate] = useState("");
+  const [cate, setCate] = useState<string>();
   const [edit, { setTrue, setFalse }] = useBoolean();
 
   useRequest(AdminHub.Product.Get.Category.bind(AdminHub.Product.Get), {
     defaultParams: [ProdId],
     onSuccess(data) {
-      setCate(data);
+      data && setCate(data);
     }
   });
 
@@ -49,11 +49,12 @@ export function AdminProductCategory({ ProdId }: { ProdId: number; }) {
       size="large"
       value={cate}
       disabled={!edit}
+      placeholder="Pending"
       appearance="underline"
       onChange={(_, v) => setCate(v.value)}
       contentBefore={<Subtitle2>Category</Subtitle2>}
       contentAfter={edit
-        ? <Button appearance="subtle" icon={<SendRegular />} onClick={() => run(ProdId, cate)} />
+        ? <Button appearance="subtle" icon={<SendRegular />} onClick={() => cate && run(ProdId, cate)} />
         : <Button appearance="subtle" icon={<EditRegular />} onClick={setTrue} />}
     />
   );
