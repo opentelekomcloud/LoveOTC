@@ -21,10 +21,9 @@ export abstract class ShopNet extends SignalR {
         skipNegotiation: true,
         transport: HttpTransportType.WebSockets,
         logMessageContent: import.meta.env.DEV,
-        accessTokenFactory() {
-          if (Common.LocalUser)
-            return Common.LocalUser.access_token;
-
+        async accessTokenFactory() {
+          const token = await Common.AccessToken();
+          if (token) return token;
           return "";
         },
       })

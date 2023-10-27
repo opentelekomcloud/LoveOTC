@@ -71,6 +71,16 @@ export abstract class Common {
       }, 100);
     });
   }
+
+  public static async AccessToken(): Promise<string | void> {
+    let { isAuthenticated, user, signinSilent } = await this.Auth;
+
+    if (!isAuthenticated)
+      user = await signinSilent();
+
+    if (user)
+      return user.access_token;
+  }
 }
 
 /**
