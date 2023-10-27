@@ -30,14 +30,4 @@ export abstract class AdminNet extends SignalR {
     .withHubProtocol(new MessagePackHubProtocol())
     .configureLogging(import.meta.env.DEV ? LogLevel.Debug : LogLevel.Information)
     .build();
-
-  /**
-   * @author Aloento
-   * @since 1.0.0
-   * @version 0.1.0
-   */
-  public static async EnsureAdmin() {
-    this.EnsureLogin();
-    await this.EnsureConnected();
-  }
 }

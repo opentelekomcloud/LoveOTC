@@ -7,35 +7,18 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.2.2
+     * @version 1.0.0
      * </remarks>
      */
-    public async Task<ProductItem[]> ProductGetList() {
-        var raw = await this.Db.Products
+    public async Task<dynamic[]> ProductGetList() =>
+        await this.Db.Products
             .Select(x => new {
                 x.ProductId,
-                Cover = x.Photos
-                    .Where(p => p.Cover == true)
-                    .Select(p => p.ObjectId)
-                    .SingleOrDefault(),
-                x.Name,
-                x.Category,
-                Variant = (byte)x.Variants.Count,
-                Combo = (byte)x.Combos.Count,
+                Variant = x.Variants.Count,
+                Combo = x.Combos.Count,
                 Stock = x.Combos.Sum(s => s.Stock)
             })
             .ToArrayAsync();
-
-        return raw.Select(x => new ProductItem {
-            ProductId = x.ProductId,
-            Cover = x.Cover,
-            Name = x.Name,
-            Category = x.Category?.Name ?? "Pending",
-            Variant = x.Variant,
-            Combo = x.Combo,
-            Stock = (uint)x.Stock
-        }).ToArray();
-    }
 
     /**
      * <remarks>

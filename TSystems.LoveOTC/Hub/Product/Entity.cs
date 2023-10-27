@@ -22,7 +22,7 @@ internal partial class ShopHub {
             .Where(x => x.ProductId == key)
             .Select(x => new {
                 x.Name,
-                x.CategoryId,
+                Category = x.Category!.Name,
                 x.Description,
                 x.Version
             })

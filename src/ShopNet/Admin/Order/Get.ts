@@ -13,7 +13,7 @@ export class AdminOrderGet extends AdminNet {
    * @version 0.1.0
    */
   public static async List(): Promise<IOrderItem[]> {
-    await this.EnsureAdmin();
+    await this.EnsureConnected();
     const res = await this.Hub.invoke<Omit<IOrderItem & { OrderId: number }, "Id">[]>("OrderGetList");
 
     return res.map(x => {

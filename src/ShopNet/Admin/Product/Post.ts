@@ -13,7 +13,7 @@ export class AdminProductPost extends AdminNet {
    * @version 0.1.0
    */
   public static async Create(name: string): Promise<number> {
-    await this.EnsureAdmin();
+    await this.EnsureConnected();
     const res = await this.Hub.invoke<number>("ProductPostCreate", name);
     return res;
   }
@@ -24,7 +24,7 @@ export class AdminProductPost extends AdminNet {
    * @version 0.1.0
    */
   public static async MovePhoto(photoId: number, up: boolean): Promise<true> {
-    await this.EnsureAdmin();
+    await this.EnsureConnected();
     const res = await this.Hub.invoke<true>("ProductPostMovePhoto", photoId, up);
     return res;
   }
@@ -41,7 +41,7 @@ export class AdminProductPost extends AdminNet {
     if (file.size > 10 * 1024 * 1024)
       throw new RangeError("File is too large, max 10MB");
 
-    await this.EnsureAdmin();
+    await this.EnsureConnected();
 
     const chunkSize = 30 * 1024;
     const chunks = Math.ceil(file.size / chunkSize);
@@ -81,7 +81,7 @@ export class AdminProductPost extends AdminNet {
    * @version 0.1.0
    */
   public static async Variant(prodId: number, name: string): Promise<number> {
-    await this.EnsureAdmin();
+    await this.EnsureConnected();
     const res = await this.Hub.invoke<number>("ProductPostVariant", prodId, name);
     return res;
   }
@@ -92,7 +92,7 @@ export class AdminProductPost extends AdminNet {
    * @version 0.1.0
    */
   public static async Type(variantId: number, name: string): Promise<number> {
-    await this.EnsureAdmin();
+    await this.EnsureConnected();
     const res = await this.Hub.invoke<number>("ProductPostType", variantId, name);
     return res;
   }
@@ -103,7 +103,7 @@ export class AdminProductPost extends AdminNet {
    * @version 0.1.0
    */
   public static async Combo(prodId: number, combo: Record<string, string>, stock: number): Promise<number> {
-    await this.EnsureAdmin();
+    await this.EnsureConnected();
     const res = await this.Hub.invoke<number>("ProductPostCombo", prodId, combo, stock);
     return res;
   }
