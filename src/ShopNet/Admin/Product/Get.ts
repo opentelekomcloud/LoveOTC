@@ -1,6 +1,8 @@
 import dayjs from "dayjs";
 import { IProductItem } from "~/Pages/Admin/Product";
 import { IVariantItem } from "~/Pages/Admin/Product/Variant";
+import { ProductEntity } from "~/ShopNet/Product/Entity";
+import { ProductGet } from "~/ShopNet/Product/Get";
 import { AdminNet } from "../AdminNet";
 
 /**
@@ -12,7 +14,7 @@ export class AdminProductGet extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.1.0
+   * @version 1.0.0
    */
   public static async List(): Promise<IProductItem[]> {
     const list = await this.WithTimeCache<typeof AdminProductGet,
@@ -24,17 +26,34 @@ export class AdminProductGet extends AdminNet {
       }[]
     >("", "ProductGetList", dayjs().add(1, "m"));
 
-    for (const meta of list) {
+    const items: IProductItem[] = [];
 
+    for (const meta of list) {
+      const prod = await ProductEntity.Product(meta.ProductId);
+
+      if (!prod) {
+        console.error(`Product ${meta.ProductId} Not Found`);
+        continue;
+      }
+
+      const photos = await ProductGet.PhotoList(meta.ProductId);
+      const cover = await this.FindCover(photos, meta.ProductId);
+
+      if (!cover)
+        console.warn(`Product ${meta.ProductId} has no photo`);
+
+      items.push({
+        Id: meta.ProductId,
+        Cover: cover || "",
+        Name: prod.Name,
+        Category: prod.Category || "Pending",
+        Variant: meta.Variant,
+        Combo: meta.Combo,
+        Stock: meta.Stock
+      });
     }
 
-    return list.map(x => {
-      const { ProductId, ...rest } = x;
-      return {
-        Id: ProductId,
-        ...rest
-      };
-    });
+    return items;
   }
 
   /**
