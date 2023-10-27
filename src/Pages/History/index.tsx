@@ -5,24 +5,16 @@ import { HistoryColumns } from "./Columns";
 
 /**
  * @author Aloento
- * @since 0.5.0
- * @version 0.1.0
- */
-export interface IOrderExtension {
-  Status: string,
-  TrackNumber: string,
-  OrderDate: Date
-}
-
-/**
- * @author Aloento
  * @since 0.1.0
- * @version 0.3.0
+ * @version 0.3.1
  */
-export interface IOrderItem extends IOrderExtension {
+export interface IOrderItem {
   Id: number;
   Items: string[];
   Quantity: number;
+  Status: string,
+  TrackNumber?: string,
+  OrderDate: Date
 }
 
 /**

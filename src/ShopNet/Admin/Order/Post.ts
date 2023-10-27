@@ -33,7 +33,7 @@ export class AdminOrderPost extends AdminNet {
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static async Ship(orderId: number, track: string): Promise<true> {
+  public static async Ship(orderId: number, track?: string): Promise<true> {
     await this.EnsureAdmin();
     const res = await this.Hub.invoke<true>("OrderPostShip", orderId, track);
     return res;

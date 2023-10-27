@@ -4,6 +4,7 @@ import { WebStorageStateStore } from "oidc-client-ts";
 import { ReactNode, useEffect } from "react";
 import { AuthProvider, hasAuthParams, useAuth } from "react-oidc-context";
 import { use500Toast } from "~/Helpers/useToast";
+import { Common } from "~/ShopNet/Database";
 import { useRouter } from "../Router";
 
 /**
@@ -49,7 +50,7 @@ export function OIDCProvider({ children }: { children: ReactNode }): ReactNode {
  * @version 0.1.3
  */
 function AuthHandler() {
-  const auth = useAuth();
+  const auth = Common.AuthSlot = useAuth();
   const { Paths, Rep } = useRouter();
   const { dispatchError } = use500Toast();
 

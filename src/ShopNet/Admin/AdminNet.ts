@@ -1,6 +1,6 @@
 import { HttpTransportType, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { MessagePackHubProtocol } from "@microsoft/signalr-protocol-msgpack";
-import { Auth } from "../Database";
+import { Common } from "../Database";
 import { SignalR } from "../SignalR";
 
 /**
@@ -20,10 +20,9 @@ export abstract class AdminNet extends SignalR {
         skipNegotiation: true,
         transport: HttpTransportType.WebSockets,
         logMessageContent: import.meta.env.DEV,
-        accessTokenFactory() {
-          if (Auth.User?.expired === false)
-            return Auth.User.access_token;
-
+        async accessTokenFactory() {
+          const token = await Common.AccessToken();
+          if (token) return token;
           throw new Error("Please Login First");
         },
       })

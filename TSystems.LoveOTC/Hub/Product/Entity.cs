@@ -100,6 +100,7 @@ internal partial class ShopHub {
             .Where(x => x.VariantId == key)
             .Select(x => new {
                 x.Name,
+                x.ProductId,
                 x.Version
             })
             .SingleOrDefaultAsync();
