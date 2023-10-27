@@ -90,16 +90,16 @@ export abstract class SignalR {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.1.0
+   * @version 0.1.1
    */
   protected static async WithTimeCache<T extends SubClass, TRes>(
-    this: T, key: string | number, methodName: string, exp: Dayjs
+    this: T, key: string | number, methodName: string, exp: Dayjs, ...args: any[]
   ): Promise<TRes> {
     const res = await Shared.GetOrSet(
       `${methodName}_${key}`,
       async () => {
         await this.EnsureConnected();
-        const db = await this.Hub.invoke<TRes>(methodName, key);
+        const db = await this.Hub.invoke<TRes>(methodName, args);
         return db;
       },
       exp

@@ -10,7 +10,7 @@ import { HistoryColumns } from "./Columns";
  */
 export interface IOrderExtension {
   Status: string,
-  TrackNumber: string,
+  TrackNumber?: string,
   OrderDate: Date
 }
 

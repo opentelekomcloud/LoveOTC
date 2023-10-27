@@ -17,6 +17,7 @@ export abstract class OrderEntity extends ShopNet {
     CreateAt: Date;
     TrackingNumber?: string;
   } & IConcurrency) | void> {
+    this.EnsureLogin();
     return this.WithVersionCache(key, "OrderEntity");
   }
 }

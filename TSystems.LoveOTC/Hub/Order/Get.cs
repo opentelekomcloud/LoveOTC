@@ -10,20 +10,17 @@ internal partial class ShopHub {
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.2.0
+     * @version 1.0.0
      * </remarks>
      */
     [Authorize]
-    public async Task<OrderItem[]> OrderGetList() =>
+    public async Task<dynamic[]> OrderGetList() =>
         await this.Db.Orders
             .Where(x => x.UserId == this.UserId)
-            .Select(x => new OrderItem {
-                OrderId = x.OrderId,
-                Items = x.Combos.Select(c => c.Product.Name).ToArray(),
-                Quantity = (ushort)x.OrderCombos.Sum(o => o.Quantity),
-                OrderDate = x.CreateAt,
-                TrackNumber = x.TrackingNumber,
-                Status = Enum.GetName(x.Status)!
+            .Select(x => new {
+                x.OrderId,
+                Products = x.Combos.Select(c => c.ProductId).ToArray(),
+                Quantity = (ushort)x.OrderCombos.Sum(o => o.Quantity)
             })
             .ToArrayAsync();
 

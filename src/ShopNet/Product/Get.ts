@@ -148,7 +148,7 @@ export abstract class ProductGet extends ShopNet {
     Stock: number;
     Types: number[];
   }[]> {
-    return this.WithTimeCache(prodId, "ProductGetComboList", dayjs().add(1, "m"));
+    return this.WithTimeCache(prodId, "ProductGetComboList", dayjs().add(1, "m"), prodId);
   }
 
   /**
@@ -157,6 +157,6 @@ export abstract class ProductGet extends ShopNet {
    * @version 0.1.0
    */
   static #PhotoList(prodId: number): Promise<number[]> {
-    return this.WithTimeCache(prodId, "ProductGetPhotoList", dayjs().add(1, "m"));
+    return this.WithTimeCache(prodId, "ProductGetPhotoList", dayjs().add(1, "m"), prodId);
   }
 }
