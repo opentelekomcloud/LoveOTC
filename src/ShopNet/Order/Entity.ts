@@ -20,4 +20,18 @@ export abstract class OrderEntity extends ShopNet {
     this.EnsureLogin();
     return this.WithVersionCache(key, "OrderEntity");
   }
+
+  /**
+   * @author Aloento
+   * @since 1.0.0
+   * @version 0.1.0
+   */
+  public static Comment(key: number): Promise<({
+    Content: string;
+    UserId?: string;
+    CreateAt: Date;
+  } & IConcurrency) | void> {
+    this.EnsureLogin();
+    return this.WithVersionCache(key, "CommentEntity");
+  }
 }

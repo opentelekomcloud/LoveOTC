@@ -23,16 +23,13 @@ export abstract class ProductGet extends ShopNet {
       throw new Error(`Product ${prodId} Not Found`);
 
     const list = await this.#PhotoList(prodId);
+    const cover = await this.FindCover(list);
 
-    for (const i of list) {
-      const p = await ProductEntity.Photo(i);
-
-      if (p && p.Cover)
-        return {
-          Name: res.Name,
-          Cover: p.ObjectId,
-        };
-    }
+    if (cover)
+      return {
+        Name: res.Name,
+        Cover: cover
+      };
 
     if (list.length > 0) {
       console.warn(`Product ${prodId} has no cover photo, using first photo instead`);

@@ -35,14 +35,9 @@ internal partial class ShopHub {
         var cartDb = await this.Db.OrderCombos
             .Where(x => x.OrderId == orderId && x.Order.UserId == this.UserId)
             .Select(x => new {
-                ProdId = x.Combo.ProductId,
-                Cover = x.Combo.Product.Photos
-                    .Where(p => p.Cover == true)
-                    .Select(p => p.ObjectId)
-                    .Single(),
-                x.Combo.Product.Name,
+                x.Combo.ProductId,
                 Type = x.Combo.Types
-                    .Select(t => KeyValuePair.Create(t.Variant.Name, t.Name))
+                    .Select(t => t.TypeId)
                     .ToArray(),
                 x.Quantity
             })

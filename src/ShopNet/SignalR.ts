@@ -2,6 +2,7 @@ import { HubConnectionState } from "@microsoft/signalr";
 import dayjs, { Dayjs } from "dayjs";
 import { AdminNet } from "./Admin/AdminNet";
 import { Common, IConcurrency, Shared } from "./Database";
+import { ProductEntity } from "./Product/Entity";
 import { ShopNet } from "./ShopNet";
 
 /**
@@ -106,5 +107,19 @@ export abstract class SignalR {
     );
 
     return res;
+  }
+
+  /**
+   * @author Aloento
+   * @since 1.0.0
+   * @version 0.1.1
+   */
+  protected static async FindCover(photos: number[]): Promise<string | void> {
+    for (const photoId of photos) {
+      const photo = await ProductEntity.Photo(photoId);
+
+      if (photo && photo.Cover)
+        return photo.ObjectId;
+    }
   }
 }
