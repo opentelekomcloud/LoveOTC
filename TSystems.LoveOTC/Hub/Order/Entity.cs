@@ -30,4 +30,31 @@ internal partial class ShopHub {
             })
             .SingleOrDefaultAsync();
     }
+
+    /**
+     * <remarks>
+     * @author Aloento
+     * @since 0.5.0
+     * @version 0.1.1
+     * </remarks>
+     */
+    [Authorize]
+    public async Task<dynamic?> CommentEntity(uint key, uint? version) {
+        if (version is not null) {
+            var noChange = await this.Db.Comments
+                .AnyAsync(x => x.CommentId == key && x.Version == version);
+
+            if (noChange) return true;
+        }
+
+        return await this.Db.Comments
+            .Where(x => x.CommentId == key && x.Order.UserId == this.UserId)
+            .Select(x => new {
+                x.Content,
+                x.User!.Name,
+                x.CreateAt,
+                x.Version
+            })
+            .SingleOrDefaultAsync();
+    }
 }

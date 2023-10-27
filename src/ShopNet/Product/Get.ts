@@ -22,28 +22,14 @@ export abstract class ProductGet extends ShopNet {
     if (!res)
       throw new Error(`Product ${prodId} Not Found`);
 
-    const list = await this.#PhotoList(prodId);
+    const list = await this.PhotoList(prodId);
+    const cover = await this.FindCover(list, prodId);
 
-    for (const i of list) {
-      const p = await ProductEntity.Photo(i);
-
-      if (p && p.Cover)
-        return {
-          Name: res.Name,
-          Cover: p.ObjectId,
-        };
-    }
-
-    if (list.length > 0) {
-      console.warn(`Product ${prodId} has no cover photo, using first photo instead`);
-      const p = await ProductEntity.Photo(list[0]);
-
-      if (p)
-        return {
-          Name: res.Name,
-          Cover: p.ObjectId,
-        };
-    }
+    if (cover)
+      return {
+        Name: res.Name,
+        Cover: cover
+      };
 
     console.warn(`Product ${prodId} has no photo`);
     return {
@@ -69,34 +55,34 @@ export abstract class ProductGet extends ShopNet {
    * @version 1.0.0
    */
   public static async Combo(prodId: number): Promise<IComboItem[]> {
-    const list = await this.#ComboList(prodId);
+    const list = await this.ComboList(prodId);
     const items: IComboItem[] = [];
 
     for (const combo of list) {
-      const res: Record<string, string> = {};
+      const variType: Record<string, string> = {};
 
       for (const typeId of combo.Types) {
         const type = await ProductEntity.Type(typeId);
 
         if (!type) {
-          console.error(`ComboList Mismatch: Type ${typeId} not found : Combo ${combo.ComboId} : Product ${prodId}`);
+          console.error(`ComboList Mismatch: Type ${typeId} not found. Combo ${combo.ComboId} : Product ${prodId}`);
           continue;
         }
 
         const vari = await ProductEntity.Variant(type.VariantId);
 
         if (!vari) {
-          console.error(`ComboList Mismatch: Variant ${type.VariantId} not found : Combo ${combo.ComboId} : Type ${typeId} : Product ${prodId}`);
+          console.error(`ComboList Mismatch: Variant ${type.VariantId} not found. Combo ${combo.ComboId} : Type ${typeId} : Product ${prodId}`);
           continue;
         }
 
-        res[vari.Name] = type.Name;
+        variType[vari.Name] = type.Name;
       }
 
       items.push({
         Id: combo.ComboId,
         Stock: combo.Stock,
-        Combo: res,
+        Combo: variType,
       });
     }
 
@@ -109,7 +95,7 @@ export abstract class ProductGet extends ShopNet {
    * @version 1.0.0
    */
   public static async Carousel(prodId: number): Promise<IPhotoItem[]> {
-    const list = await this.#PhotoList(prodId);
+    const list = await this.PhotoList(prodId);
     const photos: IPhotoItem[] = [];
 
     for (let i = 0; i < list.length; i++) {
@@ -122,6 +108,8 @@ export abstract class ProductGet extends ShopNet {
           Cover: p.ObjectId,
           Caption: p.Caption,
         });
+      else
+        console.warn(`Photo ${id} not found in Product ${prodId}`);
     }
 
     return photos.sort((a, b) => a.Id - b.Id);
@@ -143,7 +131,7 @@ export abstract class ProductGet extends ShopNet {
    * @since 1.0.0
    * @version 0.1.0
    */
-  static #ComboList(prodId: number): Promise<{
+  public static ComboList(prodId: number): Promise<{
     ComboId: number;
     Stock: number;
     Types: number[];
@@ -156,7 +144,7 @@ export abstract class ProductGet extends ShopNet {
    * @since 1.0.0
    * @version 0.1.0
    */
-  static #PhotoList(prodId: number): Promise<number[]> {
+  public static PhotoList(prodId: number): Promise<number[]> {
     return this.WithTimeCache(prodId, "ProductGetPhotoList", dayjs().add(1, "m"), prodId);
   }
 }
