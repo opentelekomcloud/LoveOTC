@@ -1,5 +1,6 @@
 import Dexie from "dexie";
 import { User } from "oidc-client-ts";
+import { AuthContextProps } from "react-oidc-context";
 import { ICartItem } from "~/Components/ShopCart";
 import { Table } from "./Table";
 
@@ -41,10 +42,10 @@ export const CartTable = DB.table<Omit<ICartItem, "Name" | "Cover">, never>("Sho
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.1.0
+ * @version 0.2.0
  */
-class auth {
-  public get User(): User | null {
+export abstract class Common {
+  public static get LocalUser(): User | null {
     const str = localStorage.getItem(
       import.meta.env.DEV
         ? "oidc.user:http://localhost:8080/realms/loveotc:loveotc"
@@ -54,14 +55,23 @@ class auth {
     if (!str) return null;
     return User.fromStorageString(str);
   }
-}
 
-/**
- * @author Aloento
- * @since 1.0.0
- * @version 0.1.0
- */
-export const Auth = new auth();
+  public static AuthSlot?: AuthContextProps;
+
+  public static get Auth(): Promise<AuthContextProps> {
+    return new Promise<AuthContextProps>(resolve => {
+      if (this.AuthSlot)
+        return resolve(this.AuthSlot);
+
+      const interval = setInterval(() => {
+        if (this.AuthSlot) {
+          clearInterval(interval);
+          resolve(this.AuthSlot);
+        }
+      }, 100);
+    });
+  }
+}
 
 /**
  * @author Aloento

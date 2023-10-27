@@ -53,6 +53,7 @@ export abstract class ProductEntity extends ShopNet {
    */
   public static Variant(key: number): Promise<({
     Name: string;
+    ProductId: number;
   } & IConcurrency) | void> {
     return this.WithVersionCache(key, "VariantEntity");
   }

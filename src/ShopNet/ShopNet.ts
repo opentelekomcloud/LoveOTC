@@ -1,7 +1,7 @@
 import { HttpTransportType, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { MessagePackHubProtocol } from "@microsoft/signalr-protocol-msgpack";
 import { OnNewUserSubject } from "~/Components/NewUser";
-import { Auth } from "./Database";
+import { Common } from "./Database";
 import { SignalR } from "./SignalR";
 
 /**
@@ -22,8 +22,8 @@ export abstract class ShopNet extends SignalR {
         transport: HttpTransportType.WebSockets,
         logMessageContent: import.meta.env.DEV,
         accessTokenFactory() {
-          if (Auth.User)
-            return Auth.User.access_token;
+          if (Common.LocalUser)
+            return Common.LocalUser.access_token;
 
           return "";
         },

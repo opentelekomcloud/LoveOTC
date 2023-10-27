@@ -1,6 +1,6 @@
 import { HttpTransportType, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { MessagePackHubProtocol } from "@microsoft/signalr-protocol-msgpack";
-import { Auth } from "../Database";
+import { Common } from "../Database";
 import { SignalR } from "../SignalR";
 
 /**
@@ -21,8 +21,8 @@ export abstract class AdminNet extends SignalR {
         transport: HttpTransportType.WebSockets,
         logMessageContent: import.meta.env.DEV,
         accessTokenFactory() {
-          if (Auth.User?.expired === false)
-            return Auth.User.access_token;
+          if (Common.LocalUser?.expired === false)
+            return Common.LocalUser.access_token;
 
           throw new Error("Please Login First");
         },
