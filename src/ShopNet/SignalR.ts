@@ -112,14 +112,26 @@ export abstract class SignalR {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.1.1
+   * @version 0.2.0
    */
-  protected static async FindCover(photos: number[]): Promise<string | void> {
+  protected static async FindCover(photos: number[], prodId?: number): Promise<string | void> {
+    const list = [];
+
     for (const photoId of photos) {
       const photo = await ProductEntity.Photo(photoId);
 
-      if (photo && photo.Cover)
-        return photo.ObjectId;
+      if (photo) {
+        list.push(photo);
+
+        if (photo.Cover)
+          return photo.ObjectId;
+      } else
+        console.warn(`Photo ${photoId} not found in Product ${prodId}`);
+    }
+
+    if (list.length > 0) {
+      console.warn(`Product ${prodId} has no cover photo, using first photo instead`);
+      return list.sort((a, b) => a.Order - b.Order)[0].ObjectId;
     }
   }
 }

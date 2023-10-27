@@ -30,13 +30,23 @@ internal partial class ShopHub {
      * </remarks>
      */
     [Authorize]
-    public async Task<dynamic[]> OrderGetDetail(uint orderId) =>
-        await this.Db.OrderCombos
+    public async Task<dynamic> OrderGetDetail(uint orderId) {
+        var items = await this.Db.OrderCombos
             .Where(x => x.OrderId == orderId && x.Order.UserId == this.UserId)
             .Select(x => new {
                 x.Quantity,
-                Types = x.Combo.Types.Select(t => t.TypeId).ToArray(),
-                Cmts = x.Order.Comments.Select(c => c.CommentId).ToArray()
+                Types = x.Combo.Types.Select(t => t.TypeId).ToArray()
             })
             .ToArrayAsync();
+
+        var cmts = await this.Db.Comments
+            .Where(x => x.OrderId == orderId && x.Order.UserId == this.UserId)
+            .Select(x => x.CommentId)
+            .ToArrayAsync();
+
+        return new {
+            Items = items,
+            Comments = cmts
+        };
+    }
 }

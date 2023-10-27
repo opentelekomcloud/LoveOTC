@@ -3,6 +3,7 @@ import { ICartItem } from "~/Components/ShopCart";
 import { IOrderItem } from "~/Pages/History";
 import { IOrderDetail } from "~/Pages/History/Detail";
 import { ProductEntity } from "../Product/Entity";
+import { ProductGet } from "../Product/Get";
 import { ShopNet } from "../ShopNet";
 import { OrderEntity } from "./Entity";
 
@@ -67,17 +68,63 @@ export class OrderGet extends ShopNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.1.0
+   * @version 1.0.0
    */
-  public static async Detail(id: number): Promise<IOrderDetail> {
+  public static async Detail(orderId: number): Promise<IOrderDetail> {
     this.EnsureLogin();
-    await this.EnsureConnected();
+
+    const meta = await this.WithTimeCache<typeof OrderGet,
+      {
+        Items: {
+          Types: number[];
+          Quantity: number;
+        }[],
+        Comments: number[];
+      }
+    >(orderId, "OrderGetDetail", dayjs().add(1, "m"), orderId);
+
+    const items: IOrderItem[] = [];
+
+    for (const combo of meta.Items) {
+      const variType: Record<string, string> = {};
+      let prodId = 0;
+
+      for (const typeId of combo.Types) {
+        const type = await ProductEntity.Type(typeId);
+
+        if (!type) {
+          console.error(`OrderGetDetail Mismatch: Type ${typeId} not found. Order : ${orderId}`);
+          continue;
+        }
+
+        const vari = await ProductEntity.Variant(type.VariantId);
+
+        if (!vari) {
+          console.error(`OrderGetDetail Mismatch: Variant ${type.VariantId} not found. Type : ${typeId}, Order : ${orderId}`);
+          continue;
+        }
+
+        variType[vari.Name] = type.Name;
+        prodId = vari.ProductId;
+      }
+
+      const prod = await ProductEntity.Product(prodId);
+
+      if (!prod) {
+        console.error(`OrderGetDetail Mismatch: Product ${prodId} not found. Order : ${orderId}`);
+        continue;
+      }
+
+      const list = await ProductGet.PhotoList(prodId);
+      const cover = await this.FindCover(list);
+
+    }
 
     const { ShopCart, Comments } = await this.Hub.invoke<
       Omit<IOrderDetail, "ShopCart"> & {
         ShopCart: Omit<ICartItem, "Id">[];
       }
-    >("OrderGetDetail", id);
+    >("OrderGetDetail", orderId);
 
     return {
       ShopCart: ShopCart.map((x, i) => {
