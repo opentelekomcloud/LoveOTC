@@ -13,14 +13,14 @@ import { AdminHub } from "~/ShopNet/Admin";
  */
 export function Shipment({ OrderId, Refresh }: { OrderId: number; Refresh: (id: number) => void }) {
   const [edit, { setTrue, setFalse }] = useBoolean();
-  const [track, setTrack] = useState("");
+  const [track, setTrack] = useState<string>();
 
   const { dispatchError, dispatchToast } = use500Toast();
 
-  useRequest(Hub.Order.Get.Extension.bind(Hub.Order.Get.bind(Hub.Order.Get)), {
+  useRequest(Hub.Order.Get.Order.bind(Hub.Order.Get.bind(Hub.Order.Get)), {
     defaultParams: [OrderId],
     onSuccess(data) {
-      setTrack(data.TrackNumber);
+      setTrack(data?.TrackingNumber);
     },
   });
 

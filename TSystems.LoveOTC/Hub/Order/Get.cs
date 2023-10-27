@@ -1,7 +1,6 @@
 namespace TSystems.LoveOTC.Hub;
 
 using System.Collections.Immutable;
-using Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
@@ -69,22 +68,6 @@ internal partial class ShopHub {
                 })
                 .ToImmutableArray(),
             Comments = cmtDb
-        };
-    }
-
-    /**
-     * <remarks>
-     * @author Aloento
-     * @since 0.1.0
-     * @version 0.1.0
-     * </remarks>
-     */
-    [Authorize]
-    public async Task<OrderExtension> OrderGetExtension(uint orderId) {
-        return new() {
-            OrderDate = DateTime.Now,
-            TrackNumber = "Number123456789",
-            Status = Enum.GetName(OrderStatus.Finished)!
         };
     }
 }

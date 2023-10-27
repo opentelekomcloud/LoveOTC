@@ -29,7 +29,7 @@ export function OrderPersona({ OrderId, Admin }: { OrderId: number; Admin?: true
     defaultParams: [OrderId]
   });
 
-  const { data: ext } = useRequest(Hub.Order.Get.Extension.bind(Hub.Order.Get), {
+  const { data: order } = useRequest(Hub.Order.Get.Order.bind(Hub.Order.Get), {
     defaultParams: [OrderId]
   });
 
@@ -51,13 +51,13 @@ export function OrderPersona({ OrderId, Admin }: { OrderId: number; Admin?: true
     <div className={style.flex}>
       <div className={style.box}>
         <Field label="Order Date" size="large">
-          <Label>{ext?.OrderDate.toLocaleDateString()}</Label>
+          <Label>{order?.CreateAt.toLocaleDateString()}</Label>
         </Field>
       </div>
 
       <div className={style.box}>
         <Field label="Status" size="large">
-          <Label>{ext?.Status}</Label>
+          <Label>{order?.Status}</Label>
         </Field>
       </div>
     </div>
@@ -73,7 +73,7 @@ export function OrderPersona({ OrderId, Admin }: { OrderId: number; Admin?: true
         !Admin &&
         <div className={style.box}>
           <Field label="Tracking Number" size="large">
-            <Label>{ext?.TrackNumber}</Label>
+            <Label>{order?.TrackingNumber}</Label>
           </Field>
         </div>
       }

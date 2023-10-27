@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { ICartItem } from "~/Components/ShopCart";
-import { IOrderExtension, IOrderItem } from "~/Pages/History";
+import { IOrderItem } from "~/Pages/History";
 import { IOrderDetail } from "~/Pages/History/Detail";
 import { ProductEntity } from "../Product/Entity";
 import { ShopNet } from "../ShopNet";
@@ -31,7 +31,7 @@ export class OrderGet extends ShopNet {
     const items: IOrderItem[] = [];
 
     for (const meta of list) {
-      const order = await OrderEntity.Order(meta.OrderId);
+      const order = await this.Order(meta.OrderId);
 
       if (!order) {
         console.error(`OrderGetList Mismatch: Order ${meta.OrderId} not found`);
@@ -90,16 +90,5 @@ export class OrderGet extends ShopNet {
     };
   }
 
-  /**
-   * @author Aloento
-   * @since 0.5.0
-   * @version 0.1.0
-   */
-  public static async Extension(orderId: number): Promise<IOrderExtension> {
-    this.EnsureLogin();
-    await this.EnsureConnected();
-
-    const res = await this.Hub.invoke<IOrderExtension>("OrderGetExtension", orderId);
-    return res;
-  }
+  public static Order = OrderEntity.Order;
 }

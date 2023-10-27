@@ -99,7 +99,7 @@ export abstract class SignalR {
       `${methodName}_${key}`,
       async () => {
         await this.EnsureConnected();
-        const db = await this.Hub.invoke<TRes>(methodName, args);
+        const db = await this.Hub.invoke<TRes>(methodName, ...args);
         return db;
       },
       exp
