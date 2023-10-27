@@ -2,7 +2,6 @@ import { HubConnectionState } from "@microsoft/signalr";
 import dayjs, { Dayjs } from "dayjs";
 import { AdminNet } from "./Admin/AdminNet";
 import { Common, IConcurrency, Shared } from "./Database";
-import { ProductEntity } from "./Product/Entity";
 import { ShopNet } from "./ShopNet";
 
 /**
@@ -118,6 +117,7 @@ export abstract class SignalR {
     const list = [];
 
     for (const photoId of photos) {
+      const { ProductEntity } = await import("./Product/Entity")
       const photo = await ProductEntity.Photo(photoId);
 
       if (photo) {

@@ -35,7 +35,7 @@ internal partial class ShopHub {
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 0.1.0
+     * @version 0.1.1
      * </remarks>
      */
     [Authorize]
@@ -51,7 +51,7 @@ internal partial class ShopHub {
             .Where(x => x.CommentId == key && x.Order.UserId == this.UserId)
             .Select(x => new {
                 x.Content,
-                x.UserId,
+                x.User!.Name,
                 x.CreateAt,
                 x.Version
             })

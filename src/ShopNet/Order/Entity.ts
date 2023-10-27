@@ -28,7 +28,7 @@ export abstract class OrderEntity extends ShopNet {
    */
   public static Comment(key: number): Promise<({
     Content: string;
-    UserId?: string;
+    Name?: string;
     CreateAt: Date;
   } & IConcurrency) | void> {
     this.EnsureLogin();

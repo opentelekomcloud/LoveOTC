@@ -146,13 +146,13 @@ export class OrderGet extends ShopNet {
       comments.push({
         Content: cmt.Content,
         Time: cmt.CreateAt,
-        User: cmt.UserId || "You"
+        User: cmt.Name || "You"
       });
     }
 
     return {
       ShopCart: items,
-      Comments: comments
+      Comments: comments.sort((a, b) => a.Time.getTime() - b.Time.getTime())
     };
   }
 

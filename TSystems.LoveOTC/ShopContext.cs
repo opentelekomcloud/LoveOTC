@@ -2,7 +2,6 @@
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 namespace TSystems.LoveOTC;
 
-using Entities;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
@@ -68,6 +67,7 @@ internal class ShopContext(DbContextOptions<ShopContext> opts) : DbContext(opts)
         #endregion
 
         #region MockData
+#if false
 
         modelBuilder.Entity<User>().HasData(new User {
             UserId = Guid.Parse("e2653b80-9be7-41d0-aff0-524ad0e66944"),
@@ -329,6 +329,13 @@ internal class ShopContext(DbContextOptions<ShopContext> opts) : DbContext(opts)
 
         modelBuilder.Entity<Comment>().HasData(new Comment {
             CommentId = 1,
+            Content = "This is a comment no user",
+            CreateAt = DateTime.UtcNow,
+            OrderId = 1
+        });
+
+        modelBuilder.Entity<Comment>().HasData(new Comment {
+            CommentId = 2,
             Content = "This is a comment",
             UserId = Guid.Parse("e2653b80-9be7-41d0-aff0-524ad0e66944"),
             CreateAt = DateTime.UtcNow,
@@ -337,6 +344,7 @@ internal class ShopContext(DbContextOptions<ShopContext> opts) : DbContext(opts)
 
         #endregion
 
+#endif
         #endregion
     }
 }
