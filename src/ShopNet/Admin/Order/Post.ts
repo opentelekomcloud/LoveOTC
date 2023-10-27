@@ -12,7 +12,7 @@ export class AdminOrderPost extends AdminNet {
    * @version 0.1.0
    */
   public static async Append(orderId: number, cmt: string): Promise<true> {
-    await this.EnsureAdmin();
+    await this.EnsureConnected();
     const res = await this.Hub.invoke<true>("OrderPostAppend", orderId, cmt);
     return res;
   }
@@ -23,7 +23,7 @@ export class AdminOrderPost extends AdminNet {
    * @version 0.1.0
    */
   public static async Close(orderId: number, reason: string): Promise<true> {
-    await this.EnsureAdmin();
+    await this.EnsureConnected();
     const res = await this.Hub.invoke<true>("OrderPostClose", orderId, reason);
     return res;
   }
@@ -34,7 +34,7 @@ export class AdminOrderPost extends AdminNet {
    * @version 0.1.0
    */
   public static async Ship(orderId: number, track?: string): Promise<true> {
-    await this.EnsureAdmin();
+    await this.EnsureConnected();
     const res = await this.Hub.invoke<true>("OrderPostShip", orderId, track);
     return res;
   }

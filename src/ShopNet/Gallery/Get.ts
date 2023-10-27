@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { ShopNet } from "../ShopNet";
 
 /**
@@ -9,22 +10,19 @@ export class GalleryGet extends ShopNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.2.0
+   * @version 0.2.1
    */
-  public static async Categories(): Promise<string[]> {
-    await this.EnsureConnected();
-    const res = await this.Hub.invoke<string[]>("GalleryGetCategories");
-    return res;
+  public static Categories(): Promise<string[]> {
+    return this.WithTimeCache("", "GalleryGetCategories", dayjs().add(1, "m"));
   }
 
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.2.0
+   * @version 0.2.1
    */
   public static async Products(category: string): Promise<[number[], number]> {
-    await this.EnsureConnected();
-    const nums = await this.Hub.invoke<number[]>("GalleryGetProducts", category);
+    const nums = await this.WithTimeCache<typeof GalleryGet, number[]>(category, "GalleryGetProducts", dayjs().add(1, "m"), category);
 
     return [
       nums,

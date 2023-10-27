@@ -14,7 +14,7 @@ export class AdminUserGet extends AdminNet {
    * @version 0.1.0
    */
   public static async OrderUser(orderId: number): Promise<IPersona> {
-    await this.EnsureAdmin();
+    await this.EnsureConnected();
     const res = await this.Hub.invoke<IPersona>("UserGetOrderUser", orderId);
     return res;
   }
@@ -25,7 +25,7 @@ export class AdminUserGet extends AdminNet {
    * @version 0.1.0
    */
   public static async List(): Promise<IUserItem[]> {
-    await this.EnsureAdmin();
+    await this.EnsureConnected();
     const res = await this.Hub.invoke<IUserItem[]>("UserGetList");
     return res;
   }
