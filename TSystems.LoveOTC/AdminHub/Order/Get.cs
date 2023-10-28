@@ -1,34 +1,21 @@
 namespace TSystems.LoveOTC.AdminHub;
 
-using Entities;
-using Hub;
+using Microsoft.EntityFrameworkCore;
 
 internal partial class AdminHub {
     /**
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.1.0
+     * @version 0.2.0
      * </remarks>
      */
-    public async Task<List<OrderItem>> OrderGetList() {
-        return new() {
-            new() {
-                OrderId = 1,
-                Items = new List<string> { "OTC SHIRT - GREY", "OTC Cap - Cap and Cap" },
-                Quantity = 2,
-                OrderDate = DateTime.Now,
-                TrackNumber = "Number123456789",
-                Status = Enum.GetName(OrderStatus.Finished)!
-            },
-            new() {
-                OrderId = 2,
-                Items = new List<string> { "OTC Cap - Cap and Cap" },
-                Quantity = 1,
-                OrderDate = DateTime.Now,
-                TrackNumber = "Number123456789",
-                Status = Enum.GetName(OrderStatus.Finished)!
-            },
-        };
-    }
+    public async Task<dynamic[]> OrderGetList() =>
+        await this.Db.Orders
+            .Select(x => new {
+                x.OrderId,
+                Products = x.Combos.Select(c => c.ProductId).ToArray(),
+                Quantity = (ushort)x.OrderCombos.Sum(o => o.Quantity)
+            })
+            .ToArrayAsync();
 }

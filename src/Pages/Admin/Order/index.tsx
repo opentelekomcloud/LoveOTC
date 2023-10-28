@@ -20,17 +20,47 @@ const useStyles = makeStyles({
     flexBasis: "2.5%",
     flexGrow: 0,
     justifyContent: "center"
-  }
+  },
+  ten: {
+    flexBasis: "10%",
+    flexGrow: 0
+  },
 });
 
 /**
  * @author Aloento
- * @since 0.1.0
- * @version 0.1.1
+ * @since 1.0.0
+ * @version 0.1.0
  */
-const columns: TableColumnDefinition<IOrderItem>[] = [
+export interface IAdminOrderItem extends IOrderItem {
+  User: string;
+}
+
+/**
+ * @author Aloento
+ * @since 0.1.0
+ * @version 0.2.0
+ */
+const columns: TableColumnDefinition<IAdminOrderItem>[] = [
   ...HistoryColumns.slice(0, -1),
-  createTableColumn<IOrderItem>({
+  createTableColumn<IAdminOrderItem>({
+    columnId: "User",
+    renderHeaderCell: () => {
+      return (
+        <DataGridHeaderCell className={useStyles().ten}>
+          User
+        </DataGridHeaderCell>
+      );
+    },
+    renderCell(item) {
+      return (
+        <DataGridCell className={useStyles().ten}>
+          {item.User}
+        </DataGridCell>
+      );
+    }
+  }),
+  createTableColumn<IAdminOrderItem>({
     columnId: "Action",
     renderHeaderCell: () => {
       return (

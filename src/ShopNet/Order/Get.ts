@@ -22,7 +22,7 @@ export class OrderGet extends ShopNet {
   public static async List(): Promise<IOrderItem[]> {
     this.EnsureLogin();
 
-    const list = await this.WithTimeCache<typeof OrderGet,
+    const list = await this.WithTimeCache<
       {
         OrderId: number;
         Products: number[];
@@ -33,7 +33,7 @@ export class OrderGet extends ShopNet {
     const items: IOrderItem[] = [];
 
     for (const meta of list) {
-      const order = await this.Order(meta.OrderId);
+      const order = await OrderEntity.Order(meta.OrderId);
 
       if (!order) {
         console.error(`OrderGetList Mismatch: Order ${meta.OrderId} not found`);
@@ -63,7 +63,7 @@ export class OrderGet extends ShopNet {
       });
     }
 
-    return items;
+    return items.sort((a, b) => b.OrderDate.getTime() - a.OrderDate.getTime());
   }
 
   /**
@@ -74,7 +74,7 @@ export class OrderGet extends ShopNet {
   public static async Detail(orderId: number): Promise<IOrderDetail> {
     this.EnsureLogin();
 
-    const meta = await this.WithTimeCache<typeof OrderGet,
+    const meta = await this.WithTimeCache<
       {
         Items: {
           Types: number[];
