@@ -1,6 +1,7 @@
 import { HttpTransportType, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { MessagePackHubProtocol } from "@microsoft/signalr-protocol-msgpack";
-import { Common } from "../Database";
+import { Dayjs } from "dayjs";
+import { Common, IConcurrency } from "../Database";
 import { SignalR } from "../SignalR";
 
 /**
@@ -30,4 +31,26 @@ export abstract class AdminNet extends SignalR {
     .withHubProtocol(new MessagePackHubProtocol())
     .configureLogging(import.meta.env.DEV ? LogLevel.Debug : LogLevel.Information)
     .build();
+
+  /**
+   * @author Aloento
+   * @since 1.0.0
+   * @version 0.1.0
+   */
+  protected static override WithVersionCache<T extends IConcurrency>(
+    key: string | number, methodName: string
+  ): Promise<T | void> {
+    return super.WithVersionCache(`Admin_${key}`, methodName);
+  }
+
+  /**
+   * @author Aloento
+   * @since 1.0.0
+   * @version 0.1.0
+   */
+  protected static override WithTimeCache<T>(
+    key: string | number, methodName: string, exp: Dayjs, ...args: any[]
+  ): Promise<T> {
+    return super.WithTimeCache(`Admin_${key}`, methodName, exp, ...args);
+  }
 }

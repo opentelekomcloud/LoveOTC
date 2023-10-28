@@ -22,7 +22,7 @@ export class GalleryGet extends ShopNet {
    * @version 0.2.1
    */
   public static async Products(category: string): Promise<[number[], number]> {
-    const nums = await this.WithTimeCache<typeof GalleryGet, number[]>(category, "GalleryGetProducts", dayjs().add(1, "m"), category);
+    const nums = await this.WithTimeCache<number[]>(category, "GalleryGetProducts", dayjs().add(1, "m"), category);
 
     return [
       nums,

@@ -22,7 +22,7 @@ export class OrderGet extends ShopNet {
   public static async List(): Promise<IOrderItem[]> {
     this.EnsureLogin();
 
-    const list = await this.WithTimeCache<typeof OrderGet,
+    const list = await this.WithTimeCache<
       {
         OrderId: number;
         Products: number[];
@@ -74,7 +74,7 @@ export class OrderGet extends ShopNet {
   public static async Detail(orderId: number): Promise<IOrderDetail> {
     this.EnsureLogin();
 
-    const meta = await this.WithTimeCache<typeof OrderGet,
+    const meta = await this.WithTimeCache<
       {
         Items: {
           Types: number[];

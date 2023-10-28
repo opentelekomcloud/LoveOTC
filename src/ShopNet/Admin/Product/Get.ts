@@ -17,7 +17,7 @@ export class AdminProductGet extends AdminNet {
    * @version 1.0.0
    */
   public static async List(): Promise<IProductItem[]> {
-    const list = await this.WithTimeCache<typeof AdminProductGet,
+    const list = await this.WithTimeCache<
       {
         ProductId: number;
         Variant: number;
@@ -90,7 +90,7 @@ export class AdminProductGet extends AdminNet {
    * @version 1.0.0
    */
   public static async Variants(prodId: number): Promise<IVariantItem[]> {
-    const list = await this.WithTimeCache<typeof AdminProductGet,
+    const list = await this.WithTimeCache<
       {
         VariantId: number;
         Types: number[];
