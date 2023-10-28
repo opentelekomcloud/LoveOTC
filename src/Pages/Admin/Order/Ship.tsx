@@ -9,19 +9,19 @@ import { AdminHub } from "~/ShopNet/Admin";
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
+ * @version 0.2.1
  */
 export function Shipment({ OrderId, Refresh }: { OrderId: number; Refresh: (id: number) => void }) {
   const [edit, { setTrue, setFalse }] = useBoolean();
-  const [track, setTrack] = useState<string>();
+  const [track, setTrack] = useState("");
 
   const { dispatchError, dispatchToast } = use500Toast();
 
-  useRequest(Hub.Order.Get.Order.bind(Hub.Order.Get.bind(Hub.Order.Get)), {
+  useRequest(Hub.Order.Get.Order.bind(Hub.Order.Get), {
     defaultParams: [OrderId],
     onSuccess(data) {
-      setTrack(data?.TrackingNumber);
-    },
+      setTrack(data?.TrackingNumber!);
+    }
   });
 
   const { run } = useRequest(AdminHub.Order.Post.Ship.bind(AdminHub.Order.Post), {
@@ -53,6 +53,7 @@ export function Shipment({ OrderId, Refresh }: { OrderId: number; Refresh: (id: 
         disabled={!edit}
         appearance="underline"
         onChange={(_, v) => setTrack(v.value)}
+        placeholder="Fill in this field to ship the order."
         contentAfter={edit
           ? <Button appearance="subtle" icon={<SendRegular />} onClick={() => run(OrderId, track)} />
           : <Button appearance="subtle" icon={<EditRegular />} onClick={setTrue} />}
