@@ -53,12 +53,12 @@ export abstract class SignalR {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.2.0
+   * @version 0.2.1
    */
   protected static async WithVersionCache<T extends IConcurrency>(
-    this: Nets, key: string | number, methodName: string
+    this: Nets, key: string | number, methodName: string, admin?: boolean
   ): Promise<T | void> {
-    const index = `${methodName}_${key}`;
+    const index = `${methodName}_${admin ? `Admin_${key}` : key}`;
     const find = await Shared.Get<T & { QueryExp: number }>(index);
 
     if (find && find.QueryExp > dayjs().unix())

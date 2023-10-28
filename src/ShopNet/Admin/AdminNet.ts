@@ -40,7 +40,7 @@ export abstract class AdminNet extends SignalR {
   protected static override WithVersionCache<T extends IConcurrency>(
     key: string | number, methodName: string
   ): Promise<T | void> {
-    return super.WithVersionCache(`Admin_${key}`, methodName);
+    return super.WithVersionCache(key, methodName, true);
   }
 
   /**

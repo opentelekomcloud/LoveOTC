@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import { IAdminOrderItem } from "~/Pages/Admin/Order";
 import { ProductEntity } from "~/ShopNet/Product/Entity";
 import { AdminNet } from "../AdminNet";
+import { AdminUserEntity } from "../User/Entity";
 import { AdminOrderEntity } from "./Entity";
 
 /**
@@ -49,6 +50,13 @@ export class AdminOrderGet extends AdminNet {
         prodNames.push(prod.Name);
       }
 
+      const user = await AdminUserEntity.User(order.UserId);
+
+      if (!user) {
+        console.error(`AdminOrderGetList Mismatch: User ${order.UserId} not found`);
+        continue;
+      }
+
       items.push({
         Id: meta.OrderId,
         Items: prodNames,
@@ -56,7 +64,7 @@ export class AdminOrderGet extends AdminNet {
         Status: order.Status,
         TrackNumber: order.TrackingNumber,
         OrderDate: order.CreateAt,
-        User: order.UserId
+        User: user.Name,
       });
     }
 
