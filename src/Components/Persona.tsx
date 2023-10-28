@@ -21,17 +21,25 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.3.0
+ * @version 0.4.0
  */
 export function OrderPersona({ OrderId, Admin }: { OrderId: number; Admin?: true }) {
   const style = useStyles();
-  const { data } = useRequest(Admin ? AdminHub.User.Get.OrderUser.bind(AdminHub.User.Get) : Hub.User.Get.Me.bind(Hub.User.Get), {
-    defaultParams: [OrderId]
+
+  const { data: admin } = useRequest(AdminHub.User.Get.OrderUser.bind(AdminHub.User.Get), {
+    defaultParams: [OrderId],
+    manual: Admin
+  })
+
+  const { data: me } = useRequest(Hub.User.Get.Me.bind(Hub.User.Get), {
+    manual: !Admin
   });
 
   const { data: order } = useRequest(Hub.Order.Get.Order.bind(Hub.Order.Get), {
     defaultParams: [OrderId]
   });
+
+  const data = Admin ? admin : me;
 
   return <>
     <div className={style.flex}>

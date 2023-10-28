@@ -2,8 +2,6 @@ import dayjs, { Dayjs } from "dayjs";
 import Dexie from "dexie";
 
 /**
- * 缓存实体
- *
  * @author Aloento
  * @since 0.3.1 MusiLand
  * @version 0.2.1
@@ -15,8 +13,6 @@ interface ITable<T> {
 }
 
 /**
- * 数据表操作工具
- *
  * @author Aloento
  * @since 0.3.1 MusiLand
  * @version 0.2.1
@@ -30,12 +26,9 @@ export class Table<TPre = any> {
   }
 
   /**
-   * 按完整 key 获取
-   *
    * @author Aloento
    * @since 0.1.0 MusiLand
    * @version 0.2.0
-   * @param expire 对象失效规则
    */
   public async Get<T extends TPre = TPre>(key: string, expire?: (x?: ITable<T>) => Promise<boolean>): Promise<T | null> {
     const find = await this.Sto.get(key) as ITable<T> | undefined;
@@ -54,14 +47,9 @@ export class Table<TPre = any> {
   }
 
   /**
-   * 获取或者创建
-   *
    * @author Aloento
    * @since 0.1.0 MusiLand
    * @version 0.2.0
-   * @param fac 内容生成工厂
-   * @param exp 过期时间
-   * @returns 工厂创建的结果
    */
   public async GetOrSet<T extends TPre = TPre>(
     key: string,
@@ -75,15 +63,9 @@ export class Table<TPre = any> {
   }
 
   /**
-   * 存储，已存在时会替换
-   * 默认有一月的过期时间，但也可以设置为 null
-   * 高并发时不能保证 key 唯一
-   *
    * @author Aloento
    * @since 0.1.0 MusiLand
    * @version 0.2.0
-   * @param exp 过期Token
-   * @returns val
    */
   public async Set<T extends TPre = TPre>(id: string, val: T, exp?: Dayjs | null): Promise<T> {
     if (!val)
@@ -98,7 +80,7 @@ export class Table<TPre = any> {
       return val;
     }
 
-    const time = (exp || dayjs().add(1, "M")).unix();
+    const time = (exp || dayjs().add(1, "week")).unix();
     if (exp && time < dayjs().unix())
       throw "The expiration time cannot be less than the current time";
 
@@ -111,8 +93,6 @@ export class Table<TPre = any> {
   }
 
   /**
-   * 清理过期的缓存
-   *
    * @author Aloento
    * @since 0.3.0 MusiLand
    * @version 0.2.0

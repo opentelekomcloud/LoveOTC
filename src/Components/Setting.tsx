@@ -49,7 +49,10 @@ export function Setting({ Open, Toggle, New }: ISetting) {
 
   useRequest(Hub.User.Get.Me.bind(Hub.User.Get), {
     manual: New,
-    onSuccess({ Name, Address, Phone }) {
+    onSuccess(data) {
+      if (!data) return;
+      const { Name, Phone, Address } = data;
+
       setName(Name);
       setPhone(Phone);
       setAddress(Address);
