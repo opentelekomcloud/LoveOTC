@@ -19,12 +19,12 @@ export class AdminUserGet extends AdminNet {
     const order = await AdminOrderEntity.Order(orderId);
 
     if (!order)
-      throw new Error("Order not found");
+      throw new Error(`Order ${orderId} not found`);
 
     const user = await AdminUserEntity.User(order.UserId);
 
     if (!user)
-      throw new Error("User not found");
+      throw new Error(`User ${order.UserId} not found in order ${orderId}`);
 
     return user;
   }
