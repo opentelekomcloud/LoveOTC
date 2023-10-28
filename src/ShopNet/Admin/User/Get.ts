@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { IPersona } from "~/Components/ShopCart/Persona";
 import { IUserItem } from "~/Pages/Admin/User";
 import { AdminNet } from "../AdminNet";
@@ -32,11 +33,28 @@ export class AdminUserGet extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.1.0
+   * @version 1.0.0
    */
   public static async List(): Promise<IUserItem[]> {
-    await this.EnsureConnected();
-    const res = await this.Hub.invoke<IUserItem[]>("UserGetList");
+    const list = await this.WithTimeCache<string[]>("", "UserGetList", dayjs().add(1, "m"));
+    const res: IUserItem[] = [];
+
+    for (const userId of list) {
+      const user = await AdminUserEntity.User(userId);
+
+      if (!user) {
+        console.warn(`User ${userId} not found`);
+        continue;
+      }
+
+      res.push({
+        Id: userId,
+        Name: user.Name,
+        EMail: user.EMail,
+        Admin: user.Admin,
+      });
+    }
+
     return res;
   }
 }

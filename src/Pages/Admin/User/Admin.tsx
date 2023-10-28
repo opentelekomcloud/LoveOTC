@@ -8,7 +8,7 @@ import { AdminHub } from "~/ShopNet/Admin";
  * @since 0.5.0
  * @version 0.1.0
  */
-export function AdminUserAdmin({ UserId, Admin, Refresh }: { UserId: string; Admin?: true; Refresh: () => void }) {
+export function AdminUserAdmin({ UserId, Admin, Refresh }: { UserId: string; Admin?: boolean; Refresh: () => void }) {
   const { dispatchError, dispatchToast } = use500Toast();
 
   const { run: grant } = useRequest(AdminHub.User.Post.Admin.bind(AdminHub.User.Post), {

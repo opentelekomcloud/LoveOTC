@@ -14,7 +14,7 @@ export interface IUserItem {
   Id: string;
   Name: string;
   EMail: string;
-  Admin?: true;
+  Admin?: boolean;
 }
 
 /**
