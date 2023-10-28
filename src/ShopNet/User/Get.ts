@@ -12,13 +12,13 @@ export class UserGet extends ShopNet {
    * @since 1.0.0
    * @version 0.1.0
    */
-  public static Me(key: string): Promise<({
+  public static Me(): Promise<({
     Name: string;
     EMail: string;
     Phone: string;
     Address: string;
   } & IConcurrency) | void> {
     this.EnsureLogin();
-    return this.WithVersionCache(key, "UserEntity");
+    return this.WithVersionCache(0, "UserGetMe");
   }
 }
