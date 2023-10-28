@@ -28,11 +28,11 @@ export function OrderPersona({ OrderId, Admin }: { OrderId: number; Admin?: true
 
   const { data: admin } = useRequest(AdminHub.User.Get.OrderUser.bind(AdminHub.User.Get), {
     defaultParams: [OrderId],
-    manual: Admin
+    manual: !Admin
   })
 
   const { data: me } = useRequest(Hub.User.Get.Me.bind(Hub.User.Get), {
-    manual: !Admin
+    manual: Admin
   });
 
   const { data: order } = useRequest(Hub.Order.Get.Order.bind(Hub.Order.Get), {
