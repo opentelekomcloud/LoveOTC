@@ -12,19 +12,26 @@ internal partial class ShopHub {
      * </remarks>
      */
     [Authorize]
-    public async Task<Persona> UserGetMe() {
+    public async Task<dynamic?> UserGetMe(byte _, uint? version) {
         var hasNew = this.Context.Items.TryGetValue("NewUser", out var isNew);
-        if (hasNew && isNew is true) return null!;
+        if (hasNew && isNew is true) return null;
 
-        var res = await this.Db.Users
+        if (version is not null) {
+            var noChange = await this.Db.Users
+                .AnyAsync(x => x.UserId == this.UserId && x.Version == version);
+
+            if (noChange) return true;
+        }
+
+        return await this.Db.Users
             .Where(x => x.UserId == this.UserId)
-            .Select(user => new Persona {
-                Name = user.Name,
-                EMail = user.EMail,
-                Phone = user.Phone,
-                Address = user.Address
-            }).FirstAsync();
-
-        return res;
+            .Select(x => new {
+                x.Name,
+                x.EMail,
+                x.Phone,
+                x.Address,
+                x.Version
+            })
+            .SingleOrDefaultAsync();
     }
 }

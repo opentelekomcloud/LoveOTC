@@ -20,6 +20,13 @@ internal partial class AdminHub {
 
         return await this.Db.Users
             .Where(x => x.UserId == key)
+            .Select(x => new {
+                x.Name,
+                x.EMail,
+                x.Phone,
+                x.Address,
+                x.Admin
+            })
             .SingleOrDefaultAsync();
     }
 }
