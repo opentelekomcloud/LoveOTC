@@ -49,4 +49,24 @@ internal static partial class LoggerExtension {
 
     public static void FailedAdminLogin(this ILogger logger, string? name, HubCallerContext ctx) =>
         failedAdminLogin(logger, name, ctx.UserIdentifier, ctx.GetHttpContext()?.Connection.RemoteIpAddress?.ToString());
+
+    [LoggerMessage(
+        EventId = 3002,
+        Level = LogLevel.Warning,
+        Message = "{from} Grant Admin for {to} : [{uid}] [{ip}]"
+    )]
+    private static partial void grantAdmin(ILogger logger, string? from, Guid? to, string? uid, string? ip);
+
+    public static void GrantAdmin(this ILogger logger, string? from, Guid? to, HubCallerContext ctx) =>
+        grantAdmin(logger, from, to, ctx.UserIdentifier, ctx.GetHttpContext()?.Connection.RemoteIpAddress?.ToString());
+
+    [LoggerMessage(
+        EventId = 3003,
+        Level = LogLevel.Warning,
+        Message = "{from} Revoke Admin for {to} : [{uid}] [{ip}]"
+    )]
+    private static partial void revokeAdmin(ILogger logger, string? from, Guid? to, string? uid, string? ip);
+
+    public static void RevokeAdmin(this ILogger logger, string? from, Guid? to, HubCallerContext ctx) =>
+        grantAdmin(logger, from, to, ctx.UserIdentifier, ctx.GetHttpContext()?.Connection.RemoteIpAddress?.ToString());
 }
