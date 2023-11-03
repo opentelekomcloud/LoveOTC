@@ -68,5 +68,15 @@ internal static partial class LoggerExtension {
     private static partial void revokeAdmin(ILogger logger, string? from, Guid? to, string? uid, string? ip);
 
     public static void RevokeAdmin(this ILogger logger, string? from, Guid? to, HubCallerContext ctx) =>
-        grantAdmin(logger, from, to, ctx.UserIdentifier, ctx.GetHttpContext()?.Connection.RemoteIpAddress?.ToString());
+        revokeAdmin(logger, from, to, ctx.UserIdentifier, ctx.GetHttpContext()?.Connection.RemoteIpAddress?.ToString());
+
+    [LoggerMessage(
+        EventId = 3004,
+        Level = LogLevel.Warning,
+        Message = "{from} Delete User {to} : [{uid}] [{ip}]"
+    )]
+    private static partial void deleteUser(ILogger logger, string? from, Guid? to, string? uid, string? ip);
+
+    public static void DeleteUser(this ILogger logger, string? from, Guid? to, HubCallerContext ctx) =>
+        deleteUser(logger, from, to, ctx.UserIdentifier, ctx.GetHttpContext()?.Connection.RemoteIpAddress?.ToString());
 }
