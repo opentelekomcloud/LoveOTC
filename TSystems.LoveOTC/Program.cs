@@ -1,7 +1,6 @@
 using MessagePack;
 using MessagePack.Resolvers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.EntityFrameworkCore;
 using TSystems.LoveOTC;
 using TSystems.LoveOTC.AdminHub;
@@ -73,9 +72,9 @@ app.UseAuthorization();
 
 app.UseWebSockets();
 
-app.MapHub<ShopHub>("/Hub", x => x.Transports = HttpTransportType.WebSockets);
+app.MapHub<ShopHub>("/Hub");
 
-app.MapHub<AdminHub>("/AdminHub", x => x.Transports = HttpTransportType.WebSockets);
+app.MapHub<AdminHub>("/AdminHub");
 
 app.MapFallbackToFile("index.html");
 
