@@ -1,8 +1,10 @@
 namespace TSystems.LoveOTC.AdminHub;
 
+using System;
 using Helpers;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 /**
@@ -33,5 +35,25 @@ internal partial class AdminHub(ShopContext db, ILogger<AdminHub> logger) : Craf
             this.Logger.FailedAdminLogin(this.Name, this.Context);
             this.Context.Abort();
         }
+    }
+
+    /**
+     * <remarks>
+     * @author Aloento
+     * @since 0.5.0
+     * @version 0.1.0
+     * </remarks>
+     */
+    protected static async Task<byte[]> EncodeWebp(Stream input) {
+        using var img = await Image.LoadAsync(input);
+
+        if (img.Width < 1600 || img.Height < 1600 || img.Width != img.Height)
+            throw new HubException(
+                $"Image should be larger than 1600px and 1:1 ratio, currently {img.Width} : {img.Height}");
+
+        await using var output = new MemoryStream();
+        await img.SaveAsWebpAsync(output);
+
+        return output.ToArray();
     }
 }

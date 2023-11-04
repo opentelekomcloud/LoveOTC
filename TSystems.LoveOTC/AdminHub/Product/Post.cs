@@ -86,18 +86,10 @@ internal partial class AdminHub {
             throw new HubException($"Product {prodId} not found");
 
         await using var buffer = await this.HandleByteStream(input, 10 * 1024 * 1024, "10 MB");
-
-        using var img = await Image.LoadAsync(buffer);
-
-        if (img.Width < 1600 || img.Height < 1600 || img.Width != img.Height)
-            throw new HubException(
-                $"Image should be larger than 1600px and 1:1 ratio, currently {img.Width} : {img.Height}");
-
-        using var output = new MemoryStream();
-        await img.SaveAsWebpAsync(output);
+        var img = await EncodeWebp(buffer);
 
         var obj = await this.Db.Objects.AddAsync(new() {
-            Data = output.ToArray()
+            Data = img
         });
 
         var next = (byte)(await this.Db.Photos.CountAsync(x => x.ProductId == prodId) + 1);

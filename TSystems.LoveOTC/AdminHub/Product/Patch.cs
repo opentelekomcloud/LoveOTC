@@ -32,7 +32,7 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.2.0
+     * @version 0.2.1
      * </remarks>
      */
     public async Task<bool> ProductPatchCategory(uint prodId, string name) {
@@ -42,11 +42,14 @@ internal partial class AdminHub {
         if (!valid.IsValid(name))
             throw new HubException(valid.FormatErrorMessage("Name"));
 
-        var cate = await this.Db.Categories.SingleAsync(x => x.Name == name);
+        var cate = await this.Db.Categories
+            .Where(x => x.Name == name)
+            .Select(x => x.CategoryId)
+            .SingleAsync();
 
         var row = await this.Db.Products
             .Where(x => x.ProductId == prodId)
-            .ExecuteUpdateAsync(x => x.SetProperty(p => p.Category, cate));
+            .ExecuteUpdateAsync(x => x.SetProperty(p => p.CategoryId, cate));
 
         return row > 0;
     }
@@ -55,11 +58,23 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.1.0
+     * @version 0.2.0
      * </remarks>
      */
-    public async Task<bool> ProductPatchPhoto(uint photoId, string file) {
-        throw new NotImplementedException();
+    public async Task<bool> ProductPatchPhoto(uint photoId, IAsyncEnumerable<byte[]> input) {
+        var objId = await this.Db.Photos
+            .Where(x => x.PhotoId == photoId)
+            .Select(x => x.ObjectId)
+            .SingleAsync();
+
+        await using var buffer = await this.HandleByteStream(input, 10 * 1024 * 1024, "10 MB");
+        var img = await EncodeWebp(buffer);
+
+        var row = await this.Db.Objects
+            .Where(x => x.Id == objId)
+            .ExecuteUpdateAsync(x => x.SetProperty(p => p.Data, img));
+
+        return row > 0;
     }
 
     /**
