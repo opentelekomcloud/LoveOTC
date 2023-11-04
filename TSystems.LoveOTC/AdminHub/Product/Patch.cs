@@ -81,11 +81,21 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.1.0
+     * @version 0.2.0
      * </remarks>
      */
     public async Task<bool> ProductPatchCaption(uint photoId, string caption) {
-        throw new NotImplementedException();
+        var prop = typeof(Photo).GetProperty(nameof(Photo.Caption))!;
+        var valid = prop.GetCustomAttribute<StringLengthAttribute>()!;
+
+        if (!valid.IsValid(caption))
+            throw new HubException(valid.FormatErrorMessage("Caption"));
+
+        var row = await this.Db.Photos
+            .Where(x => x.PhotoId == photoId)
+            .ExecuteUpdateAsync(x => x.SetProperty(p => p.Caption, caption));
+
+        return row > 0;
     }
 
     /**
