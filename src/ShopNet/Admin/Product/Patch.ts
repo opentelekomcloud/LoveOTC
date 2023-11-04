@@ -1,3 +1,4 @@
+import { Subject } from "rxjs";
 import { AdminNet } from "../AdminNet";
 
 /**
@@ -33,14 +34,21 @@ export class AdminProductPatch extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.1.0
+   * @version 1.0.0
    */
   public static async Photo(photoId: number, file: File): Promise<true> {
     if (!file.type.startsWith("image/"))
       throw new TypeError("File is not an image");
 
+    if (file.size > 10 * 1024 * 1024)
+      throw new RangeError("File is too large, max 10MB");
+
     await this.EnsureConnected();
+
+    const subject = new Subject<Uint8Array>();
     const res = await this.Hub.invoke<boolean>("ProductPatchPhoto", photoId, file);
+    await this.HandleFileStream(file, subject);
+
     this.EnsureTrue(res);
     return res;
   }
