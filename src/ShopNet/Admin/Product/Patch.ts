@@ -46,11 +46,11 @@ export class AdminProductPatch extends AdminNet {
     await this.EnsureConnected();
 
     const subject = new Subject<Uint8Array>();
-    const res = await this.Hub.invoke<boolean>("ProductPatchPhoto", photoId, file);
+    const res = this.Hub.invoke<boolean>("ProductPatchPhoto", photoId, subject);
     await this.HandleFileStream(file, subject);
 
-    this.EnsureTrue(res);
-    return res;
+    this.EnsureTrue(await res);
+    return true;
   }
 
   /**
