@@ -1,5 +1,6 @@
 ﻿namespace TSystems.LoveOTC;
 
+using System;
 using System.Security.Authentication;
 using System.Security.Claims;
 using Microsoft.AspNetCore.SignalR;
@@ -46,5 +47,30 @@ internal abstract class CraftHub<TSelf, TClient>(ShopContext db, ILogger<TSelf> 
     public override async Task OnDisconnectedAsync(Exception? _) {
         foreach (var action in this.OnDisconnect)
             await action();
+    }
+
+    /**
+     * <remarks>
+     * @author Aloento
+     * @since 0.5.0
+     * @version 0.1.0
+     * </remarks>
+     */
+    protected async Task<Stream> HandleByteStream(IAsyncEnumerable<byte[]> input, ulong max, string maxStr) {
+        var stream = new MemoryStream();
+        var count = 0UL;
+
+        await foreach (var chunk in input) {
+            count += (ulong)chunk.Length;
+            if (count > max) {
+                _ = stream.DisposeAsync().ConfigureAwait(false);
+                throw new HubException($"File size exceed {maxStr}");
+            }
+
+            await stream.WriteAsync(chunk);
+        }
+
+        stream.Seek(0, SeekOrigin.Begin);
+        return stream;
     }
 }
