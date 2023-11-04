@@ -1,4 +1,4 @@
-import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
+import { HttpTransportType, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { MessagePackHubProtocol } from "@microsoft/signalr-protocol-msgpack";
 import { Dayjs } from "dayjs";
 import { Common, IConcurrency } from "../Database";
@@ -18,6 +18,10 @@ export abstract class AdminNet extends SignalR {
   public static readonly Hub = new HubConnectionBuilder()
     .withUrl(import.meta.env.DEV ? "https://localhost/AdminHub" : "/AdminHub",
       {
+        ...import.meta.env.DEV ? {
+          skipNegotiation: true,
+          transport: HttpTransportType.WebSockets,
+        } : {},
         logMessageContent: import.meta.env.DEV,
         async accessTokenFactory() {
           const token = await Common.AccessToken();

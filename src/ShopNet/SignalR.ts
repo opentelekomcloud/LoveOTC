@@ -1,5 +1,6 @@
 import { HubConnectionState } from "@microsoft/signalr";
 import dayjs, { Dayjs } from "dayjs";
+import { Subject } from "rxjs";
 import { AdminNet } from "./Admin/AdminNet";
 import { Common, IConcurrency, Shared } from "./Database";
 import { ShopNet } from "./ShopNet";
@@ -48,6 +49,16 @@ export abstract class SignalR {
   public static EnsureLogin() {
     if (!Common.LocalUser || Common.LocalUser.expired)
       throw new Error("Please Login First");
+  }
+
+  /**
+   * @author Aloento
+   * @since 1.0.0
+   * @version 0.1.0
+   */
+  public static EnsureTrue(res: boolean | null | undefined): asserts res is true {
+    if (!res)
+      throw new Error("Server Returned False");
   }
 
   /**
@@ -133,5 +144,35 @@ export abstract class SignalR {
       console.warn(`Product ${prodId} has no cover photo, using first photo instead`);
       return list.sort((a, b) => a.Order - b.Order)[0].ObjectId;
     }
+  }
+
+  /**
+   * @author Aloento
+   * @since 1.0.0
+   * @version 0.1.0
+   */
+  protected static async HandleFileStream(file: File, subject: Subject<Uint8Array>) {
+    const chunkSize = 30 * 1024;
+    const chunks = Math.ceil(file.size / chunkSize);
+    let index = 0;
+
+    while (index < chunks) {
+      const start = index * chunkSize;
+      const end = Math.min(start + chunkSize, file.size);
+      const chunk = file.slice(start, end);
+
+      const reader = new FileReader();
+      const buffer = await new Promise<Uint8Array>((resolve, reject) => {
+        reader.onload = () => resolve(new Uint8Array(reader.result as ArrayBuffer));
+        reader.onerror = () => reject(reader.error);
+        reader.readAsArrayBuffer(chunk);
+      });
+
+      subject.next(buffer);
+      console.debug(`Sent chunk ${index + 1}/${chunks}`);
+      index++;
+    }
+
+    subject.complete();
   }
 }
