@@ -32,7 +32,7 @@ export class AdminProductPost extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 1.0.0
+   * @version 1.0.1
    */
   public static async Photo(prodId: number, file: File): Promise<true> {
     if (!file.type.startsWith("image/"))
@@ -43,35 +43,10 @@ export class AdminProductPost extends AdminNet {
 
     await this.EnsureConnected();
 
-    const chunkSize = 30 * 1024;
-    const chunks = Math.ceil(file.size / chunkSize);
-    let index = 0;
-
     const subject = new Subject<Uint8Array>();
     const res = this.Hub.invoke<true>("ProductPostPhoto", prodId, subject);
+    await this.HandleFileStream(file, subject);
 
-    while (index < chunks) {
-      const start = index * chunkSize;
-      const end = Math.min(start + chunkSize, file.size);
-      const chunk = file.slice(start, end);
-
-      const reader = new FileReader();
-      const buffer = await new Promise<Uint8Array>((resolve, reject) => {
-        reader.onload = () => {
-          resolve(new Uint8Array(reader.result as ArrayBuffer));
-        };
-        reader.onerror = () => {
-          reject(reader.error);
-        };
-        reader.readAsArrayBuffer(chunk);
-      });
-
-      subject.next(buffer);
-      console.debug(`Sent chunk ${index + 1}/${chunks}`);
-      index++;
-    }
-
-    subject.complete();
     return res;
   }
 
