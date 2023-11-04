@@ -53,6 +53,16 @@ export abstract class SignalR {
   /**
    * @author Aloento
    * @since 1.0.0
+   * @version 0.1.0
+   */
+  public static EnsureTrue(res: boolean | null | undefined): asserts res is true {
+    if (!res)
+      throw new Error("Server Returned False");
+  }
+
+  /**
+   * @author Aloento
+   * @since 1.0.0
    * @version 0.2.1
    */
   protected static async WithVersionCache<T extends IConcurrency>(
