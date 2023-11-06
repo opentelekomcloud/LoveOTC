@@ -102,11 +102,21 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.1.0
+     * @version 0.2.0
      * </remarks>
      */
     public async Task<bool> ProductPatchVariantName(uint variantId, string name) {
-        throw new NotImplementedException();
+        var prop = typeof(Variant).GetProperty(nameof(Variant.Name))!;
+        var valid = prop.GetCustomAttribute<StringLengthAttribute>()!;
+
+        if (!valid.IsValid(name))
+            throw new HubException(valid.FormatErrorMessage("Name"));
+
+        var row = await this.Db.Variants
+            .Where(x => x.VariantId == variantId)
+            .ExecuteUpdateAsync(x => x.SetProperty(p => p.Name, name));
+
+        return row > 0;
     }
 
     /**
