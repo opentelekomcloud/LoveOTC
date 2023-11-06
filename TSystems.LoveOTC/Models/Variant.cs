@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
  * </remarks>
  */
 [Index(nameof(ProductId), nameof(Name), IsUnique = true)]
-public class Variant : Concurrency {
+public class Variant : Concurrency, IRemoveHolder {
     public uint VariantId { get; set; }
 
     [StringLength(15, MinimumLength = 1)]
@@ -25,4 +25,6 @@ public class Variant : Concurrency {
     public uint ProductId { get; set; }
 
     public virtual Product Product { get; set; }
+
+    public bool? IsRemoved { get; set; }
 }

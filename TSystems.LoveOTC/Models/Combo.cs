@@ -11,7 +11,7 @@ using Entities;
  * @version 0.1.0
  * </remarks>
  */
-public class Combo : Concurrency {
+public class Combo : Concurrency, IRemoveHolder {
     public uint ComboId { get; set; }
 
     public ushort Stock { get; set; }
@@ -19,6 +19,8 @@ public class Combo : Concurrency {
     public uint ProductId { get; set; }
 
     public virtual Product Product { get; set; }
+
+    public bool? IsRemoved { get; set; }
 
     public virtual ICollection<Type> Types { get; init; }
 
