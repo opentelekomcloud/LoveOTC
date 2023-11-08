@@ -102,22 +102,42 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.1.0
+     * @version 0.2.0
      * </remarks>
      */
     public async Task<bool> ProductPatchVariantName(uint variantId, string name) {
-        throw new NotImplementedException();
+        var prop = typeof(Variant).GetProperty(nameof(Variant.Name))!;
+        var valid = prop.GetCustomAttribute<StringLengthAttribute>()!;
+
+        if (!valid.IsValid(name))
+            throw new HubException(valid.FormatErrorMessage("Name"));
+
+        var row = await this.Db.Variants
+            .Where(x => x.VariantId == variantId)
+            .ExecuteUpdateAsync(x => x.SetProperty(p => p.Name, name));
+
+        return row > 0;
     }
 
     /**
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.1.0
+     * @version 0.2.0
      * </remarks>
      */
     public async Task<bool> ProductPatchType(uint variantId, string oldName, string newName) {
-        throw new NotImplementedException();
+        var prop = typeof(Type).GetProperty(nameof(Type.Name))!;
+        var valid = prop.GetCustomAttribute<StringLengthAttribute>()!;
+
+        if (!valid.IsValid(newName))
+            throw new HubException(valid.FormatErrorMessage("Name"));
+
+        var row = await this.Db.Types
+            .Where(x => x.VariantId == variantId && x.Name == oldName)
+            .ExecuteUpdateAsync(x => x.SetProperty(p => p.Name, newName));
+
+        return row > 0;
     }
 
     /**
