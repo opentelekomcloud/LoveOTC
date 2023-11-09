@@ -20,7 +20,7 @@ public class Variant : Concurrency, IRemoveHolder {
     [StringLength(15, MinimumLength = 1)]
     public string Name { get; set; }
 
-    public virtual ICollection<Type> Types { get; }
+    public virtual ICollection<Type> Types { get; init; }
 
     public uint ProductId { get; set; }
 

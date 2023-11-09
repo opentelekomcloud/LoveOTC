@@ -1,5 +1,6 @@
 namespace TSystems.LoveOTC.AdminHub;
 
+using System.Collections.Immutable;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using Microsoft.AspNetCore.SignalR;
@@ -102,7 +103,7 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.2.0
+     * @version 1.0.0
      * </remarks>
      */
     public async Task<bool> ProductPatchVariantName(uint variantId, string name) {
@@ -111,6 +112,51 @@ internal partial class AdminHub {
 
         if (!valid.IsValid(name))
             throw new HubException(valid.FormatErrorMessage("Name"));
+
+        var any = await this.Db.Variants
+            .Where(x => x.VariantId == variantId)
+            .SelectMany(x => x.Types)
+            .SelectMany(x => x.Combos)
+            .SelectMany(x => x.Orders)
+            .AnyAsync();
+
+        if (any) {
+            var oldVari = await this.Db.Variants
+                .Include(x => x.Types)
+                .ThenInclude(x => x.Combos)
+                .SingleAsync(x => x.VariantId == variantId);
+
+            oldVari.IsRemoved = true;
+
+            var newVari = (await this.Db.Variants.AddAsync(new() {
+                Name = oldVari.Name,
+                ProductId = oldVari.ProductId,
+                Types = new List<Type>()
+            })).Entity;
+
+            foreach (var oldType in oldVari.Types) {
+                oldType.IsRemoved = true;
+
+                var newType = new Type {
+                    Name = oldType.Name,
+                    VariantId = oldType.VariantId,
+                    Combos = new List<Combo>()
+                };
+                newVari.Types.Add(newType);
+
+                foreach (var oldCombo in oldType.Combos) {
+                    oldCombo.IsRemoved = true;
+
+                    newType.Combos.Add(new() {
+                        ProductId = oldCombo.ProductId,
+                        Stock = oldCombo.Stock,
+                    });
+                }
+            }
+
+            await this.Db.SaveChangesAsync();
+            return true;
+        }
 
         var row = await this.Db.Variants
             .Where(x => x.VariantId == variantId)
@@ -121,6 +167,7 @@ internal partial class AdminHub {
 
     /**
      * <remarks>
+     * TODO
      * @author Aloento
      * @since 0.1.0
      * @version 0.2.0
@@ -144,10 +191,36 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.1.0
+     * @version 0.2.0
      * </remarks>
      */
     public async Task<bool> ProductPatchCombo(uint comboId, Dictionary<string, string> combo, byte stock) {
+        var variTypes = (await this.Db.Variants
+            .Where(x => x.ProductId == this.Db.Combos
+                .Where(c => c.ComboId == comboId)
+                .Select(c => c.ProductId)
+                .Single())
+            .Include(x => x.Types)
+            .Select(x => new {
+                x.Name,
+                Types = x.Types.Select(t => t.Name).ToImmutableArray()
+            })
+            .ToDictionaryAsync(k => k.Name, v => v.Types))
+            .ToImmutableSortedDictionary();
+
+        var reqCombo = combo.ToImmutableSortedDictionary();
+
+        if (reqCombo.Count != variTypes.Count)
+            throw new HubException($"Mismatched: {variTypes.Count} Variants, got {reqCombo.Count} in Combos");
+
+        foreach (var (vari, type) in reqCombo) {
+            if (!variTypes.TryGetValue(vari, out var types))
+                throw new HubException($"Variant {vari} not found");
+
+            if (!types.Any(x => x == type))
+                throw new HubException($"Type {type} not found in variant {vari}");
+        }
+
         throw new NotImplementedException();
     }
 }
