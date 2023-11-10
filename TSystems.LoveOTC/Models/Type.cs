@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
  * </remarks>
  */
 [Index(nameof(VariantId), nameof(Name), IsUnique = true)]
-public class Type : Concurrency, IRemoveHolder {
+public class Type : Concurrency, IArchive {
     public uint TypeId { get; set; }
 
     [StringLength(15, MinimumLength = 1)]
@@ -24,7 +24,7 @@ public class Type : Concurrency, IRemoveHolder {
 
     public virtual Variant Variant { get; set; }
 
-    public bool? IsRemoved { get; set; }
+    public bool? IsArchived { get; set; }
 
     public virtual ICollection<Combo> Combos { get; init; }
 

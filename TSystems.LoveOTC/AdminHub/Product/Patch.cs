@@ -11,6 +11,17 @@ internal partial class AdminHub {
     /**
      * <remarks>
      * @author Aloento
+     * @since 0.5.0
+     * @version 0.1.0
+     * </remarks>
+     */
+    private void archiveCombo() {
+
+    }
+
+    /**
+     * <remarks>
+     * @author Aloento
      * @since 0.1.0
      * @version 0.2.0
      * </remarks>
@@ -126,7 +137,7 @@ internal partial class AdminHub {
                 .ThenInclude(x => x.Combos)
                 .SingleAsync(x => x.VariantId == variantId);
 
-            oldVari.IsRemoved = true;
+            oldVari.IsArchived = true;
 
             var newVari = (await this.Db.Variants.AddAsync(new() {
                 Name = oldVari.Name,
@@ -135,7 +146,7 @@ internal partial class AdminHub {
             })).Entity;
 
             foreach (var oldType in oldVari.Types) {
-                oldType.IsRemoved = true;
+                oldType.IsArchived = true;
 
                 var newType = new Type {
                     Name = oldType.Name,
@@ -145,7 +156,7 @@ internal partial class AdminHub {
                 newVari.Types.Add(newType);
 
                 foreach (var oldCombo in oldType.Combos) {
-                    oldCombo.IsRemoved = true;
+                    oldCombo.IsArchived = true;
 
                     newType.Combos.Add(new() {
                         ProductId = oldCombo.ProductId,
