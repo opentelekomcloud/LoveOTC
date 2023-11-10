@@ -15,10 +15,10 @@
     "update": "npx npm-check-updates -u"
   },
   "dependencies": {
-    "@fluentui/react-components": "^9.37.4",
-    "@fluentui/react-hooks": "^8.6.32",
+    "@fluentui/react-components": "^9.39.0",
+    "@fluentui/react-hooks": "^8.6.33",
     "@fluentui/react-icons": "^2.0.222",
-    "@griffel/react": "^1.5.17",
+    "@griffel/react": "^1.5.18",
     "@lexical/clipboard": "^0.12.2",
     "@lexical/code": "^0.12.2",
     "@lexical/file": "^0.12.2",
