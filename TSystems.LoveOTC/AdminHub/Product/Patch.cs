@@ -15,8 +15,43 @@ internal partial class AdminHub {
      * @version 0.1.0
      * </remarks>
      */
-    private void archiveCombo() {
+    private static List<Combo> archiveCombos(ICollection<Combo> oldCombos) {
+        var newTypes = new List<Combo>(oldCombos.Count);
 
+        foreach (var oldCombo in oldCombos) {
+            oldCombo.IsArchived = true;
+
+            newTypes.Add(new() {
+                ProductId = oldCombo.ProductId,
+                Stock = oldCombo.Stock,
+            });
+        }
+
+        return newTypes;
+    }
+
+    /**
+     * <remarks>
+     * @author Aloento
+     * @since 0.5.0
+     * @version 0.1.0
+     * </remarks>
+     */
+    private static List<Type> archiveTypes(ICollection<Type> oldTypes) {
+        var newTypes = new List<Type>(oldTypes.Count);
+
+        foreach (var oldType in oldTypes) {
+            oldType.IsArchived = true;
+
+            var newType = new Type {
+                Name = oldType.Name,
+                VariantId = oldType.VariantId,
+                Combos = archiveCombos(oldType.Combos)
+            };
+            newTypes.Add(newType);
+        }
+
+        return newTypes;
     }
 
     /**
@@ -139,31 +174,11 @@ internal partial class AdminHub {
 
             oldVari.IsArchived = true;
 
-            var newVari = (await this.Db.Variants.AddAsync(new() {
+            await this.Db.Variants.AddAsync(new() {
                 Name = oldVari.Name,
                 ProductId = oldVari.ProductId,
-                Types = new List<Type>()
-            })).Entity;
-
-            foreach (var oldType in oldVari.Types) {
-                oldType.IsArchived = true;
-
-                var newType = new Type {
-                    Name = oldType.Name,
-                    VariantId = oldType.VariantId,
-                    Combos = new List<Combo>()
-                };
-                newVari.Types.Add(newType);
-
-                foreach (var oldCombo in oldType.Combos) {
-                    oldCombo.IsArchived = true;
-
-                    newType.Combos.Add(new() {
-                        ProductId = oldCombo.ProductId,
-                        Stock = oldCombo.Stock,
-                    });
-                }
-            }
+                Types = archiveTypes(oldVari.Types)
+            });
 
             await this.Db.SaveChangesAsync();
             return true;
