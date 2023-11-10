@@ -14,17 +14,17 @@ using Microsoft.EntityFrameworkCore;
  * </remarks>
  */
 [Index(nameof(ProductId), nameof(Name), IsUnique = true)]
-public class Variant : Concurrency, IRemoveHolder {
+public class Variant : Concurrency, IArchive {
     public uint VariantId { get; set; }
 
     [StringLength(15, MinimumLength = 1)]
     public string Name { get; set; }
 
-    public virtual ICollection<Type> Types { get; }
+    public virtual ICollection<Type> Types { get; init; }
 
     public uint ProductId { get; set; }
 
     public virtual Product Product { get; set; }
 
-    public bool? IsRemoved { get; set; }
+    public bool? IsArchived { get; set; }
 }

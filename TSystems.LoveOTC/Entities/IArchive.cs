@@ -7,6 +7,6 @@
  * @version 0.1.0
  * </remarks>
  */
-internal interface IRemoveHolder {
-    public bool? IsRemoved { get; set; }
+internal interface IArchive {
+    public bool? IsArchived { get; set; }
 }

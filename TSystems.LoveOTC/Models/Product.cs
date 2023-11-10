@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
  * </remarks>
  */
 [Index(nameof(Name), IsUnique = true)]
-public class Product : Concurrency, IRemoveHolder {
+public class Product : Concurrency, IArchive {
     public uint ProductId { get; set; }
 
     [StringLength(50, MinimumLength = 1)]
@@ -29,7 +29,7 @@ public class Product : Concurrency, IRemoveHolder {
 
     public JsonElement? Description { get; set; }
 
-    public bool? IsRemoved { get; set; }
+    public bool? IsArchived { get; set; }
 
     public virtual ICollection<Variant> Variants { get; }
 
