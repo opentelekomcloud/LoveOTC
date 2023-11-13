@@ -175,7 +175,7 @@ internal partial class AdminHub {
             oldVari.IsArchived = true;
 
             await this.Db.Variants.AddAsync(new() {
-                Name = oldVari.Name,
+                Name = name,
                 ProductId = oldVari.ProductId,
                 Types = archiveTypes(oldVari.Types)
             });
@@ -219,7 +219,7 @@ internal partial class AdminHub {
             oldType.IsArchived = true;
 
             await this.Db.Types.AddAsync(new() {
-                Name = oldType.Name,
+                Name = newName,
                 VariantId = oldType.VariantId,
                 Combos = archiveCombos(oldType.Combos)
             });
