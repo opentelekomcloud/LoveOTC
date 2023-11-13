@@ -193,10 +193,9 @@ internal partial class AdminHub {
 
     /**
      * <remarks>
-     * TODO
      * @author Aloento
      * @since 0.1.0
-     * @version 0.2.0
+     * @version 1.0.0
      * </remarks>
      */
     public async Task<bool> ProductPatchType(uint variantId, string oldName, string newName) {
@@ -205,6 +204,29 @@ internal partial class AdminHub {
 
         if (!valid.IsValid(newName))
             throw new HubException(valid.FormatErrorMessage("Name"));
+
+        var any = await this.Db.Types
+            .Where(x => x.VariantId == variantId && x.Name == oldName)
+            .SelectMany(x => x.Combos)
+            .SelectMany(x => x.Orders)
+            .AnyAsync();
+
+        if (any) {
+            var oldType = await this.Db.Types
+                .Include(x => x.Combos)
+                .SingleAsync(x => x.VariantId == variantId && x.Name == oldName);
+
+            oldType.IsArchived = true;
+
+            await this.Db.Types.AddAsync(new() {
+                Name = oldType.Name,
+                VariantId = oldType.VariantId,
+                Combos = archiveCombos(oldType.Combos)
+            });
+
+            await this.Db.SaveChangesAsync();
+            return true;
+        }
 
         var row = await this.Db.Types
             .Where(x => x.VariantId == variantId && x.Name == oldName)

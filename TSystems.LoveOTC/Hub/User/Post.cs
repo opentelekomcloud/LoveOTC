@@ -12,7 +12,7 @@ internal partial class ShopHub {
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 0.1.0
+     * @version 0.1.1
      * </remarks>
      */
     [Authorize]
@@ -36,13 +36,14 @@ internal partial class ShopHub {
                 return false;
             }
 
-            await this.Db.Users.SingleInsertAsync(new() {
+            await this.Db.Users.AddAsync(new() {
                 UserId = this.UserId,
                 Name = req.Name!,
                 EMail = req.EMail!,
                 Phone = req.Phone!,
                 Address = req.Address!
             });
+            await this.Db.SaveChangesAsync();
 
             this.Context.Items.Remove("NewUser");
             this.Logger.NewUser(req.Name, this.Context);
