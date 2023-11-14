@@ -22,7 +22,7 @@ public class Combo : Concurrency, IArchive {
 
     public bool? IsArchived { get; set; }
 
-    public virtual ICollection<Type> Types { get; init; }
+    public virtual ICollection<Type> Types { get; set; }
 
     public virtual ICollection<ComboType> ComboTypes { get; init; }
 
