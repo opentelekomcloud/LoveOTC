@@ -44,8 +44,7 @@ export abstract class ProductGet extends ShopNet {
    * @version 0.1.0
    */
   public static async Limit(prodId: number): Promise<number> {
-    await this.EnsureConnected();
-    const res = await this.Hub.invoke<number>("ProdGetLimit", prodId);
+    const res = await this.Invoke<number>("ProdGetLimit", prodId);
     return res;
   }
 

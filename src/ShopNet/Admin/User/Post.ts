@@ -12,8 +12,7 @@ export class AdminUserPost extends AdminNet {
    * @version 0.1.0
    */
   public static async Admin(userId: string): Promise<true> {
-    await this.EnsureConnected();
-    const res = await this.Hub.invoke<true>("UserPostAdmin", userId);
+    const res = await this.Invoke<true>("UserPostAdmin", userId);
     return res;
   }
 }

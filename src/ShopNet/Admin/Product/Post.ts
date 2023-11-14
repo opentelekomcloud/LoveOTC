@@ -13,8 +13,7 @@ export class AdminProductPost extends AdminNet {
    * @version 0.1.0
    */
   public static async Create(name: string): Promise<number> {
-    await this.EnsureConnected();
-    const res = await this.Hub.invoke<number>("ProductPostCreate", name);
+    const res = await this.Invoke<number>("ProductPostCreate", name);
     return res;
   }
 
@@ -24,8 +23,7 @@ export class AdminProductPost extends AdminNet {
    * @version 0.1.0
    */
   public static async MovePhoto(photoId: number, up: boolean): Promise<true> {
-    await this.EnsureConnected();
-    const res = await this.Hub.invoke<true>("ProductPostMovePhoto", photoId, up);
+    const res = await this.Invoke<true>("ProductPostMovePhoto", photoId, up);
     return res;
   }
 
@@ -41,10 +39,8 @@ export class AdminProductPost extends AdminNet {
     if (file.size > 10 * 1024 * 1024)
       throw new RangeError("File is too large, max 10MB");
 
-    await this.EnsureConnected();
-
     const subject = new Subject<Uint8Array>();
-    const res = this.Hub.invoke<true>("ProductPostPhoto", prodId, subject);
+    const res = this.Invoke<true>("ProductPostPhoto", prodId, subject);
     await this.HandleFileStream(file, subject);
 
     return res;
@@ -56,8 +52,7 @@ export class AdminProductPost extends AdminNet {
    * @version 0.1.0
    */
   public static async Variant(prodId: number, name: string): Promise<number> {
-    await this.EnsureConnected();
-    const res = await this.Hub.invoke<number>("ProductPostVariant", prodId, name);
+    const res = await this.Invoke<number>("ProductPostVariant", prodId, name);
     return res;
   }
 
@@ -67,8 +62,7 @@ export class AdminProductPost extends AdminNet {
    * @version 0.1.0
    */
   public static async Type(variantId: number, name: string): Promise<number> {
-    await this.EnsureConnected();
-    const res = await this.Hub.invoke<number>("ProductPostType", variantId, name);
+    const res = await this.Invoke<number>("ProductPostType", variantId, name);
     return res;
   }
 
@@ -78,8 +72,7 @@ export class AdminProductPost extends AdminNet {
    * @version 0.1.0
    */
   public static async Combo(prodId: number, combo: Record<string, string>, stock: number): Promise<number> {
-    await this.EnsureConnected();
-    const res = await this.Hub.invoke<number>("ProductPostCombo", prodId, combo, stock);
+    const res = await this.Invoke<number>("ProductPostCombo", prodId, combo, stock);
     return res;
   }
 }

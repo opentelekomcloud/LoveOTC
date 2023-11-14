@@ -12,8 +12,7 @@ export class AdminUserDelete extends AdminNet {
    * @version 0.1.0
    */
   public static async User(userId: string): Promise<true> {
-    await this.EnsureConnected();
-    const res = await this.Hub.invoke<true>("UserDeleteUser", userId);
+    const res = await this.Invoke<true>("UserDeleteUser", userId);
     return res;
   }
 
@@ -23,8 +22,7 @@ export class AdminUserDelete extends AdminNet {
    * @version 0.1.0
    */
   public static async Admin(userId: string): Promise<true> {
-    await this.EnsureConnected();
-    const res = await this.Hub.invoke<true>("UserDeleteAdmin", userId);
+    const res = await this.Invoke<true>("UserDeleteAdmin", userId);
     return res;
   }
 }

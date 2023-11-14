@@ -14,9 +14,7 @@ export class UserPost extends ShopNet {
    */
   public static async Update(req: Partial<IPersona>): Promise<true> {
     this.EnsureLogin();
-    await this.EnsureConnected();
-
-    const res = await this.Hub.invoke<true>("UserPostUpdate", req);
+    const res = await this.Invoke<true>("UserPostUpdate", req);
     return res;
   }
 }
