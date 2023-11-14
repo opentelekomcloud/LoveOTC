@@ -48,7 +48,7 @@ export abstract class SignalR {
    */
   protected static async Invoke<T>(this: Nets, methodName: string, ...args: any[]): Promise<T> {
     await this.EnsureConnected();
-    return this.Invoke<T>(methodName, ...args);
+    return this.Hub.invoke<T>(methodName, ...args);
   }
 
   /**
