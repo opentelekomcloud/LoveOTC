@@ -23,7 +23,7 @@ internal partial class AdminHub {
 
             newTypes.Add(new() {
                 ProductId = oldCombo.ProductId,
-                Stock = oldCombo.Stock,
+                Stock = oldCombo.Stock
             });
         }
 
@@ -175,7 +175,7 @@ internal partial class AdminHub {
             oldVari.IsArchived = true;
 
             await this.Db.Variants.AddAsync(new() {
-                Name = oldVari.Name,
+                Name = name,
                 ProductId = oldVari.ProductId,
                 Types = archiveTypes(oldVari.Types)
             });
@@ -193,10 +193,9 @@ internal partial class AdminHub {
 
     /**
      * <remarks>
-     * TODO
      * @author Aloento
      * @since 0.1.0
-     * @version 0.2.0
+     * @version 1.0.0
      * </remarks>
      */
     public async Task<bool> ProductPatchType(uint variantId, string oldName, string newName) {
@@ -205,6 +204,29 @@ internal partial class AdminHub {
 
         if (!valid.IsValid(newName))
             throw new HubException(valid.FormatErrorMessage("Name"));
+
+        var any = await this.Db.Types
+            .Where(x => x.VariantId == variantId && x.Name == oldName)
+            .SelectMany(x => x.Combos)
+            .SelectMany(x => x.Orders)
+            .AnyAsync();
+
+        if (any) {
+            var oldType = await this.Db.Types
+                .Include(x => x.Combos)
+                .SingleAsync(x => x.VariantId == variantId && x.Name == oldName);
+
+            oldType.IsArchived = true;
+
+            await this.Db.Types.AddAsync(new() {
+                Name = newName,
+                VariantId = oldType.VariantId,
+                Combos = archiveCombos(oldType.Combos)
+            });
+
+            await this.Db.SaveChangesAsync();
+            return true;
+        }
 
         var row = await this.Db.Types
             .Where(x => x.VariantId == variantId && x.Name == oldName)
@@ -217,36 +239,69 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.2.0
+     * @version 1.0.0
      * </remarks>
      */
-    public async Task<bool> ProductPatchCombo(uint comboId, Dictionary<string, string> combo, byte stock) {
-        var variTypes = (await this.Db.Variants
-            .Where(x => x.ProductId == this.Db.Combos
-                .Where(c => c.ComboId == comboId)
-                .Select(c => c.ProductId)
-                .Single())
+    public async Task<bool> ProductPatchCombo(uint comboId, Dictionary<string, string> combo, ushort stock) {
+        var dbCombo = await this.Db.Combos
+            .Where(x => x.ComboId == comboId)
             .Include(x => x.Types)
-            .Select(x => new {
-                x.Name,
-                Types = x.Types.Select(t => t.Name).ToImmutableArray()
-            })
-            .ToDictionaryAsync(k => k.Name, v => v.Types))
-            .ToImmutableSortedDictionary();
+            .ThenInclude(x => x.Variant)
+            .SingleAsync();
 
         var reqCombo = combo.ToImmutableSortedDictionary();
 
-        if (reqCombo.Count != variTypes.Count)
-            throw new HubException($"Mismatched: {variTypes.Count} Variants, got {reqCombo.Count} in Combos");
+        {
+            var comboVariType = dbCombo.Types
+                .ToImmutableSortedDictionary(k => k.Variant.Name, v => v.Name);
 
-        foreach (var (vari, type) in reqCombo) {
-            if (!variTypes.TryGetValue(vari, out var types))
-                throw new HubException($"Variant {vari} not found");
+            if (comboVariType.Count != reqCombo.Count)
+                throw new HubException($"Mismatched: {comboVariType.Count} Variants, got {reqCombo.Count} in Combos");
 
-            if (!types.Any(x => x == type))
-                throw new HubException($"Type {type} not found in variant {vari}");
+            if (comboVariType.SequenceEqual(reqCombo)) {
+                dbCombo.Stock = stock;
+                await this.Db.SaveChangesAsync();
+                return true;
+            }
         }
 
-        throw new NotImplementedException();
+        var allVariTypes = (await this.Db.Variants
+                .Where(x => x.ProductId == this.Db.Combos
+                    .Where(c => c.ComboId == comboId)
+                    .Select(c => c.ProductId)
+                    .Single())
+                .Include(x => x.Types)
+                .Select(x => new {
+                    x.Name,
+                    x.Types
+                })
+                .ToDictionaryAsync(k => k.Name, v => v.Types))
+            .ToImmutableSortedDictionary();
+
+        var reqTypes = new List<Type>(reqCombo.Count);
+
+        foreach (var (vari, type) in reqCombo)
+            reqTypes.Add(
+                allVariTypes[vari]
+                    .Single(x => x.Name == type)
+            );
+
+        var inUse = await this.Db.OrderCombos
+            .Where(x => x.ComboId == comboId)
+            .AnyAsync();
+
+        if (inUse) {
+            dbCombo.IsArchived = true;
+
+            await this.Db.Combos.AddAsync(new() {
+                ProductId = dbCombo.ProductId,
+                Stock = stock,
+                Types = reqTypes
+            });
+        } else
+            dbCombo.Types = reqTypes;
+
+        await this.Db.SaveChangesAsync();
+        return true;
     }
 }
