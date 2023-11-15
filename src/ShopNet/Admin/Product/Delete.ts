@@ -12,8 +12,7 @@ export class AdminProductDelete extends AdminNet {
    * @version 0.1.0
    */
   public static async Photo(photoId: number): Promise<true> {
-    await this.EnsureConnected();
-    const res = await this.Hub.invoke<true>("ProductDeletePhoto", photoId);
+    const res = await this.Invoke<true>("ProductDeletePhoto", photoId);
     return res;
   }
 
@@ -23,8 +22,7 @@ export class AdminProductDelete extends AdminNet {
    * @version 0.1.0
    */
   public static async Variant(variantId: number): Promise<true> {
-    await this.EnsureConnected();
-    const res = await this.Hub.invoke<true>("ProductDeleteVariant", variantId);
+    const res = await this.Invoke<true>("ProductDeleteVariant", variantId);
     return res;
   }
 
@@ -34,8 +32,7 @@ export class AdminProductDelete extends AdminNet {
    * @version 0.1.0
    */
   public static async Type(variantId: number, type: string): Promise<true> {
-    await this.EnsureConnected();
-    const res = await this.Hub.invoke<true>("ProductDeleteType", variantId, type);
+    const res = await this.Invoke<true>("ProductDeleteType", variantId, type);
     return res;
   }
 
@@ -45,8 +42,7 @@ export class AdminProductDelete extends AdminNet {
    * @version 0.1.0
    */
   public static async Combo(comboId: number): Promise<true> {
-    await this.EnsureConnected();
-    const res = await this.Hub.invoke<true>("ProductDeleteCombo", comboId);
+    const res = await this.Invoke<true>("ProductDeleteCombo", comboId);
     return res;
   }
 
@@ -56,8 +52,7 @@ export class AdminProductDelete extends AdminNet {
    * @version 0.1.0
    */
   public static async Product(prodId: number): Promise<true> {
-    await this.EnsureConnected();
-    const res = await this.Hub.invoke<true>("ProductDeleteProduct", prodId);
+    const res = await this.Invoke<true>("ProductDeleteProduct", prodId);
     return res;
   }
 }

@@ -23,8 +23,7 @@ export class OrderPost extends ShopNet {
       };
     });
 
-    await this.EnsureConnected();
-    const res = await this.Hub.invoke<number>("OrderPostNew", req, cmt);
+    const res = await this.Invoke<number>("OrderPostNew", req, cmt);
     return res;
   }
 
@@ -35,9 +34,7 @@ export class OrderPost extends ShopNet {
    */
   public static async Append(orderId: number, cmt: string): Promise<true> {
     this.EnsureLogin();
-    await this.EnsureConnected();
-
-    const res = await this.Hub.invoke<true>("OrderPostNew", orderId, cmt);
+    const res = await this.Invoke<true>("OrderPostNew", orderId, cmt);
     return res;
   }
 
@@ -48,9 +45,7 @@ export class OrderPost extends ShopNet {
    */
   public static async Cancel(orderId: number, reason: string): Promise<true> {
     this.EnsureLogin();
-    await this.EnsureConnected();
-
-    const res = await this.Hub.invoke<true>("OrderPostCancel", orderId, reason);
+    const res = await this.Invoke<true>("OrderPostCancel", orderId, reason);
     return res;
   }
 }

@@ -23,7 +23,7 @@ export abstract class SignalR {
    * @since 1.0.0
    * @version 0.1.1
    */
-  public static EnsureConnected(this: Nets): Promise<void> {
+  protected static EnsureConnected(this: Nets): Promise<void> {
     if (this.Hub.state === HubConnectionState.Connected)
       return Promise.resolve();
 
@@ -46,7 +46,17 @@ export abstract class SignalR {
    * @since 1.0.0
    * @version 0.1.0
    */
-  public static EnsureLogin() {
+  protected static async Invoke<T>(this: Nets, methodName: string, ...args: any[]): Promise<T> {
+    await this.EnsureConnected();
+    return this.Hub.invoke<T>(methodName, ...args);
+  }
+
+  /**
+   * @author Aloento
+   * @since 1.0.0
+   * @version 0.1.0
+   */
+  protected static EnsureLogin() {
     if (!Common.LocalUser || Common.LocalUser.expired)
       throw new Error("Please Login First");
   }
@@ -56,7 +66,7 @@ export abstract class SignalR {
    * @since 1.0.0
    * @version 0.1.0
    */
-  public static EnsureTrue(res: boolean | null | undefined): asserts res is true {
+  protected static EnsureTrue(res: boolean | null | undefined): asserts res is true {
     if (!res)
       throw new Error("Server Returned False");
   }
@@ -75,8 +85,7 @@ export abstract class SignalR {
     if (find && find.QueryExp > dayjs().unix())
       return find;
 
-    await this.EnsureConnected();
-    const res = await this.Hub.invoke<T | true | null>(methodName, key, find?.Version);
+    const res = await this.Invoke<T | true | null>(methodName, key, find?.Version);
 
     if (res === true) {
       Shared.Set<T & { QueryExp: number }>(index, {
@@ -109,8 +118,7 @@ export abstract class SignalR {
     const res = await Shared.GetOrSet(
       `${methodName}_${key}`,
       async () => {
-        await this.EnsureConnected();
-        const db = await this.Hub.invoke<T>(methodName, ...args);
+        const db = await this.Invoke<T>(methodName, ...args);
         return db;
       },
       exp
