@@ -1,9 +1,8 @@
 import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Input, Label, Toast, ToastBody, ToastTitle, makeStyles, tokens } from "@fluentui/react-components";
-import { useRequest } from "ahooks";
 import { useState } from "react";
 import { useAuth } from "react-oidc-context";
 import { ColFlex, Flex } from "~/Helpers/Styles";
-import { use500Toast } from "~/Helpers/useToast";
+import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
 import { OnNewUserSubject } from "./NewUser";
 
@@ -37,7 +36,7 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.3.1
+ * @version 0.4.0
  */
 export function Setting({ Open, Toggle, New }: ISetting) {
   const style = useStyles();
@@ -47,7 +46,7 @@ export function Setting({ Open, Toggle, New }: ISetting) {
   const [phone, setPhone] = useState<string>();
   const [address, setAddress] = useState<string>();
 
-  useRequest(Hub.User.Get.Me.bind(Hub.User.Get), {
+  Hub.User.Get.useMe({
     manual: New,
     onSuccess(data) {
       if (!data) return;
@@ -59,18 +58,18 @@ export function Setting({ Open, Toggle, New }: ISetting) {
     }
   });
 
-  const { dispatchError, dispatchToast } = use500Toast();
+  const { dispatch, dispatchToast } = useErrorToast();
 
-  const { run } = useRequest(Hub.User.Post.Update.bind(Hub.User.Post), {
+  const { run } = Hub.User.Post.useUpdate({
     manual: true,
-    onFinally([req], _, e) {
-      if (e)
-        return dispatchError({
-          Message: `Failed ${New ? "Create" : "Update"} Info`,
-          Error: e,
-          Request: req
-        });
-
+    onError(e, [req]) {
+      dispatch({
+        Message: `Failed ${New ? "Create" : "Update"} Info`,
+        Error: e,
+        Request: req
+      });
+    },
+    onSuccess(_, [req]) {
       dispatchToast(
         <Toast>
           <ToastTitle>Info {New ? "Created" : "Updated"}</ToastTitle>

@@ -1,3 +1,5 @@
+import { useRequest } from "ahooks";
+import { Options } from "ahooks/lib/useRequest/src/types";
 import { AdminNet } from "../AdminNet";
 
 /**
@@ -5,24 +7,22 @@ import { AdminNet } from "../AdminNet";
  * @since 0.5.0
  * @version 0.1.0
  */
-export class AdminUserDelete extends AdminNet {
+export abstract class AdminUserDelete extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.1.0
+   * @version 0.2.0
    */
-  public static async User(userId: string): Promise<true> {
-    const res = await this.Invoke<true>("UserDeleteUser", userId);
-    return res;
+  public static useUser(options: Options<true, [string]>) {
+    return useRequest((userId) => this.Invoke("UserDeleteUser", userId), options);
   }
 
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.1.0
+   * @version 0.2.0
    */
-  public static async Admin(userId: string): Promise<true> {
-    const res = await this.Invoke<true>("UserDeleteAdmin", userId);
-    return res;
+  public static useAdmin(options: Options<true, [string]>) {
+    return useRequest((userId) => this.Invoke("UserDeleteAdmin", userId), options);
   }
 }

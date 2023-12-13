@@ -1,8 +1,7 @@
 import { Button, Field, Textarea, Toast, ToastTitle, makeStyles } from "@fluentui/react-components";
-import { useRequest } from "ahooks";
 import { useState } from "react";
 import { Flex } from "~/Helpers/Styles";
-import { use500Toast } from "~/Helpers/useToast";
+import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
 
 /**
@@ -22,22 +21,22 @@ const useStyles = makeStyles({
  * @since 0.5.0
  * @version 0.2.1
  */
-export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: (id: number) => void }) {
+export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: () => void }) {
   const style = useStyles();
   const [cmt, setCmt] = useState<string>();
 
-  const { dispatchError, dispatchToast } = use500Toast();
+  const { dispatch, dispatchToast } = useErrorToast();
 
-  const { run: append } = useRequest(Hub.Order.Post.Append.bind(Hub.Order.Post), {
+  const { run: append } = Hub.Order.Post.useAppend({
     manual: true,
-    onFinally(req, _, e) {
-      if (e)
-        return dispatchError({
-          Message: "Failed Append Comment",
-          Request: req,
-          Error: e
-        });
-
+    onError(e, req) {
+      dispatch({
+        Message: "Failed Append Comment",
+        Request: req,
+        Error: e
+      });
+    },
+    onSuccess() {
       dispatchToast(
         <Toast>
           <ToastTitle>Comment Appended</ToastTitle>
@@ -45,20 +44,20 @@ export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: (i
         { intent: "success" }
       );
 
-      Refresh(OrderId);
-    },
+      Refresh();
+    }
   });
 
-  const { run: cancel } = useRequest(Hub.Order.Post.Cancel.bind(Hub.Order.Post), {
+  const { run: cancel } = Hub.Order.Post.useCancel({
     manual: true,
-    onFinally(req, _, e) {
-      if (e)
-        return dispatchError({
-          Message: "Failed Cancel",
-          Request: req,
-          Error: e
-        });
-
+    onError(e, params) {
+      dispatch({
+        Message: "Failed Cancel Order",
+        Request: params,
+        Error: e
+      });
+    },
+    onSuccess() {
       dispatchToast(
         <Toast>
           <ToastTitle>Order Canceled</ToastTitle>
@@ -66,8 +65,8 @@ export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: (i
         { intent: "success" }
       );
 
-      Refresh(OrderId);
-    },
+      Refresh();
+    }
   });
 
   return <>

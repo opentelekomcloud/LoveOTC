@@ -13,7 +13,7 @@ import { OrderEntity } from "./Entity";
  * @since 0.5.0
  * @version 0.1.0
  */
-export class OrderGet extends ShopNet {
+export abstract class OrderGet extends ShopNet {
   /**
    * @author Aloento
    * @since 0.5.0

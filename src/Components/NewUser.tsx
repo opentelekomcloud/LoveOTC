@@ -1,5 +1,4 @@
-import { useBoolean } from "ahooks";
-import { useEffect } from "react";
+import { useBoolean, useMount } from "ahooks";
 import { Subject } from "rxjs";
 import { WithAuth } from "./Auth/With";
 import { Setting } from "./Setting";
@@ -14,14 +13,14 @@ export const OnNewUserSubject = new Subject<boolean>();
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.1.1
+ * @version 0.1.2
  */
 export function NewUser() {
   const [open, { toggle }] = useBoolean();
 
-  useEffect(() => {
+  useMount(() => {
     OnNewUserSubject.subscribe(x => x && toggle());
-  }, []);
+  });
 
   return (
     <WithAuth>

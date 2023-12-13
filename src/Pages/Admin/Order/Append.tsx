@@ -1,8 +1,7 @@
 import { Button, Field, Textarea, Toast, ToastTitle, makeStyles } from "@fluentui/react-components";
-import { useRequest } from "ahooks";
 import { useState } from "react";
 import { Flex } from "~/Helpers/Styles";
-import { use500Toast } from "~/Helpers/useToast";
+import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
 
 /**
@@ -20,24 +19,24 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
+ * @version 0.2.1
  */
-export function AdminOrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: (id: number) => void }) {
+export function AdminOrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: () => void }) {
   const style = useStyles();
   const [cmt, setCmt] = useState<string>();
 
-  const { dispatchError, dispatchToast } = use500Toast();
+  const { dispatch, dispatchToast } = useErrorToast();
 
-  const { run: append } = useRequest(AdminHub.Order.Post.Append.bind(AdminHub.Order.Post), {
+  const { run: append } = AdminHub.Order.Post.useAppend({
     manual: true,
-    onFinally(req, _, e) {
-      if (e)
-        return dispatchError({
-          Message: "Failed Append Comment",
-          Request: req,
-          Error: e
-        });
-
+    onError(e, params) {
+      dispatch({
+        Message: "Failed Append Comment",
+        Request: params,
+        Error: e
+      });
+    },
+    onSuccess() {
       dispatchToast(
         <Toast>
           <ToastTitle>Comment Appended</ToastTitle>
@@ -45,20 +44,20 @@ export function AdminOrderAppend({ OrderId, Refresh }: { OrderId: number; Refres
         { intent: "success" }
       );
 
-      Refresh(OrderId);
-    },
+      Refresh();
+    }
   });
 
-  const { run: close } = useRequest(AdminHub.Order.Post.Close.bind(AdminHub.Order.Post), {
+  const { run: close } = AdminHub.Order.Post.useClose({
     manual: true,
-    onFinally(req, _, e) {
-      if (e)
-        return dispatchError({
-          Message: "Failed Close",
-          Request: req,
-          Error: e
-        });
-
+    onError(e, params) {
+      dispatch({
+        Message: "Failed Close Order",
+        Request: params,
+        Error: e
+      });
+    },
+    onSuccess() {
       dispatchToast(
         <Toast>
           <ToastTitle>Order Closed</ToastTitle>
@@ -66,8 +65,8 @@ export function AdminOrderAppend({ OrderId, Refresh }: { OrderId: number; Refres
         { intent: "success" }
       );
 
-      Refresh(OrderId);
-    },
+      Refresh();
+    }
   });
 
   return <>

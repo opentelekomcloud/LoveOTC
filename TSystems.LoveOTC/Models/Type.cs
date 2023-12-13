@@ -24,9 +24,9 @@ public class Type : Concurrency, IArchive {
 
     public virtual Variant Variant { get; set; }
 
-    public bool? IsArchived { get; set; }
-
     public virtual ICollection<Combo> Combos { get; init; }
 
     public virtual ICollection<ComboType> ComboTypes { get; init; }
+
+    public bool? IsArchived { get; set; }
 }

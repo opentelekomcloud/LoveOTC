@@ -23,7 +23,7 @@ export interface IOrderItem {
  * @version 0.2.0
  */
 export function History() {
-  const { data } = useRequest(Hub.Order.Get.List.bind(Hub.Order.Get));
+  const { data } = useRequest(() => Hub.Order.Get.List());
 
   return (
     <DelegateDataGrid Items={data || []} Columns={HistoryColumns} />

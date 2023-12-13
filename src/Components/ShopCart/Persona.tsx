@@ -1,5 +1,4 @@
 import { Field, Label, makeStyles, tokens } from "@fluentui/react-components";
-import { useRequest } from "ahooks";
 import { ColFlex, Flex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
 
@@ -32,11 +31,11 @@ export interface IPersona {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 export function PersonaInfo() {
   const style = useStyles();
-  const { data } = useRequest(Hub.User.Get.Me.bind(Hub.User.Get));
+  const { data } = Hub.User.Get.useMe();
 
   return <>
     <div className={style.person}>

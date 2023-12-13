@@ -40,7 +40,7 @@ const useStyle = makeStyles({
 /**
  * @author Aloento
  * @since 0.2.2 MusiLand
- * @version 0.2.0
+ * @version 0.3.0
  */
 export function Layout() {
   const style = useStyle();
@@ -57,6 +57,9 @@ export function Layout() {
 
       case "History":
         return <History />;
+
+      case "Login":
+        return <div>Login Redirecting...</div>;
 
       case "":
       case undefined:

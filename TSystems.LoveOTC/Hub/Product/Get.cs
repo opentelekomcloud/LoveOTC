@@ -36,8 +36,8 @@ internal partial class ShopHub {
      * @version 0.2.0
      * </remarks>
      */
-    public async Task<uint[]> ProductGetPhotoList(uint prodId) =>
-        await this.Db.Photos
+    public Task<uint[]> ProductGetPhotoList(uint prodId) =>
+        this.Db.Photos
             .Where(x => x.ProductId == prodId)
             .Select(x => x.PhotoId)
             .ToArrayAsync();

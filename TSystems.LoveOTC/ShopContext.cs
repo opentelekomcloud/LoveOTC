@@ -2,6 +2,7 @@
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 namespace TSystems.LoveOTC;
 
+using Entities;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
@@ -67,12 +68,15 @@ internal class ShopContext(DbContextOptions<ShopContext> opts) : DbContext(opts)
         #endregion
 
         #region MockData
-#if false
+
+#if DEBUG
+
+        var userId = Guid.Parse("e2653b80-9be7-41d0-aff0-524ad0e66944");
 
         modelBuilder.Entity<User>().HasData(new User {
-            UserId = Guid.Parse("e2653b80-9be7-41d0-aff0-524ad0e66944"),
+            UserId = userId,
             Name = "Aloento",
-            EMail = "me@Aloen.to",
+            EMail = "me@example.com",
             Phone = "+36 300000000",
             Address = "T-Systems, Budapest, Hungary",
             Admin = true
@@ -311,7 +315,7 @@ internal class ShopContext(DbContextOptions<ShopContext> opts) : DbContext(opts)
 
         modelBuilder.Entity<Order>().HasData(new Order {
             OrderId = 1,
-            UserId = Guid.Parse("e2653b80-9be7-41d0-aff0-524ad0e66944"),
+            UserId = userId,
             Status = OrderStatus.Finished,
             CreateAt = DateTime.UtcNow,
             TrackingNumber = "1234567890"
@@ -337,7 +341,7 @@ internal class ShopContext(DbContextOptions<ShopContext> opts) : DbContext(opts)
         modelBuilder.Entity<Comment>().HasData(new Comment {
             CommentId = 2,
             Content = "This is a comment",
-            UserId = Guid.Parse("e2653b80-9be7-41d0-aff0-524ad0e66944"),
+            UserId = userId,
             CreateAt = DateTime.UtcNow,
             OrderId = 1
         });
@@ -345,6 +349,7 @@ internal class ShopContext(DbContextOptions<ShopContext> opts) : DbContext(opts)
         #endregion
 
 #endif
+
         #endregion
     }
 }

@@ -33,7 +33,7 @@ export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
   const [open, { toggle, setTrue }] = useBoolean();
   const { Nav, Paths } = useRouter();
 
-  const { data, run } = useRequest(Hub.Order.Get.Detail.bind(Hub.Order.Get), {
+  const { data, run } = useRequest(() => Hub.Order.Get.Detail(OrderId), {
     onError(e) {
       Nav("Admin", "Order");
       console.error(e);
@@ -43,7 +43,7 @@ export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
 
   useMount(() => {
     if (parseInt(Paths.at(2)!) === OrderId) {
-      run(OrderId);
+      run();
       setTrue();
     }
   });
@@ -54,7 +54,7 @@ export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
       icon={<OpenRegular />}
       onClick={() => {
         Nav("Admin", "Order", OrderId);
-        run(OrderId);
+        run();
         setTrue();
       }}
     />

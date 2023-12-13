@@ -1,3 +1,5 @@
+import { useRequest } from "ahooks";
+import { Options } from "ahooks/lib/useRequest/src/types";
 import { AdminNet } from "../AdminNet";
 
 /**
@@ -5,34 +7,31 @@ import { AdminNet } from "../AdminNet";
  * @since 0.5.0
  * @version 0.1.0
  */
-export class AdminOrderPost extends AdminNet {
+export abstract class AdminOrderPost extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.1.0
+   * @version 0.2.0
    */
-  public static async Append(orderId: number, cmt: string): Promise<true> {
-    const res = await this.Invoke<true>("OrderPostAppend", orderId, cmt);
-    return res;
+  public static useAppend(options: Options<true, [number, string]>) {
+    return useRequest((orderId, cmt) => this.Invoke("OrderPostAppend", orderId, cmt), options);
   }
 
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.1.0
+   * @version 0.2.0
    */
-  public static async Close(orderId: number, reason: string): Promise<true> {
-    const res = await this.Invoke<true>("OrderPostClose", orderId, reason);
-    return res;
+  public static useClose(options: Options<true, [number, string]>) {
+    return useRequest((orderId, reason) => this.Invoke("OrderPostClose", orderId, reason), options);
   }
 
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.1.0
+   * @version 0.2.0
    */
-  public static async Ship(orderId: number, track?: string): Promise<true> {
-    const res = await this.Invoke<true>("OrderPostShip", orderId, track);
-    return res;
+  public static useShip(options: Options<true, [number, string | undefined]>) {
+    return useRequest((orderId, track) => this.Invoke("OrderPostShip", orderId, track), options);
   }
 }

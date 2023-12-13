@@ -1,28 +1,27 @@
 import { Button, Toast, ToastTitle } from "@fluentui/react-components";
-import { useRequest } from "ahooks";
 import { useRouter } from "~/Components/Router";
-import { use500Toast } from "~/Helpers/useToast";
+import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
 
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 export function AdminProductDelete({ ProdId }: { ProdId: number }) {
   const { Nav } = useRouter();
-  const { dispatchError, dispatchToast } = use500Toast();
+  const { dispatch, dispatchToast } = useErrorToast();
 
-  const { run } = useRequest(AdminHub.Product.Delete.Product.bind(AdminHub.Product.Delete), {
+  const { run } = AdminHub.Product.Delete.useProduct({
     manual: true,
-    onFinally(req, _, e) {
-      if (e)
-        return dispatchError({
-          Message: "Failed Delete Product",
-          Request: req,
-          Error: e
-        });
-
+    onError(e, params) {
+      dispatch({
+        Message: "Failed Delete Product",
+        Request: params,
+        Error: e
+      });
+    },
+    onSuccess() {
       dispatchToast(
         <Toast>
           <ToastTitle>Product Deleted</ToastTitle>
@@ -32,7 +31,7 @@ export function AdminProductDelete({ ProdId }: { ProdId: number }) {
 
       Nav("/Admin");
       location.reload();
-    },
+    }
   });
 
   return (

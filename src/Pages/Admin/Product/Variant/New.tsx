@@ -1,9 +1,9 @@
 import { Button, Field, Input, Popover, PopoverSurface, PopoverTrigger, Toast, ToastTitle, makeStyles, tokens } from "@fluentui/react-components";
 import { AddRegular } from "@fluentui/react-icons";
-import { useBoolean, useRequest } from "ahooks";
+import { useBoolean } from "ahooks";
 import { useState } from "react";
 import { ColFlex } from "~/Helpers/Styles";
-import { use500Toast } from "~/Helpers/useToast";
+import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
 
 /**
@@ -21,25 +21,25 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.1
+ * @version 0.1.2
  */
-export function AdminProductNewVariant({ ProdId, Refresh }: { ProdId: number; Refresh: (prodId: number) => void }) {
+export function AdminProductNewVariant({ ProdId, Refresh }: { ProdId: number; Refresh: () => void }) {
   const style = useStyles();
   const [open, { toggle }] = useBoolean();
   const [name, setName] = useState("");
 
-  const { dispatchError, dispatchToast } = use500Toast();
+  const { dispatch, dispatchToast } = useErrorToast();
 
-  const { run } = useRequest(AdminHub.Product.Post.Variant.bind(AdminHub.Product.Post), {
+  const { run } = AdminHub.Product.Post.useVariant({
     manual: true,
-    onFinally(req, _, e) {
-      if (e)
-        return dispatchError({
-          Message: "Failed Create Variant",
-          Request: req,
-          Error: e
-        });
-
+    onError(e, params) {
+      dispatch({
+        Message: "Failed Create Variant",
+        Request: params,
+        Error: e
+      });
+    },
+    onSuccess() {
       dispatchToast(
         <Toast>
           <ToastTitle>Variant Created</ToastTitle>
@@ -47,10 +47,10 @@ export function AdminProductNewVariant({ ProdId, Refresh }: { ProdId: number; Re
         { intent: "success" }
       );
 
-      Refresh(ProdId);
+      Refresh();
       setName("");
       toggle();
-    },
+    }
   });
 
   return (

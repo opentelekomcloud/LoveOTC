@@ -34,9 +34,7 @@ const useStyle = makeStyles({
  * @version 0.2.0
  */
 export function ProductRadioList({ ProdId }: { ProdId: number }) {
-  const { data } = useRequest(Hub.Product.Get.Combo.bind(Hub.Product.Get), {
-    defaultParams: [ProdId],
-  });
+  const { data } = useRequest(() => Hub.Product.Get.Combo(ProdId));
 
   const { Update } = useRadioGroup();
 

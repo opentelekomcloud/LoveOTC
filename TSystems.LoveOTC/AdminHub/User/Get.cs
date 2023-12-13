@@ -10,8 +10,8 @@ internal partial class AdminHub {
      * @version 1.0.0
      * </remarks>
      */
-    public async Task<Guid[]> UserGetList() =>
-        await this.Db.Users
+    public Task<Guid[]> UserGetList() =>
+        this.Db.Users
             .Select(x => x.UserId)
             .ToArrayAsync();
 }

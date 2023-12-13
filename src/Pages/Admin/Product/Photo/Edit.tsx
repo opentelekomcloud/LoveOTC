@@ -1,9 +1,8 @@
 import { Button, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Image, Input, Toast, ToastTitle, makeStyles, tokens } from "@fluentui/react-components";
 import { DismissRegular, EditRegular } from "@fluentui/react-icons";
-import { useRequest } from "ahooks";
 import { useState } from "react";
 import { ColFlex, Cover, Flex } from "~/Helpers/Styles";
-import { use500Toast } from "~/Helpers/useToast";
+import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
 import { IPhotoItem } from ".";
 
@@ -32,24 +31,24 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.3.0
+ * @version 0.3.1
  */
 export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }: { Photo: IPhotoItem; Refresh: () => void; }) {
   const style = useStyles();
   const [cap, setCap] = useState(Caption || "");
 
-  const { dispatchError, dispatchToast } = use500Toast();
+  const { dispatch, dispatchToast } = useErrorToast();
 
-  const { run: updateCaption } = useRequest(AdminHub.Product.Patch.Caption.bind(AdminHub.Product.Patch), {
+  const { run: updateCaption } = AdminHub.Product.Patch.useCaption({
     manual: true,
-    onFinally(req, _, e) {
-      if (e)
-        return dispatchError({
-          Message: "Failed Update Caption",
-          Request: req,
-          Error: e
-        });
-
+    onError(e, req) {
+      dispatch({
+        Message: "Failed Update Caption",
+        Request: req,
+        Error: e
+      });
+    },
+    onSuccess() {
       dispatchToast(
         <Toast>
           <ToastTitle>Caption Updated</ToastTitle>
@@ -58,19 +57,19 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
       );
 
       Refresh();
-    },
+    }
   });
 
-  const { run: updateFile } = useRequest(AdminHub.Product.Patch.Photo.bind(AdminHub.Product.Patch), {
+  const { run: updateFile } = AdminHub.Product.Patch.usePhoto({
     manual: true,
-    onFinally(req, _, e) {
-      if (e)
-        return dispatchError({
-          Message: "Failed Update Photo",
-          Request: req,
-          Error: e
-        });
-
+    onError(e, req) {
+      dispatch({
+        Message: "Failed Update Photo",
+        Request: req,
+        Error: e
+      });
+    },
+    onSuccess() {
       dispatchToast(
         <Toast>
           <ToastTitle>Photo Updated</ToastTitle>
@@ -79,19 +78,19 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
       );
 
       Refresh();
-    },
+    }
   });
 
-  const { run: deletePhoto } = useRequest(AdminHub.Product.Delete.Photo.bind(AdminHub.Product.Delete), {
+  const { run: deletePhoto } = AdminHub.Product.Delete.usePhoto({
     manual: true,
-    onFinally(req, _, e) {
-      if (e)
-        return dispatchError({
-          Message: "Failed Delete Photo",
-          Request: req,
-          Error: e
-        });
-
+    onError(e, req) {
+      dispatch({
+        Message: "Failed Delete Photo",
+        Request: req,
+        Error: e
+      });
+    },
+    onSuccess() {
       dispatchToast(
         <Toast>
           <ToastTitle>Photo Deleted</ToastTitle>
@@ -100,7 +99,7 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
       );
 
       Refresh();
-    },
+    }
   });
 
   return (

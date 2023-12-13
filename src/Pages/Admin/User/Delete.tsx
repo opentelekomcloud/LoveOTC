@@ -1,27 +1,26 @@
 import { Button, Toast, ToastTitle } from "@fluentui/react-components";
 import { DeleteRegular } from "@fluentui/react-icons";
-import { useRequest } from "ahooks";
-import { use500Toast } from "~/Helpers/useToast";
+import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
 
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 export function AdminUserDelete({ UserId, Refresh }: { UserId: string; Refresh: () => void }) {
-  const { dispatchError, dispatchToast } = use500Toast();
+  const { dispatch, dispatchToast } = useErrorToast();
 
-  const { run } = useRequest(AdminHub.User.Delete.User.bind(AdminHub.User.Delete), {
+  const { run } = AdminHub.User.Delete.useUser({
     manual: true,
-    onFinally(req, _, e) {
-      if (e)
-        return dispatchError({
-          Message: "Failed Delete User",
-          Request: req,
-          Error: e
-        });
-
+    onError(e, req) {
+      dispatch({
+        Message: "Failed Delete User",
+        Request: req,
+        Error: e
+      });
+    },
+    onSuccess() {
       dispatchToast(
         <Toast>
           <ToastTitle>User Deleted</ToastTitle>
@@ -30,7 +29,7 @@ export function AdminUserDelete({ UserId, Refresh }: { UserId: string; Refresh: 
       );
 
       Refresh();
-    },
+    }
   });
 
   return (

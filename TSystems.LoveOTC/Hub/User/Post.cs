@@ -12,7 +12,7 @@ internal partial class ShopHub {
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 0.1.1
+     * @version 0.1.2
      * </remarks>
      */
     [Authorize]
@@ -23,7 +23,7 @@ internal partial class ShopHub {
         var isValid = Validator.TryValidateObject(req, validCtx, validRes, true);
         if (!isValid) {
             var msg = validRes.Select(x => x.ErrorMessage);
-            throw new HubException(string.Join("; ", msg));
+            throw new HubException(string.Join("; \n", msg));
         }
 
         var hasNew = this.Context.Items.TryGetValue("NewUser", out var isNew);
@@ -33,7 +33,7 @@ internal partial class ShopHub {
             if (email is null || string.IsNullOrWhiteSpace(email) ||
                 !email.Equals(req.EMail, StringComparison.OrdinalIgnoreCase)) {
                 this.Context.Abort();
-                return false;
+                throw new HubException($"EMail ${email} wanted, but got ${req.EMail} from [${this.UserId}]");
             }
 
             await this.Db.Users.AddAsync(new() {
@@ -43,11 +43,11 @@ internal partial class ShopHub {
                 Phone = req.Phone!,
                 Address = req.Address!
             });
-            await this.Db.SaveChangesAsync();
+            var row1 = await this.Db.SaveChangesAsync();
 
             this.Context.Items.Remove("NewUser");
             this.Logger.NewUser(req.Name, this.Context);
-            return true;
+            return row1 > 0;
         }
 
         var row = await this.Db.Users
@@ -59,6 +59,6 @@ internal partial class ShopHub {
                 .SetProperty(u => u.Address, req.Address!)
             );
 
-        return row == 0 ? throw new HubException("Operation is invalid.") : true;
+        return row > 0;
     }
 }

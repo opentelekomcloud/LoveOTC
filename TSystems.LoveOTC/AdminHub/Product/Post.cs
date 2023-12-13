@@ -16,13 +16,14 @@ internal partial class AdminHub {
      * </remarks>
      */
     public async Task<uint> ProductPostCreate(string name) {
-        var prop = typeof(Product).GetProperty(nameof(Product.Name))!;
-        var valid = prop.GetCustomAttribute<StringLengthAttribute>()!;
+        var valid = typeof(Product)
+            .GetProperty(nameof(Product.Name))!
+            .GetCustomAttribute<StringLengthAttribute>()!;
 
         if (!valid.IsValid(name))
             throw new HubException(valid.FormatErrorMessage("Name"));
 
-        if (await this.Db.Products.AnyAsync(x => EF.Functions.ILike(x.Name, name)))
+        if (await this.Db.Products.AnyAsync(x => EF.Functions.Like(x.Name, name)))
             throw new HubException($"Product {name} already exist");
 
         var temp = await this.Db.Products.AddAsync(new() {
@@ -112,8 +113,9 @@ internal partial class AdminHub {
      * </remarks>
      */
     public async Task<uint> ProductPostVariant(uint prodId, string name) {
-        var prop = typeof(Variant).GetProperty(nameof(Variant.Name))!;
-        var valid = prop.GetCustomAttribute<StringLengthAttribute>()!;
+        var valid = typeof(Variant)
+            .GetProperty(nameof(Variant.Name))!
+            .GetCustomAttribute<StringLengthAttribute>()!;
 
         if (!valid.IsValid(name))
             throw new HubException(valid.FormatErrorMessage("Name"));
@@ -131,7 +133,7 @@ internal partial class AdminHub {
 
         var temp = await this.Db.Variants.AddAsync(new() {
             ProductId = prodId,
-            Name = name,
+            Name = name
         });
 
         await this.Db.SaveChangesAsync();
@@ -146,8 +148,9 @@ internal partial class AdminHub {
      * </remarks>
      */
     public async Task<uint> ProductPostType(uint variantId, string name) {
-        var prop = typeof(Type).GetProperty(nameof(Type.Name))!;
-        var valid = prop.GetCustomAttribute<StringLengthAttribute>()!;
+        var valid = typeof(Type)
+            .GetProperty(nameof(Type.Name))!
+            .GetCustomAttribute<StringLengthAttribute>()!;
 
         if (!valid.IsValid(name))
             throw new HubException(valid.FormatErrorMessage("Name"));
@@ -181,11 +184,11 @@ internal partial class AdminHub {
      */
     public async Task<uint> ProductPostCombo(uint prodId, Dictionary<string, string> combo, ushort stock) {
         var variTypesDb = (await this.Db.Products
-            .Include(x => x.Variants)
-            .ThenInclude(x => x.Types)
-            .Where(x => x.ProductId == prodId)
-            .SelectMany(x => x.Variants)
-            .ToDictionaryAsync(k => k.Name, v => v.Types.ToImmutableArray()))
+                .Include(x => x.Variants)
+                .ThenInclude(x => x.Types)
+                .Where(x => x.ProductId == prodId)
+                .SelectMany(x => x.Variants)
+                .ToDictionaryAsync(k => k.Name, v => v.Types.ToImmutableArray()))
             .ToImmutableSortedDictionary();
 
         var reqCombo = combo.ToImmutableSortedDictionary();

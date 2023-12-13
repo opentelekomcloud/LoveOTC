@@ -62,15 +62,14 @@ export interface IProduct {
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.3
+ * @version 0.1.4
  */
 export function Product() {
   const style = useStyle();
   const { Nav, Paths } = useRouter();
   const id = parseInt(Paths.at(1)!);
 
-  const { data } = useRequest(Hub.Product.Get.Basic.bind(Hub.Product.Get), {
-    defaultParams: [id],
+  const { data } = useRequest(() => Hub.Product.Get.Basic(id), {
     onBefore() {
       isNaN(id) && Nav("/");
     },

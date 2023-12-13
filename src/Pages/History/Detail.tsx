@@ -93,7 +93,7 @@ export function OrderDetail({ OrderId }: { OrderId: number }) {
   const { Nav, Paths } = useRouter();
   const [open, { toggle, setTrue }] = useBoolean();
 
-  const { data, run } = useRequest(Hub.Order.Get.Detail.bind(Hub.Order.Get), {
+  const { data, run } = useRequest(() => Hub.Order.Get.Detail(OrderId), {
     onError(e) {
       Nav("History");
       console.error(e);
@@ -103,7 +103,7 @@ export function OrderDetail({ OrderId }: { OrderId: number }) {
 
   useMount(() => {
     if (parseInt(Paths.at(1)!) === OrderId) {
-      run(OrderId);
+      run();
       setTrue();
     }
   });
@@ -111,7 +111,7 @@ export function OrderDetail({ OrderId }: { OrderId: number }) {
   return <>
     <Button appearance="subtle" icon={<OpenRegular />} onClick={() => {
       Nav("History", OrderId);
-      run(OrderId);
+      run();
       setTrue();
     }} />
 

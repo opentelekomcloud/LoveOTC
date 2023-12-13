@@ -10,7 +10,7 @@ import { AdminOrderEntity } from "./Entity";
  * @since 0.5.0
  * @version 0.1.0
  */
-export class AdminOrderGet extends AdminNet {
+export abstract class AdminOrderGet extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0

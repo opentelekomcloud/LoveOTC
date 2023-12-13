@@ -3,7 +3,7 @@ import { useMount } from "ahooks";
 import { WebStorageStateStore } from "oidc-client-ts";
 import { ReactNode, useEffect } from "react";
 import { AuthProvider, hasAuthParams, useAuth } from "react-oidc-context";
-import { use500Toast } from "~/Helpers/useToast";
+import { useErrorToast } from "~/Helpers/useToast";
 import { Common } from "~/ShopNet/Database";
 import { useRouter } from "../Router";
 
@@ -52,7 +52,7 @@ export function OIDCProvider({ children }: { children: ReactNode }): ReactNode {
 function AuthHandler() {
   const auth = Common.AuthSlot = useAuth();
   const { Paths, Rep } = useRouter();
-  const { dispatchError } = use500Toast();
+  const { dispatch } = useErrorToast();
 
   useMount(() => {
     if (Paths.at(0) === "Logout") {
@@ -72,7 +72,7 @@ function AuthHandler() {
 
   useEffect(() => {
     if (auth.error) {
-      return dispatchError({
+      return dispatch({
         Message: "Failed Authenticate",
         Request: auth,
         Error: auth.error

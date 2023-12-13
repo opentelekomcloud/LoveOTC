@@ -10,7 +10,7 @@ import { AdminNet } from "../AdminNet";
  * @since 0.5.0
  * @version 0.1.0
  */
-export class AdminProductGet extends AdminNet {
+export abstract class AdminProductGet extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0

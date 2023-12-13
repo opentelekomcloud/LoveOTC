@@ -1,30 +1,30 @@
 import { Button, Input, Subtitle2, Toast, ToastTitle } from "@fluentui/react-components";
 import { EditRegular, SendRegular } from "@fluentui/react-icons";
-import { useBoolean, useRequest } from "ahooks";
+import { useBoolean } from "ahooks";
 import { useState } from "react";
-import { use500Toast } from "~/Helpers/useToast";
+import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
 
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 export function AdminProductVariantName({ Id, Name }: { Id: number; Name: string; }) {
   const [name, setName] = useState(Name);
   const [edit, { setTrue, setFalse }] = useBoolean();
-  const { dispatchError, dispatchToast } = use500Toast();
+  const { dispatch, dispatchToast } = useErrorToast();
 
-  const { run } = useRequest(AdminHub.Product.Patch.VariantName.bind(AdminHub.Product.Patch), {
+  const { run } = AdminHub.Product.Patch.useVariantName({
     manual: true,
-    onFinally(req, _, e) {
-      if (e)
-        return dispatchError({
-          Message: "Failed Update Variant Name",
-          Request: req,
-          Error: e
-        });
-
+    onError(e, params) {
+      dispatch({
+        Message: "Failed Update Variant Name",
+        Request: params[0],
+        Error: e
+      });
+    },
+    onSuccess() {
       dispatchToast(
         <Toast>
           <ToastTitle>Variant Name Updated</ToastTitle>
@@ -33,7 +33,7 @@ export function AdminProductVariantName({ Id, Name }: { Id: number; Name: string
       );
 
       setFalse();
-    },
+    }
   });
 
   return (

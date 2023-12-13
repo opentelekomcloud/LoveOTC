@@ -5,7 +5,7 @@ import { isInteger } from "lodash-es";
 import { useState } from "react";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { Flex } from "~/Helpers/Styles";
-import { use500Toast } from "~/Helpers/useToast";
+import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
 import { IComboItem } from ".";
 import { IVariantItem } from "../Variant";
@@ -80,35 +80,33 @@ const useStyles = makeStyles({
  */
 export interface IDetailComboItem extends IComboItem {
   ProdId: number;
-  Refresh: (prodId: number) => void;
+  Refresh: () => void;
 }
 
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
+ * @version 0.2.1
  */
 export function AdminProductComboDetail({ Id, ProdId, Combo, Stock, Refresh }: IDetailComboItem) {
   const [open, { toggle }] = useBoolean();
   const [combo, setCombo] = useState(Combo);
   const [stock, setStock] = useState(Stock);
 
-  const { data: varis } = useRequest(AdminHub.Product.Get.Variants.bind(AdminHub.Product.Get), {
-    defaultParams: [ProdId]
-  });
+  const { data: varis } = useRequest(() => AdminHub.Product.Get.Variants(ProdId));
 
-  const { dispatchError, dispatchToast } = use500Toast();
+  const { dispatch, dispatchToast } = useErrorToast();
 
-  const { run } = useRequest(AdminHub.Product.Patch.Combo.bind(AdminHub.Product.Patch), {
+  const { run } = AdminHub.Product.Patch.useCombo({
     manual: true,
-    onFinally(req, _, e) {
-      if (e)
-        return dispatchError({
-          Message: "Failed Update Combo",
-          Request: req,
-          Error: e
-        });
-
+    onError(e, req) {
+      dispatch({
+        Message: "Failed Update Combo",
+        Request: req,
+        Error: e
+      });
+    },
+    onSuccess() {
       dispatchToast(
         <Toast>
           <ToastTitle>Combo Updated</ToastTitle>
@@ -116,9 +114,9 @@ export function AdminProductComboDetail({ Id, ProdId, Combo, Stock, Refresh }: I
         { intent: "success" }
       );
 
-      Refresh(ProdId);
+      Refresh();
       toggle();
-    },
+    }
   });
 
   return (

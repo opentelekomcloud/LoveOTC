@@ -1,5 +1,5 @@
 import { useRequest } from "ahooks";
-import { createContext, useContext, useState } from "react";
+import { ReactNode, createContext, useContext, useState } from "react";
 import { Hub } from "~/ShopNet";
 import { CartTable } from "~/ShopNet/Database";
 import { ICartItem } from ".";
@@ -36,7 +36,7 @@ export function useShopCart() {
  * @since 0.5.0
  * @version 0.3.0
  */
-export function ShopCartContext({ children }: { children: JSX.Element }) {
+export function ShopCartContext({ children }: { children: ReactNode }) {
   const [list, setList] = useState<ICartItem[]>([]);
 
   useRequest(async () => {

@@ -10,8 +10,8 @@ internal partial class ShopHub {
      * @version 0.2.0
      * </remarks>
      */
-    public async Task<string[]> GalleryGetCategories() =>
-        await this.Db.Categories.Select(x => x.Name).ToArrayAsync();
+    public Task<string[]> GalleryGetCategories() =>
+        this.Db.Categories.Select(x => x.Name).ToArrayAsync();
 
     /**
      * <remarks>
@@ -20,8 +20,8 @@ internal partial class ShopHub {
      * @version 0.2.0
      * </remarks>
      */
-    public async Task<uint[]> GalleryGetProducts(string category) =>
-        await this.Db.Products
+    public Task<uint[]> GalleryGetProducts(string category) =>
+        this.Db.Products
             .Where(x => x.Category!.Name == category)
             .Select(x => x.ProductId)
             .ToArrayAsync();

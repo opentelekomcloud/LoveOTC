@@ -1,3 +1,5 @@
+import { useRequest } from "ahooks";
+import { Options } from "ahooks/lib/useRequest/src/types";
 import { ICartItem } from "~/Components/ShopCart";
 import { ShopNet } from "../ShopNet";
 
@@ -6,46 +8,49 @@ import { ShopNet } from "../ShopNet";
  * @since 0.5.0
  * @version 0.1.0
  */
-export class OrderPost extends ShopNet {
+export abstract class OrderPost extends ShopNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.1.0
+   * @version 0.3.0
    */
-  public static async New(cart: ICartItem[], cmt?: string): Promise<number> {
-    this.EnsureLogin();
+  public static useNew(options: Options<number, [ICartItem[], string | undefined]>) {
+    return useRequest((cart, cmt) => {
+      this.EnsureLogin();
 
-    const req = cart.map(x => {
-      const { Id, ...rest } = x;
-      return {
-        OrderId: Id,
-        ...rest
-      };
-    });
+      const req = cart.map(x => {
+        return {
+          ProdId: x.ProdId,
+          Type: Object.values(x.Type),
+          Quantity: x.Quantity,
+        };
+      });
 
-    const res = await this.Invoke<number>("OrderPostNew", req, cmt);
-    return res;
+      return this.Invoke("OrderPostNew", req, cmt);
+    }, options);
   }
 
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.1.0
+   * @version 0.2.0
    */
-  public static async Append(orderId: number, cmt: string): Promise<true> {
-    this.EnsureLogin();
-    const res = await this.Invoke<true>("OrderPostNew", orderId, cmt);
-    return res;
+  public static useAppend(options: Options<true, [number, string]>) {
+    return useRequest((orderId, cmt) => {
+      this.EnsureLogin();
+      return this.Invoke("OrderPostAppend", orderId, cmt);
+    }, options);
   }
 
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.1.0
+   * @version 0.2.0
    */
-  public static async Cancel(orderId: number, reason: string): Promise<true> {
-    this.EnsureLogin();
-    const res = await this.Invoke<true>("OrderPostCancel", orderId, reason);
-    return res;
+  public static useCancel(options: Options<true, [number, string]>) {
+    return useRequest((orderId, reason) => {
+      this.EnsureLogin();
+      return this.Invoke("OrderPostCancel", orderId, reason);
+    }, options);
   }
 }

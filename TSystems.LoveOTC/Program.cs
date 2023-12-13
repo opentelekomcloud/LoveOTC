@@ -12,7 +12,9 @@ builder.WebHost.ConfigureKestrel(x => x.AddServerHeader = false);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, x => {
-        x.Authority = Shared.Dev ? "http://localhost:8080/realms/loveotc" : "https://keycloak.eco.tsi-dev.otc-service.com/realms/eco";
+        x.Authority = Shared.Dev
+            ? "http://localhost:8080/realms/loveotc"
+            : "https://keycloak.eco.tsi-dev.otc-service.com/realms/eco";
         x.Audience = "account";
         x.RequireHttpsMetadata = !Shared.Dev;
         x.Events = new() {
@@ -29,6 +31,7 @@ builder.Services.AddDbContext<ShopContext>(x => {
         x.EnableSensitiveDataLogging();
         x.EnableDetailedErrors();
     }
+
     x.UseLazyLoadingProxies();
     x.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });

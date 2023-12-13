@@ -29,9 +29,9 @@ public class Product : Concurrency, IArchive {
 
     public JsonElement? Description { get; set; }
 
-    public bool? IsArchived { get; set; }
-
     public virtual ICollection<Variant> Variants { get; }
 
     public virtual ICollection<Combo> Combos { get; }
+
+    public bool? IsArchived { get; set; }
 }

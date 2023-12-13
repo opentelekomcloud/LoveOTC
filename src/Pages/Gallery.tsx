@@ -47,11 +47,11 @@ export interface IProductInfo {
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.1
+ * @version 0.1.2
  */
 export function Gallery() {
   const style = useStyles();
-  const { data } = useRequest(Hub.Gallery.Get.Categories.bind(Hub.Gallery.Get));
+  const { data } = useRequest(() => Hub.Gallery.Get.Categories());
 
   return (
     <div className={style.main}>
@@ -65,13 +65,11 @@ export function Gallery() {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.1
+ * @version 0.1.2
  */
 function GalleryCategory({ Category }: { Category: string }) {
   const style = useStyles();
-  const { data } = useRequest(Hub.Gallery.Get.Products.bind(Hub.Gallery.Get), {
-    defaultParams: [Category]
-  });
+  const { data } = useRequest(() => Hub.Gallery.Get.Products(Category));
   const list = data || [[], 0];
 
   return <>
@@ -92,13 +90,11 @@ function GalleryCategory({ Category }: { Category: string }) {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.1
+ * @version 0.1.2
  */
 function GalleryCard({ Id }: { Id: number }) {
   const style = useStyles();
-  const { data } = useRequest(Hub.Product.Get.Basic.bind(Hub.Product.Get), {
-    defaultParams: [Id]
-  })
+  const { data } = useRequest(() => Hub.Product.Get.Basic(Id));
 
   return (
     <Card className={style.card}>

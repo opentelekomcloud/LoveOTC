@@ -3,7 +3,7 @@ import { EditRegular, SendRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
 import { useState } from "react";
 import { Flex } from "~/Helpers/Styles";
-import { use500Toast } from "~/Helpers/useToast";
+import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
 
@@ -25,31 +25,30 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.3.0
+ * @version 0.3.1
  */
 export function AdminProductCategory({ ProdId }: { ProdId: number; }) {
   const [cate, setCate] = useState("");
   const [edit, { setTrue, setFalse }] = useBoolean();
 
-  useRequest(AdminHub.Product.Get.Category.bind(AdminHub.Product.Get), {
-    defaultParams: [ProdId],
+  useRequest(() => AdminHub.Product.Get.Category(ProdId), {
     onSuccess(data) {
       data && setCate(data);
     }
   });
 
-  const { dispatchError, dispatchToast } = use500Toast();
+  const { dispatch, dispatchToast } = useErrorToast();
 
-  const { run } = useRequest(AdminHub.Product.Patch.Category.bind(AdminHub.Product.Patch), {
+  const { run } = AdminHub.Product.Patch.useCategory({
     manual: true,
-    onFinally(req, _, e) {
-      if (e)
-        return dispatchError({
-          Message: "Failed Update Category",
-          Request: req,
-          Error: e
-        });
-
+    onError(e, params) {
+      dispatch({
+        Message: "Failed Update Category",
+        Request: params,
+        Error: e
+      });
+    },
+    onSuccess() {
       dispatchToast(
         <Toast>
           <ToastTitle>Category Updated</ToastTitle>
@@ -58,10 +57,10 @@ export function AdminProductCategory({ ProdId }: { ProdId: number; }) {
       );
 
       setFalse();
-    },
+    }
   });
 
-  const { data: cates } = useRequest(Hub.Gallery.Get.Categories.bind(Hub.Gallery.Get), {
+  const { data: cates } = useRequest(() => Hub.Gallery.Get.Categories(), {
     onSuccess(data) {
       setMatchCate(data);
     }

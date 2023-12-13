@@ -25,7 +25,7 @@ public class Order : Concurrency {
     [Column("timestamp without time zone")]
     public DateTime CreateAt { get; set; }
 
-    [StringLength(50)]
+    [StringLength(50, MinimumLength = 6)]
     public string? TrackingNumber { get; set; }
 
     public virtual ICollection<Combo> Combos { get; init; }

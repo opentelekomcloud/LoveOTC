@@ -41,11 +41,10 @@ export abstract class ProductGet extends ShopNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.1.0
+   * @version 0.1.1
    */
-  public static async Limit(prodId: number): Promise<number> {
-    const res = await this.Invoke<number>("ProdGetLimit", prodId);
-    return res;
+  public static Limit(prodId: number): Promise<number> {
+    return this.Invoke<number>("ProdGetLimit", prodId);
   }
 
   /**

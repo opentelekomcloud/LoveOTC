@@ -27,15 +27,12 @@ export function ProductCarousel({ Id }: { Id: number; }) {
   const style = useStyle();
   const [imgs, setImgs] = useState<string[]>(["https://placehold.co/400?text=Loading..."]);
 
-  useRequest(Hub.Product.Get.Carousel.bind(Hub.Product.Get), {
-    defaultParams: [Id],
+  useRequest(() => Hub.Product.Get.Carousel(Id), {
     async onSuccess(data) {
       setImgs(Array<string>(data.length).fill("https://placehold.co/400?text=Loading..."));
 
       for (let i = 0; i < data.length; i++) {
-        const e = data[i];
-
-        Hub.Storage.GetBySlice(e.Cover).then(slice => {
+        Hub.Storage.GetBySlice(data[i].Cover).then(slice => {
           setImgs(x => {
             const n = [...x];
             n[i] = URL.createObjectURL(new Blob(slice));

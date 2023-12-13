@@ -20,8 +20,6 @@ public class Combo : Concurrency, IArchive {
 
     public virtual Product Product { get; set; }
 
-    public bool? IsArchived { get; set; }
-
     public virtual ICollection<Type> Types { get; set; }
 
     public virtual ICollection<ComboType> ComboTypes { get; init; }
@@ -29,4 +27,6 @@ public class Combo : Concurrency, IArchive {
     public virtual ICollection<Order> Orders { get; init; }
 
     public virtual ICollection<OrderCombo> OrderCombos { get; init; }
+
+    public bool? IsArchived { get; set; }
 }

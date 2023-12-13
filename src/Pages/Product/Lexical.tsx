@@ -24,9 +24,7 @@ const useStyle = makeStyles({
 export function ProductLexicalRender({ ProdId }: { ProdId: number }) {
   const style = useStyle();
 
-  const { data, loading } = useRequest(Hub.Product.Get.Lexical, {
-    defaultParams: [ProdId]
-  });
+  const { data, loading } = useRequest(() => Hub.Product.Get.Lexical(ProdId));
 
   return (
     <div className={style.lex}>

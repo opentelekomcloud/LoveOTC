@@ -1,3 +1,5 @@
+import { useRequest } from "ahooks";
+import { Options } from "ahooks/lib/useRequest/src/types";
 import { AdminNet } from "../AdminNet";
 
 /**
@@ -5,54 +7,49 @@ import { AdminNet } from "../AdminNet";
  * @since 0.5.0
  * @version 0.1.0
  */
-export class AdminProductDelete extends AdminNet {
+export abstract class AdminProductDelete extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.1.0
+   * @version 0.2.0
    */
-  public static async Photo(photoId: number): Promise<true> {
-    const res = await this.Invoke<true>("ProductDeletePhoto", photoId);
-    return res;
+  public static usePhoto(options: Options<true, [number]>) {
+    return useRequest((photoId) => this.Invoke("ProductDeletePhoto", photoId), options);
   }
 
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.1.0
+   * @version 0.2.0
    */
-  public static async Variant(variantId: number): Promise<true> {
-    const res = await this.Invoke<true>("ProductDeleteVariant", variantId);
-    return res;
+  public static useVariant(options: Options<true, [number]>) {
+    return useRequest((variantId) => this.Invoke("ProductDeleteVariant", variantId), options);
   }
 
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.1.0
+   * @version 0.2.0
    */
-  public static async Type(variantId: number, type: string): Promise<true> {
-    const res = await this.Invoke<true>("ProductDeleteType", variantId, type);
-    return res;
+  public static useType(options: Options<true, [number, string]>) {
+    return useRequest((variantId, type) => this.Invoke("ProductDeleteType", variantId, type), options);
   }
 
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.1.0
+   * @version 0.2.0
    */
-  public static async Combo(comboId: number): Promise<true> {
-    const res = await this.Invoke<true>("ProductDeleteCombo", comboId);
-    return res;
+  public static useCombo(options: Options<true, [number]>) {
+    return useRequest((comboId) => this.Invoke("ProductDeleteCombo", comboId), options);
   }
 
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.1.0
+   * @version 0.2.0
    */
-  public static async Product(prodId: number): Promise<true> {
-    const res = await this.Invoke<true>("ProductDeleteProduct", prodId);
-    return res;
+  public static useProduct(options: Options<true, [number]>) {
+    return useRequest((prodId) => this.Invoke("ProductDeleteProduct", prodId), options);
   }
 }

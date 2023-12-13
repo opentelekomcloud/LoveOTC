@@ -17,8 +17,7 @@ using Microsoft.EntityFrameworkCore;
 public class Category : Concurrency {
     public uint CategoryId { get; set; }
 
-    [StringLength(15, MinimumLength = 1)]
-    public string Name { get; set; }
+    [StringLength(15, MinimumLength = 1)] public string Name { get; set; }
 
     public virtual ICollection<Product> Products { get; }
 }
