@@ -10,7 +10,7 @@ import { useRouter } from "../Router";
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.2.0
+ * @version 0.2.1
  */
 export function OIDCProvider({ children }: { children: ReactNode }): ReactNode {
   const { Rep } = useRouter();
@@ -25,18 +25,13 @@ export function OIDCProvider({ children }: { children: ReactNode }): ReactNode {
         location.reload();
       }}
 
-      {...(import.meta.env.DEV ?
-        {
-          authority: "http://localhost:8080/realms/loveotc",
-          redirect_uri: "http://localhost:5173/Login",
-          post_logout_redirect_uri: "http://localhost:5173/Logout",
-        } :
-        {
-          authority: "https://keycloak.eco.tsi-dev.otc-service.com/realms/eco",
-          redirect_uri: "https://shop.eco.tsi-dev.otc-service.com/Login",
-          post_logout_redirect_uri: "https://shop.eco.tsi-dev.otc-service.com/Logout",
-        }
-      )}
+      authority="https://keycloak.eco.tsi-dev.otc-service.com/realms/eco"
+      post_logout_redirect_uri="https://shop.eco.tsi-dev.otc-service.com/Logout"
+      redirect_uri={
+        import.meta.env.DEV
+          ? "http://localhost:5173/Login"
+          : "https://shop.eco.tsi-dev.otc-service.com/Login"
+      }
     >
       <AuthHandler />
       {children}
