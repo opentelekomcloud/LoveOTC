@@ -2,6 +2,7 @@ import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface
 import { AddRegular } from "@fluentui/react-icons";
 import { useState } from "react";
 import { useRouter } from "~/Components/Router";
+import { Logger } from "~/Helpers/Logger";
 import { ColFlex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
@@ -14,6 +15,8 @@ import { AdminHub } from "~/ShopNet/Admin";
 const useStyles = makeStyles({
   body: ColFlex
 });
+
+const log = new Logger("Admin", "Product", "AddButton");
 
 /**
  * @author Aloento
@@ -28,7 +31,7 @@ export function AdminProductAddButton() {
   const style = useStyles();
   const [name, setName] = useState("");
 
-  const { dispatch, dispatchToast } = useErrorToast();
+  const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run } = AdminHub.Product.Post.useCreate({
     manual: true,

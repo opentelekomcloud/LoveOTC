@@ -3,8 +3,11 @@ import { EditRegular, SendRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
 import { useState } from "react";
 import { useRouter } from "~/Components/Router";
+import { Logger } from "~/Helpers/Logger";
 import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
+
+const log = new Logger("Admin", "Product", "Detail", "Name");
 
 /**
  * @author Aloento
@@ -22,11 +25,11 @@ export function AdminProductName({ ProdId }: { ProdId: number; }) {
     },
     onError(e) {
       Nav("Admin");
-      console.error(e);
+      log.error(e);
     },
   });
 
-  const { dispatch, dispatchToast } = useErrorToast();
+  const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run } = AdminHub.Product.Patch.useName({
     manual: true,

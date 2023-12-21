@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import { ICartItem } from "~/Components/ShopCart";
+import { Logger } from "~/Helpers/Logger";
 import { IOrderItem } from "~/Pages/History";
 import { IComment } from "~/Pages/History/Comment";
 import { IOrderDetail } from "~/Pages/History/Detail";
@@ -11,16 +12,20 @@ import { OrderEntity } from "./Entity";
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 export abstract class OrderGet extends ShopNet {
+  /** "Order", "Get" */
+  protected static override readonly Log = [...super.Log, "Order", "Get"];
+
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 1.0.0
+   * @version 1.0.1
    */
-  public static async List(): Promise<IOrderItem[]> {
+  public static async List(pLog: Logger): Promise<IOrderItem[]> {
     this.EnsureLogin();
+    const log = pLog.With(...this.Log, "List");
 
     const list = await this.WithTimeCache<
       {
@@ -36,7 +41,7 @@ export abstract class OrderGet extends ShopNet {
       const order = await OrderEntity.Order(meta.OrderId);
 
       if (!order) {
-        console.error(`OrderGetList Mismatch: Order ${meta.OrderId} not found`);
+        log.warn(`[Mismatch] Order ${meta.OrderId} not found`);
         continue;
       }
 
@@ -46,7 +51,7 @@ export abstract class OrderGet extends ShopNet {
         const prod = await ProductEntity.Product(prodId);
 
         if (!prod) {
-          console.error(`OrderGetList Mismatch: Product ${prodId} not found`);
+          log.warn(`[Mismatch] Product ${prodId} not found`);
           continue;
         }
 
@@ -69,10 +74,11 @@ export abstract class OrderGet extends ShopNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 1.0.0
+   * @version 1.0.1
    */
-  public static async Detail(orderId: number): Promise<IOrderDetail> {
+  public static async Detail(orderId: number, pLog: Logger): Promise<IOrderDetail> {
     this.EnsureLogin();
+    const log = pLog.With(...this.Log, "Detail");
 
     const meta = await this.WithTimeCache<
       {
@@ -95,14 +101,14 @@ export abstract class OrderGet extends ShopNet {
         const type = await ProductEntity.Type(typeId);
 
         if (!type) {
-          console.error(`OrderGetDetail Mismatch: Type ${typeId} not found. Order : ${orderId}`);
+          log.warn(`[Mismatch] Type ${typeId} not found. Order : ${orderId}`);
           continue;
         }
 
         const vari = await ProductEntity.Variant(type.VariantId);
 
         if (!vari) {
-          console.error(`OrderGetDetail Mismatch: Variant ${type.VariantId} not found. Type : ${typeId}, Order : ${orderId}`);
+          log.warn(`[Mismatch] Variant ${type.VariantId} not found. Type : ${typeId}, Order : ${orderId}`);
           continue;
         }
 
@@ -113,15 +119,15 @@ export abstract class OrderGet extends ShopNet {
       const prod = await ProductEntity.Product(prodId);
 
       if (!prod) {
-        console.error(`OrderGetDetail Mismatch: Product ${prodId} not found. Order : ${orderId}`);
+        log.warn(`[Mismatch] Product ${prodId} not found. Order : ${orderId}`);
         continue;
       }
 
       const list = await ProductGet.PhotoList(prodId);
-      const cover = await this.FindCover(list, prodId);
+      const cover = await this.FindCover(list, prodId, log);
 
       if (!cover)
-        console.warn(`Product ${prodId} has no photo`);
+        log.warn(`Product ${prodId} has no photo`);
 
       items.push({
         Id: index++,
@@ -139,7 +145,7 @@ export abstract class OrderGet extends ShopNet {
       const cmt = await OrderEntity.Comment(cmtId);
 
       if (!cmt) {
-        console.error(`OrderGetDetail Mismatch: Comment ${cmtId} not found. Order : ${orderId}`);
+        log.warn(`[Mismatch] Comment ${cmtId} not found. Order : ${orderId}`);
         continue;
       }
 

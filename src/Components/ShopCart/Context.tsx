@@ -1,5 +1,6 @@
 import { useRequest } from "ahooks";
 import { ReactNode, createContext, useContext, useState } from "react";
+import { Logger } from "~/Helpers/Logger";
 import { Hub } from "~/ShopNet";
 import { CartTable } from "~/ShopNet/Database";
 import { ICartItem } from ".";
@@ -31,10 +32,12 @@ export function useShopCart() {
   return useContext(ShopCart);
 }
 
+const log = new Logger("ShopCart", "Context");
+
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.3.0
+ * @version 0.3.1
  */
 export function ShopCartContext({ children }: { children: ReactNode }) {
   const [list, setList] = useState<ICartItem[]>([]);
@@ -44,7 +47,7 @@ export function ShopCartContext({ children }: { children: ReactNode }) {
     const res: ICartItem[] = [];
 
     for (const i of arr) {
-      const b = await Hub.Product.Get.Basic(i.ProdId);
+      const b = await Hub.Product.Get.Basic(i.ProdId, log);
       res.push({
         ...i,
         ...b
@@ -52,6 +55,8 @@ export function ShopCartContext({ children }: { children: ReactNode }) {
     }
 
     setList(res);
+  }, {
+    onError: log.error,
   });
 
   async function Update(val: ICartItem[]) {
@@ -70,7 +75,7 @@ export function ShopCartContext({ children }: { children: ReactNode }) {
   }
 
   async function Add(prodId: number, type: Record<string, string>, quantity: number) {
-    const res = await Hub.Product.Get.Basic(prodId);
+    const res = await Hub.Product.Get.Basic(prodId, log);
     list.push({
       ...res,
       Id: list.length,

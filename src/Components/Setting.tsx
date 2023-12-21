@@ -1,6 +1,7 @@
 import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Input, Label, Toast, ToastBody, ToastTitle, makeStyles, tokens } from "@fluentui/react-components";
 import { useState } from "react";
 import { useAuth } from "react-oidc-context";
+import { Logger } from "~/Helpers/Logger";
 import { ColFlex, Flex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
@@ -33,10 +34,12 @@ const useStyles = makeStyles({
   },
 });
 
+const log = new Logger("Setting");
+
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.4.0
+ * @version 0.4.1
  */
 export function Setting({ Open, Toggle, New }: ISetting) {
   const style = useStyles();
@@ -46,7 +49,7 @@ export function Setting({ Open, Toggle, New }: ISetting) {
   const [phone, setPhone] = useState<string>();
   const [address, setAddress] = useState<string>();
 
-  Hub.User.Get.useMe({
+  Hub.User.Get.useMe(log, {
     manual: New,
     onSuccess(data) {
       if (!data) return;
@@ -58,7 +61,7 @@ export function Setting({ Open, Toggle, New }: ISetting) {
     }
   });
 
-  const { dispatch, dispatchToast } = useErrorToast();
+  const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run } = Hub.User.Post.useUpdate({
     manual: true,

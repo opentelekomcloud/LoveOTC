@@ -5,7 +5,7 @@ import { Combine } from "~/Helpers/Path";
 /**
  * @author Aloento
  * @since 0.5.0 MusiLand
- * @version 0.2.1
+ * @version 0.2.2
  */
 interface IRouter {
   Paths: readonly string[],
@@ -13,6 +13,7 @@ interface IRouter {
   readonly Put: (search: URLSearchParams) => void,
   readonly Nav: (...paths: readonly any[]) => void,
   readonly Rep: (...paths: readonly any[]) => void,
+  readonly Fresh: (...paths: readonly any[]) => void,
   readonly Reload: (bool: boolean) => void,
 }
 
@@ -51,6 +52,7 @@ export function BrowserRouter({ children }: { children: ReactNode }): ReactNode 
     Put: put,
     Nav: (...p) => nav(Combine(p)),
     Rep: (...p) => rep(Combine(p)),
+    Fresh: (...p) => fresh(Combine(p)),
     Reload: (bool) => reload = bool
   }));
 
@@ -74,6 +76,11 @@ export function BrowserRouter({ children }: { children: ReactNode }): ReactNode 
   function rep(path: string) {
     history.replaceState(null, "", path);
     update(path);
+  }
+
+  function fresh(path: string) {
+    history.pushState(null, "", path);
+    location.reload();
   }
 
   useMount(() => {

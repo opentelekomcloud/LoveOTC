@@ -1,6 +1,7 @@
 import { Button, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Image, Input, Toast, ToastTitle, makeStyles, tokens } from "@fluentui/react-components";
 import { DismissRegular, EditRegular } from "@fluentui/react-icons";
 import { useState } from "react";
+import { Logger } from "~/Helpers/Logger";
 import { ColFlex, Cover, Flex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
@@ -31,13 +32,25 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.3.1
+ * @version 0.1.0
  */
-export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }: { Photo: IPhotoItem; Refresh: () => void; }) {
+interface IAdminProductPhotoEdit {
+  Photo: IPhotoItem;
+  Refresh: () => void;
+}
+
+const log = new Logger("Admin", "Product", "Detail", "Photo", "Edit");
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.3.2
+ */
+export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }: IAdminProductPhotoEdit) {
   const style = useStyles();
   const [cap, setCap] = useState(Caption || "");
 
-  const { dispatch, dispatchToast } = useErrorToast();
+  const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run: updateCaption } = AdminHub.Product.Patch.useCaption({
     manual: true,
@@ -60,7 +73,7 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
     }
   });
 
-  const { run: updateFile } = AdminHub.Product.Patch.usePhoto({
+  const { run: updateFile } = AdminHub.Product.Patch.usePhoto(log, {
     manual: true,
     onError(e, req) {
       dispatch({

@@ -1,7 +1,9 @@
 import { Toast, ToastTitle } from "@fluentui/react-components";
+import { useConst } from "@fluentui/react-hooks";
 import { useRequest } from "ahooks";
 import type { Options } from "ahooks/lib/useRequest/src/types";
 import { NotLoginError } from "~/Helpers/Exceptions";
+import type { Logger } from "~/Helpers/Logger";
 import { useErrorToast } from "~/Helpers/useToast";
 import { IConcurrency } from "../Database";
 import { ShopNet } from "../ShopNet";
@@ -22,10 +24,11 @@ export abstract class UserGet extends ShopNet {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.2.0
+   * @version 0.2.1
    */
-  public static useMe(options?: Options<IuseMe | void, []>, suppress: boolean = true) {
-    const { dispatch, dispatchToast } = useErrorToast();
+  public static useMe(pLog: Logger, options?: Options<IuseMe | void, []>, suppress: boolean = true) {
+    const log = useConst(() => pLog.With("|", "Hub", "User", "Get", "Me"));
+    const { dispatch, dispatchToast } = useErrorToast(log);
 
     return useRequest(() => {
       this.EnsureLogin();
@@ -35,7 +38,7 @@ export abstract class UserGet extends ShopNet {
       onError: (e, req) => {
         if (e instanceof NotLoginError) {
           if (suppress)
-            console.debug(e);
+            log.debug(e);
           else
             dispatchToast(
               <Toast>

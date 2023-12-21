@@ -1,6 +1,7 @@
 import { Body1Strong, Button, Caption1, DataGridCell, Link, SpinButton, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
 import { DeleteRegular } from "@fluentui/react-icons";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
+import { Logger } from "~/Helpers/Logger";
 import { ColFlex } from "~/Helpers/Styles";
 import { useLimit } from "~/Helpers/useLimit";
 import { ICartItem } from ".";
@@ -27,13 +28,7 @@ const useStyles = makeStyles({
   },
 });
 
-/**
- * @author Aloento
- * @since 0.1.0
- * @version 0.3.1
- */
-export const CartColumns: TableColumnDefinition<ICartItem>[] = [
-  MakeCoverCol(44),
+const columns: TableColumnDefinition<ICartItem>[] = [
   createTableColumn<ICartItem>({
     columnId: "Product",
     renderCell(item) {
@@ -81,11 +76,21 @@ export const CartColumns: TableColumnDefinition<ICartItem>[] = [
           <Button
             appearance="subtle"
             icon={<DeleteRegular />}
-            onClick={() => {
-              Update(List.filter(x => x.Id !== item.Id));
-            }} />
+            onClick={() => Update(List.filter(x => x.Id !== item.Id))} />
         </DataGridCell>
       );
     },
   })
 ];
+
+/**
+ * @author Aloento
+ * @since 0.1.0
+ * @version 0.3.1
+ */
+export function CartColumns(log: Logger): TableColumnDefinition<ICartItem>[] {
+  return [
+    MakeCoverCol(44, log),
+    ...columns
+  ];
+}

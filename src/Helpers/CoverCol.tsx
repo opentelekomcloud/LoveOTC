@@ -1,5 +1,6 @@
 import { DataGridCell, DataGridHeaderCell, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
 import { GuidImage } from "./GuidImage";
+import type { Logger } from "./Logger";
 import { Cover } from "./Styles";
 
 /**
@@ -25,12 +26,10 @@ const useStyle = makeStyles({
  * @since 0.5.0
  * @version 0.2.0
  */
-export function MakeCoverCol(Size: number) {
-  const w = { width: `${Size}px` };
+export function MakeCoverCol(size: number, log: Logger) {
+  const w = { width: `${size}px` };
 
-  return createTableColumn<{
-    Cover: string;
-  }>({
+  return createTableColumn<{ Cover: string; }>({
     columnId: "Cover",
     renderHeaderCell: () => {
       const style = useStyle();
@@ -50,16 +49,10 @@ export function MakeCoverCol(Size: number) {
             className={style.img}
             style={w}
             Guid={item.Cover}
+            Log={log}
           />
         </DataGridCell>
       )
     },
   })
 }
-
-/**
- * @author Aloento
- * @since 0.1.0
- * @version 0.2.0
- */
-export const CoverCol = MakeCoverCol(50);

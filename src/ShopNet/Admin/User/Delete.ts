@@ -14,7 +14,11 @@ export abstract class AdminUserDelete extends AdminNet {
    * @version 0.2.0
    */
   public static useUser(options: Options<true, [string]>) {
-    return useRequest((userId) => this.Invoke("UserDeleteUser", userId), options);
+    return useRequest(async userId => {
+      const res = await this.Invoke<boolean>("UserDeleteUser", userId);
+      this.EnsureTrue(res);
+      return res;
+    }, options);
   }
 
   /**
@@ -23,6 +27,10 @@ export abstract class AdminUserDelete extends AdminNet {
    * @version 0.2.0
    */
   public static useAdmin(options: Options<true, [string]>) {
-    return useRequest((userId) => this.Invoke("UserDeleteAdmin", userId), options);
+    return useRequest(async userId => {
+      const res = await this.Invoke<boolean>("UserDeleteAdmin", userId);
+      this.EnsureTrue(res);
+      return res;
+    }, options);
   }
 }

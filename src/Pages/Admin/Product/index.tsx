@@ -1,6 +1,7 @@
 import { Body1Strong, DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
-import { CoverCol } from "~/Helpers/CoverCol";
+import { MakeCoverCol } from "~/Helpers/CoverCol";
+import { Logger } from "~/Helpers/Logger";
 import { AdminHub } from "~/ShopNet/Admin";
 import { DelegateDataGrid } from "../../../Components/DataGrid/Delegate";
 import { AdminProductDetail } from "./Detail";
@@ -37,13 +38,15 @@ const useStyles = makeStyles({
   }
 });
 
+const log = new Logger("Admin", "Product");
+
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 const columns: TableColumnDefinition<IProductItem>[] = [
-  CoverCol,
+  MakeCoverCol(50, log),
   createTableColumn<IProductItem>({
     columnId: "Product",
     renderHeaderCell: () => {
@@ -122,7 +125,9 @@ const columns: TableColumnDefinition<IProductItem>[] = [
  * @version 0.1.1
  */
 export function AdminProduct() {
-  const { data } = useRequest(() => AdminHub.Product.Get.List());
+  const { data } = useRequest(() => AdminHub.Product.Get.List(log), {
+    onError: log.error
+  });
 
   return (
     <DelegateDataGrid Items={data || []} Columns={columns} />

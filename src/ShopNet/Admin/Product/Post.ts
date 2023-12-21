@@ -1,6 +1,8 @@
+import { useConst } from "@fluentui/react-hooks";
 import { useRequest } from "ahooks";
 import { Options } from "ahooks/lib/useRequest/src/types";
 import { Subject } from "rxjs";
+import { Logger } from "~/Helpers/Logger";
 import { AdminNet } from "../AdminNet";
 
 /**
@@ -9,13 +11,16 @@ import { AdminNet } from "../AdminNet";
  * @version 0.1.0
  */
 export abstract class AdminProductPost extends AdminNet {
+  /** "Product", "Post" */
+  protected static override readonly Log = [...super.Log, "Product", "Post"];
+
   /**
    * @author Aloento
    * @since 0.5.0
    * @version 0.2.0
    */
   public static useCreate(options: Options<number, [string]>) {
-    return useRequest((name) => this.Invoke("ProductPostCreate", name), options);
+    return useRequest(name => this.Invoke("ProductPostCreate", name), options);
   }
 
   /**
@@ -24,15 +29,21 @@ export abstract class AdminProductPost extends AdminNet {
    * @version 0.2.0
    */
   public static useMovePhoto(options: Options<true, [number, boolean]>) {
-    return useRequest((photoId, up) => this.Invoke("ProductPostMovePhoto", photoId, up), options);
+    return useRequest(async (photoId, up) => {
+      const res = await this.Invoke<boolean>("ProductPostMovePhoto", photoId, up);
+      this.EnsureTrue(res);
+      return res;
+    }, options);
   }
 
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 1.0.2
+   * @version 1.0.3
    */
-  public static usePhoto(options: Options<true, [number, File]>) {
+  public static usePhoto(pLog: Logger, options: Options<true, [number, File]>) {
+    const log = useConst(() => pLog.With(...this.Log, "Photo"));
+
     return useRequest(async (prodId, file) => {
       if (!file.type.startsWith("image/"))
         throw new TypeError("File is not an image");
@@ -41,10 +52,11 @@ export abstract class AdminProductPost extends AdminNet {
         throw new RangeError("File is too large, max 10MB");
 
       const subject = new Subject<Uint8Array>();
-      const res = this.Invoke<true>("ProductPostPhoto", prodId, subject);
-      await this.HandleFileStream(file, subject);
+      const res = this.Invoke<boolean>("ProductPostPhoto", prodId, subject);
+      await this.HandleFileStream(file, subject, log);
 
-      return res;
+      this.EnsureTrue(await res);
+      return true as const;
     }, options);
   }
 

@@ -1,6 +1,7 @@
 import { DataGridCell, DataGridHeaderCell, Subtitle1, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
+import { Logger } from "~/Helpers/Logger";
 import { Flex } from "~/Helpers/Styles";
 import { AdminHub } from "~/ShopNet/Admin";
 import { AdminProductVariantDelete } from "./Delete";
@@ -41,6 +42,8 @@ const useStyles = makeStyles({
     flexGrow: 0
   }
 });
+
+const log = new Logger("Admin", "Product", "Detail", "Variant");
 
 /**
  * @author Aloento
@@ -130,12 +133,14 @@ let refreshVariant: () => void;
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
+ * @version 0.2.1
  */
 export function AdminProductVariant({ ProdId }: { ProdId: number }) {
   const style = useStyles();
 
-  const { data, run } = useRequest(() => AdminHub.Product.Get.Variants(ProdId));
+  const { data, run } = useRequest(() => AdminHub.Product.Get.Variants(ProdId, log), {
+    onError: log.error
+  });
   refreshVariant = run;
 
   return <>

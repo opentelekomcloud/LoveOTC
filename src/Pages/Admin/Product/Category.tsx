@@ -2,6 +2,7 @@ import { Button, Combobox, Label, Option, Toast, ToastTitle, makeStyles } from "
 import { EditRegular, SendRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
 import { useState } from "react";
+import { Logger } from "~/Helpers/Logger";
 import { Flex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
@@ -22,10 +23,12 @@ const useStyles = makeStyles({
   }
 });
 
+const log = new Logger("Admin", "Product", "Detail", "Category");
+
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.3.1
+ * @version 0.3.2
  */
 export function AdminProductCategory({ ProdId }: { ProdId: number; }) {
   const [cate, setCate] = useState("");
@@ -34,10 +37,11 @@ export function AdminProductCategory({ ProdId }: { ProdId: number; }) {
   useRequest(() => AdminHub.Product.Get.Category(ProdId), {
     onSuccess(data) {
       data && setCate(data);
-    }
+    },
+    onError: log.error
   });
 
-  const { dispatch, dispatchToast } = useErrorToast();
+  const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run } = AdminHub.Product.Patch.useCategory({
     manual: true,
@@ -63,7 +67,8 @@ export function AdminProductCategory({ ProdId }: { ProdId: number; }) {
   const { data: cates } = useRequest(() => Hub.Gallery.Get.Categories(), {
     onSuccess(data) {
       setMatchCate(data);
-    }
+    },
+    onError: log.error
   });
 
   const [matchCate, setMatchCate] = useState(cates);

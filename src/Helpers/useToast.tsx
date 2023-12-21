@@ -1,4 +1,5 @@
 import { Text, Toast, ToastBody, ToastTitle, makeStyles, useToastController } from "@fluentui/react-components";
+import type { Logger } from "./Logger";
 import { PreLine } from "./Styles";
 
 /**
@@ -24,9 +25,9 @@ interface Cause<T = any> {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.2
+ * @version 0.2.3
  */
-export function useErrorToast<T>() {
+export function useErrorToast<T>(log: Logger) {
   const style = useStyles();
   const { dispatchToast } = useToastController();
 
@@ -60,7 +61,7 @@ export function useErrorToast<T>() {
         { intent: "error", timeout: 10000 }
       );
 
-      console.error(e);
+      log.error(e);
     },
     dispatchToast
   };

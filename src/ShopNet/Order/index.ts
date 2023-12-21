@@ -1,3 +1,4 @@
+import { OrderDelete } from "./Delete";
 import { OrderGet } from "./Get";
 import { OrderPost } from "./Post";
 
@@ -8,5 +9,6 @@ import { OrderPost } from "./Post";
  */
 export const Order = {
   Get: OrderGet,
-  Post: OrderPost
+  Post: OrderPost,
+  Delete: OrderDelete,
 }

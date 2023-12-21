@@ -2,6 +2,7 @@ import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import { useState } from "react";
 import { Carousel } from "react-responsive-carousel";
+import { Logger } from "~/Helpers/Logger";
 import { Cover } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
 
@@ -18,21 +19,25 @@ const useStyle = makeStyles({
   },
 });
 
+const img = "https://placehold.co/400?text=Loading...";
+
+const log = new Logger("Product", "Carousel");
+
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.2
+ * @version 0.2.3
  */
 export function ProductCarousel({ Id }: { Id: number; }) {
   const style = useStyle();
-  const [imgs, setImgs] = useState<string[]>(["https://placehold.co/400?text=Loading..."]);
+  const [imgs, setImgs] = useState<string[]>([img]);
 
-  useRequest(() => Hub.Product.Get.Carousel(Id), {
+  useRequest(() => Hub.Product.Get.Carousel(Id, log), {
     async onSuccess(data) {
-      setImgs(Array<string>(data.length).fill("https://placehold.co/400?text=Loading..."));
+      setImgs(Array<string>(data.length).fill(img));
 
       for (let i = 0; i < data.length; i++) {
-        Hub.Storage.GetBySlice(data[i].Cover).then(slice => {
+        Hub.Storage.GetBySlice(data[i].Cover, log).then(slice => {
           setImgs(x => {
             const n = [...x];
             n[i] = URL.createObjectURL(new Blob(slice));
@@ -41,6 +46,7 @@ export function ProductCarousel({ Id }: { Id: number; }) {
         });
       }
     },
+    onError: log.error
   });
 
   return (

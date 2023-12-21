@@ -14,6 +14,10 @@ export abstract class AdminUserPost extends AdminNet {
    * @version 0.1.0
    */
   public static useAdmin(options: Options<true, [string]>) {
-    return useRequest((userId) => this.Invoke("UserPostAdmin", userId), options);
+    return useRequest(async userId => {
+      const res = await this.Invoke<boolean>("UserPostAdmin", userId);
+      this.EnsureTrue(res);
+      return res;
+    }, options);
   }
 }

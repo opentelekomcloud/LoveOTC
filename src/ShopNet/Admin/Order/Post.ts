@@ -11,19 +11,27 @@ export abstract class AdminOrderPost extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.2.0
+   * @version 0.2.1
    */
   public static useAppend(options: Options<true, [number, string]>) {
-    return useRequest((orderId, cmt) => this.Invoke("OrderPostAppend", orderId, cmt), options);
+    return useRequest(async (orderId, cmt) => {
+      const res = await this.Invoke<boolean>("OrderPostAppend", orderId, cmt);
+      this.EnsureTrue(res);
+      return res;
+    }, options);
   }
 
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.2.0
+   * @version 0.2.1
    */
   public static useClose(options: Options<true, [number, string]>) {
-    return useRequest((orderId, reason) => this.Invoke("OrderPostClose", orderId, reason), options);
+    return useRequest(async (orderId, reason) => {
+      const res = await this.Invoke<boolean>("OrderPostClose", orderId, reason);
+      this.EnsureTrue(res);
+      return res;
+    }, options);
   }
 
   /**
@@ -32,6 +40,23 @@ export abstract class AdminOrderPost extends AdminNet {
    * @version 0.2.0
    */
   public static useShip(options: Options<true, [number, string | undefined]>) {
-    return useRequest((orderId, track) => this.Invoke("OrderPostShip", orderId, track), options);
+    return useRequest(async (orderId, track) => {
+      const res = await this.Invoke<boolean>("OrderPostShip", orderId, track);
+      this.EnsureTrue(res);
+      return res;
+    }, options);
+  }
+
+  /**
+   * @author Aloento
+   * @since 1.0.0
+   * @version 0.1.0
+   */
+  public static useAccept(options: Options<true, [number]>) {
+    return useRequest(async orderId => {
+      const res = await this.Invoke<boolean>("OrderPostAccept", orderId);
+      this.EnsureTrue(res);
+      return res;
+    }, options);
   }
 }
