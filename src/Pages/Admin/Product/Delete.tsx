@@ -1,7 +1,10 @@
 import { Button, Toast, ToastTitle } from "@fluentui/react-components";
 import { useRouter } from "~/Components/Router";
+import { Logger } from "~/Helpers/Logger";
 import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
+
+const log = new Logger("Admin", "Product", "Detail", "Delete");
 
 /**
  * @author Aloento
@@ -10,7 +13,7 @@ import { AdminHub } from "~/ShopNet/Admin";
  */
 export function AdminProductDelete({ ProdId }: { ProdId: number }) {
   const { Nav } = useRouter();
-  const { dispatch, dispatchToast } = useErrorToast();
+  const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run } = AdminHub.Product.Delete.useProduct({
     manual: true,

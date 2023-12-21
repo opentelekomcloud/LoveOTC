@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import type { Logger } from "~/Helpers/Logger";
 import { IProductItem } from "~/Pages/Admin/Product";
 import { IVariantItem } from "~/Pages/Admin/Product/Variant";
 import { ProductEntity } from "~/ShopNet/Product/Entity";
@@ -8,15 +9,20 @@ import { AdminNet } from "../AdminNet";
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 export abstract class AdminProductGet extends AdminNet {
+  /** "Product", "Get" */
+  protected static override readonly Log = [...super.Log, "Product", "Get"];
+
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 1.0.0
+   * @version 1.0.1
    */
-  public static async List(): Promise<IProductItem[]> {
+  public static async List(pLog: Logger): Promise<IProductItem[]> {
+    const log = pLog.With(...this.Log, "List");
+
     const list = await this.WithTimeCache<
       {
         ProductId: number;
@@ -32,15 +38,15 @@ export abstract class AdminProductGet extends AdminNet {
       const prod = await ProductEntity.Product(meta.ProductId);
 
       if (!prod) {
-        console.error(`Product ${meta.ProductId} Not Found`);
+        log.warn(`Product ${meta.ProductId} Not Found`);
         continue;
       }
 
       const photos = await ProductGet.PhotoList(meta.ProductId);
-      const cover = await this.FindCover(photos, meta.ProductId);
+      const cover = await this.FindCover(photos, meta.ProductId, log);
 
       if (!cover)
-        console.warn(`Product ${meta.ProductId} has no photo`);
+        log.warn(`Product ${meta.ProductId} has no photo`);
 
       items.push({
         Id: meta.ProductId,
@@ -87,9 +93,11 @@ export abstract class AdminProductGet extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 1.0.0
+   * @version 1.0.1
    */
-  public static async Variants(prodId: number): Promise<IVariantItem[]> {
+  public static async Variants(prodId: number, pLog: Logger): Promise<IVariantItem[]> {
+    const log = pLog.With(...this.Log, "Variants");
+
     const list = await this.WithTimeCache<
       {
         VariantId: number;
@@ -103,7 +111,7 @@ export abstract class AdminProductGet extends AdminNet {
       const vari = await ProductEntity.Variant(meta.VariantId);
 
       if (!vari) {
-        console.error(`Variant ${meta} Not Found. Product : ${prodId}`);
+        log.warn(`Variant ${meta} Not Found. Product : ${prodId}`);
         continue;
       }
 
@@ -113,7 +121,7 @@ export abstract class AdminProductGet extends AdminNet {
         const type = await ProductEntity.Type(typeId);
 
         if (!type) {
-          console.error(`Type ${typeId} Not Found. Variant : ${meta.VariantId}, Product : ${prodId}`);
+          log.warn(`Type ${typeId} Not Found. Variant : ${meta.VariantId}, Product : ${prodId}`);
           continue;
         }
 

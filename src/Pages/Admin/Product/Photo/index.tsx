@@ -3,6 +3,7 @@ import { AddRegular, ArrowDownRegular, ArrowUpRegular } from "@fluentui/react-ic
 import { useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
+import { Logger } from "~/Helpers/Logger";
 import { Flex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
@@ -25,6 +26,8 @@ const useStyles = makeStyles({
   }
 });
 
+const log = new Logger("Admin", "Product", "Detail", "Photo");
+
 /**
  * @author Aloento
  * @since 0.5.0
@@ -40,10 +43,10 @@ export interface IPhotoItem {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.1
+ * @version 0.1.2
  */
 const columns: TableColumnDefinition<IPhotoItem>[] = [
-  MakeCoverCol(70),
+  MakeCoverCol(70, log),
   createTableColumn<IPhotoItem>({
     columnId: "Caption",
     renderHeaderCell: () => {
@@ -63,7 +66,7 @@ const columns: TableColumnDefinition<IPhotoItem>[] = [
       )
     },
     renderCell(item) {
-      const { dispatch } = useErrorToast();
+      const { dispatch } = useErrorToast(log);
 
       const { run } = AdminHub.Product.Post.useMovePhoto({
         manual: true,
@@ -108,15 +111,17 @@ let refreshCarousel: () => void;
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.3.1
+ * @version 0.3.2
  */
 export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
-  const { data, run } = useRequest(() => Hub.Product.Get.Carousel(ProdId));
+  const { data, run } = useRequest(() => Hub.Product.Get.Carousel(ProdId, log), {
+    onError: log.error
+  });
   refreshCarousel = run;
 
-  const { dispatch, dispatchToast } = useErrorToast();
+  const { dispatch, dispatchToast } = useErrorToast(log);
 
-  const { run: newPhoto } = AdminHub.Product.Post.usePhoto({
+  const { run: newPhoto } = AdminHub.Product.Post.usePhoto(log, {
     manual: true,
     onError(e, params) {
       dispatch({

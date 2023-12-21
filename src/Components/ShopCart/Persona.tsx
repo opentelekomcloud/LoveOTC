@@ -1,4 +1,6 @@
 import { Field, Label, makeStyles, tokens } from "@fluentui/react-components";
+import { useConst } from "@fluentui/react-hooks";
+import type { Logger } from "~/Helpers/Logger";
 import { ColFlex, Flex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
 
@@ -31,11 +33,12 @@ export interface IPersona {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
+ * @version 0.2.1
  */
-export function PersonaInfo() {
+export function PersonaInfo({ Log }: { Log: Logger }) {
   const style = useStyles();
-  const { data } = Hub.User.Get.useMe();
+  const log = useConst(() => Log.With("PersonaInfo"));
+  const { data } = Hub.User.Get.useMe(log);
 
   return <>
     <div className={style.person}>

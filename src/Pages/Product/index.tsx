@@ -3,6 +3,7 @@ import { useRequest } from "ahooks";
 import { useState } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { useRouter } from "~/Components/Router";
+import { Logger } from "~/Helpers/Logger";
 import { BaseCard, Col, ColFlex, Flex } from "~/Helpers/Styles";
 import { useLimit } from "~/Helpers/useLimit";
 import { Hub } from "~/ShopNet";
@@ -59,23 +60,25 @@ export interface IProduct {
   Combos: Omit<IComboItem, "Id">[];
 }
 
+const log = new Logger("Product");
+
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.4
+ * @version 0.1.5
  */
 export function Product() {
   const style = useStyle();
   const { Nav, Paths } = useRouter();
   const id = parseInt(Paths.at(1)!);
 
-  const { data } = useRequest(() => Hub.Product.Get.Basic(id), {
+  const { data } = useRequest(() => Hub.Product.Get.Basic(id, log), {
     onBefore() {
       isNaN(id) && Nav("/");
     },
     onError(e) {
       Nav("/");
-      console.error(e);
+      log.error(e);
     }
   });
 

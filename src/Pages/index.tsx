@@ -1,4 +1,5 @@
 import { makeStyles, tokens } from "@fluentui/react-components";
+import { useMemo } from "react";
 import { NewUser } from "~/Components/NewUser";
 import { ColFlex, NavH, NavW } from "~/Helpers/Styles";
 import { Admin } from "~/Pages/Admin";
@@ -40,14 +41,14 @@ const useStyle = makeStyles({
 /**
  * @author Aloento
  * @since 0.2.2 MusiLand
- * @version 0.3.0
+ * @version 0.3.1
  */
 export function Layout() {
   const style = useStyle();
   const { Paths } = useRouter();
   const path = Paths.at(0);
 
-  function Matcher() {
+  const match = useMemo(() => {
     switch (path) {
       case "Product":
         return <Product />;
@@ -68,14 +69,14 @@ export function Layout() {
       default:
         return <div>404</div>;
     }
-  }
+  }, [path]);
 
   return <>
     <TopNavBar />
 
     <div className={style.body}>
       <main className={style.content}>
-        <Matcher />
+        {match}
       </main>
 
       <Footer />

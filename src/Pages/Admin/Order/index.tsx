@@ -1,6 +1,7 @@
 import { DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
+import { Logger } from "~/Helpers/Logger";
 import { IOrderItem } from "~/Pages/History";
 import { HistoryColumns } from "~/Pages/History/Columns";
 import { AdminHub } from "~/ShopNet/Admin";
@@ -36,13 +37,15 @@ export interface IAdminOrderItem extends IOrderItem {
   User: string;
 }
 
+const log = new Logger("Admin", "Order");
+
 /**
  * @author Aloento
  * @since 0.1.0
  * @version 0.2.0
  */
 const columns: TableColumnDefinition<IAdminOrderItem>[] = [
-  ...HistoryColumns.slice(0, -1),
+  ...HistoryColumns(log).slice(0, -1),
   createTableColumn<IAdminOrderItem>({
     columnId: "User",
     renderHeaderCell: () => {
@@ -85,7 +88,9 @@ const columns: TableColumnDefinition<IAdminOrderItem>[] = [
  * @version 0.2.0
  */
 export function AdminOrder() {
-  const { data } = useRequest(() => AdminHub.Order.Get.List());
+  const { data } = useRequest(() => AdminHub.Order.Get.List(log), {
+    onError: log.error
+  });
 
   return (
     <DelegateDataGrid Items={data || []} Columns={columns} />

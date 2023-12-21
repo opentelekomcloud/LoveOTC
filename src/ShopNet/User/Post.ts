@@ -15,9 +15,11 @@ export abstract class UserPost extends ShopNet {
    * @version 0.2.0
    */
   public static useUpdate(options: Options<true, [Partial<IPersona>]>) {
-    return useRequest(req => {
+    return useRequest(async req => {
       this.EnsureLogin();
-      return this.Invoke("UserPostUpdate", req);
+      const res = await this.Invoke<boolean>("UserPostUpdate", req);
+      this.EnsureTrue(res);
+      return res;
     }, options);
   }
 }

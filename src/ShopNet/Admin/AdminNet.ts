@@ -7,13 +7,16 @@ import { SignalR } from "../SignalR";
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 export abstract class AdminNet extends SignalR {
+  /** "|", "AdminNet" */
+  protected static readonly Log = ["|", "AdminNet"];
+
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.1.0
+   * @version 0.1.2
    */
   public static readonly Hub = new HubConnectionBuilder()
     .withUrl(import.meta.env.DEV ? "https://localhost/AdminHub" : "/AdminHub",
@@ -30,6 +33,7 @@ export abstract class AdminNet extends SignalR {
         },
       })
     .withAutomaticReconnect()
+    .withStatefulReconnect()
     .withHubProtocol(new MessagePackHubProtocol())
     .configureLogging(import.meta.env.DEV ? LogLevel.Debug : LogLevel.Information)
     .build();

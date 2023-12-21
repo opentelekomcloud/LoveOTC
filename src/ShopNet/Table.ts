@@ -65,11 +65,11 @@ export class Table<TPre = any> {
   /**
    * @author Aloento
    * @since 0.1.0 MusiLand
-   * @version 0.2.0
+   * @version 0.2.1
    */
   public async Set<T extends TPre = TPre>(id: string, val: T, exp?: Dayjs | null): Promise<T> {
     if (!val)
-      throw `val is null or undefined`;
+      throw TypeError("Value cannot be null");
 
     if (exp === null) {
       await this.Sto.put({
@@ -82,7 +82,7 @@ export class Table<TPre = any> {
 
     const time = (exp || dayjs().add(1, "week")).unix();
     if (exp && time < dayjs().unix())
-      throw "The expiration time cannot be less than the current time";
+      throw RangeError(`Expire time [${time}] cannot be less than now`);
 
     await this.Sto.put({
       Id: id, Exp: time,
@@ -95,11 +95,11 @@ export class Table<TPre = any> {
   /**
    * @author Aloento
    * @since 0.3.0 MusiLand
-   * @version 0.2.0
+   * @version 0.2.1
    */
   public Trim() {
-    return this.Sto.filter(x => {
-      return typeof x.Exp === "number" && x.Exp < dayjs().unix();
-    }).delete();
+    return this.Sto
+      .filter(x => typeof x.Exp === "number" && x.Exp < dayjs().unix())
+      .delete();
   }
 }

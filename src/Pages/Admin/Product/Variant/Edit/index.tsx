@@ -99,7 +99,10 @@ export function AdminProductVariantEdit({ Variant, Refresh }: { Variant: IVarian
           <DialogContent className={useStyles().body}>
             <AdminProductVariantName Id={Variant.Id} Name={Variant.Name} />
 
-            <DelegateDataGrid Items={Variant.Types.map<ITypeItem>((v, i) => ({ Id: i, Name: v, VariantId: Variant.Id, Refresh }))} Columns={columns} />
+            <DelegateDataGrid
+              Items={Variant.Types.map<ITypeItem>((v, i) => ({ Id: i, Name: v, VariantId: Variant.Id, Refresh }))}
+              Columns={columns}
+            />
           </DialogContent>
 
           <DialogActions>

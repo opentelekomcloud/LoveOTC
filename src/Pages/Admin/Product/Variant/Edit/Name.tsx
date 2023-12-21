@@ -2,8 +2,11 @@ import { Button, Input, Subtitle2, Toast, ToastTitle } from "@fluentui/react-com
 import { EditRegular, SendRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
 import { useState } from "react";
+import { Logger } from "~/Helpers/Logger";
 import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
+
+const log = new Logger("Admin", "Product", "Detail", "Variant", "Edit", "Name");
 
 /**
  * @author Aloento
@@ -13,7 +16,7 @@ import { AdminHub } from "~/ShopNet/Admin";
 export function AdminProductVariantName({ Id, Name }: { Id: number; Name: string; }) {
   const [name, setName] = useState(Name);
   const [edit, { setTrue, setFalse }] = useBoolean();
-  const { dispatch, dispatchToast } = useErrorToast();
+  const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run } = AdminHub.Product.Patch.useVariantName({
     manual: true,

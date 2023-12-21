@@ -4,7 +4,7 @@ namespace TSystems.LoveOTC.Entities;
  * <remarks>
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.0
+ * @version 0.1.1
  * </remarks>
  */
 public enum OrderStatus {
@@ -12,5 +12,6 @@ public enum OrderStatus {
     Processing,
     Shipping,
     Finished,
-    Cancelled
+    Cancelled,
+    Returning,
 }

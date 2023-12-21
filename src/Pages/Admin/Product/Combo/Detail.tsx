@@ -4,6 +4,7 @@ import { useBoolean, useRequest } from "ahooks";
 import { isInteger } from "lodash-es";
 import { useState } from "react";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
+import { Logger } from "~/Helpers/Logger";
 import { Flex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
@@ -83,19 +84,23 @@ export interface IDetailComboItem extends IComboItem {
   Refresh: () => void;
 }
 
+const log = new Logger("Admin", "Product", "Detail", "Combo", "Detail");
+
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.1
+ * @version 0.2.2
  */
 export function AdminProductComboDetail({ Id, ProdId, Combo, Stock, Refresh }: IDetailComboItem) {
   const [open, { toggle }] = useBoolean();
   const [combo, setCombo] = useState(Combo);
   const [stock, setStock] = useState(Stock);
 
-  const { data: varis } = useRequest(() => AdminHub.Product.Get.Variants(ProdId));
+  const { data: varis } = useRequest(() => AdminHub.Product.Get.Variants(ProdId, log), {
+    onError: log.error
+  });
 
-  const { dispatch, dispatchToast } = useErrorToast();
+  const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run } = AdminHub.Product.Patch.useCombo({
     manual: true,

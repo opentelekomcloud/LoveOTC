@@ -1,27 +1,34 @@
 import { Button, Field, Input, Toast, ToastTitle } from "@fluentui/react-components";
 import { EditRegular, SendRegular } from "@fluentui/react-icons";
-import { useBoolean, useRequest } from "ahooks";
+import { useBoolean } from "ahooks";
 import { useState } from "react";
+import { Logger } from "~/Helpers/Logger";
 import { useErrorToast } from "~/Helpers/useToast";
-import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
 
 /**
  * @author Aloento
- * @since 0.5.0
- * @version 0.2.2
+ * @since 1.0.0
+ * @version 0.1.0
  */
-export function Shipment({ OrderId, Refresh }: { OrderId: number; Refresh: () => void }) {
+interface IShipment {
+  OrderId: number;
+  TrackingNumber?: string;
+  Refresh: () => void;
+}
+
+const log = new Logger("Admin", "Order", "Detail", "Shipment");
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.2.3
+ */
+export function Shipment({ OrderId, TrackingNumber, Refresh }: IShipment) {
   const [edit, { setTrue, setFalse }] = useBoolean();
-  const [track, setTrack] = useState("");
+  const [track, setTrack] = useState(TrackingNumber);
 
-  const { dispatch, dispatchToast } = useErrorToast();
-
-  useRequest(() => Hub.Order.Get.Order(OrderId), {
-    onSuccess(data) {
-      setTrack(data?.TrackingNumber!);
-    }
-  });
+  const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run } = AdminHub.Order.Post.useShip({
     manual: true,

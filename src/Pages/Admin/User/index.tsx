@@ -1,9 +1,10 @@
 import { TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import { DefaultDataGrid } from "~/Components/DataGrid";
+import { Logger } from "~/Helpers/Logger";
 import { AdminHub } from "~/ShopNet/Admin";
-import { AdminUserAdmin } from "./Admin";
 import { AdminUserDelete } from "./Delete";
+import { AdminUserGrant } from "./Grant";
 
 /**
  * @author Aloento
@@ -16,6 +17,8 @@ export interface IUserItem {
   EMail: string;
   Admin?: boolean;
 }
+
+const log = new Logger("Admin", "User");
 
 /**
  * @author Aloento
@@ -56,7 +59,7 @@ const columns: TableColumnDefinition<IUserItem>[] = [
       return "Admin";
     },
     renderCell(item) {
-      return <AdminUserAdmin UserId={item.Id} Admin={item.Admin} Refresh={refreshUser} />
+      return <AdminUserGrant UserId={item.Id} Admin={item.Admin} Refresh={refreshUser} />
     },
   }),
   createTableColumn<IUserItem>({
@@ -80,10 +83,12 @@ let refreshUser: () => void;
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.2.0
+ * @version 0.2.1
  */
 export function AdminUser() {
-  const { data, run } = useRequest(() => AdminHub.User.Get.List());
+  const { data, run } = useRequest(() => AdminHub.User.Get.List(), {
+    onError: log.error
+  });
   refreshUser = run;
 
   return (

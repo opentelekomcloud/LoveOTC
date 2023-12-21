@@ -3,6 +3,7 @@ import { AddRegular, EditRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
 import { Options } from "ahooks/lib/useRequest/src/types";
 import { useState } from "react";
+import { Logger } from "~/Helpers/Logger";
 import { ColFlex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
@@ -19,17 +20,31 @@ const useStyles = makeStyles({
   },
 });
 
+const log = new Logger("Admin", "Product", "Detail", "Variant", "Edit", "Type");
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.1.0
+ */
+interface IAdminProductType {
+  VariantId: number;
+  Type?: string;
+  Refresh: () => void;
+  New?: true;
+}
+
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.2.1
  */
-export function AdminProductType({ VariantId, Type, Refresh, New }: { VariantId: number; Type?: string; Refresh: () => void; New?: true }) {
+export function AdminProductType({ VariantId, Type, Refresh, New }: IAdminProductType) {
   const style = useStyles();
   const [open, { toggle }] = useBoolean();
   const [name, setName] = useState(Type || "");
 
-  const { dispatch, dispatchToast } = useErrorToast();
+  const { dispatch, dispatchToast } = useErrorToast(log);
 
   const options: Options<any, any> = {
     manual: true,

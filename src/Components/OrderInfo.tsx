@@ -1,5 +1,6 @@
 import { Field, Label, makeStyles, tokens } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
+import { Logger } from "~/Helpers/Logger";
 import { ColFlex, Flex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
@@ -20,21 +21,33 @@ const useStyles = makeStyles({
 
 /**
  * @author Aloento
- * @since 0.5.0
- * @version 0.4.0
+ * @since 1.0.0
+ * @version 0.1.1
  */
-export function OrderPersona({ OrderId, Admin }: { OrderId: number; Admin?: true }) {
+interface IOrderInfo {
+  OrderId: number;
+  Order: Awaited<ReturnType<typeof Hub.Order.Get.Order>>;
+  Admin?: true;
+}
+
+const log = new Logger("Order", "Info");
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.4.1
+ */
+export function OrderInfo({ OrderId, Order, Admin }: IOrderInfo) {
   const style = useStyles();
 
   const { data: admin } = useRequest(() => AdminHub.User.Get.OrderUser(OrderId), {
-    manual: !Admin
-  })
-
-  const { data: me } = Hub.User.Get.useMe({
-    manual: Admin
+    manual: !Admin,
+    onError: log.error
   });
 
-  const { data: order } = useRequest(() => Hub.Order.Get.Order(OrderId));
+  const { data: me } = Hub.User.Get.useMe(log, {
+    manual: Admin
+  });
 
   const data = Admin ? admin : me;
 
@@ -56,13 +69,13 @@ export function OrderPersona({ OrderId, Admin }: { OrderId: number; Admin?: true
     <div className={style.flex}>
       <div className={style.box}>
         <Field label="Order Date" size="large">
-          <Label>{order?.CreateAt.toLocaleDateString()}</Label>
+          <Label>{Order?.CreateAt.toLocaleDateString()}</Label>
         </Field>
       </div>
 
       <div className={style.box}>
         <Field label="Status" size="large">
-          <Label>{order?.Status}</Label>
+          <Label>{Order?.Status}</Label>
         </Field>
       </div>
     </div>
@@ -78,7 +91,7 @@ export function OrderPersona({ OrderId, Admin }: { OrderId: number; Admin?: true
         !Admin &&
         <div className={style.box}>
           <Field label="Tracking Number" size="large">
-            <Label>{order?.TrackingNumber}</Label>
+            <Label>{Order?.TrackingNumber}</Label>
           </Field>
         </div>
       }

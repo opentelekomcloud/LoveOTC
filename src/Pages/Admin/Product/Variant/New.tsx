@@ -2,6 +2,7 @@ import { Button, Field, Input, Popover, PopoverSurface, PopoverTrigger, Toast, T
 import { AddRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
 import { useState } from "react";
+import { Logger } from "~/Helpers/Logger";
 import { ColFlex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
@@ -18,6 +19,8 @@ const useStyles = makeStyles({
   },
 });
 
+const log = new Logger("Admin", "Product", "Detail", "Variant", "New");
+
 /**
  * @author Aloento
  * @since 0.5.0
@@ -28,7 +31,7 @@ export function AdminProductNewVariant({ ProdId, Refresh }: { ProdId: number; Re
   const [open, { toggle }] = useBoolean();
   const [name, setName] = useState("");
 
-  const { dispatch, dispatchToast } = useErrorToast();
+  const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run } = AdminHub.Product.Post.useVariant({
     manual: true,

@@ -1,11 +1,12 @@
 import { IStreamResult } from "@microsoft/signalr";
+import { Logger } from "~/Helpers/Logger";
 import { Shared } from "./Database";
 import { ShopNet } from "./ShopNet";
 
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 export class ObjectStorage extends ShopNet {
   /**
@@ -24,21 +25,21 @@ export class ObjectStorage extends ShopNet {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.2.0
+   * @version 0.2.2
    */
-  public static GetBySlice(objId: string): Promise<Uint8Array[]> {
+  public static GetBySlice(objId: string, logger: Logger): Promise<Uint8Array[]> {
     const slice: Uint8Array[] = [];
 
     return Shared.GetOrSet(objId, () => new Promise(
       (resolve, reject) => {
-        ObjectStorage.Get(objId).then(x =>
+        this.Get(objId).then(x =>
           x.subscribe({
             error(err) {
               reject(err);
             },
             next(value) {
               slice.push(value);
-              console.debug("Received Slice", objId, slice.length);
+              logger.debug("Received Slice", objId, slice.length);
             },
             complete() {
               resolve(slice);

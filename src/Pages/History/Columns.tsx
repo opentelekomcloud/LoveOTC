@@ -1,4 +1,5 @@
 import { DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
+import { Logger } from "~/Helpers/Logger";
 import { IOrderItem } from ".";
 import { OrderDetail } from "./Detail";
 
@@ -22,12 +23,7 @@ const useStyles = makeStyles({
   }
 });
 
-/**
- * @author Aloento
- * @since 0.1.0
- * @version 0.3.0
- */
-export const HistoryColumns: TableColumnDefinition<IOrderItem>[] = [
+const columns: TableColumnDefinition<IOrderItem>[] = [
   createTableColumn<IOrderItem>({
     columnId: "OrderId",
     renderHeaderCell: () => {
@@ -110,21 +106,32 @@ export const HistoryColumns: TableColumnDefinition<IOrderItem>[] = [
       );
     }
   }),
-  createTableColumn<IOrderItem>({
-    columnId: "Detail",
-    renderHeaderCell: () => {
-      return (
-        <DataGridHeaderCell className={useStyles().two}>
-          Detail
-        </DataGridHeaderCell>
-      );
-    },
-    renderCell(item) {
-      return (
-        <DataGridCell className={useStyles().two}>
-          <OrderDetail OrderId={item.Id} />
-        </DataGridCell>
-      );
-    },
-  })
 ];
+
+/**
+ * @author Aloento
+ * @since 0.1.0
+ * @version 0.3.1
+ */
+export function HistoryColumns(pLog: Logger): TableColumnDefinition<IOrderItem>[] {
+  return [
+    ...columns,
+    createTableColumn<IOrderItem>({
+      columnId: "Detail",
+      renderHeaderCell: () => {
+        return (
+          <DataGridHeaderCell className={useStyles().two}>
+            Detail
+          </DataGridHeaderCell>
+        );
+      },
+      renderCell(item) {
+        return (
+          <DataGridCell className={useStyles().two}>
+            <OrderDetail OrderId={item.Id} ParentLog={pLog} />
+          </DataGridCell>
+        );
+      },
+    })
+  ];
+}

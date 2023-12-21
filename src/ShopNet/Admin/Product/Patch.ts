@@ -1,14 +1,19 @@
+import { useConst } from "@fluentui/react-hooks";
 import { useRequest } from "ahooks";
 import { Options } from "ahooks/lib/useRequest/src/types";
 import { Subject } from "rxjs";
+import { Logger } from "~/Helpers/Logger";
 import { AdminNet } from "../AdminNet";
 
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 export abstract class AdminProductPatch extends AdminNet {
+  /** "Product", "Patch" */
+  protected static override readonly Log = [...super.Log, "Product", "Patch"];
+
   /**
    * @author Aloento
    * @since 0.5.0
@@ -38,9 +43,11 @@ export abstract class AdminProductPatch extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 1.0.1
+   * @version 1.0.2
    */
-  public static usePhoto(options: Options<true, [number, File]>) {
+  public static usePhoto(pLog: Logger, options: Options<true, [number, File]>) {
+    const log = useConst(() => pLog.With(...this.Log, "Photo"));
+
     return useRequest(async (photoId, file) => {
       if (!file.type.startsWith("image/"))
         throw new TypeError("File is not an image");
@@ -52,7 +59,7 @@ export abstract class AdminProductPatch extends AdminNet {
 
       const subject = new Subject<Uint8Array>();
       const res = this.Hub.invoke<boolean>("ProductPatchPhoto", photoId, subject);
-      await this.HandleFileStream(file, subject);
+      await this.HandleFileStream(file, subject, log);
 
       this.EnsureTrue(await res);
       return true as const;

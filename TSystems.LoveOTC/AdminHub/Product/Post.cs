@@ -133,7 +133,7 @@ internal partial class AdminHub {
 
         var temp = await this.Db.Variants.AddAsync(new() {
             ProductId = prodId,
-            Name = name
+            Name = name,
         });
 
         await this.Db.SaveChangesAsync();
