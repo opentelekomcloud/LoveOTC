@@ -37,7 +37,7 @@ internal partial class ShopHub {
             order.Comments.Add(new() {
                 Content = cmt,
                 CreateAt = DateTime.UtcNow,
-                Order = order
+                Order = order,
             });
 
         foreach (var item in cart) {
@@ -57,13 +57,12 @@ internal partial class ShopHub {
             order.OrderCombos.Add(new() {
                 Order = order,
                 Combo = combo,
-                Quantity = item.Quantity
+                Quantity = item.Quantity,
             });
         }
 
         return await this.Db.SaveChangesAsync() > 0
-            ? order.OrderId
-            : throw new HubException();
+            ? order.OrderId : throw new HubException();
     }
 
     /**
@@ -92,7 +91,7 @@ internal partial class ShopHub {
         order.Comments.Add(new() {
             Content = cmt,
             CreateAt = DateTime.UtcNow,
-            Order = order
+            Order = order,
         });
 
         return await this.Db.SaveChangesAsync() > 0;
@@ -127,7 +126,7 @@ internal partial class ShopHub {
         order.Comments.Add(new() {
             Content = "[User Cancel] " + reason,
             CreateAt = DateTime.UtcNow,
-            Order = order
+            Order = order,
         });
 
         return await this.Db.SaveChangesAsync() > 0;

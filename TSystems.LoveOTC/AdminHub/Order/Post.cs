@@ -31,7 +31,7 @@ internal partial class AdminHub {
             Content = cmt,
             UserId = this.UserId,
             CreateAt = DateTime.UtcNow,
-            Order = order
+            Order = order,
         });
 
         return await this.Db.SaveChangesAsync() > 0;
@@ -63,7 +63,7 @@ internal partial class AdminHub {
             Content = "[Admin Close] " + reason,
             UserId = this.UserId,
             CreateAt = DateTime.UtcNow,
-            Order = order
+            Order = order,
         });
 
         return await this.Db.SaveChangesAsync() > 0;
