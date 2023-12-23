@@ -7,7 +7,7 @@
   "targets": {
     ".NETCoreApp,Version=v8.0": {},
     ".NETCoreApp,Version=v8.0/linux-x64": {
-      "TSystems.LoveOTC/1.0.0": {
+      "TSystems.LoveOTC/1.1.0": {
         "dependencies": {
           "JetBrains.Annotations": "2023.3.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "8.0.0",
@@ -1916,7 +1916,7 @@
     }
   },
   "libraries": {
-    "TSystems.LoveOTC/1.0.0": {
+    "TSystems.LoveOTC/1.1.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
