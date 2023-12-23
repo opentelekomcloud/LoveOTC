@@ -3,6 +3,7 @@ import { useMount } from "ahooks";
 import { WebStorageStateStore } from "oidc-client-ts";
 import { ReactNode, useEffect } from "react";
 import { AuthProvider, hasAuthParams, useAuth } from "react-oidc-context";
+import { Logger } from "~/Helpers/Logger";
 import { useErrorToast } from "~/Helpers/useToast";
 import { Common } from "~/ShopNet/Database";
 import { useRouter } from "../Router";
@@ -39,6 +40,8 @@ export function OIDCProvider({ children }: { children: ReactNode }): ReactNode {
   );
 }
 
+const log = new Logger("Auth");
+
 /**
  * @author Aloento
  * @since 1.0.0
@@ -47,7 +50,7 @@ export function OIDCProvider({ children }: { children: ReactNode }): ReactNode {
 function AuthHandler() {
   const auth = Common.AuthSlot = useAuth();
   const { Paths, Rep } = useRouter();
-  const { dispatch } = useErrorToast();
+  const { dispatch } = useErrorToast(log);
 
   useMount(() => {
     if (Paths.at(0) === "Logout") {
