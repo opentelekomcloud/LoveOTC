@@ -10,7 +10,7 @@ using Entities;
  * </remarks>
  */
 internal static class DataSeeder {
-    public static async Task SeedData(this IApplicationBuilder host) {
+    public static async Task SeedData(IApplicationBuilder host) {
         await using var scope = host.ApplicationServices.CreateAsyncScope();
         await using var context = scope.ServiceProvider.GetRequiredService<ShopContext>();
 
@@ -174,7 +174,7 @@ internal static class DataSeeder {
 
         var mShirtSComb = context.Combos.Add(new() {
             Stock = 25,
-            Product = jacketProd,
+            Product = mShirtProd,
             Types = [mShirtSType]
         }).Entity;
 
@@ -185,7 +185,7 @@ internal static class DataSeeder {
 
         var mShirtMComb = context.Combos.Add(new() {
             Stock = 105,
-            Product = jacketProd,
+            Product = mShirtProd,
             Types = [mShirtMType]
         }).Entity;
 
@@ -196,7 +196,7 @@ internal static class DataSeeder {
 
         var mShirtLComb = context.Combos.Add(new() {
             Stock = 115,
-            Product = jacketProd,
+            Product = mShirtProd,
             Types = [mShirtLType]
         }).Entity;
 
@@ -207,7 +207,7 @@ internal static class DataSeeder {
 
         var mShirt1XLComb = context.Combos.Add(new() {
             Stock = 115,
-            Product = jacketProd,
+            Product = mShirtProd,
             Types = [mShirt1XLType]
         }).Entity;
 
@@ -218,7 +218,7 @@ internal static class DataSeeder {
 
         var mShirt2XLComb = context.Combos.Add(new() {
             Stock = 85,
-            Product = jacketProd,
+            Product = mShirtProd,
             Types = [mShirt2XLType]
         }).Entity;
 
@@ -229,7 +229,7 @@ internal static class DataSeeder {
 
         var mShirt3XLComb = context.Combos.Add(new() {
             Stock = 27,
-            Product = jacketProd,
+            Product = mShirtProd,
             Types = [mShirt3XLType]
         }).Entity;
 
@@ -240,7 +240,7 @@ internal static class DataSeeder {
 
         var mShirt4XLComb = context.Combos.Add(new() {
             Stock = 15,
-            Product = jacketProd,
+            Product = mShirtProd,
             Types = [mShirt4XLType]
         }).Entity;
 
@@ -278,7 +278,7 @@ internal static class DataSeeder {
 
         var fShirtSComb = context.Combos.Add(new() {
             Stock = 28,
-            Product = jacketProd,
+            Product = fShirtProd,
             Types = [fShirtSType]
         }).Entity;
 
@@ -289,7 +289,7 @@ internal static class DataSeeder {
 
         var fShirtMComb = context.Combos.Add(new() {
             Stock = 50,
-            Product = jacketProd,
+            Product = fShirtProd,
             Types = [fShirtMType]
         }).Entity;
 
@@ -300,7 +300,7 @@ internal static class DataSeeder {
 
         var fShirtLComb = context.Combos.Add(new() {
             Stock = 55,
-            Product = jacketProd,
+            Product = fShirtProd,
             Types = [fShirtLType]
         }).Entity;
 
@@ -311,7 +311,7 @@ internal static class DataSeeder {
 
         var fShirt1XLComb = context.Combos.Add(new() {
             Stock = 20,
-            Product = jacketProd,
+            Product = fShirtProd,
             Types = [fShirt1XLType]
         }).Entity;
 
@@ -322,7 +322,7 @@ internal static class DataSeeder {
 
         var fShirt2XLComb = context.Combos.Add(new() {
             Stock = 6,
-            Product = jacketProd,
+            Product = fShirtProd,
             Types = [fShirt2XLType]
         }).Entity;
 
@@ -333,7 +333,7 @@ internal static class DataSeeder {
 
         var fShirt3XLComb = context.Combos.Add(new() {
             Stock = 4,
-            Product = jacketProd,
+            Product = fShirtProd,
             Types = [fShirt3XLType]
         }).Entity;
 
