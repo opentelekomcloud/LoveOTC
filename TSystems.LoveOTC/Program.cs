@@ -59,7 +59,7 @@ if (Shared.Dev) {
     app.UseMigrationsEndPoint();
 
 #if false
-    await app.SeedData();
+    await TSystems.LoveOTC.Helpers.DataSeeder.SeedData(app);
 #endif
 }
 

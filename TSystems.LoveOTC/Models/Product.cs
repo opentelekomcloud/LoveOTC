@@ -3,7 +3,7 @@
 namespace TSystems.LoveOTC.Models;
 
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json;
+using System.ComponentModel.DataAnnotations.Schema;
 using Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
  * <remarks>
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.0
+ * @version 0.1.1
  * </remarks>
  */
 [Index(nameof(Name), IsUnique = true)]
@@ -27,7 +27,8 @@ public class Product : Concurrency, IArchive {
 
     public virtual ICollection<Photo> Photos { get; init; }
 
-    public JsonElement? Description { get; set; }
+    [Column(TypeName = "jsonb")]
+    public string? Description { get; set; }
 
     public bool? IsArchived { get; set; }
 
