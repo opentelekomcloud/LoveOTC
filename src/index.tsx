@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { OIDCProvider } from "./Components/Auth";
 import { BrowserRouter } from "./Components/Router";
 import { ShopCartContext } from "./Components/ShopCart/Context";
+import { Dic } from "./Helpers/Dic";
 import { Layout } from "./Pages";
 
 /**
@@ -34,7 +35,7 @@ const Magenta: BrandVariants = {
  * @since 0.1.0
  * @version 0.2.0
  */
-ReactDOM.createRoot(document.getElementById("LoveOTC")!).render(
+ReactDOM.createRoot(document.getElementById(Dic.Name)!).render(
   <FluentProvider theme={createLightTheme(Magenta)}>
     <BrowserRouter>
       <OIDCProvider>

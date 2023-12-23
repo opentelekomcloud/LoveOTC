@@ -1,4 +1,6 @@
 wwwroot
+public/*.png
+.idea
 
 ### Node template
 # Logs

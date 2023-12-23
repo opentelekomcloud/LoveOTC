@@ -1,6 +1,19 @@
 import { useMount } from "ahooks";
 import { ReactNode, createContext, useContext, useState } from "react";
-import { Combine } from "~/Helpers/Path";
+
+/**
+ * @author Aloento
+ * @since 0.1.1 MusiLand
+ * @version 0.2.0
+ */
+function combine(paths: readonly any[]): string {
+  const p = paths
+    .filter(x => x)
+    .map(x => x!.toString().replace(/^\/+/, ""))
+    .join("/");
+
+  return `/${p}`;
+}
 
 /**
  * @author Aloento
@@ -13,8 +26,7 @@ interface IRouter {
   readonly Put: (search: URLSearchParams) => void,
   readonly Nav: (...paths: readonly any[]) => void,
   readonly Rep: (...paths: readonly any[]) => void,
-  readonly Fresh: (...paths: readonly any[]) => void,
-  readonly Reload: (bool: boolean) => void,
+  readonly Reload: (...paths: readonly any[]) => void,
 }
 
 /**
@@ -36,24 +48,16 @@ export function useRouter() {
 /**
  * @author Aloento
  * @since 0.5.0 MusiLand
- * @version 0.1.0
- */
-let reload = false;
-
-/**
- * @author Aloento
- * @since 0.5.0 MusiLand
- * @version 0.2.2
+ * @version 0.3.0
  */
 export function BrowserRouter({ children }: { children: ReactNode }): ReactNode {
   const [router, setRouter] = useState<IRouter>(() => ({
     Paths: location.pathname.split("/").filter(x => x),
     Search: new URLSearchParams(location.search),
     Put: put,
-    Nav: (...p) => nav(Combine(p)),
-    Rep: (...p) => rep(Combine(p)),
-    Fresh: (...p) => fresh(Combine(p)),
-    Reload: (bool) => reload = bool
+    Nav: (...p) => nav(combine(p)),
+    Rep: (...p) => rep(combine(p)),
+    Reload: (...p) => reload(p),
   }));
 
   function put(search: URLSearchParams) {
@@ -78,9 +82,15 @@ export function BrowserRouter({ children }: { children: ReactNode }): ReactNode 
     update(path);
   }
 
-  function fresh(path: string) {
-    history.pushState(null, "", path);
-    location.reload();
+  function reload(paths: readonly string[]) {
+    history.replaceState(null, "", "/Reload");
+    update("/Reload");
+
+    setTimeout(() => {
+      const path = paths.length ? combine(paths) : location.pathname;
+      history.pushState(null, "", path);
+      update(path);
+    }, 100);
   }
 
   useMount(() => {
@@ -97,18 +107,12 @@ export function BrowserRouter({ children }: { children: ReactNode }): ReactNode 
           return;
         }
 
-        if (reload)
-          return;
-
         e.preventDefault();
         nav(target.pathname);
       }
     });
 
     addEventListener("popstate", e => {
-      if (reload)
-        location.reload();
-
       e.preventDefault();
       update(location.pathname);
     });

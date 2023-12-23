@@ -38,7 +38,7 @@ export function OrderAction({ OrderId, Status, Refresh, ParentLog }: IOrderActio
   const log = useConst(() => ParentLog.With("Action"));
 
   const style = useStyles();
-  const { Fresh } = useRouter();
+  const { Reload } = useRouter();
   const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run: received } = Hub.Order.Post.useReceived({
@@ -79,7 +79,7 @@ export function OrderAction({ OrderId, Status, Refresh, ParentLog }: IOrderActio
         { intent: "success" }
       );
 
-      Fresh("History");
+      Reload("History");
     }
   });
 
