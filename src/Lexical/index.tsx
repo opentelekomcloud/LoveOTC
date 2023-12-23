@@ -1,4 +1,5 @@
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
+import { Dic } from "~/Helpers/Dic";
 import { LexDisplayPreset } from "./Context/Display";
 import { LexRichTextPreset } from "./Context/RichText";
 import { LexicalContext, type ILexical } from "./Context/Setting";
@@ -15,7 +16,7 @@ import { useLexEditorTheme } from "./Themes/LexEditorTheme";
  * @version 0.1.0
  */
 export function Lexical({
-  Namespace = "LoveOTC",
+  Namespace = Dic.Name,
   Plugin = LexRichTextPreset,
   Editable = true,
   OnError = (e) => { throw e; },

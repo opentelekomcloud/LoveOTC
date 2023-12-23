@@ -20,6 +20,7 @@ import {
   createCommand
 } from "lexical";
 import { useEffect, useState } from "react";
+import { Dic } from "~/Helpers/Dic";
 import {
   $createImageNode,
   $isImageNode,
@@ -34,7 +35,7 @@ export const INSERT_IMAGE_COMMAND: LexicalCommand<InsertImagePayload> =
 
 export function InsertImageDialog({ editor }: { editor: LexicalEditor }): JSX.Element {
   const [src, setSrc] = useState("https://source.unsplash.com/random");
-  const [altText, setAltText] = useState("LoveOTC!");
+  const [altText, setAltText] = useState(Dic.Name);
 
   return (
     <DialogBody>

@@ -1,5 +1,6 @@
 import { Image, Link, Portal, Text, makeStyles, shorthands, tokens } from "@fluentui/react-components";
 import { AdminSearch } from "~/Components/Search";
+import { Dic } from "~/Helpers/Dic";
 import { Flex, NavH, NavW } from "~/Helpers/Styles";
 import { AdminTopNav } from "~/Pages/Admin/Nav";
 import { AdminProductAddButton } from "~/Pages/Admin/Product/Add";
@@ -55,7 +56,7 @@ export function TopNavBar() {
           <Link className={style.logoBox} href="/" appearance="subtle">
             <Image src="/telekom-logo.svg" height={NavH} />
 
-            <Text size={600} font="monospace" className={style.logoText}>LoveOTC</Text>
+            <Text size={600} font="monospace" className={style.logoText}>{Dic.Name}</Text>
           </Link>
 
           <AdminTopNav />

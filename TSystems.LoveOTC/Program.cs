@@ -41,7 +41,7 @@ if (Shared.Dev)
 
 builder.Services.AddSignalR(x => {
     x.HandshakeTimeout = TimeSpan.FromSeconds(5);
-    x.SupportedProtocols = new[] { "messagepack" };
+    x.SupportedProtocols = ["messagepack"];
     x.EnableDetailedErrors = Shared.Dev;
     x.MaximumParallelInvocationsPerClient = sbyte.MaxValue / 2;
 }).AddMessagePackProtocol(x => {
@@ -57,6 +57,10 @@ var app = builder.Build();
 if (Shared.Dev) {
     app.UseDeveloperExceptionPage();
     app.UseMigrationsEndPoint();
+
+#if false
+    await app.SeedData();
+#endif
 }
 
 app.UseHttpsRedirection();
