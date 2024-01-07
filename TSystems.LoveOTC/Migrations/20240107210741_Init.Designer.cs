@@ -12,7 +12,7 @@ using TSystems.LoveOTC;
 namespace TSystems.LoveOTC.Migrations
 {
     [DbContext(typeof(ShopContext))]
-    [Migration("20231223181315_Init")]
+    [Migration("20240107210741_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -257,7 +257,8 @@ namespace TSystems.LoveOTC.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Description")
-                        .HasColumnType("jsonb");
+                        .HasMaxLength(65535)
+                        .HasColumnType("json");
 
                     b.Property<bool?>("IsArchived")
                         .HasColumnType("boolean");

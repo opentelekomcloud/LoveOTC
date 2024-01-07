@@ -1,6 +1,6 @@
 import { useBoolean, useMount } from "ahooks";
 import { Subject } from "rxjs";
-import { WithAuth } from "./Auth/With";
+import { AuthenticatedTemplate } from "./Auth/With";
 import { Setting } from "./Setting";
 
 /**
@@ -23,8 +23,8 @@ export function NewUser() {
   });
 
   return (
-    <WithAuth>
+    <AuthenticatedTemplate>
       <Setting Open={open} Toggle={toggle} New />
-    </WithAuth>
+    </AuthenticatedTemplate>
   )
 }

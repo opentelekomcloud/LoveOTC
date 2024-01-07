@@ -1,11 +1,7 @@
 import { Spinner, makeStyles, tokens } from "@fluentui/react-components";
-import { useMemo } from "react";
+import { Suspense, lazy, useMemo } from "react";
 import { NewUser } from "~/Components/NewUser";
 import { ColFlex, NavH, NavW } from "~/Helpers/Styles";
-import { Admin } from "~/Pages/Admin";
-import { Gallery } from "~/Pages/Gallery";
-import { History } from "~/Pages/History";
-import { Product } from "~/Pages/Product";
 import { Footer } from "../Components/Footer";
 import { useRouter } from "../Components/Router";
 import { TopNavBar } from "../Components/TopNavBar";
@@ -80,7 +76,9 @@ export function Layout() {
 
     <div className={style.body}>
       <main className={style.content}>
-        {match}
+        <Suspense fallback={<Spinner />}>
+          {match}
+        </Suspense>
       </main>
 
       <Footer />
@@ -89,3 +87,11 @@ export function Layout() {
     <NewUser />
   </>
 }
+
+const Product = lazy(() => import("~/Pages/Product"));
+
+const Admin = lazy(() => import("~/Pages/Admin"));
+
+const History = lazy(() => import("~/Pages/History"));
+
+const Gallery = lazy(() => import("~/Pages/Gallery"));

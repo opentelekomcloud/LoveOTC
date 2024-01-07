@@ -30,7 +30,7 @@ jobs:
           version: "latest"
           run_install: false
 
-      - name: Get pnpm store directory
+      - name: Get pnpm store
         id: pnpm-cache
         run: |
           echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
@@ -43,8 +43,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-      - name: Install
-        run: pnpm install
+      - name: Build React
+        run: pnpm install && pnpm build
+
+      - name: Move wwwroot
+        run: mv dist TSystems.LoveOTC/wwwroot
 
       - name: Build
         run: |

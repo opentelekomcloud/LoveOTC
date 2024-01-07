@@ -2,14 +2,18 @@ import { Avatar, Link, Menu, MenuGroupHeader, MenuItem, MenuList, MenuPopover, M
 import { useBoolean } from "ahooks";
 import { useEffect } from "react";
 import { useAuth } from "react-oidc-context";
-import { WithAuth, WithoutAuth } from "./Auth/With";
+import { Logger } from "~/Helpers/Logger";
+import { Hub } from "~/ShopNet";
+import { AuthenticatedTemplate, UnauthenticatedTemplate } from "./Auth/With";
 import { OnNewUserSubject } from "./NewUser";
 import { Setting } from "./Setting";
+
+const log = new Logger("Avatar", "Menu");
 
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.2.2
+ * @version 0.3.2
  */
 export function AvatarMenu() {
   const [isMenu, { toggle: toggleMenu }] = useBoolean();
@@ -22,36 +26,46 @@ export function AvatarMenu() {
     OnNewUserSubject.subscribe(x => setMount(!x));
   }, []);
 
+  const { data } = Hub.User.Get.useMe(log);
+  const name = auth.user?.profile.preferred_username;
+
   return <>
     <Menu open={isMenu} onOpenChange={toggleMenu}>
       <MenuTrigger>
-        <Avatar size={36} active={isMenu ? "active" : "unset"} />
+        <Avatar size={36} active={isMenu ? "active" : "unset"} name={name} />
       </MenuTrigger>
 
       <MenuPopover>
         <MenuList>
 
-          <WithAuth>
-            <MenuGroupHeader>Hi {auth.user?.profile.preferred_username}</MenuGroupHeader>
-          </WithAuth>
+          <AuthenticatedTemplate>
+            <MenuGroupHeader>Hi {name}</MenuGroupHeader>
+          </AuthenticatedTemplate>
 
-          <WithoutAuth>
-            <MenuItem onClick={() => auth.signinRedirect()}>Login</MenuItem>
-          </WithoutAuth>
+          <UnauthenticatedTemplate>
+            <MenuItem onClick={() => auth.signinRedirect()}>
+              Login
+            </MenuItem>
+          </UnauthenticatedTemplate>
 
-          <WithAuth>
+          <AuthenticatedTemplate>
             <Link appearance="subtle" href="/History">
               <MenuItem>History</MenuItem>
             </Link>
 
-            <Link appearance="subtle" href="/Admin">
-              <MenuItem>Admin</MenuItem>
-            </Link>
+            {
+              data?.Admin &&
+              <Link appearance="subtle" href="/Admin">
+                <MenuItem>Admin</MenuItem>
+              </Link>
+            }
 
             <MenuItem onClick={toggleModal}>Setting</MenuItem>
 
-            <MenuItem onClick={() => auth.signoutRedirect()}>Logout</MenuItem>
-          </WithAuth>
+            <MenuItem onClick={() => auth.signoutRedirect()}>
+              Logout
+            </MenuItem>
+          </AuthenticatedTemplate>
 
         </MenuList>
       </MenuPopover>
@@ -59,9 +73,9 @@ export function AvatarMenu() {
 
     {
       mount &&
-      <WithAuth>
+      <AuthenticatedTemplate>
         <Setting Open={isModal} Toggle={toggleModal} />
-      </WithAuth>
+      </AuthenticatedTemplate>
     }
   </>
 }

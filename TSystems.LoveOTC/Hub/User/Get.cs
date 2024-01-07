@@ -8,7 +8,7 @@ internal partial class ShopHub {
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 0.1.0
+     * @version 0.1.1
      * </remarks>
      */
     [Authorize]
@@ -30,6 +30,7 @@ internal partial class ShopHub {
                 x.EMail,
                 x.Phone,
                 x.Address,
+                x.Admin,
                 x.Version
             })
             .SingleOrDefaultAsync();

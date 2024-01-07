@@ -1,17 +1,16 @@
-import { Divider, LargeTitle, SpinButton, Title3, makeStyles, tokens } from "@fluentui/react-components";
+import { Divider, LargeTitle, makeStyles, tokens } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
-import { useState } from "react";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Helmet } from "react-helmet";
 import { useRouter } from "~/Components/Router";
+import { Dic } from "~/Helpers/Dic";
 import { Logger } from "~/Helpers/Logger";
 import { BaseCard, Col, ColFlex, Flex } from "~/Helpers/Styles";
-import { useLimit } from "~/Helpers/useLimit";
 import { Hub } from "~/ShopNet";
 import { IComboItem } from "../Admin/Product/Combo";
-import { ProductAddCart } from "./AddCart";
 import { ProductCarousel } from "./Carousel";
 import { RadioGroupContext } from "./Context";
-import { ProductRadioList } from "./RadioGroup";
+import { ProductQuantity } from "./Quantity";
+import { ProductRadioList } from "./RadioList";
 
 /**
  * @author Aloento
@@ -38,16 +37,7 @@ const useStyle = makeStyles({
   },
   fore: {
     color: tokens.colorBrandForeground1
-  },
-  quan: {
-    ...ColFlex,
-    rowGap: tokens.spacingVerticalS,
-  },
-  add: {
-    ...Flex,
-    justifyContent: "space-between",
-    columnGap: tokens.spacingHorizontalM
-  },
+  }
 })
 
 /**
@@ -65,9 +55,9 @@ const log = new Logger("Product");
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.5
+ * @version 0.2.0
  */
-export function Product() {
+function Product() {
   const style = useStyle();
   const { Nav, Paths } = useRouter();
   const id = parseInt(Paths.at(1)!);
@@ -82,18 +72,19 @@ export function Product() {
     }
   });
 
-  const [_, max] = useLimit(id);
-  const [quantity, setQuantity] = useState(1);
-
   return (
     <RadioGroupContext>
+      <Helmet>
+        <title>{data?.Name || ""} - {Dic.Name}</title>
+      </Helmet>
+
       <div className={style.main}>
         <div className={style.info}>
           <ProductCarousel Id={id} />
 
           <div className={style.detail}>
             <LargeTitle className={style.fore}>
-              {data?.Name}
+              {data?.Name || "Loading..."}
             </LargeTitle>
 
             <Divider />
@@ -102,27 +93,7 @@ export function Product() {
 
             <Divider />
 
-            <div className={style.quan}>
-              <Title3 className={style.fore}>
-                QUANTITY
-              </Title3>
-
-              <div className={style.add}>
-                <SpinButton
-                  appearance="underline"
-                  value={quantity}
-                  min={1}
-                  max={max}
-                  onChange={(_, val) => setQuantity(val.value!)}
-                />
-
-                <ProductAddCart
-                  ProdId={id}
-                  Quantity={quantity}
-                />
-              </div>
-            </div>
-
+            <ProductQuantity Id={id} />
           </div>
         </div>
 
@@ -131,3 +102,6 @@ export function Product() {
     </RadioGroupContext>
   )
 }
+
+/** @deprecated */
+export default Product;

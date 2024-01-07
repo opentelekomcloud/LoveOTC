@@ -26,7 +26,7 @@ const log = new Logger("History");
  * @since 0.1.0
  * @version 0.2.0
  */
-export function History() {
+function History() {
   const { data } = useRequest(() => Hub.Order.Get.List(log), {
     onError: log.error
   });
@@ -35,3 +35,6 @@ export function History() {
     <DelegateDataGrid Items={data || []} Columns={useConst(() => HistoryColumns(log))} />
   )
 }
+
+/** @deprecated */
+export default History;

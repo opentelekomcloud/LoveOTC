@@ -254,7 +254,8 @@ namespace TSystems.LoveOTC.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Description")
-                        .HasColumnType("jsonb");
+                        .HasMaxLength(65535)
+                        .HasColumnType("json");
 
                     b.Property<bool?>("IsArchived")
                         .HasColumnType("boolean");

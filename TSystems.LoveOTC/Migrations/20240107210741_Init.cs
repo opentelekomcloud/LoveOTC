@@ -66,7 +66,7 @@ namespace TSystems.LoveOTC.Migrations
                     ProductId = table.Column<long>(type: "bigint", nullable: false),
                     Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     CategoryId = table.Column<long>(type: "bigint", nullable: true),
-                    Description = table.Column<string>(type: "jsonb", nullable: true),
+                    Description = table.Column<string>(type: "json", maxLength: 65535, nullable: true),
                     IsArchived = table.Column<bool>(type: "boolean", nullable: true),
                     xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
                 },
