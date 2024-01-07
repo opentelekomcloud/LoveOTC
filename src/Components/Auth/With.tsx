@@ -6,7 +6,7 @@ import { useAuth } from "react-oidc-context";
  * @since 1.0.0
  * @version 0.1.0
  */
-export function WithAuth({ children }: { children: ReactNode }): ReactNode {
+export function AuthenticatedTemplate({ children }: { children: ReactNode }): ReactNode {
   const auth = useAuth();
 
   if (auth.isLoading) {
@@ -25,7 +25,7 @@ export function WithAuth({ children }: { children: ReactNode }): ReactNode {
  * @since 1.0.0
  * @version 0.1.0
  */
-export function WithoutAuth({ children }: { children: ReactNode }): ReactNode {
+export function UnauthenticatedTemplate({ children }: { children: ReactNode }): ReactNode {
   const auth = useAuth();
 
   if (auth.isAuthenticated) {

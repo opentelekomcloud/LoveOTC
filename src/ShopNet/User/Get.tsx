@@ -8,11 +8,17 @@ import { useErrorToast } from "~/Helpers/useToast";
 import { IConcurrency } from "../Database";
 import { ShopNet } from "../ShopNet";
 
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.1.0
+ */
 interface IuseMe extends IConcurrency {
   Name: string;
   EMail: string;
   Phone: string;
   Address: string;
+  Admin?: boolean;
 }
 
 /**

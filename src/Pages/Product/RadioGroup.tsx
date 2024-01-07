@@ -1,9 +1,5 @@
 import { Title3, ToggleButton, makeStyles, shorthands, tokens } from "@fluentui/react-components";
-import { useRequest } from "ahooks";
-import { useEffect, useState } from "react";
-import { Logger } from "~/Helpers/Logger";
 import { ColFlex, Flex } from "~/Helpers/Styles";
-import { Hub } from "~/ShopNet";
 import { useRadioGroup } from "./Context";
 
 /**
@@ -29,59 +25,22 @@ const useStyle = makeStyles({
   }
 })
 
-const log = new Logger("Product", "RadioGroup");
-
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.3.0
+ * @version 0.1.1
  */
-export function ProductRadioList({ ProdId }: { ProdId: number }) {
-  const { data } = useRequest(() => Hub.Product.Get.Combo(ProdId, log), {
-    onError: log.error
-  });
-
-  const { Update } = useRadioGroup();
-  const [variants, setVariants] = useState<Record<string, Set<string>>>({});
-
-  useEffect(() => {
-    if (!data) return;
-
-    const variant: Record<string, Set<string>> = {};
-    const cur: Record<string, string> = {};
-
-    for (const i of data)
-      for (const [vari, type] of Object.entries(i.Combo))
-        if (variant.hasOwnProperty(vari))
-          variant[vari].add(type);
-        else {
-          variant[vari] = new Set([type]);
-          cur[vari] = type;
-        }
-
-    Update(cur);
-    setVariants(variant);
-  }, [data]);
-
-  return Object.keys(variants).map((val, i) => <VariRadioGroup key={i} Variant={val} Types={variants[val]} />);
-}
-
-/**
- * @author Aloento
- * @since 0.5.0
- * @version 0.1.0
- */
-interface IVariRadioGroup {
+interface IProductRadioGroup {
   Variant: string;
-  Types: Set<string>;
+  Types: string[];
 }
 
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.1
+ * @version 0.2.2
  */
-function VariRadioGroup({ Variant, Types }: IVariRadioGroup) {
+export function ProductRadioGroup({ Variant, Types }: IProductRadioGroup) {
   const style = useStyle();
   const { Current, Update } = useRadioGroup();
 
@@ -92,7 +51,7 @@ function VariRadioGroup({ Variant, Types }: IVariRadioGroup) {
       </Title3>
 
       <div className={style.radio}>
-        {Array.from(Types).map((val, i) =>
+        {Types.map((val, i) =>
           <ToggleButton
             key={i}
             appearance="outline"

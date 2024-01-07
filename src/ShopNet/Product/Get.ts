@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import type { Logger } from "~/Helpers/Logger";
 import { IComboItem } from "~/Pages/Admin/Product/Combo";
 import { IPhotoItem } from "~/Pages/Admin/Product/Photo";
-import { IProductInfo } from "~/Pages/Gallery";
+import type { IProductInfo } from "~/Pages/Gallery";
 import { ShopNet } from "../ShopNet";
 import { ProductEntity } from "./Entity";
 // import demo from "./demo.json";

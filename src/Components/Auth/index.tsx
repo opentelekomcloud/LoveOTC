@@ -1,10 +1,9 @@
 import { Toaster } from "@fluentui/react-components";
-import { useMount } from "ahooks";
+import { useMount, useUpdateEffect } from "ahooks";
 import { WebStorageStateStore } from "oidc-client-ts";
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import { AuthProvider, hasAuthParams, useAuth } from "react-oidc-context";
 import { Logger } from "~/Helpers/Logger";
-import { useErrorToast } from "~/Helpers/useToast";
 import { Common } from "~/ShopNet/Database";
 import { useRouter } from "../Router";
 
@@ -45,12 +44,11 @@ const log = new Logger("Auth");
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.1.3
+ * @version 0.1.4
  */
 function AuthHandler() {
   const auth = Common.AuthSlot = useAuth();
   const { Paths, Rep } = useRouter();
-  const { dispatch } = useErrorToast(log);
 
   useMount(() => {
     if (Paths.at(0) === "Logout") {
@@ -63,19 +61,13 @@ function AuthHandler() {
       !auth.isAuthenticated &&
       !auth.activeNavigator &&
       !auth.isLoading
-    ) {
+    )
       auth.signinRedirect();
-    }
   });
 
-  useEffect(() => {
-    if (auth.error) {
-      return dispatch({
-        Message: "Failed Authenticate",
-        Request: auth,
-        Error: auth.error
-      });
-    }
+  useUpdateEffect(() => {
+    if (auth.error)
+      log.warn(auth.error);
   }, [auth.error]);
 
   return <Toaster pauseOnHover />;

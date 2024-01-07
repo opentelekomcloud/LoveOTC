@@ -16,17 +16,17 @@ interface IProductAddCart {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 export function ProductAddCart({ ProdId, Quantity }: IProductAddCart) {
   const { List, Add, Update } = useShopCart();
-  const { Current } = useRadioGroup();
+  const { Current, Combo } = useRadioGroup();
   const [dis] = useLimit(ProdId);
 
   return (
     <Button
       appearance="primary"
-      disabled={dis}
+      disabled={dis || !Combo?.Stock}
       onClick={() => {
         const i = List.find(v => {
           if (v.ProdId === ProdId) {
