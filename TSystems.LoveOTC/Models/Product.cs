@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
  * <remarks>
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.1
+ * @version 0.1.0
  * </remarks>
  */
 [Index(nameof(Name), IsUnique = true)]
@@ -27,7 +27,8 @@ public class Product : Concurrency, IArchive {
 
     public virtual ICollection<Photo> Photos { get; init; }
 
-    [Column(TypeName = "jsonb")]
+    [Column(TypeName = "json")]
+    [StringLength(ushort.MaxValue)]
     public string? Description { get; set; }
 
     public bool? IsArchived { get; set; }
