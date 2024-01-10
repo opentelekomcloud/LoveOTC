@@ -1,10 +1,10 @@
-import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import { Text, makeStyles, shorthands, tokens } from "@fluentui/react-components";
 import { Flex, NavW } from "~/Helpers/Styles";
 
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 const useStyle = makeStyles({
   box: {
@@ -19,8 +19,8 @@ const useStyle = makeStyles({
     ...shorthands.margin(0, "auto"),
   },
   logo: {
-    width: "300px",
-    filter: "brightness(200)"
+    color: "white",
+    ...shorthands.margin("64px", 0),
   },
   otc: {
     color: "white"
@@ -29,8 +29,8 @@ const useStyle = makeStyles({
 
 /**
  * @author Aloento
- * @since 0.3.1 MusiLand
- * @version 0.1.0
+ * @since 0.1.0
+ * @version 0.2.0
  */
 export function Footer(): JSX.Element {
   const style = useStyle();
@@ -38,7 +38,10 @@ export function Footer(): JSX.Element {
   return (
     <footer className={style.box}>
       <div className={style.main}>
-        <img src="/systems-logo.png" className={style.logo} />
+        <Text size={800} className={style.logo}>
+          OpenTelekomCloud
+        </Text>
+
       </div>
     </footer>
   );
