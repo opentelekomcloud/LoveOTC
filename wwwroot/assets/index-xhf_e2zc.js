@@ -1,1 +1,0 @@
-import{L as t,f as o,H as e,h as a,af as n,aT as u}from"./index-RDaWWjNW.js";import{H as i}from"./Columns-yrWsan0v.js";const s=new t("History");function H(){const{data:r}=o(()=>e.Order.Get.List(s),{onError:s.error});return a.jsx(n,{Items:r||[],Columns:u(()=>i(s))})}export{H as default};
