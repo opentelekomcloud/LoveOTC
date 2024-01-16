@@ -1,10 +1,9 @@
-import dayjs from "dayjs";
 import { ICartItem } from "~/Components/ShopCart";
 import { Logger } from "~/Helpers/Logger";
 import { IOrderItem } from "~/Pages/History";
 import { IComment } from "~/Pages/History/Comment";
 import { IOrderDetail } from "~/Pages/History/Detail";
-import { ProductEntity } from "../Product/Entity";
+import { ProductData } from "../Product/Data";
 import { ProductGet } from "../Product/Get";
 import { ShopNet } from "../ShopNet";
 import { OrderEntity } from "./Entity";
@@ -27,13 +26,13 @@ export abstract class OrderGet extends ShopNet {
     this.EnsureLogin();
     const log = pLog.With(...this.Log, "List");
 
-    const list = await this.WithTimeCache<
+    const list = await this.GetTimeCache<
       {
         OrderId: number;
         Products: number[];
         Quantity: number;
       }[]
-    >("", "OrderGetList", dayjs().add(1, "m"));
+    >("", "OrderGetList", (x) => x.add(1, "m"));
 
     const items: IOrderItem[] = [];
 
@@ -48,7 +47,7 @@ export abstract class OrderGet extends ShopNet {
       const prodNames: string[] = [];
 
       for (const prodId of meta.Products) {
-        const prod = await ProductEntity.Product(prodId);
+        const prod = await ProductData.Product(prodId);
 
         if (!prod) {
           log.warn(`[Mismatch] Product ${prodId} not found`);
@@ -80,7 +79,7 @@ export abstract class OrderGet extends ShopNet {
     this.EnsureLogin();
     const log = pLog.With(...this.Log, "Detail");
 
-    const meta = await this.WithTimeCache<
+    const meta = await this.GetTimeCache<
       {
         Items: {
           Types: number[];
@@ -88,7 +87,7 @@ export abstract class OrderGet extends ShopNet {
         }[],
         Comments: number[];
       }
-    >(orderId, "OrderGetDetail", dayjs().add(1, "m"), orderId);
+    >(orderId, "OrderGetDetail", (x) => x.add(1, "m"), orderId);
 
     const items: ICartItem[] = [];
     let index = 0;
@@ -98,14 +97,14 @@ export abstract class OrderGet extends ShopNet {
       let prodId = 0;
 
       for (const typeId of combo.Types) {
-        const type = await ProductEntity.Type(typeId);
+        const type = await ProductData.Type(typeId);
 
         if (!type) {
           log.warn(`[Mismatch] Type ${typeId} not found. Order : ${orderId}`);
           continue;
         }
 
-        const vari = await ProductEntity.Variant(type.VariantId);
+        const vari = await ProductData.Variant(type.VariantId);
 
         if (!vari) {
           log.warn(`[Mismatch] Variant ${type.VariantId} not found. Type : ${typeId}, Order : ${orderId}`);
@@ -116,15 +115,14 @@ export abstract class OrderGet extends ShopNet {
         prodId = vari.ProductId;
       }
 
-      const prod = await ProductEntity.Product(prodId);
+      const prod = await ProductData.Product(prodId);
 
       if (!prod) {
         log.warn(`[Mismatch] Product ${prodId} not found. Order : ${orderId}`);
         continue;
       }
 
-      const list = await ProductGet.PhotoList(prodId);
-      const cover = await this.FindCover(list, prodId, log);
+      const [_, cover] = await ProductGet.PhotoList(prodId, log);
 
       if (!cover)
         log.warn(`Product ${prodId} has no photo`);

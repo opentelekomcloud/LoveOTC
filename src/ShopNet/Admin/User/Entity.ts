@@ -20,6 +20,6 @@ export abstract class AdminUserEntity extends AdminNet {
     Admin?: boolean;
   } & IConcurrency) | void> {
     this.EnsureLogin();
-    return this.WithVersionCache(key, "UserEntity");
+    return this.GetVersionCache(key, "UserEntity");
   }
 }

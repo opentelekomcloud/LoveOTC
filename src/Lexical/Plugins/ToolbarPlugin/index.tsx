@@ -53,7 +53,7 @@ import { BlockFormat, BlockTypeToBlockName } from "./BlockFormat";
 import { LexColorPicker } from "./ColorPopover";
 import { FontDropDown } from "./Font";
 
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   box: {
     columnGap: "1px",
     backgroundColor: "#fff",
@@ -250,7 +250,7 @@ export function ToolbarPlugin(): JSX.Element {
     [activeEditor, selectedElementKey]
   );
 
-  const style = useStyle();
+  const style = useStyles();
 
   return (
     <Toolbar
@@ -298,8 +298,8 @@ export function ToolbarPlugin(): JSX.Element {
 
           <MenuPopover>
             <MenuList>
-              {CODE_LANGUAGE_OPTIONS.map(([value, name]) =>
-                <MenuItem onClick={() => onCodeLanguageSelect(value)} children={name} />)}
+              {CODE_LANGUAGE_OPTIONS.map(([value, name], i) =>
+                <MenuItem key={i} onClick={() => onCodeLanguageSelect(value)} children={name} />)}
             </MenuList>
           </MenuPopover>
         </Menu>

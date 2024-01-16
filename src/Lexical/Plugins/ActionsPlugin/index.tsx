@@ -8,14 +8,14 @@ import { LexLockEditor } from "./Lock";
 import { LexConvertMarkdown } from "./Markdown";
 import { LexImExport } from "./Port";
 
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   box: {
     ...Flex,
     columnGap: "3px",
     position: "absolute",
     ...shorthands.padding("10px"),
     bottom: 0,
-    right: 0
+    left: 0
   }
 });
 
@@ -23,7 +23,7 @@ const useStyle = makeStyles({
  * 右下角四个功能按钮
  */
 export function ActionsPlugin({ anchor }: { anchor?: HTMLElement; }): JSX.Element {
-  const style = useStyle();
+  const style = useStyles();
   const [editor] = useLexicalComposerContext();
   const [isEditable, setIsEditable] = useState(() => editor.isEditable());
   const [isEditorEmpty, setIsEditorEmpty] = useState(true);

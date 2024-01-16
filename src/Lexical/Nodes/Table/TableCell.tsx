@@ -78,7 +78,7 @@ export function TableCell({
       setShowMenu(false);
   }, [isEditing, isPrimarySelected]);
 
-  const style = useStyle();
+  const style = useStyles();
 
   return (
     <CellComponent
@@ -140,7 +140,7 @@ export function TableCell({
   );
 }
 
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   prim: {
     position: "relative",
     zIndex: 3

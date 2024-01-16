@@ -15,10 +15,10 @@ interface ITable<T> {
 /**
  * @author Aloento
  * @since 0.3.1 MusiLand
- * @version 0.2.1
+ * @version 0.3.0
  */
-export class Table<TPre = any> {
-  public readonly Sto: Dexie.Table<ITable<TPre>, string>;
+export class Table {
+  public readonly Sto: Dexie.Table<ITable<unknown>, string>;
 
   public constructor(public readonly DB: Dexie, public readonly Name: string) {
     this.Sto = DB.table(Name);
@@ -28,13 +28,14 @@ export class Table<TPre = any> {
   /**
    * @author Aloento
    * @since 0.1.0 MusiLand
-   * @version 0.2.0
+   * @version 0.2.1
+   * @liveSafe
    */
-  public async Get<T extends TPre = TPre>(key: string, expire?: (x?: ITable<T>) => Promise<boolean>): Promise<T | null> {
+  public async Get<T>(key: string, expire?: (x?: ITable<T>) => Promise<boolean>): Promise<T | null> {
     const find = await this.Sto.get(key) as ITable<T> | undefined;
 
     if (find) {
-      if ((expire && await expire(find)) ||
+      if ((expire && await Promise.resolve(expire(find))) ||
         (typeof find.Exp === "number" && find.Exp < dayjs().unix())) {
         await this.Sto.delete(key);
         return null;
@@ -50,8 +51,9 @@ export class Table<TPre = any> {
    * @author Aloento
    * @since 0.1.0 MusiLand
    * @version 0.2.0
+   * @liveSafe
    */
-  public async GetOrSet<T extends TPre = TPre>(
+  public async GetOrSet<T>(
     key: string,
     fac: () => Promise<T>,
     exp?: Dayjs | null,
@@ -59,15 +61,16 @@ export class Table<TPre = any> {
   ): Promise<T> {
     const res = await this.Get<T>(key, expire);
     if (res) return res;
-    return this.Set<T>(key, await fac(), exp);
+    return this.Set<T>(key, await Promise.resolve(fac()), exp);
   }
 
   /**
    * @author Aloento
    * @since 0.1.0 MusiLand
    * @version 0.2.1
+   * @liveSafe
    */
-  public async Set<T extends TPre = TPre>(id: string, val: T, exp?: Dayjs | null): Promise<T> {
+  public async Set<T>(id: string, val: T, exp?: Dayjs | null): Promise<T> {
     if (!val)
       throw TypeError("Value cannot be null");
 
@@ -82,7 +85,7 @@ export class Table<TPre = any> {
 
     const time = (exp || dayjs().add(1, "week")).unix();
     if (exp && time < dayjs().unix())
-      throw RangeError(`Expire time [${time}] cannot be less than now`);
+      throw RangeError(`Expire time [${time}] cannot be less than now [${dayjs().unix()}]`);
 
     await this.Sto.put({
       Id: id, Exp: time,

@@ -249,7 +249,7 @@ export function ImageResizer({
     }
   }
 
-  const style = useStyle();
+  const style = useStyles();
 
   return (
     <div ref={controlWrapperRef}>
@@ -306,7 +306,7 @@ export function ImageResizer({
   );
 }
 
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   button: {
     minWidth: "unset",
     fontWeight: "unset",

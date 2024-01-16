@@ -26,12 +26,12 @@ import { MarkdownShortcutPlugin } from "./Plugins/MarkdownShortcutPlugin";
 import { TabFocusPlugin } from "./Plugins/TabFocusPlugin";
 import { TablePlugin } from "./Plugins/TablePlugin";
 import { ToolbarPlugin } from "./Plugins/ToolbarPlugin";
-import { useLexEditorTheme } from "./Themes/LexEditorTheme";
+import { useLexEditorTheme } from "./Theme";
 import { LexContentEditable } from "./UI/ContentEditable";
 import { Placeholder } from "./UI/Placeholder";
 import { SetCurrentEditor } from "./Utils";
 
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   shell: {
     lineHeight: "1.7"
   },
@@ -78,7 +78,7 @@ export function LexEditor(): JSX.Element {
 
   const placeholder = <Placeholder children={ph || "Let's say something awesome...."} />
   const [anchor, setAnchor] = useState<HTMLDivElement>();
-  const style = useStyle();
+  const style = useStyles();
 
   return (
     <div className={mergeClasses("LexEditor_Shell", style.shell)}>

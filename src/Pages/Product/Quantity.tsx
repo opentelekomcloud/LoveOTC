@@ -10,7 +10,7 @@ import { useRadioGroup } from "./Context";
  * @since 1.2.0
  * @version 0.1.0
  */
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   fore: {
     color: tokens.colorBrandForeground1
   },
@@ -35,7 +35,7 @@ const useStyle = makeStyles({
  * @version 0.2.0
  */
 export function ProductQuantity({ Id }: { Id: number; }) {
-  const style = useStyle();
+  const style = useStyles();
   const { Combo } = useRadioGroup();
 
   const [_, max] = useLimit(Id);

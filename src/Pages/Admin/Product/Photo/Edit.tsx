@@ -1,6 +1,7 @@
-import { Button, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Image, Input, Toast, ToastTitle, makeStyles, tokens } from "@fluentui/react-components";
+import { Button, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Input, Toast, ToastTitle, makeStyles, tokens } from "@fluentui/react-components";
 import { DismissRegular, EditRegular } from "@fluentui/react-icons";
 import { useState } from "react";
+import { GuidImage } from "~/Helpers/GuidImage";
 import { Logger } from "~/Helpers/Logger";
 import { ColFlex, Cover, Flex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
@@ -44,7 +45,7 @@ const log = new Logger("Admin", "Product", "Detail", "Photo", "Edit");
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.3.2
+ * @version 0.3.3
  */
 export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }: IAdminProductPhotoEdit) {
   const style = useStyles();
@@ -135,10 +136,11 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
           </DialogTitle>
 
           <DialogContent className={style.box}>
-            <Image
+            <GuidImage
               shape="rounded"
               className={style.img}
-              src={Cover}
+              Guid={Cover}
+              Log={log}
             />
 
             <div className={style.cap}>

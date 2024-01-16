@@ -13,7 +13,7 @@ interface Position {
   right: string;
 }
 
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   container: {
     height: "35.8px",
     fontSize: "10px",
@@ -131,7 +131,7 @@ export function CodeActionMenuPlugin({ anchor = document.body }: { anchor?: HTML
   });
   const codeFriendlyName = getLanguageFriendlyName(lang);
 
-  const style = useStyle();
+  const style = useStyles();
 
   return (
     <Portal mountNode={anchor}>

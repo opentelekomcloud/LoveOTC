@@ -18,9 +18,9 @@ import {
 } from "lexical";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BaseCard } from "~/Helpers/Styles";
-import { getDOMRangeRect } from "../../Utils/getDOMRangeRect";
-import { getSelectedNode } from "../../Utils/getSelectedNode";
-import { setFloatingElemPosition } from "../../Utils/setFloatingElemPosition";
+import { getDOMRangeRect } from "../Utils/getDOMRangeRect";
+import { getSelectedNode } from "../Utils/getSelectedNode";
+import { setFloatingElemPosition } from "../Utils/setFloatingElemPosition";
 
 interface ITextFormatFloatingToolbar {
   editor: LexicalEditor;
@@ -126,7 +126,7 @@ function TextFormatFloatingToolbar({
     isLink && "link"
   ] as string[];
 
-  const style = useStyle();
+  const style = useStyles();
 
   return (
     <Toolbar
@@ -210,7 +210,7 @@ function TextFormatFloatingToolbar({
   );
 }
 
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   toolbar: {
     ...BaseCard,
     ...shorthands.padding("4px"),

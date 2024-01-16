@@ -9,6 +9,7 @@ import { Hub } from "~/ShopNet";
 import { IComboItem } from "../Admin/Product/Combo";
 import { ProductCarousel } from "./Carousel";
 import { RadioGroupContext } from "./Context";
+import { ProductLexicalRender } from "./Lexical";
 import { ProductQuantity } from "./Quantity";
 import { ProductRadioList } from "./RadioList";
 
@@ -17,7 +18,7 @@ import { ProductRadioList } from "./RadioList";
  * @since 0.1.0
  * @version 0.1.0
  */
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   main: ColFlex,
   info: {
     ...Flex,
@@ -26,14 +27,17 @@ const useStyle = makeStyles({
   detail: {
     ...BaseCard,
     ...Col,
-    height: "fit-content",
-    flexBasis: "50%",
-    flexShrink: 0,
     rowGap: tokens.spacingVerticalXL,
     paddingTop: tokens.spacingVerticalM,
     paddingLeft: tokens.spacingHorizontalXXL,
     paddingRight: tokens.spacingHorizontalXXL,
     paddingBottom: tokens.spacingHorizontalXXL
+  },
+  lex: {
+    ...ColFlex,
+    flexBasis: "50%",
+    flexShrink: 0,
+    rowGap: tokens.spacingVerticalXL,
   },
   fore: {
     color: tokens.colorBrandForeground1
@@ -55,10 +59,10 @@ const log = new Logger("Product");
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.2.0
+ * @version 0.3.0
  */
 function Product() {
-  const style = useStyle();
+  const style = useStyles();
   const { Nav, Paths } = useRouter();
   const id = parseInt(Paths.at(1)!);
 
@@ -82,22 +86,24 @@ function Product() {
         <div className={style.info}>
           <ProductCarousel Id={id} />
 
-          <div className={style.detail}>
-            <LargeTitle className={style.fore}>
-              {data?.Name || "Loading..."}
-            </LargeTitle>
+          <div className={style.lex}>
+            <div className={style.detail}>
+              <LargeTitle className={style.fore}>
+                {data?.Name || "Loading..."}
+              </LargeTitle>
 
-            <Divider />
+              <Divider />
 
-            <ProductRadioList ProdId={id} />
+              <ProductRadioList ProdId={id} />
 
-            <Divider />
+              <Divider />
 
-            <ProductQuantity Id={id} />
+              <ProductQuantity Id={id} />
+            </div>
+
+            <ProductLexicalRender ProdId={id} />
           </div>
         </div>
-
-        {/* <ProductLexicalRender ProdId={id} /> */}
       </div>
     </RadioGroupContext>
   )

@@ -8,7 +8,7 @@ import { Logger } from "~/Helpers/Logger";
 import { ColFlex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
-import { DelegateDataGrid } from "../DataGrid/Delegate";
+import { DelegateDataGrid } from "../DataGrid";
 import { useRouter } from "../Router";
 import { CartColumns } from "./Columns";
 import { useShopCart } from "./Context";

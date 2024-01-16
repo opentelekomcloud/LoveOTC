@@ -1,6 +1,6 @@
-import { TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
+import { DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
-import { DefaultDataGrid } from "~/Components/DataGrid";
+import { DelegateDataGrid } from "~/Components/DataGrid";
 import { Logger } from "~/Helpers/Logger";
 import { AdminHub } from "~/ShopNet/Admin";
 import { AdminUserDelete } from "./Delete";
@@ -23,55 +23,49 @@ const log = new Logger("Admin", "User");
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.2.0
+ * @version 0.3.0
  */
 const columns: TableColumnDefinition<IUserItem>[] = [
   createTableColumn<IUserItem>({
     columnId: "Id",
-    renderHeaderCell: () => {
-      return "Id";
-    },
+    renderHeaderCell: () => "Id",
     renderCell(item) {
       return item.Id;
     }
   }),
   createTableColumn<IUserItem>({
     columnId: "Name",
-    renderHeaderCell: () => {
-      return "Real Name";
-    },
+    renderHeaderCell: () => "Real Name",
     renderCell(item) {
       return item.Name;
     }
   }),
   createTableColumn<IUserItem>({
     columnId: "Email",
-    renderHeaderCell: () => {
-      return "E-Mail";
-    },
+    renderHeaderCell: () => "E-Mail",
     renderCell(item) {
       return item.EMail;
     }
   }),
   createTableColumn<IUserItem>({
     columnId: "Admin",
-    renderHeaderCell: () => {
-      return "Admin";
-    },
+    renderHeaderCell: () => "Admin",
     renderCell(item) {
       return <AdminUserGrant UserId={item.Id} Admin={item.Admin} Refresh={refreshUser} />
     },
   }),
   createTableColumn<IUserItem>({
     columnId: "Delete",
-    renderHeaderCell: () => {
-      return "Delete";
-    },
+    renderHeaderCell: () => "Delete",
     renderCell(item) {
       return <AdminUserDelete UserId={item.Id} Refresh={refreshUser} />
     },
   })
-]
+].map(({ renderHeaderCell, renderCell, ...col }) => ({
+  ...col,
+  renderHeaderCell: () => <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>,
+  renderCell: (item) => <DataGridCell>{renderCell(item)}</DataGridCell>
+}))
 
 /**
  * @author Aloento
@@ -83,7 +77,7 @@ let refreshUser: () => void;
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.2.1
+ * @version 0.2.2
  */
 export function AdminUser() {
   const { data, run } = useRequest(() => AdminHub.User.Get.List(), {
@@ -92,6 +86,6 @@ export function AdminUser() {
   refreshUser = run;
 
   return (
-    <DefaultDataGrid Items={data || []} Columns={columns} />
+    <DelegateDataGrid Items={data} Columns={columns} />
   )
 }

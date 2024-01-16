@@ -1334,7 +1334,7 @@ function TableComponent({ nodeKey, rows: rawRows, theme, }: ITableComponent): JS
   if (!cellEditor)
     return null;
 
-  const style = useStyle();
+  const style = useStyles();
 
   return (
     <div className={style.box}>
@@ -1387,7 +1387,7 @@ function TableComponent({ nodeKey, rows: rawRows, theme, }: ITableComponent): JS
   );
 }
 
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   box: { position: "relative" }
 });
 

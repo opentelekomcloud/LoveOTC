@@ -64,7 +64,7 @@ export function FontDropDown({ editor, value, style, disabled = false }: IFontDr
       <MenuPopover>
         <MenuList>
           {(style === "font-family" ? FONT_FAMILY_OPTIONS : FONT_SIZE_OPTIONS).map(
-            ([option, text]) => <MenuItem children={text} onClick={() => handleClick(option)} />
+            ([option, text], i) => <MenuItem key={i} children={text} onClick={() => handleClick(option)} />
           )}
         </MenuList>
       </MenuPopover>

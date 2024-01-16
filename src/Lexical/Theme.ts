@@ -1,7 +1,7 @@
 import { makeStyles, mergeClasses, shorthands } from "@fluentui/react-components";
 import type { EditorThemeClasses } from "lexical";
 
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   ltr: { textAlign: "left" },
   rtl: { textAlign: "right" },
   paragraph: {
@@ -258,7 +258,7 @@ const useStyle = makeStyles({
     marginLeft: "16px",
     listStylePosition: "inside"
   },
-  listItem: { ...shorthands.margin(0, "32px") },
+  listItem: { ...shorthands.margin(0, "8px") },
   tokenComment: { color: "slategray" },
   tokenPunctuation: { color: "#999" },
   tokenProperty: { color: "#905" },
@@ -274,7 +274,7 @@ const useStyle = makeStyles({
 });
 
 export function useLexEditorTheme(): EditorThemeClasses {
-  const style = useStyle();
+  const style = useStyles();
   return {
     blockCursor: "LexEditor_blockCursor",
     code: mergeClasses(style.code, "LexEditor_code"),

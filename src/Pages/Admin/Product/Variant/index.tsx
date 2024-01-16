@@ -1,6 +1,6 @@
 import { DataGridCell, DataGridHeaderCell, Subtitle1, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
-import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
+import { DelegateDataGrid } from "~/Components/DataGrid";
 import { Logger } from "~/Helpers/Logger";
 import { Flex } from "~/Helpers/Styles";
 import { AdminHub } from "~/ShopNet/Admin";
@@ -149,6 +149,6 @@ export function AdminProductVariant({ ProdId }: { ProdId: number }) {
       <AdminProductNewVariant ProdId={ProdId} Refresh={run} />
     </div>
 
-    <DelegateDataGrid Items={data || []} Columns={columns} />
+    <DelegateDataGrid Items={data} Columns={columns} />
   </>
 }

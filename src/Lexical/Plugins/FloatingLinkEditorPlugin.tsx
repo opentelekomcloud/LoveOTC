@@ -18,9 +18,9 @@ import {
 } from "lexical";
 import { Dispatch, useCallback, useEffect, useRef, useState } from "react";
 import { BaseCard, Col, Flex } from "~/Helpers/Styles";
-import { getSelectedNode } from "../../Utils/getSelectedNode";
-import { setFloatingElemPosition } from "../../Utils/setFloatingElemPosition";
-import { sanitizeUrl } from "../../Utils/url";
+import { getSelectedNode } from "../Utils/getSelectedNode";
+import { setFloatingElemPosition } from "../Utils/setFloatingElemPosition";
+import { sanitizeUrl } from "../Utils/url";
 
 interface IFloatingLinkEditor {
   editor: LexicalEditor;
@@ -150,7 +150,7 @@ function FloatingLinkEditor({ editor, isLink, setIsLink, anchor }: IFloatingLink
       inputRef.current.focus();
   }, [isEditMode]);
 
-  const style = useStyle();
+  const style = useStyles();
 
   return (
     <div ref={editorRef} style={{ transition: "opacity 0.5s" }} className={style.editor}>
@@ -195,7 +195,7 @@ const box = {
   ...shorthands.padding("4px", "12px"),
 }
 
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   editor: {
     ...BaseCard,
     ...Col,

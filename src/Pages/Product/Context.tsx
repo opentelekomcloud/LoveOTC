@@ -1,5 +1,5 @@
 import { isEqual } from "lodash-es";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { IComboItem } from "../Admin/Product/Combo";
 
 /**
@@ -35,23 +35,17 @@ export function useRadioGroup() {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.3.0
+ * @version 0.3.1
  */
 export function RadioGroupContext({ children }: { children: React.ReactNode }) {
   const [curr, setCurr] = useState({});
-  const [combo, setCombo] = useState<IComboItem>();
   const [all, setAll] = useState<IComboItem[]>([]);
-
-  useEffect(() => {
-    const combo = all.find(x => isEqual(x.Combo, curr));
-    setCombo(combo);
-  }, [curr, all]);
 
   return (
     <RadioGroup.Provider value={{
       Current: curr,
       Update: setCurr,
-      Combo: combo,
+      Combo: all.find(x => isEqual(x.Combo, curr)),
       SetAll: setAll
     }}>
       {children}
