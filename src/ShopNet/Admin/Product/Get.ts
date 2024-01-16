@@ -1,8 +1,8 @@
-import dayjs from "dayjs";
+import { useConst } from "@fluentui/react-hooks";
+import { useLiveQuery } from "dexie-react-hooks";
 import type { Logger } from "~/Helpers/Logger";
-import { IProductItem } from "~/Pages/Admin/Product";
+import { IProductCount } from "~/Pages/Admin/Product";
 import { IVariantItem } from "~/Pages/Admin/Product/Variant";
-import { ProductEntity } from "~/ShopNet/Product/Entity";
 import { ProductGet } from "~/ShopNet/Product/Get";
 import { AdminNet } from "../AdminNet";
 
@@ -18,48 +18,26 @@ export abstract class AdminProductGet extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 1.0.1
+   * @version 3.0.0
    */
-  public static async List(pLog: Logger): Promise<IProductItem[]> {
-    const log = pLog.With(...this.Log, "List");
+  public static useList(pLog: Logger): number[] | void {
+    const log = useConst(() => pLog.With(...this.Log, "List"));
 
-    const list = await this.WithTimeCache<
-      {
-        ProductId: number;
-        Variant: number;
-        Combo: number;
-        Stock: number;
-      }[]
-    >("", "ProductGetList", dayjs().add(1, "m"));
+    const res = useLiveQuery(() =>
+      this.GetTimeCache<number[]>("", "ProductGetList", (x) => x.add(1, "m"))
+        .catch(log.error)
+    );
 
-    const items: IProductItem[] = [];
+    return res;
+  }
 
-    for (const meta of list) {
-      const prod = await ProductEntity.Product(meta.ProductId);
-
-      if (!prod) {
-        log.warn(`Product ${meta.ProductId} Not Found`);
-        continue;
-      }
-
-      const photos = await ProductGet.PhotoList(meta.ProductId);
-      const cover = await this.FindCover(photos, meta.ProductId, log);
-
-      if (!cover)
-        log.warn(`Product ${meta.ProductId} has no photo`);
-
-      items.push({
-        Id: meta.ProductId,
-        Cover: cover || "",
-        Name: prod.Name,
-        Category: prod.Category || "Pending",
-        Variant: meta.Variant,
-        Combo: meta.Combo,
-        Stock: meta.Stock
-      });
-    }
-
-    return items;
+  /**
+   * @author Aloento
+   * @since 1.3.0
+   * @version 0.1.0
+   */
+  public static Count(prodId: number): Promise<IProductCount> {
+    return this.GetTimeCache<IProductCount>(prodId, "ProductGetCount", (x) => x.add(1, "m"), prodId);
   }
 
   /**
@@ -68,7 +46,7 @@ export abstract class AdminProductGet extends AdminNet {
    * @version 1.0.0
    */
   public static async Name(prodId: number): Promise<string> {
-    const prod = await ProductEntity.Product(prodId);
+    const prod = await ProductGet.Product(prodId);
 
     if (!prod)
       throw new Error(`Product ${prodId} Not Found`);
@@ -82,7 +60,7 @@ export abstract class AdminProductGet extends AdminNet {
    * @version 1.0.0
    */
   public static async Category(prodId: number): Promise<string | undefined> {
-    const prod = await ProductEntity.Product(prodId);
+    const prod = await ProductGet.Product(prodId);
 
     if (!prod)
       throw new Error(`Product ${prodId} Not Found`);
@@ -98,17 +76,17 @@ export abstract class AdminProductGet extends AdminNet {
   public static async Variants(prodId: number, pLog: Logger): Promise<IVariantItem[]> {
     const log = pLog.With(...this.Log, "Variants");
 
-    const list = await this.WithTimeCache<
+    const list = await this.GetTimeCache<
       {
         VariantId: number;
         Types: number[];
       }[]
-    >(prodId, "ProductGetVariants", dayjs().add(1, "m"), prodId);
+    >(prodId, "ProductGetVariants", (x) => x.add(1, "m"), prodId);
 
     const items: IVariantItem[] = [];
 
     for (const meta of list) {
-      const vari = await ProductEntity.Variant(meta.VariantId);
+      const vari = await ProductGet.Variant(meta.VariantId);
 
       if (!vari) {
         log.warn(`Variant ${meta} Not Found. Product : ${prodId}`);
@@ -118,7 +96,7 @@ export abstract class AdminProductGet extends AdminNet {
       const types: string[] = [];
 
       for (const typeId of meta.Types) {
-        const type = await ProductEntity.Type(typeId);
+        const type = await ProductGet.Type(typeId);
 
         if (!type) {
           log.warn(`Type ${typeId} Not Found. Variant : ${meta.VariantId}, Product : ${prodId}`);

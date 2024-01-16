@@ -2,7 +2,7 @@ import { makeStyles, mergeClasses, shorthands } from "@fluentui/react-components
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { useLexical } from "../Context/Setting";
 
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   root: {
     ...shorthands.border(0),
     fontSize: "15px",
@@ -35,7 +35,7 @@ const useStyle = makeStyles({
 });
 
 export function LexContentEditable({ className, table }: { className?: string, table?: true }): JSX.Element {
-  const style = useStyle();
+  const style = useStyles();
   const { Display } = useLexical();
 
   return <ContentEditable className={mergeClasses(

@@ -38,7 +38,7 @@ export interface IPersona {
 export function PersonaInfo({ Log }: { Log: Logger }) {
   const style = useStyles();
   const log = useConst(() => Log.With("PersonaInfo"));
-  const { data } = Hub.User.Get.useMe(log);
+  const data = Hub.User.Get.useMe(log);
 
   return <>
     <div className={style.person}>

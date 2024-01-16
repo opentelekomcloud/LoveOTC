@@ -35,7 +35,7 @@ const log = new Logger("Order", "Info");
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.4.1
+ * @version 0.4.2
  */
 export function OrderInfo({ OrderId, Order, Admin }: IOrderInfo) {
   const style = useStyles();
@@ -45,9 +45,7 @@ export function OrderInfo({ OrderId, Order, Admin }: IOrderInfo) {
     onError: log.error
   });
 
-  const { data: me } = Hub.User.Get.useMe(log, {
-    manual: Admin
-  });
+  const me = Hub.User.Get.useMe(log);
 
   const data = Admin ? admin : me;
 

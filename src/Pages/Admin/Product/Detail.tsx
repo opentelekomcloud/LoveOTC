@@ -8,6 +8,7 @@ import { ColFlex } from "~/Helpers/Styles";
 import { AdminProductCategory } from "./Category";
 import { AdminProductCombo } from "./Combo";
 import { AdminProductDelete } from "./Delete";
+import { AdminProductLexical } from "./Lexical";
 import { AdminProductName } from "./Name";
 import { AdminProductPhoto } from "./Photo";
 import { AdminProductVariant } from "./Variant";
@@ -28,16 +29,19 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.2.1
+ * @version 0.2.2
  */
 export function AdminProductDetail({ ProdId }: { ProdId: number }) {
   const style = useStyles();
-  const [open, { toggle, setTrue }] = useBoolean();
+  const [open, { setFalse, setTrue }] = useBoolean();
   const { Nav, Paths } = useRouter();
+  const id = parseInt(Paths.at(1)!);
 
   useEffect(() => {
-    if (parseInt(Paths.at(1)!) === ProdId)
+    if (id === ProdId)
       setTrue();
+    else
+      setFalse();
   }, [Paths]);
 
   return <>
@@ -52,7 +56,6 @@ export function AdminProductDetail({ ProdId }: { ProdId: number }) {
 
     <Drawer
       open={open}
-      onOpenChange={toggle}
       position="end"
       size="large"
       modalType="alert"
@@ -64,7 +67,7 @@ export function AdminProductDetail({ ProdId }: { ProdId: number }) {
             icon={<DismissRegular />}
             onClick={() => {
               Nav("Admin");
-              toggle();
+              setFalse();
             }}
           />}
         >
@@ -80,8 +83,7 @@ export function AdminProductDetail({ ProdId }: { ProdId: number }) {
         <AdminProductVariant ProdId={ProdId} />
         <AdminProductCombo ProdId={ProdId} />
 
-        Rich Text Editor is temporarily unavailable.
-
+        <AdminProductLexical ProdId={ProdId} />
         <AdminProductDelete ProdId={ProdId} />
       </DrawerBody>
     </Drawer>

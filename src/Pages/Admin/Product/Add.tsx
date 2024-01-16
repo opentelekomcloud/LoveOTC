@@ -21,7 +21,7 @@ const log = new Logger("Admin", "Product", "AddButton");
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.3.2
+ * @version 0.3.3
  */
 export function AdminProductAddButton() {
   const { Nav, Paths } = useRouter();
@@ -33,7 +33,7 @@ export function AdminProductAddButton() {
 
   const { dispatch, dispatchToast } = useErrorToast(log);
 
-  const { run } = AdminHub.Product.Post.useCreate({
+  const { run, loading } = AdminHub.Product.Post.useCreate({
     manual: true,
     onError(e, params) {
       dispatch({
@@ -52,6 +52,7 @@ export function AdminProductAddButton() {
       );
 
       Nav("Admin", data);
+      setName("");
     }
   });
 
@@ -82,7 +83,13 @@ export function AdminProductAddButton() {
               <Button appearance="secondary">Cancel</Button>
             </DialogTrigger>
 
-            <Button appearance="primary" onClick={() => run(name)}>Create</Button>
+            <Button
+              disabled={loading}
+              appearance="primary"
+              onClick={() => run(name)}
+            >
+              Create
+            </Button>
           </DialogActions>
 
         </DialogBody>

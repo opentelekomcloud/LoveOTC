@@ -8,7 +8,7 @@ import { Cover } from "./Styles";
  * @since 0.1.0
  * @version 0.1.0
  */
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   unset: {
     flexBasis: "unset",
     flexGrow: 0
@@ -32,7 +32,7 @@ export function MakeCoverCol(size: number, log: Logger) {
   return createTableColumn<{ Cover: string; }>({
     columnId: "Cover",
     renderHeaderCell: () => {
-      const style = useStyle();
+      const style = useStyles();
 
       return (
         <DataGridHeaderCell className={style.unset}>
@@ -41,7 +41,7 @@ export function MakeCoverCol(size: number, log: Logger) {
       )
     },
     renderCell(item) {
-      const style = useStyle();
+      const style = useStyles();
 
       return (
         <DataGridCell className={style.unset}>

@@ -5,7 +5,7 @@ import { useDebounceFn } from "ahooks";
 import { $getNearestNodeFromDOMNode, $getSelection, $setSelection, LexicalEditor } from "lexical";
 import { useState } from "react";
 
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   green: {
     color: tokens.colorPaletteLightGreenForeground3
   }
@@ -50,7 +50,7 @@ export function CopyButton({ editor, getCodeDOMNode }: ICopyButton) {
     }
   }
 
-  const style = useStyle();
+  const style = useStyles();
 
   return <Button size="small" appearance="subtle" onClick={handleClick}
     icon={isCopyCompleted ? <CheckmarkFilled className={style.green} /> : <CopyRegular />} />;

@@ -1,5 +1,5 @@
 import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Input, Label, Toast, ToastBody, ToastTitle, makeStyles, tokens } from "@fluentui/react-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "react-oidc-context";
 import { Logger } from "~/Helpers/Logger";
 import { ColFlex, Flex } from "~/Helpers/Styles";
@@ -39,7 +39,7 @@ const log = new Logger("Setting");
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.4.1
+ * @version 0.5.0
  */
 export function Setting({ Open, Toggle, New }: ISetting) {
   const style = useStyles();
@@ -49,17 +49,17 @@ export function Setting({ Open, Toggle, New }: ISetting) {
   const [phone, setPhone] = useState<string>();
   const [address, setAddress] = useState<string>();
 
-  Hub.User.Get.useMe(log, {
-    manual: New,
-    onSuccess(data) {
-      if (!data) return;
-      const { Name, Phone, Address } = data;
+  const data = Hub.User.Get.useMe(log);
 
-      setName(Name);
-      setPhone(Phone);
-      setAddress(Address);
-    }
-  });
+  useEffect(() => {
+    if (New || !data) return;
+
+    const { Name, Phone, Address } = data;
+
+    setName(Name);
+    setPhone(Phone);
+    setAddress(Address);
+  }, [data]);
 
   const { dispatch, dispatchToast } = useErrorToast(log);
 

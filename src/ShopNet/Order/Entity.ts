@@ -18,7 +18,7 @@ export abstract class OrderEntity extends ShopNet {
     TrackingNumber?: string;
   } & IConcurrency) | void> {
     this.EnsureLogin();
-    return this.WithVersionCache(key, "OrderEntity");
+    return this.GetVersionCache(key, "OrderEntity");
   }
 
   /**
@@ -32,6 +32,6 @@ export abstract class OrderEntity extends ShopNet {
     CreateAt: Date;
   } & IConcurrency) | void> {
     this.EnsureLogin();
-    return this.WithVersionCache(key, "CommentEntity");
+    return this.GetVersionCache(key, "CommentEntity");
   }
 }

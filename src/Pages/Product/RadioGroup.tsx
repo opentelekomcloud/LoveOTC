@@ -7,7 +7,7 @@ import { useRadioGroup } from "./Context";
  * @since 0.1.0
  * @version 0.1.0
  */
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   fore: {
     color: tokens.colorBrandForeground1,
     textTransform: "uppercase"
@@ -41,7 +41,7 @@ interface IProductRadioGroup {
  * @version 0.2.2
  */
 export function ProductRadioGroup({ Variant, Types }: IProductRadioGroup) {
-  const style = useStyle();
+  const style = useStyles();
   const { Current, Update } = useRadioGroup();
 
   return (

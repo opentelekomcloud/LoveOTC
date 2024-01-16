@@ -19,7 +19,7 @@ export abstract class AdminOrderEntity extends AdminNet {
     TrackingNumber?: string;
   } & IConcurrency) | void> {
     this.EnsureLogin();
-    return this.WithVersionCache(key, "OrderEntity");
+    return this.GetVersionCache(key, "OrderEntity");
   }
 
   /**
@@ -33,6 +33,6 @@ export abstract class AdminOrderEntity extends AdminNet {
     CreateAt: Date;
   } & IConcurrency) | void> {
     this.EnsureLogin();
-    return this.WithVersionCache(key, "CommentEntity");
+    return this.GetVersionCache(key, "CommentEntity");
   }
 }

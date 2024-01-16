@@ -1,4 +1,3 @@
-import dayjs from "dayjs";
 import { IPersona } from "~/Components/ShopCart/Persona";
 import { IUserItem } from "~/Pages/Admin/User";
 import { AdminNet } from "../AdminNet";
@@ -36,7 +35,7 @@ export abstract class AdminUserGet extends AdminNet {
    * @version 1.0.0
    */
   public static async List(): Promise<IUserItem[]> {
-    const list = await this.WithTimeCache<string[]>("", "UserGetList", dayjs().add(1, "m"));
+    const list = await this.GetTimeCache<string[]>("", "UserGetList", (x) => x.add(1, "m"));
     const res: IUserItem[] = [];
 
     for (const userId of list) {

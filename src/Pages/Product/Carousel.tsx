@@ -12,7 +12,7 @@ import { Hub } from "~/ShopNet";
  * @since 0.1.0
  * @version 0.1.0
  */
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   img: {
     aspectRatio: "1",
     ...Cover,
@@ -30,22 +30,21 @@ const log = new Logger("Product", "Carousel");
  * @version 0.3.0
  */
 export function ProductCarousel({ Id }: { Id: number; }) {
-  const style = useStyle();
+  const style = useStyles();
   const [imgs, setImgs] = useState<[string, string?][]>([[img]]);
 
-  useRequest(() => Hub.Product.Get.Carousel(Id, log), {
-    async onSuccess(data) {
-      setImgs(Array<[string, string?]>(data.length).fill([img]));
+  useRequest(() => Hub.Product.Get.PhotoList(Id, log), {
+    async onSuccess([list]) {
+      setImgs(Array<[string, string?]>(list.length).fill([img]));
 
-      for (let i = 0; i < data.length; i++) {
-        Hub.Storage.GetBySlice(data[i].Cover, log).then(slice => {
+      for (let i = 0; i < list.length; i++)
+        Hub.Storage.GetBySlice(list[i].ObjectId, log).then(slice => {
           setImgs(x => {
             const n = [...x];
-            n[i] = [URL.createObjectURL(new Blob(slice)), data[i].Caption];
+            n[i] = [URL.createObjectURL(new Blob(slice)), list[i].Caption];
             return n;
           });
         });
-      }
     },
     onError: log.error
   });

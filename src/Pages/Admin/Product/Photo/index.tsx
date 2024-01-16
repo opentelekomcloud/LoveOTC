@@ -1,7 +1,8 @@
 import { Button, DataGridCell, DataGridHeaderCell, Subtitle1, TableColumnDefinition, Toast, ToastTitle, createTableColumn, makeStyles } from "@fluentui/react-components";
 import { AddRegular, ArrowDownRegular, ArrowUpRegular } from "@fluentui/react-icons";
 import { useRequest } from "ahooks";
-import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
+import { useState } from "react";
+import { DelegateDataGrid } from "~/Components/DataGrid";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { Logger } from "~/Helpers/Logger";
 import { Flex } from "~/Helpers/Styles";
@@ -111,11 +112,22 @@ let refreshCarousel: () => void;
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.3.2
+ * @version 0.4.0
  */
 export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
-  const { data, run } = useRequest(() => Hub.Product.Get.Carousel(ProdId, log), {
-    onError: log.error
+  const [list, setList] = useState<IPhotoItem[]>([]);
+
+  const { run } = useRequest(() => Hub.Product.Get.PhotoList(ProdId, log), {
+    onError: log.error,
+    onSuccess([raw]) {
+      const map = raw.map(x => ({
+        Id: x.Order,
+        Cover: x.ObjectId,
+        Caption: x.Caption || "No Caption"
+      }));
+
+      setList(map);
+    }
   });
   refreshCarousel = run;
 
@@ -138,7 +150,7 @@ export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
         { intent: "success" }
       );
 
-      refreshCarousel();
+      run();
     }
   });
 
@@ -165,6 +177,6 @@ export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
       </Button>
     </div>
 
-    <DelegateDataGrid Items={data || []} Columns={columns} />
+    <DelegateDataGrid Items={list} Columns={columns} />
   </>
 }

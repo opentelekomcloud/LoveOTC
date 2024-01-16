@@ -23,7 +23,7 @@ internal partial class AdminHub {
         if (!valid.IsValid(name))
             throw new HubException(valid.FormatErrorMessage("Name"));
 
-        if (await this.Db.Products.AnyAsync(x => EF.Functions.Like(x.Name, name)))
+        if (await this.Db.Products.AnyAsync(x => EF.Functions.ILike(x.Name, name)))
             throw new HubException($"Product {name} already exist");
 
         var temp = await this.Db.Products.AddAsync(new() {
@@ -184,11 +184,11 @@ internal partial class AdminHub {
      */
     public async Task<uint> ProductPostCombo(uint prodId, Dictionary<string, string> combo, ushort stock) {
         var variTypesDb = (await this.Db.Products
-                .Include(x => x.Variants)
-                .ThenInclude(x => x.Types)
-                .Where(x => x.ProductId == prodId)
-                .SelectMany(x => x.Variants)
-                .ToDictionaryAsync(k => k.Name, v => v.Types.ToImmutableArray()))
+            .Include(x => x.Variants)
+            .ThenInclude(x => x.Types)
+            .Where(x => x.ProductId == prodId)
+            .SelectMany(x => x.Variants)
+            .ToDictionaryAsync(k => k.Name, v => v.Types.ToImmutableArray()))
             .ToImmutableSortedDictionary();
 
         var reqCombo = combo.ToImmutableSortedDictionary();
@@ -229,5 +229,23 @@ internal partial class AdminHub {
 
         await this.Db.SaveChangesAsync();
         return temp.Entity.ComboId;
+    }
+
+    /**
+     * <remarks>
+     * @author Aloento
+     * @since 1.2.0
+     * @version 0.1.0
+     * </remarks>
+     */
+    public async Task<bool> ProductPostDescription(uint prodId, string? desc) {
+        desc = desc?.Normalize().Trim();
+
+        var row = await this.Db.Products
+            .Where(x => x.ProductId == prodId)
+            .ExecuteUpdateAsync(x =>
+                x.SetProperty(p => p.Description, desc));
+
+        return row > 0;
     }
 }

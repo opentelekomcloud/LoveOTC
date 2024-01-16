@@ -16,8 +16,8 @@ import {
   createCommand
 } from "lexical";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { IRow, TableNode, createCell, createRow } from "../../Nodes/Table";
-import { invariant } from "../../Utils/invariant";
+import { IRow, TableNode, createCell, createRow } from "../Nodes/Table";
+import { invariant } from "../Utils/invariant";
 
 export type InsertTableCommandPayload = Readonly<{
   columns: string | number;

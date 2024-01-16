@@ -1,35 +1,31 @@
-import dayjs from "dayjs";
 import type { Logger } from "~/Helpers/Logger";
 import { IComboItem } from "~/Pages/Admin/Product/Combo";
-import { IPhotoItem } from "~/Pages/Admin/Product/Photo";
-import type { IProductInfo } from "~/Pages/Gallery";
-import { ShopNet } from "../ShopNet";
-import { ProductEntity } from "./Entity";
-// import demo from "./demo.json";
+import type { IGallery } from "~/Pages/Gallery";
+import { ProductData } from "./Data";
 
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.2.0
  */
-export abstract class ProductGet extends ShopNet {
+export abstract class ProductGet extends ProductData {
   /** "Product", "Get" */
   protected static override readonly Log = [...super.Log, "Product", "Get"];
 
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 1.0.1
+   * @version 1.1.0
+   * @liveSafe
    */
-  public static async Basic(prodId: number, pLog: Logger): Promise<IProductInfo> {
+  public static async Basic(prodId: number, pLog: Logger): Promise<IGallery> {
     const log = pLog.With(...this.Log, "Basic");
 
-    const res = await ProductEntity.Product(prodId);
+    const res = await this.Product(prodId);
     if (!res)
       throw new Error(`Product ${prodId} Not Found`);
 
-    const list = await this.PhotoList(prodId);
-    const cover = await this.FindCover(list, prodId, log);
+    const [_, cover] = await this.PhotoList(prodId, pLog);
 
     if (cover)
       return {
@@ -57,6 +53,7 @@ export abstract class ProductGet extends ShopNet {
    * @author Aloento
    * @since 0.5.0
    * @version 1.0.1
+   * @liveSafe
    */
   public static async Combo(prodId: number, pLog: Logger): Promise<IComboItem[]> {
     const log = pLog.With(...this.Log, "Combo");
@@ -68,14 +65,14 @@ export abstract class ProductGet extends ShopNet {
       const variType: Record<string, string> = {};
 
       for (const typeId of combo.Types) {
-        const type = await ProductEntity.Type(typeId);
+        const type = await this.Type(typeId);
 
         if (!type) {
           log.error(`[Mismatch] Type ${typeId} not found. Combo ${combo.ComboId} : Product ${prodId}`);
           continue;
         }
 
-        const vari = await ProductEntity.Variant(type.VariantId);
+        const vari = await this.Variant(type.VariantId);
 
         if (!vari) {
           log.error(`[Mismatch] Variant ${type.VariantId} not found. Combo ${combo.ComboId} : Type ${typeId} : Product ${prodId}`);
@@ -97,62 +94,50 @@ export abstract class ProductGet extends ShopNet {
 
   /**
    * @author Aloento
-   * @since 0.5.0
-   * @version 1.0.1
-   */
-  public static async Carousel(prodId: number, pLog: Logger): Promise<IPhotoItem[]> {
-    const log = pLog.With(...this.Log, "Carousel");
-
-    const list = await this.PhotoList(prodId);
-    const photos: IPhotoItem[] = [];
-
-    for (let i = 0; i < list.length; i++) {
-      const id = list[i];
-      const p = await ProductEntity.Photo(id);
-
-      if (p)
-        photos.push({
-          Id: p.Order,
-          Cover: p.ObjectId,
-          Caption: p.Caption,
-        });
-      else
-        log.warn(`Photo ${id} not found in Product ${prodId}`);
-    }
-
-    return photos.sort((a, b) => a.Id - b.Id);
-  }
-
-  /**
-   * @author Aloento
-   * @since 0.5.0
-   * @version 0.1.0
-   */
-  public static async Lexical(id: number): Promise<string> {
-    // await this.EnsureConnected();
-    // return JSON.stringify(demo.editorState);
-    return "This is a demo";
-  }
-
-  /**
-   * @author Aloento
    * @since 1.0.0
    * @version 0.1.0
+   * @liveSafe
    */
   public static ComboList(prodId: number): Promise<{
     ComboId: number;
     Stock: number;
     Types: number[];
   }[]> {
-    return this.WithTimeCache(prodId, "ProductGetComboList", dayjs().add(1, "m"), prodId);
+    return this.GetTimeCache(prodId, "ProductGetComboList", (x) => x.add(1, "m"), prodId);
   }
 
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.1.0
+   * @version 1.0.1
+   * @liveSafe
    */
-  public static PhotoList(prodId: number): Promise<number[]> {
-    return this.WithTimeCache(prodId, "ProductGetPhotoList", dayjs().add(1, "m"), prodId);
+  public static async PhotoList(prodId: number, pLog: Logger): Promise<[Awaited<ReturnType<typeof this.Photo>>[], string]> {
+    const log = pLog.With(...this.Log, "PhotoList");
+
+    const ids = await this.GetTimeCache<number[]>(prodId, "ProductGetPhotoList", (x) => x.add(1, "m"), prodId).catch(log.error);
+    let list = [];
+    let cover = "";
+
+    for (const photoId of ids || []) {
+      const photo = await this.Photo(photoId).catch(log.error);
+
+      if (photo) {
+        list.push(photo);
+
+        if (photo.Cover)
+          cover = photo.ObjectId;
+      } else
+        log.warn(`Photo ${photoId} not found in Product ${prodId}`);
+    }
+
+    list = list.sort((a, b) => a.Order - b.Order);
+
+    if (!cover && list.length > 0) {
+      log.warn(`Product ${prodId} has no cover photo, using first photo instead`);
+      return [list, list[0].ObjectId];
+    }
+
+    return [list, cover];
   }
 }

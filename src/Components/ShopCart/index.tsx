@@ -4,7 +4,7 @@ import { CartRegular } from "@fluentui/react-icons";
 import { useBoolean, useUpdateEffect } from "ahooks";
 import { Logger } from "~/Helpers/Logger";
 import { Flex } from "~/Helpers/Styles";
-import { DelegateDataGrid } from "../DataGrid/Delegate";
+import { DelegateDataGrid } from "../DataGrid";
 import { CartColumns } from "./Columns";
 import { Confirm } from "./Confirm";
 import { useShopCart } from "./Context";

@@ -3,7 +3,7 @@ import { DismissRegular, EditRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
 import { isInteger } from "lodash-es";
 import { useState } from "react";
-import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
+import { DelegateDataGrid } from "~/Components/DataGrid";
 import { Logger } from "~/Helpers/Logger";
 import { Flex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
@@ -152,7 +152,7 @@ export function AdminProductComboDetail({ Id, ProdId, Combo, Stock, Refresh }: I
                   setCombo({ ...combo });
                 },
                 ...x
-              })) || []}
+              }))}
               Columns={columns}
             />
 

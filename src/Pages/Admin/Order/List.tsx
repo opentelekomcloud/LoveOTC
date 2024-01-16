@@ -1,5 +1,5 @@
 import { DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
-import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
+import { DelegateDataGrid } from "~/Components/DataGrid";
 import { ICartItem } from "~/Components/ShopCart";
 
 /**
@@ -64,6 +64,6 @@ const columns: TableColumnDefinition<ICartItem>[] = [
  */
 export function AdminOrderList({ Items }: { Items?: ICartItem[] }) {
   return (
-    <DelegateDataGrid Items={Items || []} Columns={columns} />
+    <DelegateDataGrid Items={Items} Columns={columns} />
   )
 }

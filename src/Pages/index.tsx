@@ -12,7 +12,7 @@ import { NotFound } from "./404";
  * @since 0.2.2 MusiLand
  * @version 0.1.0
  */
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   body: {
     ...ColFlex,
     minWidth: "1024px",
@@ -41,7 +41,7 @@ const useStyle = makeStyles({
  * @version 0.4.0
  */
 export function Layout() {
-  const style = useStyle();
+  const style = useStyles();
   const { Paths } = useRouter();
   const path = Paths.at(0);
 

@@ -7,7 +7,7 @@ import { Flex } from "~/Helpers/Styles";
  * @since 0.1.0
  * @version 0.1.0
  */
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   box: {
     ...Flex,
     flexGrow: 1,
@@ -29,7 +29,7 @@ const useStyle = makeStyles({
  * @version 0.1.1
  */
 export function AdminTopNav() {
-  const style = useStyle();
+  const style = useStyles();
   const { Paths } = useRouter();
   const path1 = Paths.at(0);
   const path2 = Paths.at(1) || "Product";

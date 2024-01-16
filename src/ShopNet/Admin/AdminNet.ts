@@ -1,13 +1,12 @@
 import { HttpTransportType, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { MessagePackHubProtocol } from "@microsoft/signalr-protocol-msgpack";
-import { Dayjs } from "dayjs";
-import { Common, IConcurrency } from "../Database";
+import { Common } from "../Database";
 import { SignalR } from "../SignalR";
 
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.1.1
+ * @version 0.1.2
  */
 export abstract class AdminNet extends SignalR {
   /** "|", "AdminNet" */
@@ -40,23 +39,10 @@ export abstract class AdminNet extends SignalR {
 
   /**
    * @author Aloento
-   * @since 1.0.0
+   * @since 1.3.0
    * @version 0.1.0
    */
-  protected static override WithVersionCache<T extends IConcurrency>(
-    key: string | number, methodName: string
-  ): Promise<T | void> {
-    return super.WithVersionCache(key, methodName, true);
-  }
-
-  /**
-   * @author Aloento
-   * @since 1.0.0
-   * @version 0.1.0
-   */
-  protected static override WithTimeCache<T>(
-    key: string | number, methodName: string, exp: Dayjs, ...args: any[]
-  ): Promise<T> {
-    return super.WithTimeCache(`Admin_${key}`, methodName, exp, ...args);
+  public static override Index(key: string | number, methodName: string): string {
+    return `${methodName}_Admin_${key}`;
   }
 }

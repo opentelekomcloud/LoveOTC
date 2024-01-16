@@ -5,7 +5,7 @@ import { NotLoginError, NotTrueError } from "~/Helpers/Exceptions";
 import type { Logger } from "~/Helpers/Logger";
 import type { AdminNet } from "./Admin/AdminNet";
 import { Common, Shared, type IConcurrency } from "./Database";
-import { ShopNet } from "./ShopNet";
+import type { ShopNet } from "./ShopNet";
 
 /**
  * @author Aloento
@@ -75,19 +75,54 @@ export abstract class SignalR {
 
   /**
    * @author Aloento
-   * @since 1.0.0
-   * @version 0.2.1
+   * @since 1.3.0
+   * @version 0.1.0
    */
-  protected static async WithVersionCache<T extends IConcurrency>(
-    this: INet, key: string | number, methodName: string, admin?: boolean
-  ): Promise<T | void> {
-    const index = `${methodName}_${admin ? `Admin_${key}` : key}`;
+  public static Index(key: string | number, methodName: string): string {
+    return `${methodName}_${key}`;
+  }
+
+  /**
+   * @author Aloento
+   * @since 1.3.0
+   * @version 0.1.0
+   */
+  protected static async UpdateCache<T>(
+    this: INet, action: (raw: T) => T, key: string | number, methodName: string, exp?: Dayjs
+  ) {
+    const index = this.Index(key, methodName);
+    const find = await Shared.Get<T & { QueryExp?: number }>(index);
+
+    if (!find)
+      return;
+
+    const data = action(find);
+
+    if (find.QueryExp)
+      await Shared.Set<T & { QueryExp: number }>(index, {
+        ...data,
+        QueryExp: dayjs().add(1, "m").unix()
+      }, null);
+    else
+      await Shared.Set<T>(index, data, exp || null);
+  }
+
+  /**
+   * @author Aloento
+   * @since 1.0.0
+   * @version 0.3.2
+   * @liveSafe
+   */
+  protected static async GetVersionCache<T extends IConcurrency>(
+    this: INet, key: string | number, methodName: string
+  ): Promise<T> {
+    const index = this.Index(key, methodName);
     const find = await Shared.Get<T & { QueryExp: number }>(index);
 
     if (find && find.QueryExp > dayjs().unix())
       return find;
 
-    const res = await this.Invoke<T | true | null>(methodName, key, find?.Version);
+    const res = await Promise.resolve(this.Invoke<T | true | null>(methodName, key, find?.Version));
 
     if (res === true) {
       Shared.Set<T & { QueryExp: number }>(index, {
@@ -98,10 +133,12 @@ export abstract class SignalR {
       return find!;
     }
 
-    if (!res)
-      return Shared.Sto.delete(index);
+    if (!res) {
+      Shared.Sto.delete(index);
+      throw new TypeError("Empty Response");
+    }
 
-    Shared.Set<T & { QueryExp: number }>(index, {
+    await Shared.Set<T & { QueryExp: number }>(index, {
       ...res,
       QueryExp: dayjs().add(1, "m").unix()
     }, null);
@@ -112,47 +149,22 @@ export abstract class SignalR {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.1.1
+   * @version 0.2.0
+   * @liveSafe
    */
-  protected static async WithTimeCache<T>(
-    this: INet, key: string | number, methodName: string, exp: Dayjs, ...args: any[]
+  protected static async GetTimeCache<T>(
+    this: INet, key: string | number, methodName: string, exp: (now: Dayjs) => Dayjs, ...args: any[]
   ): Promise<T> {
     const res = await Shared.GetOrSet(
-      `${methodName}_${key}`,
+      this.Index(key, methodName),
       async () => {
         const db = await this.Invoke<T>(methodName, ...args);
         return db;
       },
-      exp
+      exp(dayjs())
     );
 
     return res;
-  }
-
-  /**
-   * @author Aloento
-   * @since 1.0.0
-   * @version 0.2.2
-   */
-  protected static async FindCover(this: INet, photos: number[], prodId: number, logger: Logger): Promise<string | void> {
-    const list = [];
-
-    for (const photoId of photos) {
-      const photo = await (await import("./Product/Entity")).ProductEntity.Photo(photoId);
-
-      if (photo) {
-        list.push(photo);
-
-        if (photo.Cover)
-          return photo.ObjectId;
-      } else
-        logger?.warn(`Photo ${photoId} not found in Product ${prodId}`);
-    }
-
-    if (list.length > 0) {
-      logger?.warn(`Product ${prodId} has no cover photo, using first photo instead`);
-      return list.sort((a, b) => a.Order - b.Order)[0].ObjectId;
-    }
   }
 
   /**

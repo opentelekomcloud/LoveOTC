@@ -1,7 +1,7 @@
 import { makeStyles, shorthands } from "@fluentui/react-components";
 import { ReactNode } from "react";
 
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   box: {
     fontSize: "15px",
     color: "#999",
@@ -19,6 +19,6 @@ const useStyle = makeStyles({
 });
 
 export function Placeholder({ children, className }: { children: ReactNode; className?: string; }): JSX.Element {
-  const style = useStyle();
+  const style = useStyles();
   return <div className={className || style.box}>{children}</div>;
 }

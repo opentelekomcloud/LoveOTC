@@ -1,6 +1,6 @@
 import { useConst } from "@fluentui/react-hooks";
 import { useRequest } from "ahooks";
-import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
+import { DelegateDataGrid } from "~/Components/DataGrid";
 import { Logger } from "~/Helpers/Logger";
 import { Hub } from "~/ShopNet";
 import { HistoryColumns } from "./Columns";
@@ -32,7 +32,7 @@ function History() {
   });
 
   return (
-    <DelegateDataGrid Items={data || []} Columns={useConst(() => HistoryColumns(log))} />
+    <DelegateDataGrid Items={data} Columns={useConst(() => HistoryColumns(log))} />
   )
 }
 
