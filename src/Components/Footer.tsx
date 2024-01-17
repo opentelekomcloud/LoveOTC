@@ -18,14 +18,22 @@ const useStyle = makeStyles({
     maxWidth: NavW,
     ...shorthands.margin(0, "auto"),
   },
-  logo: {
-    color: "white",
-    ...shorthands.margin("64px", 0),
-  },
-  otc: {
+  white: {
     color: "white"
+  },
+  mag: {
+    color: "#ED538B"
+  },
+  text: {
+    ...Flex,
+    ...shorthands.margin("64px", 0),
   }
 });
+
+const txt = {
+  size: 800,
+  weight: "medium"
+} as const;
 
 /**
  * @author Aloento
@@ -38,9 +46,17 @@ export function Footer(): JSX.Element {
   return (
     <footer className={style.box}>
       <div className={style.main}>
-        <Text size={800} className={style.logo}>
-          OpenTelekomCloud
-        </Text>
+        <div className={style.text}>
+          <Text {...txt} className={style.mag}>
+            Open
+          </Text>
+          <Text {...txt} weight="medium" className={style.white}>
+            Telekom
+          </Text>
+          <Text {...txt} weight="medium" className={style.mag}>
+            Cloud
+          </Text>
+        </div>
 
       </div>
     </footer>
