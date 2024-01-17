@@ -17,10 +17,7 @@ export const OnNewUserSubject = new Subject<boolean>();
  */
 export function NewUser() {
   const [open, { toggle }] = useBoolean();
-
-  useMount(() => {
-    OnNewUserSubject.subscribe(x => x && toggle());
-  });
+  useMount(() => OnNewUserSubject.subscribe(x => x && toggle()));
 
   return (
     <AuthenticatedTemplate>

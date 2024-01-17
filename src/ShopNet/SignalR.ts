@@ -1,7 +1,7 @@
 import { HubConnectionState } from "@microsoft/signalr";
 import dayjs, { Dayjs } from "dayjs";
 import { Subject } from "rxjs";
-import { NotLoginError, NotTrueError } from "~/Helpers/Exceptions";
+import { EmptyResponseError, NotLoginError, NotTrueError } from "~/Helpers/Exceptions";
 import type { Logger } from "~/Helpers/Logger";
 import type { AdminNet } from "./Admin/AdminNet";
 import { Common, Shared, type IConcurrency } from "./Database";
@@ -135,7 +135,7 @@ export abstract class SignalR {
 
     if (!res) {
       Shared.Sto.delete(index);
-      throw new TypeError("Empty Response");
+      throw new EmptyResponseError();
     }
 
     await Shared.Set<T & { QueryExp: number }>(index, {
