@@ -1,4 +1,4 @@
-import { Card, CardFooter, CardPreview, Link, makeStyles, tokens } from "@fluentui/react-components";
+import { Card, CardFooter, CardPreview, Link, Subtitle2, makeStyles, tokens } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import { GuidImage } from "~/Helpers/GuidImage";
 import { Logger } from "~/Helpers/Logger";
@@ -28,7 +28,7 @@ const log = new Logger("Gallery", "Category", "Card");
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.4
+ * @version 0.1.5
  */
 export function GalleryCard({ Id }: { Id: number }) {
   const style = useStyles();
@@ -43,7 +43,9 @@ export function GalleryCard({ Id }: { Id: number }) {
       </CardPreview>
 
       <CardFooter>
-        <Link href={`/Product/${Id}`}>{data?.Name || "Loading..."}</Link>
+        <Subtitle2>
+          <Link href={`/Product/${Id}`}>{data?.Name || "Loading..."}</Link>
+        </Subtitle2>
       </CardFooter>
     </Card>
   )

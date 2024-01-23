@@ -28,7 +28,7 @@ const log = new Logger("Admin", "Product", "Detail", "Category");
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.3.2
+ * @version 0.3.4
  */
 export function AdminProductCategory({ ProdId }: { ProdId: number; }) {
   const [cate, setCate] = useState("");
@@ -56,6 +56,27 @@ export function AdminProductCategory({ ProdId }: { ProdId: number; }) {
       dispatchToast(
         <Toast>
           <ToastTitle>Category Updated</ToastTitle>
+        </Toast>,
+        { intent: "success" }
+      );
+
+      setFalse();
+    }
+  });
+
+  const { run: det } = AdminHub.Product.Delete.useCategory({
+    manual: true,
+    onError(e, params) {
+      dispatch({
+        Message: "Failed Detach Category",
+        Request: params,
+        Error: e
+      });
+    },
+    onSuccess() {
+      dispatchToast(
+        <Toast>
+          <ToastTitle>Category Detached</ToastTitle>
         </Toast>,
         { intent: "success" }
       );
@@ -116,11 +137,33 @@ export function AdminProductCategory({ ProdId }: { ProdId: number; }) {
         }
 
         {matchCate?.map(x => <Option key={x}>{x}</Option>)}
+
+        {
+          matchCate?.length === cates?.length
+            ?
+            <Option key="" text="">
+              Pending
+            </Option>
+            : null
+        }
       </Combobox>
 
       {edit
-        ? <Button appearance="subtle" icon={<SendRegular />} onClick={() => cate && run(ProdId, cate)} />
-        : <Button appearance="subtle" icon={<EditRegular />} onClick={setTrue} />}
+        ? <Button
+          appearance="subtle"
+          icon={<SendRegular />}
+          onClick={() => {
+            if (cate)
+              run(ProdId, cate);
+            else
+              det(ProdId);
+          }}
+        />
+        : <Button
+          appearance="subtle"
+          icon={<EditRegular />}
+          onClick={setTrue}
+        />}
     </div>
   );
 }

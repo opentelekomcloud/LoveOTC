@@ -31,12 +31,14 @@ export class Table {
    * @version 0.2.1
    * @liveSafe
    */
-  public async Get<T>(key: string, expire?: (x?: ITable<T>) => Promise<boolean>): Promise<T | null> {
+  public async Get<T>(key: string, expire?: (x: ITable<T>) => Promise<boolean>): Promise<T | null> {
     const find = await this.Sto.get(key) as ITable<T> | undefined;
 
     if (find) {
-      if ((expire && await Promise.resolve(expire(find))) ||
-        (typeof find.Exp === "number" && find.Exp < dayjs().unix())) {
+      if (
+        (expire && await Promise.resolve(expire(find))) ||
+        (typeof find.Exp === "number" && find.Exp < dayjs().unix())
+      ) {
         await this.Sto.delete(key);
         return null;
       }

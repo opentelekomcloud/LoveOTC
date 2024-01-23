@@ -112,7 +112,7 @@ export abstract class ProductGet extends ProductData {
    * @version 1.0.1
    * @liveSafe
    */
-  public static async PhotoList(prodId: number, pLog: Logger): Promise<[Awaited<ReturnType<typeof this.Photo>>[], string]> {
+  public static async PhotoList(prodId: number, pLog: Logger): Promise<[ProductData.Photo[], string]> {
     const log = pLog.With(...this.Log, "PhotoList");
 
     const ids = await this.GetTimeCache<number[]>(prodId, "ProductGetPhotoList", (x) => x.add(1, "m"), prodId).catch(log.error);

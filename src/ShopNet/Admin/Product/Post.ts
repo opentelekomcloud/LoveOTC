@@ -1,11 +1,11 @@
 import { useConst } from "@fluentui/react-hooks";
 import { useRequest } from "ahooks";
 import { Options } from "ahooks/lib/useRequest/src/types";
-import dayjs from "dayjs";
 import { Subject } from "rxjs";
 import { Logger } from "~/Helpers/Logger";
 import { CurrentEditor } from "~/Lexical/Utils";
 import { AdminNet } from "../AdminNet";
+import { AdminProductGet } from "./Get";
 
 /**
  * @author Aloento
@@ -24,7 +24,7 @@ export abstract class AdminProductPost extends AdminNet {
   public static useCreate(options: Options<number, [string]>) {
     return useRequest(async name => {
       const res = await this.Invoke<number>("ProductPostCreate", name);
-      this.UpdateCache<number[]>(x => [res, ...x], "", "ProductGetList", dayjs().add(1, "m"))
+      AdminProductGet.ListUpdate(x => [res, ...x])
       return res;
     }, options);
   }

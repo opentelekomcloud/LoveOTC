@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using TSystems.LoveOTC;
 using TSystems.LoveOTC.AdminHub;
 using TSystems.LoveOTC.Hub;
+using Z.EntityFramework.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,12 +28,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddDbContext<ShopContext>(x => {
+    EntityFrameworkManager.IsCommunity = true;
+
     if (Shared.Dev) {
         x.EnableSensitiveDataLogging();
         x.EnableDetailedErrors();
     }
 
-    x.UseLazyLoadingProxies();
     x.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 

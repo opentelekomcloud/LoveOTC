@@ -7,13 +7,15 @@ import { useErrorToast } from "~/Helpers/useToast";
 import { IConcurrency } from "../Database";
 import { ShopNet } from "../ShopNet";
 
-/**
- * @author Aloento
- * @since 0.5.0
- * @version 0.2.0
- */
-export interface IUserGetMe extends IPersona, IConcurrency {
-  Admin?: boolean;
+export namespace UserGet {
+  /**
+   * @author Aloento
+   * @since 0.5.0
+   * @version 0.2.0
+   */
+  export interface Me extends IPersona, IConcurrency {
+    Admin?: boolean;
+  }
 }
 
 /**
@@ -22,19 +24,24 @@ export interface IUserGetMe extends IPersona, IConcurrency {
  * @version 0.2.0
  */
 export abstract class UserGet extends ShopNet {
+  /** "User", "Get" */
+  protected static override readonly Log = [...super.Log, "User", "Get"];
+
+  public static readonly me = "UserGetMe";
+
   /**
    * @author Aloento
    * @since 1.0.0
    * @version 0.4.2
    */
-  public static useMe(pLog: Logger): IUserGetMe | void {
-    const log = useConst(() => pLog.With("|", "Hub", "User", "Get", "Me"));
+  public static useMe(pLog: Logger): UserGet.Me | void {
+    const log = useConst(() => pLog.With(...this.Log, "Me"));
     const { dispatch } = useErrorToast(log);
 
-    const res = useLiveQuery(async (): Promise<IUserGetMe | void> => {
+    const res = useLiveQuery(async (): Promise<UserGet.Me | void> => {
       try {
         this.EnsureLogin();
-        return await this.GetVersionCache<IUserGetMe>(0, "UserGetMe");
+        return await this.GetVersionCache<UserGet.Me>(0, this.me);
       } catch (e) {
         if (e instanceof EmptyResponseError)
           return;
@@ -50,5 +57,8 @@ export abstract class UserGet extends ShopNet {
     });
 
     return res;
+  }
+  public static MeUpdate(action: (me: UserGet.Me) => UserGet.Me) {
+    return this.UpdateCache(action, 0, this.me);
   }
 }
