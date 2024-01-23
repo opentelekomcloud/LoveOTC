@@ -2,6 +2,7 @@ namespace TSystems.LoveOTC.AdminHub;
 
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Z.EntityFramework.Plus;
 
 internal partial class AdminHub {
     /**
@@ -104,7 +105,7 @@ internal partial class AdminHub {
         await this.deleteType(
             await this.Db.Types
                 .Where(x => x.VariantId == variantId && x.Name == reqType)
-                .Include(x => x.Combos)
+                .IncludeOptimized(x => x.Combos)
                 .SingleAsync()
         );
 
@@ -176,6 +177,31 @@ internal partial class AdminHub {
 
         foreach (var variant in product.Variants)
             await this.deleteVariant(variant);
+
+        return await this.Db.SaveChangesAsync() > 0;
+    }
+
+    /**
+     * <remarks>
+     * @author Aloento
+     * @since 1.2.0
+     * @version 0.1.0
+     * </remarks>
+     */
+    public async Task<bool> ProductDetachCategory(uint prodId) {
+        var prod = await this.Db.Products
+            .SingleAsync(x => x.ProductId == prodId);
+
+        if (prod.CategoryId is null)
+            return false;
+
+        await this.Db.Categories
+            .Where(x =>
+                x.CategoryId == prod.CategoryId &&
+                x.Products.Count == 0)
+            .ExecuteDeleteAsync();
+
+        prod.CategoryId = null;
 
         return await this.Db.SaveChangesAsync() > 0;
     }

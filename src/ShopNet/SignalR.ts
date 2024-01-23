@@ -102,7 +102,7 @@ export abstract class SignalR {
       await Shared.Set<T & { QueryExp: number }>(index, {
         ...data,
         QueryExp: dayjs().add(1, "m").unix()
-      }, null);
+      }, dayjs().add(1, "w"));
     else
       await Shared.Set<T>(index, data, exp || null);
   }
@@ -110,7 +110,7 @@ export abstract class SignalR {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.3.2
+   * @version 0.3.3
    * @liveSafe
    */
   protected static async GetVersionCache<T extends IConcurrency>(
@@ -128,7 +128,7 @@ export abstract class SignalR {
       Shared.Set<T & { QueryExp: number }>(index, {
         ...find!,
         QueryExp: dayjs().add(1, "m").unix()
-      }, null);
+      }, dayjs().add(1, "w"));
 
       return find!;
     }
@@ -141,7 +141,7 @@ export abstract class SignalR {
     await Shared.Set<T & { QueryExp: number }>(index, {
       ...res,
       QueryExp: dayjs().add(1, "m").unix()
-    }, null);
+    }, dayjs().add(1, "w"));
 
     return res;
   }

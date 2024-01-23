@@ -6,7 +6,7 @@ import { Flex, NavW } from "~/Helpers/Styles";
  * @since 0.1.0
  * @version 0.1.1
  */
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   box: {
     width: "-webkit-fill-available",
     marginTop: tokens.spacingVerticalXXXL,
@@ -41,7 +41,7 @@ const txt = {
  * @version 0.2.0
  */
 export function Footer(): JSX.Element {
-  const style = useStyle();
+  const style = useStyles();
 
   return (
     <footer className={style.box}>

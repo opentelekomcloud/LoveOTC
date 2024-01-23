@@ -1,4 +1,5 @@
 import { useConst } from "@fluentui/react-hooks";
+import dayjs from "dayjs";
 import { useLiveQuery } from "dexie-react-hooks";
 import type { Logger } from "~/Helpers/Logger";
 import { IProductCount } from "~/Pages/Admin/Product";
@@ -15,6 +16,8 @@ export abstract class AdminProductGet extends AdminNet {
   /** "Product", "Get" */
   protected static override readonly Log = [...super.Log, "Product", "Get"];
 
+  public static readonly list = "ProductGetList";
+
   /**
    * @author Aloento
    * @since 0.5.0
@@ -24,11 +27,14 @@ export abstract class AdminProductGet extends AdminNet {
     const log = useConst(() => pLog.With(...this.Log, "List"));
 
     const res = useLiveQuery(() =>
-      this.GetTimeCache<number[]>("", "ProductGetList", (x) => x.add(1, "m"))
+      this.GetTimeCache<number[]>("", this.list, (x) => x.add(1, "m"))
         .catch(log.error)
     );
 
     return res;
+  }
+  public static ListUpdate(action: (raw: number[]) => number[]) {
+    return this.UpdateCache(action, "", this.list, dayjs().add(1, "m"));
   }
 
   /**

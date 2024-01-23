@@ -4,6 +4,7 @@ import { Logger } from "~/Helpers/Logger";
 import { ColFlex, Flex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
+import { OrderEntity } from "~/ShopNet/Order/Entity";
 
 /**
  * @author Aloento
@@ -26,7 +27,7 @@ const useStyles = makeStyles({
  */
 interface IOrderInfo {
   OrderId: number;
-  Order: Awaited<ReturnType<typeof Hub.Order.Get.Order>>;
+  Order: OrderEntity.Order;
   Admin?: true;
 }
 

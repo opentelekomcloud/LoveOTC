@@ -5,7 +5,6 @@ import { IComment } from "~/Pages/History/Comment";
 import { IOrderDetail } from "~/Pages/History/Detail";
 import { ProductData } from "../Product/Data";
 import { ProductGet } from "../Product/Get";
-import { ShopNet } from "../ShopNet";
 import { OrderEntity } from "./Entity";
 
 /**
@@ -13,7 +12,7 @@ import { OrderEntity } from "./Entity";
  * @since 0.5.0
  * @version 0.2.0
  */
-export abstract class OrderGet extends ShopNet {
+export abstract class OrderGet extends OrderEntity {
   /** "Order", "Get" */
   protected static override readonly Log = [...super.Log, "Order", "Get"];
 
@@ -37,7 +36,7 @@ export abstract class OrderGet extends ShopNet {
     const items: IOrderItem[] = [];
 
     for (const meta of list) {
-      const order = await OrderEntity.Order(meta.OrderId);
+      const order = await this.Order(meta.OrderId);
 
       if (!order) {
         log.warn(`[Mismatch] Order ${meta.OrderId} not found`);
@@ -140,7 +139,7 @@ export abstract class OrderGet extends ShopNet {
     const comments: IComment[] = [];
 
     for (const cmtId of meta.Comments) {
-      const cmt = await OrderEntity.Comment(cmtId);
+      const cmt = await this.Comment(cmtId);
 
       if (!cmt) {
         log.warn(`[Mismatch] Comment ${cmtId} not found. Order : ${orderId}`);
@@ -159,6 +158,4 @@ export abstract class OrderGet extends ShopNet {
       Comments: comments.sort((a, b) => a.Time.getTime() - b.Time.getTime())
     };
   }
-
-  public static Order = OrderEntity.Order;
 }
