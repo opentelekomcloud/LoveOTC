@@ -30,13 +30,18 @@ const Magenta: BrandVariants = {
   160: "#fcf2f9",
 };
 
+const theme = createLightTheme(Magenta);
+theme.fontFamilyBase = `TeleNeoWeb, ${theme.fontFamilyBase}`;
+theme.fontFamilyMonospace = `TeleNeoWeb, ${theme.fontFamilyMonospace}`;
+theme.fontFamilyNumeric = `TeleNeoWeb, ${theme.fontFamilyNumeric}`;
+
 /**
  * @author Aloento
  * @since 0.1.0
  * @version 0.2.0
  */
 ReactDOM.createRoot(document.getElementById(Dic.Name)!).render(
-  <FluentProvider theme={createLightTheme(Magenta)}>
+  <FluentProvider theme={theme}>
     <BrowserRouter>
       <OIDCProvider>
         <ShopCartContext>

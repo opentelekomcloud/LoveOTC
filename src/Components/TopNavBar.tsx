@@ -44,7 +44,7 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.1.0 MusiLand
- * @version 0.1.2
+ * @version 0.1.3
  */
 export function TopNavBar() {
   const style = useStyles();
@@ -53,10 +53,10 @@ export function TopNavBar() {
     <Portal>
       <header className={style.navBox}>
         <nav className={style.navBar}>
-          <Link className={style.logoBox} href="/" appearance="subtle">
+          <Link className={style.logoBox} href="/">
             <Image src="/telekom-logo.svg" height={NavH} />
 
-            <Text size={600} font="monospace" className={style.logoText}>{Dic.Name}</Text>
+            <Text size={600} className={style.logoText}>{Dic.Name}</Text>
           </Link>
 
           <AdminTopNav />
