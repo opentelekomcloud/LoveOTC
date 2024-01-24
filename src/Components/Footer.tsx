@@ -1,5 +1,5 @@
 import { Text, makeStyles, shorthands, tokens } from "@fluentui/react-components";
-import { Flex, NavW } from "~/Helpers/Styles";
+import { ColFlex, Flex, NavW } from "~/Helpers/Styles";
 
 /**
  * @author Aloento
@@ -25,8 +25,8 @@ const useStyles = makeStyles({
     color: "#ED538B"
   },
   text: {
-    ...Flex,
-    ...shorthands.margin("64px", 0),
+    ...ColFlex,
+    ...shorthands.margin(tokens.spacingVerticalXXXL, 0),
   }
 });
 

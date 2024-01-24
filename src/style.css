@@ -1,3 +1,99 @@
+@font-face {
+  font-family: "TeleNeoWeb";
+  font-weight: 900;
+  font-style: normal;
+  src: url("/public/fonts/TeleNeoWeb-Ultra.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TeleNeoWeb";
+  font-weight: 900;
+  font-style: italic;
+  src: url("/public/fonts/TeleNeoWeb-UltraItalic.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TeleNeoWeb";
+  font-weight: 800;
+  font-style: normal;
+  src: url("/public/fonts/TeleNeoWeb-ExtraBold.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TeleNeoWeb";
+  font-weight: 800;
+  font-style: italic;
+  src: url("/public/fonts/TeleNeoWeb-ExtraBoldItalic.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TeleNeoWeb";
+  font-weight: 700;
+  font-style: normal;
+  src: url("/public/fonts/TeleNeoWeb-Bold.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TeleNeoWeb";
+  font-weight: 700;
+  font-style: italic;
+  src: url("/public/fonts/TeleNeoWeb-BoldItalic.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TeleNeoWeb";
+  font-weight: 500;
+  font-style: normal;
+  src: url("/public/fonts/TeleNeoWeb-Medium.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TeleNeoWeb";
+  font-weight: 500;
+  font-style: italic;
+  src: url("/public/fonts/TeleNeoWeb-MediumItalic.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TeleNeoWeb";
+  font-weight: 400;
+  font-style: normal;
+  src: url("/public/fonts/TeleNeoWeb-Regular.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TeleNeoWeb";
+  font-weight: 400;
+  font-style: italic;
+  src: url("/public/fonts/TeleNeoWeb-RegularItalic.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TeleNeoWeb";
+  font-weight: 200;
+  font-style: normal;
+  src: url("/public/fonts/TeleNeoWeb-Thin.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TeleNeoWeb";
+  font-weight: 200;
+  font-style: italic;
+  src: url("/public/fonts/TeleNeoWeb-ThinItalic.woff2") format("woff2");
+  font-display: swap;
+}
+
 html,
 body {
   margin: 0;
