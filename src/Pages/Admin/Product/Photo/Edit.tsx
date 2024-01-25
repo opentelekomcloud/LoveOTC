@@ -1,12 +1,12 @@
-import { Button, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Input, Toast, ToastTitle, makeStyles, tokens } from "@fluentui/react-components";
+import { Button, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, makeStyles, tokens } from "@fluentui/react-components";
 import { DismissRegular, EditRegular } from "@fluentui/react-icons";
-import { useState } from "react";
 import { GuidImage } from "~/Helpers/GuidImage";
 import { Logger } from "~/Helpers/Logger";
 import { ColFlex, Cover, Flex } from "~/Helpers/Styles";
-import { useErrorToast } from "~/Helpers/useToast";
-import { AdminHub } from "~/ShopNet/Admin";
 import { IPhotoItem } from ".";
+import { AdminProductPhotoEditCaption } from "./Caption";
+import { AdminProductPhotoEditDelete } from "./Delete";
+import { AdminProductPhotoEditReplace } from "./Replace";
 
 /**
  * @author Aloento
@@ -35,78 +35,11 @@ const log = new Logger("Admin", "Product", "Detail", "Photo", "Edit");
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.3.5
+ * @version 1.0.0
  */
-export function AdminProductPhotoEdit({ Id, Cover, Caption, ProductId }: IPhotoItem) {
+export function AdminProductPhotoEdit(props: IPhotoItem) {
+  const { Id, Cover } = props;
   const style = useStyles();
-  const [cap, setCap] = useState(Caption || "");
-
-  const { dispatch, dispatchToast } = useErrorToast(log);
-
-  const { run: updateCaption } = AdminHub.Product.Patch.useCaption({
-    manual: true,
-    onError(e, req) {
-      dispatch({
-        Message: "Failed Update Caption",
-        Request: req,
-        Error: e
-      });
-    },
-    onSuccess() {
-      dispatchToast(
-        <Toast>
-          <ToastTitle>Caption Updated</ToastTitle>
-        </Toast>,
-        { intent: "success" }
-      );
-    }
-  });
-
-  const { run: updateFile } = AdminHub.Product.Patch.usePhoto(log, {
-    manual: true,
-    onBefore([prodId, file]) {
-      dispatchToast(
-        <Toast>
-          <ToastTitle>Uploading Photo {file.name} for Product {prodId} to replace {Id}</ToastTitle>
-        </Toast>,
-        { intent: "info" }
-      );
-    },
-    onError(e, req) {
-      dispatch({
-        Message: "Failed Update Photo",
-        Request: req,
-        Error: e
-      });
-    },
-    onSuccess() {
-      dispatchToast(
-        <Toast>
-          <ToastTitle>Photo Updated</ToastTitle>
-        </Toast>,
-        { intent: "success" }
-      );
-    }
-  });
-
-  const { run: deletePhoto } = AdminHub.Product.Delete.usePhoto({
-    manual: true,
-    onError(e, req) {
-      dispatch({
-        Message: "Failed Delete Photo",
-        Request: req,
-        Error: e
-      });
-    },
-    onSuccess() {
-      dispatchToast(
-        <Toast>
-          <ToastTitle>Photo Deleted</ToastTitle>
-        </Toast>,
-        { intent: "success" }
-      );
-    }
-  });
 
   return (
     <Dialog>
@@ -136,31 +69,11 @@ export function AdminProductPhotoEdit({ Id, Cover, Caption, ProductId }: IPhotoI
             />
 
             <div className={style.cap}>
-              <Field label="Caption">
-                <Input value={cap} onChange={(_, e) => setCap(e.value)} />
-              </Field>
+              <AdminProductPhotoEditCaption {...props} />
 
-              <Button onClick={() => updateCaption(Id, cap)}>
-                Save Caption
-              </Button>
+              <AdminProductPhotoEditReplace Id={Id} />
 
-              <Button onClick={() => {
-                const input = document.createElement("input");
-                input.type = "file";
-                input.accept = "image/*";
-
-                input.onchange = () => {
-                  if (input.files)
-                    updateFile(Id, input.files[0]);
-                };
-                input.click();
-              }}>
-                Replace
-              </Button>
-
-              <Button appearance="primary" onClick={() => deletePhoto(ProductId, Id)}>
-                Delete
-              </Button>
+              <AdminProductPhotoEditDelete {...props} />
             </div>
           </DialogContent>
         </DialogBody>
