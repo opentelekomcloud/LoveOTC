@@ -122,7 +122,8 @@ internal partial class AdminHub {
 
         var row = await this.Db.Photos
             .Where(x => x.PhotoId == photoId)
-            .ExecuteUpdateAsync(x => x.SetProperty(p => p.Caption, caption));
+            .ExecuteUpdateAsync(x =>
+                x.SetProperty(p => p.Caption, caption));
 
         return row > 0;
     }

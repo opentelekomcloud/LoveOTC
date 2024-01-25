@@ -24,7 +24,6 @@ internal partial class AdminHub {
      * <summary>
      * Include Types -> Combos
      * </summary>
-     *
      * <remarks>
      * @author Aloento
      * @since 0.5.0
@@ -71,7 +70,6 @@ internal partial class AdminHub {
      * <summary>
      * Include Combos
      * </summary>
-     *
      * <remarks>
      * @author Aloento
      * @since 0.5.0
@@ -185,24 +183,28 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 1.2.0
-     * @version 0.1.0
+     * @version 0.1.1
      * </remarks>
      */
     public async Task<bool> ProductDetachCategory(uint prodId) {
         var prod = await this.Db.Products
             .SingleAsync(x => x.ProductId == prodId);
 
-        if (prod.CategoryId is null)
-            return false;
+        var cate = prod.CategoryId;
 
-        await this.Db.Categories
-            .Where(x =>
-                x.CategoryId == prod.CategoryId &&
-                x.Products.Count == 0)
-            .ExecuteDeleteAsync();
+        if (cate is null)
+            return false;
 
         prod.CategoryId = null;
 
-        return await this.Db.SaveChangesAsync() > 0;
+        var res = await this.Db.SaveChangesAsync();
+
+        await this.Db.Categories
+            .Where(x =>
+                x.CategoryId == cate &&
+                x.Products.Count == 0)
+            .ExecuteDeleteAsync();
+
+        return res > 0;
     }
 }

@@ -56,7 +56,7 @@ internal partial class ShopHub {
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 0.1.0
+     * @version 0.1.1
      * </remarks>
      */
     public async Task<dynamic?> PhotoEntity(uint key, uint? version) {
@@ -69,13 +69,6 @@ internal partial class ShopHub {
 
         return await this.Db.Photos
             .Where(x => x.PhotoId == key)
-            .Select(x => new {
-                x.Cover,
-                x.Caption,
-                x.Order,
-                x.ObjectId,
-                x.Version
-            })
             .SingleOrDefaultAsync();
     }
 

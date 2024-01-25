@@ -78,10 +78,10 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 0.1.0
+     * @version 0.1.1
      * </remarks>
      */
-    public async Task<bool> ProductPostPhoto(uint prodId, IAsyncEnumerable<byte[]> input) {
+    public async Task<uint> ProductPostPhoto(uint prodId, IAsyncEnumerable<byte[]> input) {
         var exist = await this.Db.Products.AnyAsync(x => x.ProductId == prodId);
         if (!exist)
             throw new HubException($"Product {prodId} not found");
@@ -95,14 +95,14 @@ internal partial class AdminHub {
 
         var next = (byte)(await this.Db.Photos.CountAsync(x => x.ProductId == prodId) + 1);
 
-        await this.Db.Photos.AddAsync(new() {
+        var photo = await this.Db.Photos.AddAsync(new() {
             ProductId = prodId,
             Object = obj.Entity,
             Order = next
         });
 
         await this.Db.SaveChangesAsync();
-        return true;
+        return photo.Entity.PhotoId;
     }
 
     /**

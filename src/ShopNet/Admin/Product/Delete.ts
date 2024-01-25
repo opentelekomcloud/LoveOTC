@@ -1,6 +1,7 @@
 import { useRequest } from "ahooks";
 import { Options } from "ahooks/lib/useRequest/src/types";
 import { ProductData } from "~/ShopNet/Product/Data";
+import { ProductGet } from "~/ShopNet/Product/Get";
 import { AdminNet } from "../AdminNet";
 import { AdminProductGet } from "./Get";
 
@@ -13,12 +14,14 @@ export abstract class AdminProductDelete extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.2.0
+   * @version 0.3.0
    */
-  public static usePhoto(options: Options<true, [number]>) {
-    return useRequest(async photoId => {
+  public static usePhoto(options: Options<true, [number, number]>) {
+    return useRequest(async (prodId, photoId) => {
       const res = await this.Invoke<boolean>("ProductDeletePhoto", photoId);
       this.EnsureTrue(res);
+
+      ProductGet.PhotoListUpdate(prodId, x => x!.filter(x => x !== photoId));
       return res;
     }, options);
   }

@@ -5,6 +5,7 @@ import { Dic } from "~/Helpers/Dic";
 import { Logger } from "~/Helpers/Logger";
 import { ColFlex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
+import { Banner } from "./Banner";
 import { GalleryCategory } from "./Category";
 
 /**
@@ -34,7 +35,7 @@ const log = new Logger("Gallery");
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.2.0
+ * @version 0.3.0
  */
 function Gallery() {
   const style = useStyles();
@@ -45,6 +46,7 @@ function Gallery() {
   if (loading)
     return (
       <Skeleton className={style.main}>
+        <Banner />
         <SkeletonItem appearance="translucent" size={32} />
         <SkeletonItem size={128} />
       </Skeleton>
@@ -55,6 +57,8 @@ function Gallery() {
       <Helmet>
         <title>Gallery - {Dic.Name}</title>
       </Helmet>
+
+      <Banner />
 
       {
         data?.map((x, i) => <GalleryCategory key={i} Category={x} />)

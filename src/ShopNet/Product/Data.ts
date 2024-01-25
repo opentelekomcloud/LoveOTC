@@ -1,11 +1,6 @@
 import { IConcurrency } from "../Database";
 import { ShopNet } from "../ShopNet";
 
-/**
- * @author Aloento
- * @since 1.3.0
- * @version 0.1.0
- */
 export namespace ProductData {
   export type Product = {
     Name: string;
@@ -17,10 +12,12 @@ export namespace ProductData {
   } & IConcurrency;
 
   export type Photo = {
+    PhotoId: number;
     Cover?: boolean;
     Caption?: string;
     Order: number;
     ObjectId: string;
+    ProductId: number;
   } & IConcurrency;
 
   export type Type = {
