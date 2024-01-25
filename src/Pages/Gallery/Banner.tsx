@@ -28,7 +28,7 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 1.3.5
- * @version 0.2.0
+ * @version 0.2.1
  */
 export function Banner() {
   const style = useStyles();
@@ -50,18 +50,18 @@ export function Banner() {
         className={style.txt}
         header={
           <Text size={500}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non magna nisi.
-            Nunc ut est vel est sodales consequat. Vivamus imperdiet eros luctus, mollis lorem quis, elementum arcu.
-            Ut maximus pharetra volutpat. Etiam lorem risus, pellentesque vitae malesuada vitae, sollicitudin in massa.
-            In nunc nulla, pretium vitae risus in, pulvinar bibendum magna. Duis ornare ullamcorper neque, sed venenatis augue.
-            Vestibulum rutrum sapien et purus condimentum, id ultricies lectus hendrerit.
-            <br />
-            Aenean porttitor, metus ac semper malesuada, nulla leo dapibus dolor, et gravida augue leo ut sem.
-            Morbi vitae ipsum viverra, suscipit turpis a, elementum mi.
-            Cras pharetra ipsum leo, nec rhoncus elit cursus ut.
-            Fusce consectetur lacus quis odio molestie, nec sollicitudin est pretium. Donec cursus sollicitudin porta.
-            Integer tellus mi, iaculis ut massa et, tempor placerat odio. Quisque ac interdum mauris, ac scelerisque odio.
-            Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae;
+            Open Telekom Cloud is envisioned, run, and nurtured by a unique and dynamic team of experts committed to sovereignty and open-source innovation:
+            The OTC tribe! To showcase your connection and #werkstolz,
+            we're thrilled to offer our tribe members an exclusive chance to snag up to three fashion items as a token of appreciation.
+            Hurry, this offer is only open until February 29, 2024!
+            <br /><br />
+            To start shopping, simply log in with your OTC-LDAP account in the top right corner.
+            Don't forget to update your delivery address for a seamless experience – just click on your profile avatar and head to "Settings."
+            Rest assured, we only keep your personal data until your awesome items reach your doorstep.
+            <br /><br />
+            Found your style in the shop? Double-check your selections in the cart – sizes, variants, quantities – and when everything's perfect, hit "Checkout."
+            Review your entire order, confirm your delivery address, and feel free to leave a note. Ready? Click "Submit" for a confirmation.
+            Now, you can either close the shop or keep browsing. Expect your stylish delivery in 10-14 days. Happy shopping, OTC trendsetters!
           </Text>
         }
       />
