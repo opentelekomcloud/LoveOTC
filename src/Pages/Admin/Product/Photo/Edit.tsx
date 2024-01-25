@@ -30,24 +30,14 @@ const useStyles = makeStyles({
   }
 });
 
-/**
- * @author Aloento
- * @since 0.5.0
- * @version 0.1.0
- */
-interface IAdminProductPhotoEdit {
-  Photo: IPhotoItem;
-  Refresh: () => void;
-}
-
 const log = new Logger("Admin", "Product", "Detail", "Photo", "Edit");
 
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.3.3
+ * @version 0.3.5
  */
-export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }: IAdminProductPhotoEdit) {
+export function AdminProductPhotoEdit({ Id, Cover, Caption, ProductId }: IPhotoItem) {
   const style = useStyles();
   const [cap, setCap] = useState(Caption || "");
 
@@ -69,13 +59,19 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
         </Toast>,
         { intent: "success" }
       );
-
-      Refresh();
     }
   });
 
   const { run: updateFile } = AdminHub.Product.Patch.usePhoto(log, {
     manual: true,
+    onBefore([prodId, file]) {
+      dispatchToast(
+        <Toast>
+          <ToastTitle>Uploading Photo {file.name} for Product {prodId} to replace {Id}</ToastTitle>
+        </Toast>,
+        { intent: "info" }
+      );
+    },
     onError(e, req) {
       dispatch({
         Message: "Failed Update Photo",
@@ -90,8 +86,6 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
         </Toast>,
         { intent: "success" }
       );
-
-      Refresh();
     }
   });
 
@@ -111,8 +105,6 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
         </Toast>,
         { intent: "success" }
       );
-
-      Refresh();
     }
   });
 
@@ -166,7 +158,7 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
                 Replace
               </Button>
 
-              <Button appearance="primary" onClick={() => deletePhoto(Id)}>
+              <Button appearance="primary" onClick={() => deletePhoto(ProductId, Id)}>
                 Delete
               </Button>
             </div>

@@ -4,6 +4,7 @@ import { Options } from "ahooks/lib/useRequest/src/types";
 import { Subject } from "rxjs";
 import { Logger } from "~/Helpers/Logger";
 import { CurrentEditor } from "~/Lexical/Utils";
+import { ProductGet } from "~/ShopNet/Product/Get";
 import { AdminNet } from "../AdminNet";
 import { AdminProductGet } from "./Get";
 
@@ -45,9 +46,9 @@ export abstract class AdminProductPost extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 1.0.3
+   * @version 1.0.5
    */
-  public static usePhoto(pLog: Logger, options: Options<true, [number, File]>) {
+  public static usePhoto(pLog: Logger, options: Options<number, [number, File]>) {
     const log = useConst(() => pLog.With(...this.Log, "Photo"));
 
     return useRequest(async (prodId, file) => {
@@ -58,11 +59,13 @@ export abstract class AdminProductPost extends AdminNet {
         throw new RangeError("File is too large, max 10MB");
 
       const subject = new Subject<Uint8Array>();
-      const res = this.Invoke<boolean>("ProductPostPhoto", prodId, subject);
+      const res = this.Invoke<number>("ProductPostPhoto", prodId, subject);
       await this.HandleFileStream(file, subject, log);
 
-      this.EnsureTrue(await res);
-      return true as const;
+      const id = await res;
+      ProductGet.PhotoListUpdate(prodId, x => [...x, id]);
+
+      return id;
     }, options);
   }
 

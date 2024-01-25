@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import type { Logger } from "~/Helpers/Logger";
 import { IComboItem } from "~/Pages/Admin/Product/Combo";
 import type { IGallery } from "~/Pages/Gallery";
@@ -106,6 +107,8 @@ export abstract class ProductGet extends ProductData {
     return this.GetTimeCache(prodId, "ProductGetComboList", (x) => x.add(1, "m"), prodId);
   }
 
+  public static readonly photoList = "ProductGetPhotoList";
+
   /**
    * @author Aloento
    * @since 1.0.0
@@ -115,7 +118,7 @@ export abstract class ProductGet extends ProductData {
   public static async PhotoList(prodId: number, pLog: Logger): Promise<[ProductData.Photo[], string]> {
     const log = pLog.With(...this.Log, "PhotoList");
 
-    const ids = await this.GetTimeCache<number[]>(prodId, "ProductGetPhotoList", (x) => x.add(1, "m"), prodId).catch(log.error);
+    const ids = await this.GetTimeCache<number[]>(prodId, this.photoList, (x) => x.add(1, "m"), prodId).catch(log.error);
     let list = [];
     let cover = "";
 
@@ -139,5 +142,8 @@ export abstract class ProductGet extends ProductData {
     }
 
     return [list, cover];
+  }
+  public static PhotoListUpdate(prodId: number, action: (list: number[]) => number[]) {
+    return this.UpdateCache(action, prodId, this.photoList, dayjs().add(1, "m"));
   }
 }
