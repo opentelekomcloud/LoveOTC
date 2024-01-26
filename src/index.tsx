@@ -4,6 +4,7 @@ import { OIDCProvider } from "./Components/Auth";
 import { BrowserRouter } from "./Components/Router";
 import { ShopCartContext } from "./Components/ShopCart/Context";
 import { Dic } from "./Helpers/Dic";
+import { Logger } from "./Helpers/Logger";
 import { Layout } from "./Pages";
 
 /**
@@ -34,6 +35,10 @@ const theme = createLightTheme(Magenta);
 theme.fontFamilyBase = `TeleNeoWeb, ${theme.fontFamilyBase}`;
 theme.fontFamilyMonospace = `TeleNeoWeb, ${theme.fontFamilyMonospace}`;
 theme.fontFamilyNumeric = `TeleNeoWeb, ${theme.fontFamilyNumeric}`;
+
+const log = new Logger("LoveOTC");
+log.info("Version: 1.3.5 2024/01/26");
+log.debug("T-Systems, EcoSystem Squad, Aloento");
 
 /**
  * @author Aloento

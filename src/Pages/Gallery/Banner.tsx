@@ -32,6 +32,7 @@ const useStyles = makeStyles({
     position: "absolute",
     top: 0,
     ...shorthands.padding(tokens.spacingHorizontalXXXL),
+    height: "-webkit-fill-available",
   },
   space: {
     flexBasis: "50%",
@@ -39,7 +40,7 @@ const useStyles = makeStyles({
   },
   txt: {
     ...ColFlex,
-    rowGap: tokens.spacingVerticalXL,
+    justifyContent: "space-around"
   },
   white: {
     color: "white !important"
@@ -56,7 +57,7 @@ export function Banner() {
 
   const ref = useRefEffect<HTMLSpanElement>((el) => {
     const typed = new Typed(el, {
-      strings: ["AwaiShop", "Together", "Dream", "Forever"],
+      strings: ["Performance", "Safe", "World", "Love"],
       typeSpeed: 60,
       backSpeed: 40,
       startDelay: 1500,
@@ -94,15 +95,15 @@ export function Banner() {
             </Text>
 
             <LargeTitle className={style.white}>
-              &nbsp;With SoarCraft
+              &nbsp;With Open Telekom Cloud
             </LargeTitle>
           </div>
 
           <Text size={500} className={style.white}>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-            when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-            It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+            We offer an exclusive chance for OTC tribe members to get up to three fashion items until February 29, 2024.
+            Members can log in using their OTC-LDAP account, update their delivery address in the "Settings," and shop for their preferred styles.
+            After selecting items and sizes, confirm and submit their order and address.
+            Orders are expected to arrive within 10-14 days.
           </Text>
 
           <Dialog modalType="non-modal">
@@ -116,21 +117,25 @@ export function Banner() {
 
             <DialogSurface>
               <DialogBody>
-
-                <DialogTitle>Welcome to AwaiShop</DialogTitle>
+                <DialogTitle>Welcome to LoveOTC Shop</DialogTitle>
 
                 <DialogContent>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed maximus nec erat vel hendrerit.
-                  Nulla tempus placerat turpis dictum placerat. Suspendisse ut justo diam.
-                  Donec auctor augue feugiat purus mollis, vitae congue erat pretium. Nulla blandit orci ante, a posuere mauris eleifend vel.
-                  Nam dapibus venenatis scelerisque. Nullam nisl turpis, cursus in convallis in, eleifend eget arcu.
-                  Curabitur scelerisque pretium turpis, consectetur congue nulla convallis tincidunt.
-                  Quisque rhoncus lectus a nunc tempor scelerisque. Quisque non augue eget augue ultricies viverra.
-                  Maecenas aliquam nisi orci, id volutpat risus efficitur et. Aliquam ac nunc euismod, interdum mi ac, faucibus enim.
-                  Donec nec finibus metus. Phasellus iaculis elit finibus sem aliquam, ut viverra tortor dapibus.
-                  Phasellus rhoncus, libero sit amet pulvinar tempus, velit lorem venenatis nisi, id ornare quam quam eget orci. In hac habitasse platea dictumst.
+                  <Text size={400}>
+                    Open Telekom Cloud is envisioned, run, and nurtured by a unique and dynamic team of experts committed to sovereignty and open-source innovation:
+                    The OTC tribe! To showcase your connection and #werkstolz,
+                    we're thrilled to offer our tribe members an exclusive chance to snag up to three fashion items as a token of appreciation.
+                    Hurry, this offer is only open until February 29, 2024!
+                    <br /><br />
+                    To start shopping, simply log in with your OTC-LDAP account in the top right corner.
+                    Don't forget to update your delivery address for a seamless experience – just click on your profile avatar and head to "Settings."
+                    Rest assured, we only keep your personal data until your awesome items reach your doorstep.
+                    <br /><br />
+                    Found your style in the shop? Double-check your selections in the cart – sizes, variants, quantities – and when everything's perfect, hit "Checkout."
+                    Review your entire order, confirm your delivery address, and feel free to leave a note.
+                    Ready? Click "Submit" for a confirmation. Now, you can either close the shop or keep browsing.
+                    Expect your stylish delivery in 10-14 days. Happy shopping, OTC trendsetters!
+                  </Text>
                 </DialogContent>
-
               </DialogBody>
             </DialogSurface>
           </Dialog>
