@@ -1,1 +1,0 @@
-import{y as o,j as t,z as e}from"./vendor-1c4AuQB0.js";import{L as a,H as n,f as i}from"./index-VjUCK6_t.js";import{H as m}from"./Columns-W1QWlCs5.js";const s=new a("History");function l(){const{data:r}=o(()=>n.Order.Get.List(s),{onError:s.error});return t.jsx(i,{Items:r,Columns:e(()=>m(s))})}export{l as default};
