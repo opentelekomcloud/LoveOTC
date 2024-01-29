@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Divider, Image, LargeTitle, Text, makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import { Button, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Divider, Image, LargeTitle, Text, makeResetStyles, makeStyles, mergeClasses, shorthands, tokens } from "@fluentui/react-components";
 import { useRefEffect } from "@fluentui/react-hooks";
 import Typed from "typed.js";
 import { ColFlex, Cover, Flex } from "~/Helpers/Styles";
@@ -55,13 +55,21 @@ const useStyles = makeStyles({
   }
 });
 
+const useMaskStyle = makeResetStyles({
+  background: "linear-gradient(to right, transparent, var(--colorScrollbarOverlay))",
+  "@media screen and (max-width: 1024px)": {
+    background: tokens.colorBackgroundOverlay
+  }
+})
+
 /**
  * @author Aloento
  * @since 1.3.5
- * @version 1.5.0
+ * @version 1.5.1
  */
 export function Banner() {
   const style = useStyles();
+  const mask = useMaskStyle();
 
   const ref = useRefEffect<HTMLSpanElement>((el) => {
     const typed = new Typed(el, {
@@ -79,9 +87,7 @@ export function Banner() {
   return <>
     <div className={style.main}>
       <Image className={style.img} src="/banner.webp" />
-      <div className={style.mask} style={{
-        background: 'linear-gradient(to right, transparent, var(--colorScrollbarOverlay))',
-      }} />
+      <div className={mergeClasses(style.mask, mask)} />
 
       <div className={style.info}>
         <div className={style.space} />
