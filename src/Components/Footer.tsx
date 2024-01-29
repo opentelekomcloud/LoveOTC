@@ -12,6 +12,8 @@ const useStyles = makeStyles({
     marginTop: tokens.spacingVerticalXXXL,
     paddingTop: tokens.spacingVerticalXXL,
     paddingBottom: tokens.spacingVerticalL,
+    paddingLeft: tokens.spacingHorizontalXXXL,
+    paddingRight: tokens.spacingHorizontalXXXL,
     backgroundColor: tokens.colorNeutralBackgroundStatic
   },
   main: {
