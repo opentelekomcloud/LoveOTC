@@ -15,7 +15,7 @@ import { NotFound } from "./404";
 const useStyles = makeStyles({
   body: {
     ...ColFlex,
-    minWidth: "1440px",
+    minWidth: "375px",
     position: "absolute",
     marginTop: `${NavH}px`,
     width: "100%",

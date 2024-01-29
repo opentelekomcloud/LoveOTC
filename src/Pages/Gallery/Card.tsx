@@ -8,13 +8,9 @@ import { Hub } from "~/ShopNet";
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 const useStyles = makeStyles({
-  card: {
-    flexBasis: "23%",
-    flexGrow: 0,
-  },
   img: {
     aspectRatio: "1",
     ...Cover,
@@ -28,7 +24,7 @@ const log = new Logger("Gallery", "Category", "Card");
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.5
+ * @version 0.1.6
  */
 export function GalleryCard({ Id }: { Id: number }) {
   const style = useStyles();
@@ -37,7 +33,7 @@ export function GalleryCard({ Id }: { Id: number }) {
   });
 
   return (
-    <Card className={style.card}>
+    <Card>
       <CardPreview>
         <GuidImage className={style.img} Guid={data?.Cover} Log={log} />
       </CardPreview>
