@@ -26,7 +26,7 @@ const useStyles = makeStyles({
     right: 0,
     bottom: "4px",
     ...shorthands.borderRadius(tokens.borderRadiusXLarge),
-    backdropFilter: "blur(1px) brightness(105%)",
+    backdropFilter: "brightness(110%)",
   },
   info: {
     ...Flex,
@@ -78,9 +78,9 @@ export function Banner() {
 
   return <>
     <div className={style.main}>
-      <Image className={style.img} src="/banner.jpg" />
+      <Image className={style.img} src="/banner.webp" />
       <div className={style.mask} style={{
-        background: 'linear-gradient(to right, transparent, var(--colorBackgroundOverlay))',
+        background: 'linear-gradient(to right, transparent, var(--colorScrollbarOverlay))',
       }} />
 
       <div className={style.info}>
