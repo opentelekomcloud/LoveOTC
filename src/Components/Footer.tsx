@@ -4,13 +4,16 @@ import { ColFlex, Flex, NavW } from "~/Helpers/Styles";
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.2
+ * @version 0.1.3
  */
 const useStyles = makeStyles({
   box: {
     width: "-webkit-fill-available",
     marginTop: tokens.spacingVerticalXXXL,
-    ...shorthands.padding(tokens.spacingVerticalXXL, 0),
+    paddingTop: tokens.spacingVerticalXXL,
+    paddingBottom: tokens.spacingVerticalL,
+    paddingLeft: tokens.spacingHorizontalXXXL,
+    paddingRight: tokens.spacingHorizontalXXXL,
     backgroundColor: tokens.colorNeutralBackgroundStatic
   },
   main: {

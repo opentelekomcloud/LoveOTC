@@ -6,7 +6,7 @@ import { ColFlex, Cover, Flex } from "~/Helpers/Styles";
 /**
  * @author Aloento
  * @since 1.3.5
- * @version 0.1.0
+ * @version 0.2.0
  */
 const useStyles = makeStyles({
   main: {
@@ -16,6 +16,7 @@ const useStyles = makeStyles({
     ...Cover,
     aspectRatio: "42/9",
     width: "100%",
+    minHeight: "320px",
     ...shorthands.borderRadius(tokens.borderRadiusXLarge),
   },
   mask: {
@@ -36,14 +37,21 @@ const useStyles = makeStyles({
   },
   space: {
     flexBasis: "50%",
-    flexShrink: 0
+    flexShrink: 0,
+    "@media screen and (max-width: 1024px)": {
+      flexBasis: 0,
+    }
   },
   txt: {
     ...ColFlex,
     justifyContent: "space-around"
   },
   white: {
-    color: "white !important"
+    color: "white !important",
+    "@media screen and (max-width: 600px)": {
+      fontSize: tokens.fontSizeBase300,
+      lineHeight: tokens.lineHeightBase300,
+    }
   }
 });
 
@@ -99,7 +107,7 @@ export function Banner() {
             </LargeTitle>
           </div>
 
-          <Text size={500} className={style.white}>
+          <Text size={500} truncate className={style.white}>
             We offer an exclusive chance for OTC tribe members to get up to three fashion items until February 29, 2024.
             Members can log in using their OTC-LDAP account, update their delivery address in the "Settings," and shop for their preferred styles.
             After selecting items and sizes, confirm and submit their order and address.
