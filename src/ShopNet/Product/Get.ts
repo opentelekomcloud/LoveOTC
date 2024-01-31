@@ -107,14 +107,13 @@ export abstract class ProductGet extends ProductData {
     return this.GetTimeCache(prodId, "ProductGetComboList", (x) => x.add(1, "m"), prodId);
   }
 
-  public static readonly photoList = "ProductGetPhotoList";
-
   /**
    * @author Aloento
    * @since 1.0.0
    * @version 1.0.1
    * @liveSafe
    */
+  public static readonly photoList = "ProductGetPhotoList";
   public static async PhotoList(prodId: number, pLog: Logger): Promise<[ProductData.Photo[], string]> {
     const log = pLog.With(...this.Log, "PhotoList");
 

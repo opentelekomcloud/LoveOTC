@@ -45,7 +45,7 @@ export interface IPhotoItem {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.3
+ * @version 0.1.4
  */
 const columns: TableColumnDefinition<IPhotoItem>[] = [
   MakeCoverCol(70, log),
@@ -55,7 +55,7 @@ const columns: TableColumnDefinition<IPhotoItem>[] = [
       return <DataGridHeaderCell>Caption</DataGridHeaderCell>
     },
     renderCell(item) {
-      return <DataGridCell>{item.Caption}</DataGridCell>
+      return <DataGridCell>{item.Caption || "No Caption"}</DataGridCell>
     }
   }),
   createTableColumn<IPhotoItem>({
@@ -120,7 +120,7 @@ export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
     const map = raw.map(x => ({
       Id: x.PhotoId,
       Cover: x.ObjectId,
-      Caption: x.Caption || "No Caption",
+      Caption: x.Caption,
       ProductId: x.ProductId
     }));
 

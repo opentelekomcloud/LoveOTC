@@ -2,6 +2,7 @@ import Dexie from "dexie";
 import { User } from "oidc-client-ts";
 import { AuthContextProps } from "react-oidc-context";
 import { ICartItem } from "~/Components/ShopCart";
+import { Dic } from "~/Helpers/Dic";
 import { Table } from "./Table";
 
 /**
@@ -9,7 +10,7 @@ import { Table } from "./Table";
  * @since 0.5.0
  * @version 0.1.0
  */
-const DB = new Dexie("EShop", { autoOpen: false });
+const DB = new Dexie(Dic.Name, { autoOpen: false });
 
 /**
  * @author Aloento

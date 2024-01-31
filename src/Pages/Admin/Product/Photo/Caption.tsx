@@ -10,14 +10,14 @@ const log = new Logger("Admin", "Product", "Detail", "Photo", "Edit", "Caption")
 /**
  * @author Aloento
  * @since 1.3.5
- * @version 0.1.0
+ * @version 0.1.1
  */
 export function AdminProductPhotoEditCaption({ Id, Caption }: IPhotoItem) {
   const [cap, setCap] = useState(Caption || "");
 
   const { dispatch, dispatchToast } = useErrorToast(log);
 
-  const { run: updateCaption } = AdminHub.Product.Patch.useCaption({
+  const { run } = AdminHub.Product.Patch.useCaption({
     manual: true,
     onError(e, req) {
       dispatch({
@@ -38,10 +38,10 @@ export function AdminProductPhotoEditCaption({ Id, Caption }: IPhotoItem) {
 
   return <>
     <Field label="Caption">
-      <Input value={cap} onChange={(_, e) => setCap(e.value)} />
+      <Input value={cap} placeholder="Write some infomation here?" onChange={(_, e) => setCap(e.value)} />
     </Field>
 
-    <Button onClick={() => updateCaption(Id, cap)}>
+    <Button onClick={() => run(Id, cap)}>
       Save Caption
     </Button>
   </>;

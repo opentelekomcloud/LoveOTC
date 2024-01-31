@@ -13,7 +13,7 @@ internal partial class ShopHub {
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 1.0.0
+     * @version 1.1.0
      * </remarks>
      */
     [Authorize]
@@ -28,16 +28,14 @@ internal partial class ShopHub {
         var order = (await this.Db.Orders.AddAsync(new() {
             UserId = this.UserId,
             Status = OrderStatus.Pending,
-            CreateAt = DateTime.UtcNow,
-            OrderCombos = new List<OrderCombo>(cart.Length),
-            Comments = new List<Comment>(1)
+            CreateAt = DateTime.UtcNow
         })).Entity;
 
         if (!string.IsNullOrWhiteSpace(cmt))
-            order.Comments.Add(new() {
+            await this.Db.Comments.AddAsync(new() {
                 Content = cmt,
                 CreateAt = DateTime.UtcNow,
-                Order = order,
+                Order = order
             });
 
         foreach (var item in cart) {
@@ -54,22 +52,23 @@ internal partial class ShopHub {
                 )
                 .SingleAsync();
 
-            order.OrderCombos.Add(new() {
+            await this.Db.OrderCombos.AddAsync(new() {
                 Order = order,
                 Combo = combo,
-                Quantity = item.Quantity,
+                Quantity = item.Quantity
             });
         }
 
         return await this.Db.SaveChangesAsync() > 0
-            ? order.OrderId : throw new HubException();
+            ? order.OrderId
+            : throw new HubException();
     }
 
     /**
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 1.0.0
+     * @version 1.1.0
      * </remarks>
      */
     [Authorize]
@@ -88,10 +87,10 @@ internal partial class ShopHub {
             .Where(x => x.Status != OrderStatus.Finished)
             .SingleAsync();
 
-        order.Comments.Add(new() {
+        await this.Db.Comments.AddAsync(new() {
             Content = cmt,
             CreateAt = DateTime.UtcNow,
-            Order = order,
+            Order = order
         });
 
         return await this.Db.SaveChangesAsync() > 0;
@@ -101,7 +100,7 @@ internal partial class ShopHub {
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 1.0.0
+     * @version 1.1.0
      * </remarks>
      */
     [Authorize]
@@ -121,12 +120,13 @@ internal partial class ShopHub {
             .SingleAsync();
 
         order.Status = order.Status == OrderStatus.Shipping
-            ? OrderStatus.Returning : OrderStatus.Cancelled;
+            ? OrderStatus.Returning
+            : OrderStatus.Cancelled;
 
-        order.Comments.Add(new() {
+        await this.Db.Comments.AddAsync(new() {
             Content = "[User Cancel] " + reason,
             CreateAt = DateTime.UtcNow,
-            Order = order,
+            Order = order
         });
 
         return await this.Db.SaveChangesAsync() > 0;
@@ -136,7 +136,7 @@ internal partial class ShopHub {
      * <remarks>
      * @author Aloento
      * @since 1.0.0
-     * @version 0.1.0
+     * @version 0.2.0
      * </remarks>
      */
     [Authorize]
@@ -148,10 +148,11 @@ internal partial class ShopHub {
             .SingleAsync();
 
         order.Status = OrderStatus.Finished;
-        order.Comments.Add(new() {
+
+        await this.Db.Comments.AddAsync(new() {
             Content = "[User Mark Received Order]",
             CreateAt = DateTime.UtcNow,
-            Order = order,
+            Order = order
         });
 
         return await this.Db.SaveChangesAsync() > 0;

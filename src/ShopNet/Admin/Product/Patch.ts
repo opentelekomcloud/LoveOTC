@@ -3,6 +3,7 @@ import { useRequest } from "ahooks";
 import { Options } from "ahooks/lib/useRequest/src/types";
 import { Subject } from "rxjs";
 import { Logger } from "~/Helpers/Logger";
+import { ProductData } from "~/ShopNet/Product/Data";
 import { AdminNet } from "../AdminNet";
 
 /**
@@ -69,12 +70,17 @@ export abstract class AdminProductPatch extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.2.0
+   * @version 0.3.0
    */
   public static useCaption(options: Options<true, [number, string]>) {
     return useRequest(async (photoId, caption) => {
       const res = await this.Invoke<boolean>("ProductPatchCaption", photoId, caption);
       this.EnsureTrue(res);
+
+      ProductData.PhotoUpdate(photoId, (raw) => {
+        raw.Caption = caption;
+        return raw;
+      });
       return res;
     }, options);
   }
