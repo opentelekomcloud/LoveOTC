@@ -12,7 +12,7 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 1.0.1
+     * @version 1.1.0
      * </remarks>
      */
     public async Task<bool> OrderPostAppend(uint orderId, string cmt) {
@@ -27,7 +27,7 @@ internal partial class AdminHub {
             .Where(x => x.OrderId == orderId)
             .SingleAsync();
 
-        order.Comments.Add(new() {
+        await this.Db.Comments.AddAsync(new() {
             Content = cmt,
             UserId = this.UserId,
             CreateAt = DateTime.UtcNow,
@@ -41,7 +41,7 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 1.0.0
+     * @version 1.1.0
      * </remarks>
      */
     public async Task<bool> OrderPostClose(uint orderId, string reason) {
@@ -59,7 +59,7 @@ internal partial class AdminHub {
             .SingleAsync();
 
         order.Status = OrderStatus.Finished;
-        order.Comments.Add(new() {
+        await this.Db.Comments.AddAsync(new() {
             Content = "[Admin Close] " + reason,
             UserId = this.UserId,
             CreateAt = DateTime.UtcNow,
@@ -73,7 +73,7 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 1.0.0
+     * @version 1.1.0
      * </remarks>
      */
     public async Task<bool> OrderPostShip(uint orderId, string? track) {
@@ -103,7 +103,7 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 1.0.0
-     * @version 0.1.0
+     * @version 0.2.0
      * </remarks>
      */
     public async Task<bool> OrderPostAccept(uint orderId) {
@@ -113,7 +113,7 @@ internal partial class AdminHub {
             .SingleAsync();
 
         order.Status = OrderStatus.Processing;
-        order.Comments.Add(new() {
+        await this.Db.Comments.AddAsync(new() {
             Content = "[Admin Accepted Order]",
             UserId = this.UserId,
             CreateAt = DateTime.UtcNow,
