@@ -133,7 +133,7 @@ internal partial class AdminHub {
 
         var temp = await this.Db.Variants.AddAsync(new() {
             ProductId = prodId,
-            Name = name,
+            Name = name
         });
 
         await this.Db.SaveChangesAsync();
@@ -184,11 +184,11 @@ internal partial class AdminHub {
      */
     public async Task<uint> ProductPostCombo(uint prodId, Dictionary<string, string> combo, ushort stock) {
         var variTypesDb = (await this.Db.Products
-            .Include(x => x.Variants)
-            .ThenInclude(x => x.Types)
-            .Where(x => x.ProductId == prodId)
-            .SelectMany(x => x.Variants)
-            .ToDictionaryAsync(k => k.Name, v => v.Types.ToImmutableArray()))
+                .Include(x => x.Variants)
+                .ThenInclude(x => x.Types)
+                .Where(x => x.ProductId == prodId)
+                .SelectMany(x => x.Variants)
+                .ToDictionaryAsync(k => k.Name, v => v.Types.ToImmutableArray()))
             .ToImmutableSortedDictionary();
 
         var reqCombo = combo.ToImmutableSortedDictionary();

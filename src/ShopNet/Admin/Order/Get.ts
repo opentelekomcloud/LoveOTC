@@ -8,6 +8,7 @@ import { ProductGet } from "~/ShopNet/Product/Get";
 import { AdminNet } from "../AdminNet";
 import { AdminUserEntity } from "../User/Entity";
 import { AdminOrderEntity } from "./Entity";
+import { AdminOrderExport } from "./Export";
 
 /**
  * @author Aloento
@@ -181,4 +182,5 @@ export abstract class AdminOrderGet extends AdminNet {
   }
 
   public static Order = AdminOrderEntity.Order;
+  public static Export = AdminOrderExport.Export;
 }
