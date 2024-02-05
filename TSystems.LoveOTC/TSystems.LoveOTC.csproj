@@ -21,7 +21,7 @@
     <NeutralLanguage>en-US</NeutralLanguage>
     <PackageProjectUrl>http://shop.eco.tsi-dev.otc-service.com</PackageProjectUrl>
 
-    <Version>1.2.0</Version>
+    <Version>1.3.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

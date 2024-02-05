@@ -1,10 +1,10 @@
 import { Image, Link, Portal, Text, makeStyles, shorthands, tokens } from "@fluentui/react-components";
-import { AdminSearch } from "~/Components/Search";
 import { Dic } from "~/Helpers/Dic";
 import { Flex, NavH, NavW } from "~/Helpers/Styles";
 import { AdminTopNav } from "~/Pages/Admin/Nav";
 import { AdminOrderExportButton } from "~/Pages/Admin/Order/Export";
 import { AdminProductAddButton } from "~/Pages/Admin/Product/Add";
+import { AdminUserFilter } from "~/Pages/Admin/User/Search";
 import { AvatarMenu } from "./AvatarMenu";
 import { ShopCart } from "./ShopCart";
 
@@ -64,7 +64,7 @@ export function TopNavBar() {
 
           <div className={style.logoBox}>
             <AdminProductAddButton />
-            <AdminSearch />
+            <AdminUserFilter />
             <AdminOrderExportButton />
 
             <ShopCart />

@@ -21,10 +21,20 @@ export abstract class AdminOrderGet extends AdminNet {
 
   /**
    * @author Aloento
-   * @since 0.5.0
-   * @version 0.1.1
+   * @since 1.3.5
+   * @version 0.1.0
    */
-  public static async List(pLog: Logger): Promise<IAdminOrderItem[]> {
+  public static Count(): Promise<number> {
+    this.EnsureLogin();
+    return this.GetTimeCache<number>("", "OrderGetCount", (x) => x.add(1, "m"));
+  }
+
+  /**
+   * @author Aloento
+   * @since 0.5.0
+   * @version 1.0.0
+   */
+  public static async List(page: number, pLog: Logger): Promise<IAdminOrderItem[]> {
     this.EnsureLogin();
     const log = pLog.With(...this.Log, "List");
 
@@ -34,7 +44,7 @@ export abstract class AdminOrderGet extends AdminNet {
         Products: number[];
         Quantity: number;
       }[]
-    >("", "OrderGetList", (x) => x.add(1, "m"));
+    >(page, "OrderGetList", (x) => x.add(1, "m"), page);
 
     const items: IAdminOrderItem[] = [];
 
@@ -77,7 +87,7 @@ export abstract class AdminOrderGet extends AdminNet {
       });
     }
 
-    return items.sort((a, b) => b.OrderDate.getTime() - a.OrderDate.getTime());
+    return items;
   }
 
   /**

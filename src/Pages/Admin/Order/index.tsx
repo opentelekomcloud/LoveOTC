@@ -1,7 +1,8 @@
-import { DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
+import { DataGridCell, DataGridHeaderCell, Label, SpinButton, TableColumnDefinition, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid";
 import { Logger } from "~/Helpers/Logger";
+import { Flex } from "~/Helpers/Styles";
 import { IOrderItem } from "~/Pages/History";
 import { HistoryColumns } from "~/Pages/History/Columns";
 import { AdminHub } from "~/ShopNet/Admin";
@@ -26,6 +27,16 @@ const useStyles = makeStyles({
     flexBasis: "10%",
     flexGrow: 0
   },
+  page: {
+    ...Flex,
+    alignItems: "center",
+    justifyContent: "flex-end",
+    paddingTop: tokens.spacingVerticalXL,
+    columnGap: tokens.spacingHorizontalM
+  },
+  spin: {
+    width: "4rem",
+  }
 });
 
 /**
@@ -85,14 +96,44 @@ const columns: TableColumnDefinition<IAdminOrderItem>[] = [
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.2.0
+ * @version 1.0.0
  */
 export function AdminOrder() {
-  const { data } = useRequest(() => AdminHub.Order.Get.List(log), {
+  const style = useStyles();
+
+  const { data: count } = useRequest(() => AdminHub.Order.Get.Count(), {
+    onError: log.error
+  });
+  const page = Math.ceil((count || 1) / 30);
+
+  const { data, run } = useRequest((go) => AdminHub.Order.Get.List(go, log), {
+    defaultParams: [1],
+    debounceWait: 300,
     onError: log.error
   });
 
-  return (
+  return <>
     <DelegateDataGrid Items={data} Columns={columns} />
-  )
+
+    <div className={style.page}>
+      <Label>Total {count} Records</Label>
+
+      <SpinButton
+        min={1}
+        max={page}
+        defaultValue={1}
+        className={style.spin}
+        onChange={(_, data) => {
+          const value = parseInt(data.value || data.displayValue as any);
+
+          if (!Number.isNaN(value) && value && value <= page)
+            run(value);
+        }}
+      />
+
+      <Label>/</Label>
+
+      <Label>{page}</Label>
+    </div>
+  </>
 }

@@ -6,17 +6,29 @@ internal partial class AdminHub {
     /**
      * <remarks>
      * @author Aloento
-     * @since 0.1.0
-     * @version 0.2.0
+     * @since 1.3.0
+     * @version 0.1.0
      * </remarks>
      */
-    public async Task<dynamic[]> OrderGetList() =>
+    public Task<long> OrderGetCount() => this.Db.Orders.LongCountAsync();
+
+    /**
+     * <remarks>
+     * @author Aloento
+     * @since 0.1.0
+     * @version 0.3.0
+     * </remarks>
+     */
+    public async Task<dynamic[]> OrderGetList(uint page) =>
         await this.Db.Orders
             .Select(x => new {
                 x.OrderId,
                 Products = x.Combos.Select(c => c.ProductId).ToArray(),
                 Quantity = (ushort)x.OrderCombos.Sum(o => o.Quantity)
             })
+            .OrderByDescending(x => x.OrderId)
+            .Skip((int)(page - 1) * 30)
+            .Take(30)
             .ToArrayAsync();
 
     /**

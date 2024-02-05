@@ -16,6 +16,9 @@ const useStyles = makeStyles({
     ...Cover,
     borderTopLeftRadius: tokens.borderRadiusMedium,
     borderTopRightRadius: tokens.borderRadiusMedium,
+  },
+  fore: {
+    color: tokens.colorBrandForegroundLink
   }
 });
 
@@ -24,7 +27,7 @@ const log = new Logger("Gallery", "Category", "Card");
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.6
+ * @version 0.2.0
  */
 export function GalleryCard({ Id }: { Id: number }) {
   const style = useStyles();
@@ -33,16 +36,18 @@ export function GalleryCard({ Id }: { Id: number }) {
   });
 
   return (
-    <Card>
-      <CardPreview>
-        <GuidImage className={style.img} Guid={data?.Cover} Log={log} />
-      </CardPreview>
+    <Link href={`/Product/${Id}`}>
+      <Card>
+        <CardPreview>
+          <GuidImage className={style.img} Guid={data?.Cover} Log={log} />
+        </CardPreview>
 
-      <CardFooter>
-        <Subtitle2>
-          <Link href={`/Product/${Id}`}>{data?.Name || "Loading..."}</Link>
-        </Subtitle2>
-      </CardFooter>
-    </Card>
+        <CardFooter>
+          <Subtitle2 className={style.fore}>
+            {data?.Name || "Loading..."}
+          </Subtitle2>
+        </CardFooter>
+      </Card>
+    </Link>
   )
 }

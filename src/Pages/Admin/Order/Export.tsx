@@ -11,7 +11,7 @@ const log = new Logger("Admin", "Order", "ExportButton");
 /**
  * @author Aloento
  * @since 1.3.5
- * @version 0.1.0
+ * @version 0.1.1
  */
 export function AdminOrderExportButton() {
   const { Paths } = useRouter();
@@ -24,7 +24,7 @@ export function AdminOrderExportButton() {
     manual: true,
     onError(e, params) {
       dispatch({
-        Message: "Failed Export Order",
+        Message: "Failed Export Orders",
         Request: params,
         Error: e
       });
@@ -32,14 +32,14 @@ export function AdminOrderExportButton() {
     onSuccess(url) {
       dispatchToast(
         <Toast>
-          <ToastTitle>Order Exported</ToastTitle>
+          <ToastTitle>Orders Exported</ToastTitle>
         </Toast>,
         { intent: "success" }
       );
 
       const a = document.createElement("a");
       a.href = url;
-      a.download = `Order_${new Date().toISOString()}.xlsx`;
+      a.download = `AllOrders_${new Date().toISOString()}.xlsx`;
       a.click();
     }
   });
@@ -51,7 +51,7 @@ export function AdminOrderExportButton() {
       icon={<ArrowDownloadRegular />}
       onClick={run}
       disabled={loading}>
-      Export Order
+      Export Orders
     </Button>
   )
 }
