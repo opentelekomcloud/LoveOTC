@@ -56,10 +56,15 @@ const columns: TableColumnDefinition<ICartItem>[] = [
             max={max}
             value={item.Quantity}
             onChange={(_, v) => {
-              if (dis && v.value! >= item.Quantity)
+              if (dis)
                 return;
 
-              item.Quantity = v.value!;
+              const val = v.value || parseInt(v.displayValue!);
+
+              if ((!v.value && isNaN(val)) || val < 1 || val > max || val === item.Quantity)
+                return;
+
+              item.Quantity = val;
               Update(List);
             }} />
         </DataGridCell>
@@ -86,7 +91,7 @@ const columns: TableColumnDefinition<ICartItem>[] = [
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.3.1
+ * @version 0.4.0
  */
 export function CartColumns(log: Logger): TableColumnDefinition<ICartItem>[] {
   return [

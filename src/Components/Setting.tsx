@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Input, Label, Toast, ToastBody, ToastTitle, makeStyles, tokens } from "@fluentui/react-components";
+import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Input, Label, Toast, ToastBody, ToastTitle, Tooltip, makeStyles, tokens } from "@fluentui/react-components";
 import { useEffect, useState } from "react";
 import { useAuth } from "react-oidc-context";
 import { Logger } from "~/Helpers/Logger";
@@ -39,7 +39,7 @@ const log = new Logger("Setting");
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.5.0
+ * @version 0.7.0
  */
 export function Setting({ Open, Toggle, New }: ISetting) {
   const style = useStyles();
@@ -105,22 +105,40 @@ export function Setting({ Open, Toggle, New }: ISetting) {
 
           <DialogContent className={style.box}>
             <div className={style.one}>
-              <Field label="Name" size="large" required>
-                <Input size="medium" value={name} maxLength={20} onChange={(_, v) => setName(v.value)} />
-              </Field>
+              <Tooltip
+                content="Full first and family names, will be used to the shipping label."
+                relationship="description"
+                withArrow
+              >
+                <Field label="Name" size="large" required>
+                  <Input size="medium" value={name} maxLength={20} onChange={(_, v) => setName(v.value)} />
+                </Field>
+              </Tooltip>
 
-              <Field label="Phone" size="large" required>
-                <Input size="medium" value={phone} maxLength={20} onChange={(_, v) => setPhone(v.value)} />
-              </Field>
+              <Tooltip
+                content="Up to 20 digits, starting with an internation access code."
+                relationship="description"
+                withArrow
+              >
+                <Field label="Phone" size="large" required>
+                  <Input size="medium" value={phone} maxLength={20} onChange={(_, v) => setPhone(v.value)} />
+                </Field>
+              </Tooltip>
             </div>
 
             <Field label="E-Mail" size="large">
               <Label>{auth.user?.profile.email}</Label>
             </Field>
 
-            <Field label="Address" size="large" required>
-              <Input size="medium" value={address} maxLength={100} minLength={20} onChange={(_, v) => setAddress(v.value)} />
-            </Field>
+            <Tooltip
+              content="Your full shipping address including street, number, ZIP, town and country. Separate lines by commas."
+              relationship="description"
+              withArrow
+            >
+              <Field label="Address" size="large" required>
+                <Input size="medium" value={address} maxLength={100} minLength={20} onChange={(_, v) => setAddress(v.value)} />
+              </Field>
+            </Tooltip>
           </DialogContent>
 
           <DialogActions>

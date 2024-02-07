@@ -30,7 +30,7 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 1.2.0
-     * @version 0.2.0
+     * @version 1.0.0
      * </remarks>
      */
     public async IAsyncEnumerable<byte[]> ExportOrder() {
@@ -224,16 +224,17 @@ internal partial class AdminHub {
 
         int shared(string text) {
             var i = 0;
+            var table = sharedStringTablePart.SharedStringTable;
 
-            foreach (var item in sharedStringTablePart!.SharedStringTable.Elements<SharedStringItem>()) {
+            foreach (var item in table.Elements<SharedStringItem>()) {
                 if (item.InnerText == text)
                     return i;
 
                 i++;
             }
 
-            sharedStringTablePart.SharedStringTable.AppendChild(new SharedStringItem(new Text(text)));
-            sharedStringTablePart.SharedStringTable.Save();
+            table.AppendChild(new SharedStringItem(new Text(text)));
+            table.Save();
 
             return i;
         }

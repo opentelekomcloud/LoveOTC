@@ -3,6 +3,8 @@ namespace TSystems.LoveOTC.Hub;
 using Microsoft.EntityFrameworkCore;
 
 internal partial class ShopHub {
+    protected const byte Limit = 3;
+
     /**
      * <remarks>
      * @author Aloento
@@ -10,7 +12,7 @@ internal partial class ShopHub {
      * @version 0.2.0
      * </remarks>
      */
-    public Task<byte> ProdGetLimit(uint _) => Task.FromResult<byte>(3);
+    public Task<byte> ProdGetLimit(uint _) => Task.FromResult(Limit);
 
     /**
      * <remarks>

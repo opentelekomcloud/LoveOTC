@@ -13,7 +13,7 @@ internal partial class ShopHub {
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 1.1.0
+     * @version 1.2.0
      * </remarks>
      */
     [Authorize]
@@ -39,18 +39,23 @@ internal partial class ShopHub {
             });
 
         foreach (var item in cart) {
-            if (item.Quantity > 3)
-                throw new HubException("No more than 3 of each type.");
+            if (item.Quantity is > Limit or < 1)
+                throw new HubException($"No more than {Limit} OR less 1 of each type.");
 
             var combo = await this.Db.Combos
-                .Where(x => x.IsArchived != true)
                 .Where(x => x.ProductId == item.ProdId)
+                .Where(x => x.IsArchived != true)
                 .Where(x => item.Type.All(
                     i => x.Types
                         .Select(t => t.Name)
-                        .Contains(i))
-                )
+                        .Contains(i)
+                    ))
                 .SingleAsync();
+
+            if (combo.Stock < item.Quantity)
+                throw new HubException("Insufficient Stock");
+
+            combo.Stock -= item.Quantity;
 
             await this.Db.OrderCombos.AddAsync(new() {
                 Order = order,
@@ -100,7 +105,7 @@ internal partial class ShopHub {
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 1.1.0
+     * @version 1.2.0
      * </remarks>
      */
     [Authorize]
@@ -117,6 +122,8 @@ internal partial class ShopHub {
             .Where(x => x.OrderId == orderId)
             .Where(x => x.Status != OrderStatus.Cancelled)
             .Where(x => x.Status != OrderStatus.Finished)
+            .Include(x => x.OrderCombos)
+            .ThenInclude(x => x.Combo)
             .SingleAsync();
 
         order.Status = order.Status == OrderStatus.Shipping
@@ -128,6 +135,9 @@ internal partial class ShopHub {
             CreateAt = DateTime.UtcNow,
             Order = order
         });
+
+        foreach (var oc in order.OrderCombos)
+            oc.Combo.Stock += oc.Quantity;
 
         return await this.Db.SaveChangesAsync() > 0;
     }

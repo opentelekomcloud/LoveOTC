@@ -32,7 +32,7 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 1.2.0
- * @version 0.2.0
+ * @version 0.3.0
  */
 export function ProductQuantity({ Id }: { Id: number; }) {
   const style = useStyles();
@@ -61,7 +61,14 @@ export function ProductQuantity({ Id }: { Id: number; }) {
           min={1}
           max={max}
           disabled={!Combo?.Stock}
-          onChange={(_, val) => setQuantity(val.value!)}
+          onChange={(_, v) => {
+            const val = v.value || parseInt(v.displayValue!);
+
+            if ((!v.value && isNaN(val)) || val < 1 || val > max || val === quantity)
+              return;
+
+            setQuantity(val);
+          }}
         />
 
         <ProductAddCart
