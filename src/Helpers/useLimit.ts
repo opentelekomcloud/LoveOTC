@@ -5,9 +5,9 @@ import { Hub } from "~/ShopNet";
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
+ * @version 0.3.0
  */
-export function useLimit(prodId: number): [boolean, number] {
+export function useLimit(prodId: number): [boolean, number, number] {
   const { List } = useShopCart();
   const { data } = useRequest(() => Hub.Product.Get.Limit(prodId));
 
@@ -19,8 +19,8 @@ export function useLimit(prodId: number): [boolean, number] {
       count += i.Quantity;
 
     if (count >= limit)
-      return [true, limit];
+      return [true, limit, count];
   }
 
-  return [false, limit];
+  return [false, limit, count];
 }

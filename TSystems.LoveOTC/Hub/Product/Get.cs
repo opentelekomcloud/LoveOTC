@@ -3,7 +3,7 @@ namespace TSystems.LoveOTC.Hub;
 using Microsoft.EntityFrameworkCore;
 
 internal partial class ShopHub {
-    protected const byte Limit = 3;
+    protected const byte Limit = 1;
 
     /**
      * <remarks>

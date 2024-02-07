@@ -1,7 +1,6 @@
 import { Button, Combobox, DataGridCell, DataGridHeaderCell, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Label, Option, SpinButton, TableColumnDefinition, Toast, ToastTitle, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
 import { AddRegular, DismissRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
-import { isInteger } from "lodash-es";
 import { useState } from "react";
 import { DelegateDataGrid } from "~/Components/DataGrid";
 import { Logger } from "~/Helpers/Logger";
@@ -73,7 +72,7 @@ const log = new Logger("Admin", "Product", "Detail", "Combo", "NewCombo");
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.2
+ * @version 0.2.3
  */
 export function AdminProductNewCombo({ ProdId, Refresh }: { ProdId: number; Refresh: () => void }) {
   const [open, { toggle }] = useBoolean();
@@ -147,14 +146,13 @@ export function AdminProductNewCombo({ ProdId, Refresh }: { ProdId: number; Refr
             <div className={useStyles().body}>
               <Label>Stock</Label>
 
-              <SpinButton value={stock} min={0} onChange={(_, x) => {
-                if (x.value)
-                  setStock(x.value);
-                else if (x.displayValue) {
-                  const i = parseInt(x.displayValue);
-                  if (isInteger(i))
-                    setStock(i);
-                }
+              <SpinButton value={stock} min={0} onChange={(_, v) => {
+                const val = parseInt(v.value || v.displayValue as any);
+
+                if (isNaN(val) || val < 0)
+                  return;
+
+                setStock(val);
               }} />
 
               <Button appearance="primary" onClick={() => run(ProdId, combo, stock)}>Create</Button>

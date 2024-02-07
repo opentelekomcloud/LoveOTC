@@ -126,7 +126,7 @@ export function AdminOrder() {
         onChange={(_, data) => {
           const value = parseInt(data.value || data.displayValue as any);
 
-          if (!Number.isNaN(value) && value && value <= page)
+          if (!isNaN(value) && value && value <= page)
             run(value);
         }}
       />

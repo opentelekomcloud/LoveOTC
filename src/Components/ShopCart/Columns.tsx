@@ -56,12 +56,9 @@ const columns: TableColumnDefinition<ICartItem>[] = [
             max={max}
             value={item.Quantity}
             onChange={(_, v) => {
-              if (dis)
-                return;
+              const val = parseInt(v.value || v.displayValue as any);
 
-              const val = v.value || parseInt(v.displayValue!);
-
-              if ((!v.value && isNaN(val)) || val < 1 || val > max || val === item.Quantity)
+              if (isNaN(val) || val < 1 || val > max || (dis && val >= item.Quantity))
                 return;
 
               item.Quantity = val;

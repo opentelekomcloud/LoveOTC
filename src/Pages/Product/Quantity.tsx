@@ -32,13 +32,13 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 1.2.0
- * @version 0.3.0
+ * @version 0.4.0
  */
 export function ProductQuantity({ Id }: { Id: number; }) {
   const style = useStyles();
   const { Combo } = useRadioGroup();
 
-  const [_, max] = useLimit(Id);
+  const [_, max, count] = useLimit(Id);
   const [quantity, setQuantity] = useState(1);
 
   return (
@@ -59,12 +59,12 @@ export function ProductQuantity({ Id }: { Id: number; }) {
           appearance="underline"
           value={quantity}
           min={1}
-          max={max}
+          max={max - count}
           disabled={!Combo?.Stock}
           onChange={(_, v) => {
-            const val = v.value || parseInt(v.displayValue!);
+            const val = parseInt(v.value || v.displayValue as any);
 
-            if ((!v.value && isNaN(val)) || val < 1 || val > max || val === quantity)
+            if (isNaN(val) || val < 1 || val > max - count)
               return;
 
             setQuantity(val);
