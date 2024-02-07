@@ -57,6 +57,13 @@ internal partial class AdminHub {
         };
         sheets.Append(sheet);
 
+        var timestamp = new Row();
+        sheetData.AppendChild(timestamp);
+        timestamp.Append(new Cell {
+            DataType = CellValues.String,
+            CellValue = new($"This order sheet was exported on {DateTime.Now:yyyy-MM-dd HH:mm}")
+        });
+
         var headerRow = new Row();
         sheetData.AppendChild(headerRow);
         headerRow.Append(headers.Select(x => new Cell {
@@ -68,6 +75,12 @@ internal partial class AdminHub {
             .Select(x => x.UserId)
             .Distinct()
             .ToArrayAsync();
+
+        var sharedStringTablePart = workbookPart.GetPartsOfType<SharedStringTablePart>().Any()
+            ? workbookPart.GetPartsOfType<SharedStringTablePart>().First()
+            : workbookPart.AddNewPart<SharedStringTablePart>();
+
+        sharedStringTablePart.SharedStringTable ??= new();
 
         foreach (var userId in userIds) {
             var records = this.Db.OrderCombos
@@ -86,7 +99,6 @@ internal partial class AdminHub {
                 .AsAsyncEnumerable();
 
             var prevId = 0u;
-            var first = true;
 
             await foreach (var record in records) {
                 var order = record.Order;
@@ -94,10 +106,19 @@ internal partial class AdminHub {
                 var combo = record.Combo;
                 var currId = order.OrderId;
 
-                var data = new List<string>(12) {
-                    currId.ToString(),
-                    order.CreateAt.ToString("yyyy-MM-dd HH:mm"),
-                    combo.Product.Name
+                var data = new List<OpenXmlElement>(12) {
+                    new Cell {
+                        DataType = CellValues.Number,
+                        CellValue = new((decimal)currId)
+                    },
+                    new Cell {
+                        DataType = CellValues.String,
+                        CellValue = new(order.CreateAt.ToString("yyyy-MM-dd HH:mm"))
+                    },
+                    new Cell {
+                        DataType = CellValues.SharedString,
+                        CellValue = new(shared(combo.Product.Name))
+                    }
                 };
 
                 var types = combo.Types.Aggregate(
@@ -112,24 +133,48 @@ internal partial class AdminHub {
                     .ToString();
 
                 data.AddRange([
-                    types,
-                    record.Quantity.ToString(),
-                    order.Status.ToString(),
-                    order.TrackingNumber ?? "/",
-                    user.Name
+                    new Cell {
+                        DataType = CellValues.String,
+                        CellValue = new(types)
+                    },
+                    new Cell {
+                        DataType = CellValues.Number,
+                        CellValue = new((decimal)record.Quantity)
+                    },
+                    new Cell {
+                        DataType = CellValues.SharedString,
+                        CellValue = new(shared(order.Status.ToString()))
+                    }
                 ]);
 
-                if (first) {
-                    data.AddRange([
-                        user.EMail,
-                        user.Phone,
-                        user.Address
-                    ]);
-                    first = false;
-                } else
-                    data.AddRange([
-                        "-", "-", "-"
-                    ]);
+                data.Add(string.IsNullOrWhiteSpace(order.TrackingNumber)
+                    ? new Cell {
+                        DataType = CellValues.String,
+                        CellValue = new("/")
+                    }
+                    : new() {
+                        DataType = CellValues.SharedString,
+                        CellValue = new(shared(order.TrackingNumber))
+                    });
+
+                data.AddRange([
+                    new Cell {
+                        DataType = CellValues.SharedString,
+                        CellValue = new(shared(user.Name))
+                    },
+                    new Cell {
+                        DataType = CellValues.SharedString,
+                        CellValue = new(shared(user.EMail))
+                    },
+                    new Cell {
+                        DataType = CellValues.SharedString,
+                        CellValue = new(shared(user.Phone))
+                    },
+                    new Cell {
+                        DataType = CellValues.SharedString,
+                        CellValue = new(shared(user.Address))
+                    }
+                ]);
 
                 if (prevId != currId) {
                     var cmts = order.Comments
@@ -147,16 +192,19 @@ internal partial class AdminHub {
                             })
                         .ToString();
 
-                    data.Add(cmts);
+                    data.Add(new Cell {
+                        DataType = CellValues.String,
+                        CellValue = new(cmts)
+                    });
                 } else
-                    data.Add("-");
+                    data.Add(new Cell {
+                        DataType = CellValues.String,
+                        CellValue = new("-")
+                    });
 
                 var row = new Row();
                 sheetData.AppendChild(row);
-                row.Append(data.Select(x => new Cell {
-                    DataType = CellValues.String,
-                    CellValue = new(x)
-                }));
+                row.Append(data);
 
                 prevId = currId;
             }
@@ -171,5 +219,23 @@ internal partial class AdminHub {
 
         while ((bytesRead = await stream.ReadAsync(buffer)) > 0)
             yield return buffer[..bytesRead];
+
+        yield break;
+
+        int shared(string text) {
+            var i = 0;
+
+            foreach (var item in sharedStringTablePart!.SharedStringTable.Elements<SharedStringItem>()) {
+                if (item.InnerText == text)
+                    return i;
+
+                i++;
+            }
+
+            sharedStringTablePart.SharedStringTable.AppendChild(new SharedStringItem(new Text(text)));
+            sharedStringTablePart.SharedStringTable.Save();
+
+            return i;
+        }
     }
 }
