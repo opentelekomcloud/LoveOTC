@@ -126,6 +126,9 @@ internal partial class ShopHub {
             .ThenInclude(x => x.Combo)
             .SingleAsync();
 
+        foreach (var oc in order.OrderCombos)
+            oc.Combo.Stock += oc.Quantity;
+
         order.Status = order.Status == OrderStatus.Shipping
             ? OrderStatus.Returning
             : OrderStatus.Cancelled;
@@ -135,9 +138,6 @@ internal partial class ShopHub {
             CreateAt = DateTime.UtcNow,
             Order = order
         });
-
-        foreach (var oc in order.OrderCombos)
-            oc.Combo.Stock += oc.Quantity;
 
         return await this.Db.SaveChangesAsync() > 0;
     }

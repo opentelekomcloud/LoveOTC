@@ -18,17 +18,14 @@ internal partial class ShopHub {
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 1.0.0
+     * @version 1.1.0
      * </remarks>
      */
-    public async Task<dynamic[]> ProductGetComboList(uint prodId) =>
-        await this.Db.Combos
+    public Task<uint[]> ProductGetComboList(uint prodId) =>
+        this.Db.Combos
             .Where(x => x.ProductId == prodId)
-            .Select(x => new {
-                x.ComboId,
-                x.Stock,
-                Types = x.Types.Select(t => t.TypeId).ToArray()
-            })
+            .Where(x => x.IsArchived != true)
+            .Select(x => x.ComboId)
             .ToArrayAsync();
 
     /**

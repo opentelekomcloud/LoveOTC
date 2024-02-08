@@ -20,6 +20,7 @@ internal partial class ShopHub {
 
         return await this.Db.Products
             .Where(x => x.ProductId == key)
+            .Where(x => x.IsArchived != true)
             .Select(x => new {
                 x.Name,
                 Category = x.Category!.Name,
@@ -45,6 +46,7 @@ internal partial class ShopHub {
 
         return await this.Db.Products
             .Where(x => x.ProductId == key)
+            .Where(x => x.IsArchived != true)
             .Select(x => new {
                 x.Description,
                 x.Version
@@ -89,6 +91,7 @@ internal partial class ShopHub {
 
         return await this.Db.Types
             .Where(x => x.TypeId == key)
+            .Where(x => x.IsArchived != true)
             .Select(x => new {
                 x.Name,
                 x.VariantId,
@@ -114,9 +117,36 @@ internal partial class ShopHub {
 
         return await this.Db.Variants
             .Where(x => x.VariantId == key)
+            .Where(x => x.IsArchived != true)
             .Select(x => new {
                 x.Name,
                 x.ProductId,
+                x.Version
+            })
+            .SingleOrDefaultAsync();
+    }
+
+    /**
+     * <remarks>
+     * @author Aloento
+     * @since 1.3.0
+     * @version 0.1.0
+     * </remarks>
+     */
+    public async Task<dynamic?> ComboEntity(uint key, uint? version) {
+        if (version is not null) {
+            var noChange = await this.Db.Combos
+                .AnyAsync(x => x.ComboId == key && x.Version == version);
+
+            if (noChange) return true;
+        }
+
+        return await this.Db.Combos
+            .Where(x => x.ComboId == key)
+            .Where(x => x.IsArchived != true)
+            .Select(x => new {
+                x.Stock,
+                Types = x.Types.Select(t => t.TypeId).ToArray(),
                 x.Version
             })
             .SingleOrDefaultAsync();

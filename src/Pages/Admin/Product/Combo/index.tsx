@@ -121,7 +121,7 @@ const columns: TableColumnDefinition<IDetailComboItem>[] = [
  * @version 0.2.2
  */
 export function AdminProductCombo({ ProdId }: { ProdId: number }) {
-  const { data, run } = useRequest(() => Hub.Product.Get.Combo(ProdId, log), {
+  const { data, run } = useRequest(() => Hub.Product.Get.ComboItem(ProdId, log), {
     onError: log.error
   });
 

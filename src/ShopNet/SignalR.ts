@@ -110,7 +110,7 @@ export abstract class SignalR {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.3.3
+   * @version 1.0.0
    * @liveSafe
    */
   protected static async GetVersionCache<T extends IConcurrency>(
@@ -119,31 +119,38 @@ export abstract class SignalR {
     const index = this.Index(key, methodName);
     const find = await Shared.Get<T & { QueryExp: number }>(index);
 
-    if (find && find.QueryExp > dayjs().unix())
+    const update = async () => {
+      const res = await Promise.resolve(this.Invoke<T | true | null>(methodName, key, find?.Version));
+
+      if (res === true) {
+        setCache(find!);
+        return find!;
+      }
+
+      if (!res) {
+        Shared.Sto.delete(index);
+        throw new EmptyResponseError();
+      }
+
+      setCache(res);
+      return res;
+    }
+
+    if (find) {
+      if (find.QueryExp <= dayjs().unix())
+        update();
+
       return find;
+    }
 
-    const res = await Promise.resolve(this.Invoke<T | true | null>(methodName, key, find?.Version));
+    return update();
 
-    if (res === true) {
-      Shared.Set<T & { QueryExp: number }>(index, {
-        ...find!,
-        QueryExp: dayjs().add(1, "m").unix()
+    function setCache(value: T) {
+      Shared.Set<T & { QueryExp: number; }>(index, {
+        ...value,
+        QueryExp: dayjs().add(5, "s").unix()
       }, dayjs().add(1, "w"));
-
-      return find!;
     }
-
-    if (!res) {
-      Shared.Sto.delete(index);
-      throw new EmptyResponseError();
-    }
-
-    await Shared.Set<T & { QueryExp: number }>(index, {
-      ...res,
-      QueryExp: dayjs().add(1, "m").unix()
-    }, dayjs().add(1, "w"));
-
-    return res;
   }
 
   /**
@@ -151,6 +158,7 @@ export abstract class SignalR {
    * @since 1.0.0
    * @version 0.2.0
    * @liveSafe
+   * @deprecated
    */
   protected static async GetTimeCache<T>(
     this: INet, key: string | number, methodName: string, exp: (now: Dayjs) => Dayjs, ...args: any[]

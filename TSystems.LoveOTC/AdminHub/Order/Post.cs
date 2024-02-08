@@ -41,7 +41,7 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 1.1.0
+     * @version 1.2.0
      * </remarks>
      */
     public async Task<bool> OrderPostClose(uint orderId, string reason) {
@@ -56,7 +56,13 @@ internal partial class AdminHub {
             .Where(x => x.OrderId == orderId)
             .Where(x => x.Status != OrderStatus.Cancelled)
             .Where(x => x.Status != OrderStatus.Finished)
+            .Include(x => x.OrderCombos)
+            .ThenInclude(x => x.Combo)
             .SingleAsync();
+
+        if (order.Status is OrderStatus.Pending or OrderStatus.Processing)
+            foreach (var oc in order.OrderCombos)
+                oc.Combo.Stock += oc.Quantity;
 
         order.Status = OrderStatus.Finished;
         await this.Db.Comments.AddAsync(new() {

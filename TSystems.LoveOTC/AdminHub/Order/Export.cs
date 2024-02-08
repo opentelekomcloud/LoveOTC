@@ -30,7 +30,7 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 1.2.0
-     * @version 1.0.0
+     * @version 1.1.0
      * </remarks>
      */
     public async IAsyncEnumerable<byte[]> ExportOrder() {
@@ -57,11 +57,33 @@ internal partial class AdminHub {
         };
         sheets.Append(sheet);
 
-        var timestamp = new Row();
-        sheetData.AppendChild(timestamp);
-        timestamp.Append(new Cell {
+        var cells = new List<Cell>(7) {
+            new() {
+                DataType = CellValues.String,
+                CellValue = new(nameof(LoveOTC))
+            }
+        };
+
+        for (var i = 0; i < 5; i++)
+            cells.Add(new() {
+                DataType = CellValues.String,
+                CellValue = new(" ")
+            });
+
+        cells.Add(new() {
             DataType = CellValues.String,
             CellValue = new($"This order sheet was exported on {DateTime.Now:yyyy-MM-dd HH:mm}")
+        });
+
+        var timestamp = new Row();
+        sheetData.AppendChild(timestamp);
+        timestamp.Append(cells);
+
+        var divider = new Row();
+        sheetData.AppendChild(divider);
+        divider.Append(new Cell {
+            DataType = CellValues.String,
+            CellValue = new(" ")
         });
 
         var headerRow = new Row();
@@ -106,16 +128,16 @@ internal partial class AdminHub {
                 var combo = record.Combo;
                 var currId = order.OrderId;
 
-                var data = new List<OpenXmlElement>(12) {
-                    new Cell {
+                var data = new List<Cell>(12) {
+                    new() {
                         DataType = CellValues.Number,
                         CellValue = new((decimal)currId)
                     },
-                    new Cell {
+                    new() {
                         DataType = CellValues.String,
                         CellValue = new(order.CreateAt.ToString("yyyy-MM-dd HH:mm"))
                     },
-                    new Cell {
+                    new() {
                         DataType = CellValues.SharedString,
                         CellValue = new(shared(combo.Product.Name))
                     }
@@ -133,15 +155,15 @@ internal partial class AdminHub {
                     .ToString();
 
                 data.AddRange([
-                    new Cell {
+                    new() {
                         DataType = CellValues.String,
                         CellValue = new(types)
                     },
-                    new Cell {
+                    new() {
                         DataType = CellValues.Number,
                         CellValue = new((decimal)record.Quantity)
                     },
-                    new Cell {
+                    new() {
                         DataType = CellValues.SharedString,
                         CellValue = new(shared(order.Status.ToString()))
                     }
@@ -158,19 +180,19 @@ internal partial class AdminHub {
                     });
 
                 data.AddRange([
-                    new Cell {
+                    new() {
                         DataType = CellValues.SharedString,
                         CellValue = new(shared(user.Name))
                     },
-                    new Cell {
+                    new() {
                         DataType = CellValues.SharedString,
                         CellValue = new(shared(user.EMail))
                     },
-                    new Cell {
+                    new() {
                         DataType = CellValues.SharedString,
                         CellValue = new(shared(user.Phone))
                     },
-                    new Cell {
+                    new() {
                         DataType = CellValues.SharedString,
                         CellValue = new(shared(user.Address))
                     }
@@ -192,12 +214,12 @@ internal partial class AdminHub {
                             })
                         .ToString();
 
-                    data.Add(new Cell {
+                    data.Add(new() {
                         DataType = CellValues.String,
                         CellValue = new(cmts)
                     });
                 } else
-                    data.Add(new Cell {
+                    data.Add(new() {
                         DataType = CellValues.String,
                         CellValue = new("-")
                     });

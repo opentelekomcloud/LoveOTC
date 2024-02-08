@@ -29,6 +29,11 @@ export namespace ProductData {
     Name: string;
     ProductId: number;
   } & IConcurrency;
+
+  export type Combo = {
+    Stock: number;
+    Types: number[];
+  } & IConcurrency;
 }
 
 /**
@@ -93,5 +98,15 @@ export abstract class ProductData extends ShopNet {
    */
   public static Variant(key: number): Promise<ProductData.Variant> {
     return this.GetVersionCache(key, "VariantEntity");
+  }
+
+  /**
+   * @author Aloento
+   * @since 1.3.5
+   * @version 0.1.0
+   * @liveSafe
+   */
+  public static Combo(key: number): Promise<ProductData.Combo> {
+    return this.GetVersionCache(key, "ComboEntity");
   }
 }

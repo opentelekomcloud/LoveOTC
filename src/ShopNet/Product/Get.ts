@@ -53,30 +53,32 @@ export abstract class ProductGet extends ProductData {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 1.0.1
+   * @version 1.1.0
    * @liveSafe
    */
-  public static async Combo(prodId: number, pLog: Logger): Promise<IComboItem[]> {
+  public static async ComboItem(prodId: number, pLog: Logger): Promise<IComboItem[]> {
     const log = pLog.With(...this.Log, "Combo");
 
     const list = await this.ComboList(prodId);
     const items: IComboItem[] = [];
 
-    for (const combo of list) {
+    for (const comboId of list) {
+      const combo = await this.Combo(comboId);
+
       const variType: Record<string, string> = {};
 
       for (const typeId of combo.Types) {
         const type = await this.Type(typeId);
 
         if (!type) {
-          log.error(`[Mismatch] Type ${typeId} not found. Combo ${combo.ComboId} : Product ${prodId}`);
+          log.error(`[Mismatch] Type ${typeId} not found. Combo ${comboId} : Product ${prodId}`);
           continue;
         }
 
         const vari = await this.Variant(type.VariantId);
 
         if (!vari) {
-          log.error(`[Mismatch] Variant ${type.VariantId} not found. Combo ${combo.ComboId} : Type ${typeId} : Product ${prodId}`);
+          log.error(`[Mismatch] Variant ${type.VariantId} not found. Combo ${comboId} : Type ${typeId} : Product ${prodId}`);
           continue;
         }
 
@@ -84,7 +86,7 @@ export abstract class ProductGet extends ProductData {
       }
 
       items.push({
-        Id: combo.ComboId,
+        Id: comboId,
         Stock: combo.Stock,
         Combo: variType,
       });
@@ -96,14 +98,10 @@ export abstract class ProductGet extends ProductData {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.1.0
+   * @version 1.0.0
    * @liveSafe
    */
-  public static ComboList(prodId: number): Promise<{
-    ComboId: number;
-    Stock: number;
-    Types: number[];
-  }[]> {
+  public static ComboList(prodId: number): Promise<number[]> {
     return this.GetTimeCache(prodId, "ProductGetComboList", (x) => x.add(1, "m"), prodId);
   }
 

@@ -37,7 +37,7 @@
     "@microsoft/signalr-protocol-msgpack": "^8.0.0",
     "ahooks": "^3.7.10",
     "dayjs": "^1.11.10",
-    "dexie": "^3.2.4",
+    "dexie": "^3.2.5",
     "dexie-react-hooks": "^1.1.7",
     "lexical": "0.10.0",
     "lodash-es": "^4.17.21",
@@ -56,6 +56,6 @@
     "@types/react-dom": "^18.2.19",
     "@vitejs/plugin-react-swc": "^3.6.0",
     "typescript": "^5.3.3",
-    "vite": "^5.0.12"
+    "vite": "^5.1.0"
   }
 }
