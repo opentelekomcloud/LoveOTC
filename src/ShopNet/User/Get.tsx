@@ -1,8 +1,8 @@
 import { useConst } from "@fluentui/react-hooks";
-import { useLiveQuery } from "dexie-react-hooks";
 import { IPersona } from "~/Components/ShopCart/Persona";
 import { EmptyResponseError, NotLoginError } from "~/Helpers/Exceptions";
 import type { Logger } from "~/Helpers/Logger";
+import { useSWR } from "~/Helpers/useSWR";
 import { useErrorToast } from "~/Helpers/useToast";
 import { IConcurrency } from "../Database";
 import { ShopNet } from "../ShopNet";
@@ -28,21 +28,22 @@ export abstract class UserGet extends ShopNet {
   protected static override readonly Log = [...super.Log, "User", "Get"];
 
   public static readonly me = "UserGetMe";
-
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.4.2
+   * @version 0.5.0
    */
-  public static useMe(pLog: Logger): UserGet.Me | void {
+  public static useMe(pLog: Logger, admin?: true) {
     const log = useConst(() => pLog.With(...this.Log, "Me"));
     const { dispatch } = useErrorToast(log);
 
-    const res = useLiveQuery(async (): Promise<UserGet.Me | void> => {
-      try {
-        this.EnsureLogin();
-        return await this.GetVersionCache<UserGet.Me>(0, this.me);
-      } catch (e) {
+    const req = useSWR(this.me, () => {
+      this.EnsureLogin();
+      return this.GetVersionCache<UserGet.Me>(0, this.me);
+    }, {
+      manual: admin,
+      useMemory: true,
+      onError(e) {
         if (e instanceof EmptyResponseError)
           return;
         else if (e instanceof NotLoginError)
@@ -56,9 +57,6 @@ export abstract class UserGet extends ShopNet {
       }
     });
 
-    return res;
-  }
-  public static MeUpdate(action: (me: UserGet.Me) => UserGet.Me) {
-    return this.UpdateCache(action, 0, this.me);
+    return req;
   }
 }

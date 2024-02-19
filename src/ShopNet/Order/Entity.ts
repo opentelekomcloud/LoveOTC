@@ -21,6 +21,7 @@ export namespace OrderEntity {
  * @version 0.1.0
  */
 export abstract class OrderEntity extends ShopNet {
+  public static readonly order = "OrderEntity";
   /**
    * @author Aloento
    * @since 1.0.0
@@ -29,9 +30,10 @@ export abstract class OrderEntity extends ShopNet {
    */
   public static Order(key: number): Promise<OrderEntity.Order> {
     this.EnsureLogin();
-    return this.GetVersionCache(key, "OrderEntity");
+    return this.GetVersionCache(key, this.order);
   }
 
+  public static readonly comment = "CommentEntity";
   /**
    * @author Aloento
    * @since 1.0.0
@@ -40,6 +42,6 @@ export abstract class OrderEntity extends ShopNet {
    */
   public static Comment(key: number): Promise<OrderEntity.Comment> {
     this.EnsureLogin();
-    return this.GetVersionCache(key, "CommentEntity");
+    return this.GetVersionCache(key, this.comment);
   }
 }

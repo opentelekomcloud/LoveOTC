@@ -1,7 +1,7 @@
 import { DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
 import { Logger } from "~/Helpers/Logger";
 import { IOrderItem } from ".";
-import { OrderDetail } from "./Detail";
+import { OrderDetail } from "../../Components/Order";
 
 /**
  * @author Aloento

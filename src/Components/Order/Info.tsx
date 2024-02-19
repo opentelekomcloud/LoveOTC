@@ -1,10 +1,11 @@
 import { Field, Label, makeStyles, tokens } from "@fluentui/react-components";
+import { useConst } from "@fluentui/react-hooks";
 import { useRequest } from "ahooks";
-import { Logger } from "~/Helpers/Logger";
 import { ColFlex, Flex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
-import { OrderEntity } from "~/ShopNet/Order/Entity";
+import type { OrderEntity } from "~/ShopNet/Order/Entity";
+import type { IOrderComp } from ".";
 
 /**
  * @author Aloento
@@ -20,25 +21,17 @@ const useStyles = makeStyles({
   },
 });
 
-/**
- * @author Aloento
- * @since 1.0.0
- * @version 0.1.1
- */
-interface IOrderInfo {
-  OrderId: number;
+interface IOrderInfo extends IOrderComp {
   Order?: OrderEntity.Order;
-  Admin?: true;
 }
-
-const log = new Logger("Order", "Info");
 
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.4.2
+ * @version 1.0.0
  */
-export function OrderInfo({ OrderId, Order, Admin }: IOrderInfo) {
+export function OrderInfo({ OrderId, Order, Admin, ParentLog }: IOrderInfo) {
+  const log = useConst(() => ParentLog.With("Info"));
   const style = useStyles();
 
   const { data: admin } = useRequest(() => AdminHub.User.Get.OrderUser(OrderId), {
@@ -46,7 +39,7 @@ export function OrderInfo({ OrderId, Order, Admin }: IOrderInfo) {
     onError: log.error
   });
 
-  const me = Hub.User.Get.useMe(log);
+  const { data: me } = Hub.User.Get.useMe(log, Admin);
 
   const data = Admin ? admin : me;
 

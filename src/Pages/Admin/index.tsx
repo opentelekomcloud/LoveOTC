@@ -31,7 +31,7 @@ function Admin() {
     }
   }, [path]);
 
-  const data = Hub.User.Get.useMe(log);
+  const { data } = Hub.User.Get.useMe(log);
 
   if (!data)
     return <Spinner size="huge" label="Authenticating..." />;

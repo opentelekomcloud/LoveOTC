@@ -1,12 +1,12 @@
 import { DataGridCell, DataGridHeaderCell, Label, SpinButton, TableColumnDefinition, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid";
+import { OrderDetail } from "~/Components/Order";
 import { Logger } from "~/Helpers/Logger";
 import { Flex } from "~/Helpers/Styles";
 import { IOrderItem } from "~/Pages/History";
 import { HistoryColumns } from "~/Pages/History/Columns";
 import { AdminHub } from "~/ShopNet/Admin";
-import { AdminOrderDetail } from "./Detail";
 
 /**
  * @author Aloento
@@ -86,7 +86,7 @@ const columns: TableColumnDefinition<IAdminOrderItem>[] = [
     renderCell(item) {
       return (
         <DataGridCell className={useStyles().twoc}>
-          <AdminOrderDetail OrderId={item.Id} />
+          <OrderDetail OrderId={item.Id} ParentLog={log} Admin />
         </DataGridCell>
       )
     },

@@ -49,7 +49,7 @@ export function Setting({ Open, Toggle, New }: ISetting) {
   const [phone, setPhone] = useState<string>();
   const [address, setAddress] = useState<string>();
 
-  const data = Hub.User.Get.useMe(log);
+  const { data, mutate } = Hub.User.Get.useMe(log);
 
   useEffect(() => {
     if (New || !data) return;
@@ -73,6 +73,11 @@ export function Setting({ Open, Toggle, New }: ISetting) {
       });
     },
     onSuccess(_, [req]) {
+      mutate({
+        ...data!,
+        ...req
+      });
+
       dispatchToast(
         <Toast>
           <ToastTitle>Info {New ? "Created" : "Updated"}</ToastTitle>

@@ -1,8 +1,7 @@
 import { Body1, Caption1Stronger, Field, Label } from "@fluentui/react-components";
 import { useConst } from "@fluentui/react-hooks";
-import { useRequest } from "ahooks";
-import { ICompLog } from "~/Helpers/Logger";
 import { Hub } from "~/ShopNet";
+import { IOrderComp } from ".";
 import { CommentAppend } from "./Append";
 
 /**
@@ -18,28 +17,12 @@ export interface IComment {
 
 /**
  * @author Aloento
- * @since 0.5.0
- * @version 0.2.0
- */
-export interface IOrderComp extends ICompLog {
-  OrderId: number;
-  Refresh: () => void;
-  Status?: string;
-  Admin?: true;
-}
-
-/**
- * @author Aloento
  * @since 1.0.0
- * @version 0.1.0
+ * @version 1.1.0
  */
-export function OrderComment({ OrderId, Refresh, ParentLog, Status, Admin }: IOrderComp) {
+export function OrderComment({ OrderId, Admin, ParentLog }: IOrderComp) {
   const log = useConst(() => ParentLog.With("Comment"));
-
-  const { data, run } = useRequest(() => Hub.Order.Get.Cmts(OrderId, log), {
-    manual: true,
-    onError: log.error
-  });
+  const { data, run } = Hub.Order.Get.useCmts(OrderId, log, Admin);
 
   return <>
     <Field label="Comment" size="large">
@@ -55,6 +38,6 @@ export function OrderComment({ OrderId, Refresh, ParentLog, Status, Admin }: IOr
         )}
     </Field>
 
-    <CommentAppend OrderId={OrderId} Status={Status} Refresh={run} ParentLog={log} />
+    <CommentAppend OrderId={OrderId} Refresh={run} ParentLog={log} Admin={Admin} />
   </>;
 }

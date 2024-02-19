@@ -2,7 +2,6 @@ import { useRequest } from "ahooks";
 import type { Options } from "ahooks/lib/useRequest/src/types";
 import type { IPersona } from "~/Components/ShopCart/Persona";
 import { ShopNet } from "../ShopNet";
-import { UserGet } from "./Get";
 
 /**
  * @author Aloento
@@ -20,9 +19,6 @@ export abstract class UserPost extends ShopNet {
       this.EnsureLogin();
       const res = await this.Invoke<boolean>("UserPostUpdate", req);
       this.EnsureTrue(res);
-
-      UserGet.MeUpdate(raw => ({ ...raw, ...req }));
-
       return res;
     }, options);
   }

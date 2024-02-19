@@ -2,10 +2,12 @@ import { Button, Field, Textarea, Toast, ToastTitle, makeStyles } from "@fluentu
 import { useConst } from "@fluentui/react-hooks";
 import { useState } from "react";
 import { Flex } from "~/Helpers/Styles";
+import { useSWR } from "~/Helpers/useSWR";
 import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
-import { IOrderComp } from "./Comment";
+import { SignalR } from "~/ShopNet/SignalR";
+import { IOrderRef } from ".";
 
 /**
  * @author Aloento
@@ -22,9 +24,9 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 1.0.0
+ * @version 1.2.0
  */
-export function CommentAppend({ OrderId, Refresh, ParentLog, Status, Admin }: IOrderComp) {
+export function CommentAppend({ OrderId, Refresh, Admin, ParentLog }: IOrderRef) {
   const log = useConst(() => ParentLog.With("Append"));
 
   const style = useStyles();
@@ -76,7 +78,15 @@ export function CommentAppend({ OrderId, Refresh, ParentLog, Status, Admin }: IO
     }
   });
 
-  switch (Status) {
+  const index = useConst(() => SignalR.Index(OrderId, Hub.Order.Get.order));
+
+  const { data: order } = useSWR(
+    index,
+    () => (Admin ? AdminHub : Hub).Order.Get.Order(OrderId),
+    { useMemory: true }
+  );
+
+  switch (order?.Status) {
     case "Cancelled":
     case "Finished":
       return null;
@@ -89,12 +99,12 @@ export function CommentAppend({ OrderId, Refresh, ParentLog, Status, Admin }: IO
 
     <div className={style.body}>
       {
-        !(Status === "Finished" || Status === "Returning") &&
+        !(order?.Status === "Finished" || order?.Status === "Returning") &&
         <Button onClick={() => cancel(OrderId, cmt!)}>
           {
             Admin
               ? "Force Close"
-              : Status === "Shipping" ? "Ask Return" : "Cancel Order"
+              : order?.Status === "Shipping" ? "Ask Return" : "Cancel Order"
           } with Reason
         </Button>
       }

@@ -26,7 +26,7 @@ export function AvatarMenu() {
     OnNewUserSubject.subscribe(x => setMount(!x));
   }, []);
 
-  const data = Hub.User.Get.useMe(log);
+  const { data } = Hub.User.Get.useMe(log);
 
   const name = auth.user?.profile.preferred_username;
 
