@@ -27,7 +27,7 @@ const useStyles = makeStyles({
  */
 interface IOrderInfo {
   OrderId: number;
-  Order: OrderEntity.Order;
+  Order?: OrderEntity.Order;
   Admin?: true;
 }
 

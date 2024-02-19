@@ -1,8 +1,10 @@
+import { useConst } from "@fluentui/react-hooks";
+import { useAsyncEffect } from "ahooks";
+import { useState } from "react";
+import { IComment } from "~/Components/Order/Comment";
 import { ICartItem } from "~/Components/ShopCart";
 import { Logger } from "~/Helpers/Logger";
 import { IOrderItem } from "~/Pages/History";
-import { IComment } from "~/Pages/History/Comment";
-import { IOrderDetail } from "~/Pages/History/Detail";
 import { ProductData } from "../Product/Data";
 import { ProductGet } from "../Product/Get";
 import { OrderEntity } from "./Entity";
@@ -69,76 +71,104 @@ export abstract class OrderGet extends OrderEntity {
     return items.sort((a, b) => b.OrderDate.getTime() - a.OrderDate.getTime());
   }
 
+  public static readonly items = "OrderGetItems";
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 1.0.1
+   * @version 2.0.0
    */
-  public static async Detail(orderId: number, pLog: Logger): Promise<IOrderDetail> {
-    this.EnsureLogin();
-    const log = pLog.With(...this.Log, "Detail");
+  public static useItems(orderId: number, pLog: Logger) {
+    const log = useConst(() => pLog.With(...this.Log, "Items"));
+    const [res, setRes] = useState<ICartItem[]>([]);
 
-    const meta = await this.GetTimeCache<
+    const req = this.useSWR<
       {
-        Items: {
-          Types: number[];
-          Quantity: number;
-        }[],
-        Comments: number[];
+        Types: number[];
+        Quantity: number;
+      }[]
+    >(
+      orderId,
+      this.items,
+      {
+        defaultParams: [orderId],
+        onError: log.error
       }
-    >(orderId, "OrderGetDetail", (x) => x.add(1, "m"), orderId);
+    );
 
-    const items: ICartItem[] = [];
-    let index = 0;
+    useAsyncEffect(async () => {
+      const meta = req.data;
+      if (!meta)
+        return;
 
-    for (const combo of meta.Items) {
-      const variType: Record<string, string> = {};
-      let prodId = 0;
+      const items: ICartItem[] = [];
+      let index = 0;
 
-      for (const typeId of combo.Types) {
-        const type = await ProductData.Type(typeId);
+      for (const combo of meta) {
+        const variType: Record<string, string> = {};
+        let prodId = 0;
 
-        if (!type) {
-          log.warn(`[Mismatch] Type ${typeId} not found. Order : ${orderId}`);
+        for (const typeId of combo.Types) {
+          const type = await ProductData.Type(typeId);
+
+          if (!type) {
+            log.warn(`[Mismatch] Type ${typeId} not found. Order : ${orderId}`);
+            continue;
+          }
+
+          const vari = await ProductData.Variant(type.VariantId);
+
+          if (!vari) {
+            log.warn(`[Mismatch] Variant ${type.VariantId} not found. Type : ${typeId}, Order : ${orderId}`);
+            continue;
+          }
+
+          variType[vari.Name] = type.Name;
+          prodId = vari.ProductId;
+        }
+
+        const prod = await ProductData.Product(prodId);
+
+        if (!prod) {
+          log.warn(`[Mismatch] Product ${prodId} not found. Order : ${orderId}`);
           continue;
         }
 
-        const vari = await ProductData.Variant(type.VariantId);
+        const [_, cover] = await ProductGet.PhotoList(prodId, log);
 
-        if (!vari) {
-          log.warn(`[Mismatch] Variant ${type.VariantId} not found. Type : ${typeId}, Order : ${orderId}`);
-          continue;
-        }
+        if (!cover)
+          log.warn(`Product ${prodId} has no photo`);
 
-        variType[vari.Name] = type.Name;
-        prodId = vari.ProductId;
+        items.push({
+          Id: index++,
+          ProdId: prodId,
+          Cover: cover || "",
+          Name: prod.Name,
+          Type: variType,
+          Quantity: combo.Quantity,
+        });
       }
 
-      const prod = await ProductData.Product(prodId);
+      setRes(items);
+    }, [req.data]);
 
-      if (!prod) {
-        log.warn(`[Mismatch] Product ${prodId} not found. Order : ${orderId}`);
-        continue;
-      }
+    return {
+      ...req,
+      data: res
+    };
+  }
 
-      const [_, cover] = await ProductGet.PhotoList(prodId, log);
+  /**
+   * @author Aloento
+   * @since 1.3.0
+   * @version 0.1.0
+   */
+  public static async Cmts(orderId: number, pLog: Logger): Promise<IComment[]> {
+    const log = pLog.With(...this.Log, "Cmts");
 
-      if (!cover)
-        log.warn(`Product ${prodId} has no photo`);
-
-      items.push({
-        Id: index++,
-        ProdId: prodId,
-        Cover: cover || "",
-        Name: prod.Name,
-        Type: variType,
-        Quantity: combo.Quantity,
-      });
-    }
-
+    const cmts = await this.GetTimeCache<number[]>(orderId, "OrderGetCmts", (x) => x.add(1, "m"), orderId);
     const comments: IComment[] = [];
 
-    for (const cmtId of meta.Comments) {
+    for (const cmtId of cmts) {
       const cmt = await this.Comment(cmtId);
 
       if (!cmt) {
@@ -153,9 +183,6 @@ export abstract class OrderGet extends OrderEntity {
       });
     }
 
-    return {
-      ShopCart: items,
-      Comments: comments.sort((a, b) => a.Time.getTime() - b.Time.getTime())
-    };
+    return comments.sort((a, b) => a.Time.getTime() - b.Time.getTime());
   }
 }

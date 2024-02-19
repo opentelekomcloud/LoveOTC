@@ -26,12 +26,12 @@ internal partial class ShopHub {
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 1.0.0
+     * @version 1.1.0
      * </remarks>
      */
     [Authorize]
-    public async Task<dynamic> OrderGetDetail(uint orderId) {
-        var items = await this.Db.OrderCombos
+    public async Task<dynamic> OrderGetItems(uint orderId) =>
+        await this.Db.OrderCombos
             .Where(x => x.OrderId == orderId && x.Order.UserId == this.UserId)
             .Select(x => new {
                 x.Quantity,
@@ -39,14 +39,17 @@ internal partial class ShopHub {
             })
             .ToArrayAsync();
 
-        var cmts = await this.Db.Comments
+    /**
+     * <remarks>
+     * @author Aloento
+     * @since 1.3.0
+     * @version 0.1.0
+     * </remarks>
+     */
+    [Authorize]
+    public Task<uint[]> OrderGetCmts(uint orderId) =>
+        this.Db.Comments
             .Where(x => x.OrderId == orderId && x.Order.UserId == this.UserId)
             .Select(x => x.CommentId)
             .ToArrayAsync();
-
-        return new {
-            Items = items,
-            Comments = cmts
-        };
-    }
 }

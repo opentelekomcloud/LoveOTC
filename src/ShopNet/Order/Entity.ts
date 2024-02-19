@@ -25,6 +25,7 @@ export abstract class OrderEntity extends ShopNet {
    * @author Aloento
    * @since 1.0.0
    * @version 0.1.0
+   * @liveSafe
    */
   public static Order(key: number): Promise<OrderEntity.Order> {
     this.EnsureLogin();
@@ -35,6 +36,7 @@ export abstract class OrderEntity extends ShopNet {
    * @author Aloento
    * @since 1.0.0
    * @version 0.1.0
+   * @liveSafe
    */
   public static Comment(key: number): Promise<OrderEntity.Comment> {
     this.EnsureLogin();

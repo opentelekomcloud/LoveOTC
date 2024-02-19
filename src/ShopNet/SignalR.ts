@@ -1,5 +1,9 @@
+import { useConst } from "@fluentui/react-hooks";
 import { HubConnectionState } from "@microsoft/signalr";
+import { useRequest } from "ahooks";
+import { Options } from "ahooks/lib/useRequest/src/types";
 import dayjs, { Dayjs } from "dayjs";
+import Dexie from "dexie";
 import { Subject } from "rxjs";
 import { EmptyResponseError, NotLoginError, NotTrueError } from "~/Helpers/Exceptions";
 import type { Logger } from "~/Helpers/Logger";
@@ -119,11 +123,19 @@ export abstract class SignalR {
     const index = this.Index(key, methodName);
     const find = await Shared.Get<T & { QueryExp: number }>(index);
 
+    // TODO：导致 LiveQuery 无限刷新
     const update = async () => {
-      const res = await Promise.resolve(this.Invoke<T | true | null>(methodName, key, find?.Version));
+      const res = await Dexie.waitFor(this.Invoke<T | true | null>(methodName, key, find?.Version));
+
+      function setCache(value: T) {
+        Shared.Set<T & { QueryExp: number; }>(index, {
+          ...value,
+          QueryExp: dayjs().add(10, "s").unix()
+        }, dayjs().add(1, "w"));
+      }
 
       if (res === true) {
-        setCache(find!);
+        setCache(find!)
         return find!;
       }
 
@@ -137,20 +149,37 @@ export abstract class SignalR {
     }
 
     if (find) {
-      if (find.QueryExp <= dayjs().unix())
+      if (find.QueryExp < dayjs().unix())
         update();
 
       return find;
     }
 
     return update();
+  }
 
-    function setCache(value: T) {
-      Shared.Set<T & { QueryExp: number; }>(index, {
-        ...value,
-        QueryExp: dayjs().add(5, "s").unix()
-      }, dayjs().add(1, "w"));
-    }
+  /**
+   * @author Aloento
+   * @since 1.3.5
+   * @version 0.1.0
+   */
+  protected static useSWR<T>(
+    this: INet, key: string | number, methodName: string, options: Options<T, any[]>
+  ) {
+    const index = useConst(() => this.Index(key, methodName));
+
+    const req = useRequest(
+      (...params) => this.Invoke<T>(methodName, ...params),
+      {
+        staleTime: 5000,
+        ...options,
+        cacheKey: index,
+        setCache: (data) => localStorage.setItem(index, JSON.stringify(data)),
+        getCache: () => JSON.parse(localStorage.getItem(index) || "{}"),
+      }
+    );
+
+    return req;
   }
 
   /**

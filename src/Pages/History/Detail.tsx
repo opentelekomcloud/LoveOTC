@@ -1,10 +1,11 @@
-import { Body1Strong, Button, Caption1, DataGridCell, DataGridHeaderCell, Link, TableColumnDefinition, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
+import { Body1Strong, Button, Caption1, DataGridCell, DataGridHeaderCell, Link, SkeletonItem, TableColumnDefinition, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { useConst } from "@fluentui/react-hooks";
 import { DismissRegular, OpenRegular } from "@fluentui/react-icons";
-import { useBoolean, useRequest } from "ahooks";
-import { useEffect } from "react";
+import { useBoolean, useInViewport, useRequest } from "ahooks";
+import { useEffect, useRef } from "react";
 import { DelegateDataGrid } from "~/Components/DataGrid";
+import { IComment, OrderComment } from "~/Components/Order/Comment";
 import { OrderInfo } from "~/Components/OrderInfo";
 import { useRouter } from "~/Components/Router";
 import { ICartItem } from "~/Components/ShopCart";
@@ -13,8 +14,6 @@ import { ICompLog } from "~/Helpers/Logger";
 import { ColFlex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
 import { OrderAction } from "./Action";
-import { OrderAppend } from "./Append";
-import { IComment, OrderComment } from "./Comment";
 
 /**
  * @author Aloento
@@ -91,42 +90,18 @@ export interface IOrderDetail {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.3.5
+ * @version 1.0.0
  */
 export function OrderDetail({ OrderId, ParentLog }: { OrderId: number } & ICompLog) {
   const log = useConst(() => ParentLog.With("Detail"));
 
-  const style = useStyles();
-  const [open, { setTrue, setFalse }] = useBoolean();
-
+  const [open, { set }] = useBoolean();
   const { Nav, Paths } = useRouter();
   const curr = parseInt(Paths.at(1)!);
 
-  const { data, run: runDetail } = useRequest(() => Hub.Order.Get.Detail(OrderId, log), {
-    manual: true,
-    onError: log.error
-  });
-
-  const { data: order, run: runOrder } = useRequest(() => Hub.Order.Get.Order(OrderId), {
-    onError(e) {
-      Nav("History");
-      log.error(e);
-    },
-    manual: true
-  });
-
-  function run() {
-    runOrder();
-    runDetail();
-  }
-
-  useEffect(() => {
-    if (curr === OrderId) {
-      run();
-      setTrue();
-    } else
-      setFalse();
-  }, [curr]);
+  useEffect(() => set(curr === OrderId), [curr]);
+  const ref = useRef(null);
+  const [inViewport] = useInViewport(ref);
 
   return <>
     <Button
@@ -155,22 +130,51 @@ export function OrderDetail({ OrderId, ParentLog }: { OrderId: number } & ICompL
         </DrawerHeaderTitle>
       </DrawerHeader>
 
-      <DrawerBody>
-        <div className={style.body}>
-          <OrderInfo OrderId={OrderId} Order={order} />
-
-          <DelegateDataGrid
-            Items={data?.ShopCart}
-            Columns={[MakeCoverCol(44, log), ...columns]}
-          />
-
-          <OrderComment Comments={data?.Comments} />
-
-          <OrderAppend OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={log} />
-
-          <OrderAction OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={log} />
-        </div>
+      <DrawerBody ref={ref}>
+        {inViewport && <DeferredBody OrderId={OrderId} ParentLog={log} />}
       </DrawerBody>
     </Drawer>
   </>
+}
+
+/**
+ * @author Aloento
+ * @since 1.3.5
+ * @version 0.1.0
+ */
+function DeferredBody({ OrderId, ParentLog }: { OrderId: number } & ICompLog) {
+  const style = useStyles();
+  const { Nav } = useRouter();
+
+  const { data: order, run: runOrder } = useRequest(() => Hub.Order.Get.Order(OrderId), {
+    onError(e) {
+      Nav("History");
+      ParentLog.error(e);
+    },
+    manual: true
+  });
+
+  const { data: cart, run: runItems, loading } = Hub.Order.Get.useItems(OrderId, ParentLog);
+
+  const run = () => {
+    runItems();
+    runOrder();
+  };
+
+  return (
+    <div className={style.body}>
+      <OrderInfo OrderId={OrderId} Order={order} />
+
+      <DelegateDataGrid
+        Items={cart}
+        Columns={[MakeCoverCol(44, ParentLog), ...columns]}
+      />
+
+      {loading && <SkeletonItem size={48} />}
+
+      <OrderComment OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={ParentLog} />
+
+      <OrderAction OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={ParentLog} />
+    </div>
+  );
 }

@@ -1,10 +1,11 @@
 import { Button, Field, Textarea, Toast, ToastTitle, makeStyles } from "@fluentui/react-components";
 import { useConst } from "@fluentui/react-hooks";
 import { useState } from "react";
-import { Logger } from "~/Helpers/Logger";
 import { Flex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
+import { AdminHub } from "~/ShopNet/Admin";
+import { IOrderComp } from "./Comment";
 
 /**
  * @author Aloento
@@ -21,21 +22,9 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.1
+ * @version 1.0.0
  */
-interface IOrderAppend {
-  OrderId: number;
-  Status?: string;
-  Refresh: () => void;
-  ParentLog: Logger;
-}
-
-/**
- * @author Aloento
- * @since 0.5.0
- * @version 0.4.2
- */
-export function OrderAppend({ OrderId, Status, Refresh, ParentLog }: IOrderAppend) {
+export function CommentAppend({ OrderId, Refresh, ParentLog, Status, Admin }: IOrderComp) {
   const log = useConst(() => ParentLog.With("Append"));
 
   const style = useStyles();
@@ -43,7 +32,9 @@ export function OrderAppend({ OrderId, Status, Refresh, ParentLog }: IOrderAppen
 
   const { dispatch, dispatchToast } = useErrorToast(log);
 
-  const { run: append } = Hub.Order.Post.useAppend({
+  const hub = (Admin ? AdminHub : Hub).Order.Post as typeof AdminHub.Order.Post & typeof Hub.Order.Post;
+
+  const { run: append } = hub.useAppend({
     manual: true,
     onError(e, req) {
       dispatch({
@@ -64,11 +55,11 @@ export function OrderAppend({ OrderId, Status, Refresh, ParentLog }: IOrderAppen
     }
   });
 
-  const { run: cancel } = Hub.Order.Post.useCancel({
+  const { run: cancel } = (Admin ? hub.useClose : hub.useCancel)({
     manual: true,
     onError(e, params) {
       dispatch({
-        Message: "Failed Cancel Order",
+        Message: `Failed ${Admin ? "Close" : "Cancel"} Order`,
         Request: params,
         Error: e
       });
@@ -76,7 +67,7 @@ export function OrderAppend({ OrderId, Status, Refresh, ParentLog }: IOrderAppen
     onSuccess() {
       dispatchToast(
         <Toast>
-          <ToastTitle>Order Canceled</ToastTitle>
+          <ToastTitle>Order {Admin ? "Closed" : "Cancelled"}</ToastTitle>
         </Toast>,
         { intent: "success" }
       );
@@ -100,7 +91,11 @@ export function OrderAppend({ OrderId, Status, Refresh, ParentLog }: IOrderAppen
       {
         !(Status === "Finished" || Status === "Returning") &&
         <Button onClick={() => cancel(OrderId, cmt!)}>
-          {Status === "Shipping" ? "Ask Return" : "Cancel Order"} with Reason
+          {
+            Admin
+              ? "Force Close"
+              : Status === "Shipping" ? "Ask Return" : "Cancel Order"
+          } with Reason
         </Button>
       }
 

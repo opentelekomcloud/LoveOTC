@@ -6,7 +6,7 @@ import { defineConfig, splitVendorChunkPlugin } from "vite";
 export default defineConfig({
   plugins: [
     react(),
-    splitVendorChunkPlugin(),
+    splitVendorChunkPlugin()
   ],
   resolve: {
     alias: {
@@ -18,6 +18,6 @@ export default defineConfig({
     reportCompressedSize: false,
     modulePreload: {
       polyfill: false,
-    },
+    }
   },
 });

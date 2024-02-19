@@ -36,7 +36,7 @@ export class Table {
 
     if (find) {
       if (
-        (expire && await Promise.resolve(expire(find))) ||
+        (expire && await Dexie.waitFor(expire(find))) ||
         (typeof find.Exp === "number" && find.Exp < dayjs().unix())
       ) {
         await this.Sto.delete(key);
@@ -63,7 +63,7 @@ export class Table {
   ): Promise<T> {
     const res = await this.Get<T>(key, expire);
     if (res) return res;
-    return this.Set<T>(key, await Promise.resolve(fac()), exp);
+    return this.Set<T>(key, await Dexie.waitFor(fac()), exp);
   }
 
   /**
@@ -78,7 +78,8 @@ export class Table {
 
     if (exp === null) {
       await this.Sto.put({
-        Id: id, Exp: exp,
+        Id: id,
+        Exp: exp,
         Val: val
       });
 
@@ -90,7 +91,8 @@ export class Table {
       throw RangeError(`Expire time [${time}] cannot be less than now [${dayjs().unix()}]`);
 
     await this.Sto.put({
-      Id: id, Exp: time,
+      Id: id,
+      Exp: time,
       Val: val
     });
 
