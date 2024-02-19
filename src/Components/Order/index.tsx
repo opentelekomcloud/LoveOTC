@@ -16,15 +16,6 @@ export interface IOrderComp extends ICompLog {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
- */
-export interface IOrderRef extends IOrderComp {
-  Refresh: () => void;
-}
-
-/**
- * @author Aloento
- * @since 0.5.0
  * @version 1.1.0
  */
 export function OrderDetail({ OrderId, Admin, ParentLog }: IOrderComp) {
@@ -42,7 +33,7 @@ export function OrderDetail({ OrderId, Admin, ParentLog }: IOrderComp) {
     <Button
       appearance="subtle"
       icon={<OpenRegular />}
-      onClick={() => Nav("History", OrderId)}
+      onClick={() => Nav(Admin ? "Admin/Order" : "History", OrderId)}
     />
 
     <Drawer
@@ -57,7 +48,7 @@ export function OrderDetail({ OrderId, Admin, ParentLog }: IOrderComp) {
             <Button
               appearance="subtle"
               icon={<DismissRegular />}
-              onClick={() => Nav("History")}
+              onClick={() => Nav(Admin ? "Admin/Order" : "History")}
             />
           }
         >

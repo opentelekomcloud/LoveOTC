@@ -24,15 +24,12 @@ export abstract class AdminOrderPost extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.2.1
+   * @version 0.3.0
    */
-  public static useClose(options: Options<true, [number, string]>) {
-    return useRequest(async (orderId, reason) => {
-      const res = await this.Invoke<boolean>("OrderPostClose", orderId, reason);
-      this.EnsureTrue(res);
-      return res;
-    }, options);
+  public static useClose(options: Options<string, [number, string]>) {
+    return useRequest((orderId, reason) => this.Invoke("OrderPostClose", orderId, reason), options);
   }
+  public static useCancel = this.useClose;
 
   /**
    * @author Aloento

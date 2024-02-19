@@ -22,7 +22,7 @@ export interface IComment {
  */
 export function OrderComment({ OrderId, Admin, ParentLog }: IOrderComp) {
   const log = useConst(() => ParentLog.With("Comment"));
-  const { data, run } = Hub.Order.Get.useCmts(OrderId, log, Admin);
+  const { data, refresh } = Hub.Order.Get.useCmts(OrderId, log, Admin);
 
   return <>
     <Field label="Comment" size="large">
@@ -38,6 +38,6 @@ export function OrderComment({ OrderId, Admin, ParentLog }: IOrderComp) {
         )}
     </Field>
 
-    <CommentAppend OrderId={OrderId} Refresh={run} ParentLog={log} Admin={Admin} />
+    <CommentAppend OrderId={OrderId} Refresh={refresh} ParentLog={log} Admin={Admin} />
   </>;
 }

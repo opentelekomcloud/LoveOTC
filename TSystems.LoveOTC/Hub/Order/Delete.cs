@@ -13,7 +13,7 @@ internal partial class ShopHub {
      * </remarks>
      */
     [Authorize]
-    public async Task<bool> OrderDeleteCancel(uint orderId) {
+    public async Task<bool> OrderDeleteCancelled(uint orderId) {
         var row = await this.Db.Orders
             .Where(x => x.UserId == this.UserId)
             .Where(x => x.OrderId == orderId)

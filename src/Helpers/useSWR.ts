@@ -1,10 +1,10 @@
-import { useRequest } from "ahooks";
+import { clearCache, useRequest } from "ahooks";
 import type { Options, Service } from "ahooks/lib/useRequest/src/types";
 
 /**
  * @author Aloento
  * @since 1.3.5
- * @version 0.2.0
+ * @version 0.3.0
  */
 export function useSWR<TData, TParams extends any[]>(
   key: string,
@@ -27,5 +27,15 @@ export function useSWR<TData, TParams extends any[]>(
     }
   );
 
-  return req;
+  return {
+    ...req,
+    refresh: () => {
+      if (options.useMemory)
+        clearCache(key);
+      else
+        localStorage.removeItem(key);
+
+      req.refresh();
+    }
+  };
 }

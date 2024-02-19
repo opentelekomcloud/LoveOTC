@@ -2,12 +2,11 @@ import { Button, Field, Textarea, Toast, ToastTitle, makeStyles } from "@fluentu
 import { useConst } from "@fluentui/react-hooks";
 import { useState } from "react";
 import { Flex } from "~/Helpers/Styles";
-import { useSWR } from "~/Helpers/useSWR";
 import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
-import { SignalR } from "~/ShopNet/SignalR";
-import { IOrderRef } from ".";
+import { IOrderComp } from ".";
+import { useOrder } from "./useOrder";
 
 /**
  * @author Aloento
@@ -24,9 +23,9 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 1.2.0
+ * @version 1.3.0
  */
-export function CommentAppend({ OrderId, Refresh, Admin, ParentLog }: IOrderRef) {
+export function CommentAppend({ OrderId, Refresh, Admin, ParentLog }: IOrderComp & { Refresh: () => void }) {
   const log = useConst(() => ParentLog.With("Append"));
 
   const style = useStyles();
@@ -34,9 +33,7 @@ export function CommentAppend({ OrderId, Refresh, Admin, ParentLog }: IOrderRef)
 
   const { dispatch, dispatchToast } = useErrorToast(log);
 
-  const hub = (Admin ? AdminHub : Hub).Order.Post as typeof AdminHub.Order.Post & typeof Hub.Order.Post;
-
-  const { run: append } = hub.useAppend({
+  const { run: append, loading } = (Admin ? AdminHub : Hub).Order.Post.useAppend({
     manual: true,
     onError(e, req) {
       dispatch({
@@ -54,10 +51,13 @@ export function CommentAppend({ OrderId, Refresh, Admin, ParentLog }: IOrderRef)
       );
 
       Refresh();
+      setCmt("");
     }
   });
 
-  const { run: cancel } = (Admin ? hub.useClose : hub.useCancel)({
+  const { data: order, mutate } = useOrder(OrderId, Admin);
+
+  const { run: cancel, loading: submit } = (Admin ? AdminHub : Hub).Order.Post.useCancel({
     manual: true,
     onError(e, params) {
       dispatch({
@@ -66,7 +66,7 @@ export function CommentAppend({ OrderId, Refresh, Admin, ParentLog }: IOrderRef)
         Error: e
       });
     },
-    onSuccess() {
+    onSuccess(data) {
       dispatchToast(
         <Toast>
           <ToastTitle>Order {Admin ? "Closed" : "Cancelled"}</ToastTitle>
@@ -74,17 +74,12 @@ export function CommentAppend({ OrderId, Refresh, Admin, ParentLog }: IOrderRef)
         { intent: "success" }
       );
 
-      Refresh();
+      mutate((old) => ({
+        ...old!,
+        Status: data
+      }));
     }
   });
-
-  const index = useConst(() => SignalR.Index(OrderId, Hub.Order.Get.order));
-
-  const { data: order } = useSWR(
-    index,
-    () => (Admin ? AdminHub : Hub).Order.Get.Order(OrderId),
-    { useMemory: true }
-  );
 
   switch (order?.Status) {
     case "Cancelled":
@@ -100,7 +95,10 @@ export function CommentAppend({ OrderId, Refresh, Admin, ParentLog }: IOrderRef)
     <div className={style.body}>
       {
         !(order?.Status === "Finished" || order?.Status === "Returning") &&
-        <Button onClick={() => cancel(OrderId, cmt!)}>
+        <Button
+          onClick={() => cancel(OrderId, cmt!)}
+          disabled={submit}
+        >
           {
             Admin
               ? "Force Close"
@@ -109,7 +107,11 @@ export function CommentAppend({ OrderId, Refresh, Admin, ParentLog }: IOrderRef)
         </Button>
       }
 
-      <Button appearance="primary" onClick={() => append(OrderId, cmt!)}>
+      <Button
+        appearance="primary"
+        onClick={() => append(OrderId, cmt!)}
+        disabled={loading}
+      >
         Add Comment
       </Button>
     </div>

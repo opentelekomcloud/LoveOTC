@@ -1,6 +1,6 @@
 import { Button, Field, Toast, ToastTitle, makeStyles } from "@fluentui/react-components";
-import { useConst } from "@fluentui/react-hooks";
-import { IOrderRef } from "~/Components/Order";
+import { useOrder } from "~/Components/Order/useOrder";
+import { Logger } from "~/Helpers/Logger";
 import { ColFlex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
@@ -17,16 +17,18 @@ const useStyles = makeStyles({
   },
 });
 
+const log = new Logger("Admin", "Order", "Detail", "Action");
+
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.2.0
+ * @version 0.3.0
  */
-export function AdminOrderAction({ OrderId, Status, Refresh, ParentLog }: IOrderRef & { Status?: string; }) {
-  const log = useConst(() => ParentLog.With("Action"));
-
+export function AdminOrderAction({ OrderId }: { OrderId: number; }) {
   const style = useStyles();
   const { dispatch, dispatchToast } = useErrorToast(log);
+
+  const { data: order, mutate } = useOrder(OrderId, true);
 
   const { run: accept } = AdminHub.Order.Post.useAccept({
     manual: true,
@@ -45,11 +47,11 @@ export function AdminOrderAction({ OrderId, Status, Refresh, ParentLog }: IOrder
         { intent: "success" }
       );
 
-      Refresh();
+      mutate((old) => ({ ...old!, Status: "Processing" }));
     }
   });
 
-  switch (Status) {
+  switch (order?.Status) {
     // case "Pending":
     case "Processing":
     case "Shipping":
@@ -63,8 +65,11 @@ export function AdminOrderAction({ OrderId, Status, Refresh, ParentLog }: IOrder
     <Field label="Action" size="large">
       <div className={style.body}>
         {
-          Status === "Pending" &&
-          <Button appearance="subtle" onClick={() => accept(OrderId)}>
+          order?.Status === "Pending" &&
+          <Button
+            appearance="subtle"
+            onClick={() => accept(OrderId)}
+          >
             Accept Order
           </Button>
         }

@@ -2,33 +2,24 @@ import { Button, Field, Input, Toast, ToastTitle } from "@fluentui/react-compone
 import { EditRegular, SendRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
 import { useState } from "react";
+import { useOrder } from "~/Components/Order/useOrder";
 import { Logger } from "~/Helpers/Logger";
 import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
-
-/**
- * @author Aloento
- * @since 1.0.0
- * @version 0.1.0
- */
-interface IShipment {
-  OrderId: number;
-  TrackingNumber?: string;
-  Refresh: () => void;
-}
 
 const log = new Logger("Admin", "Order", "Detail", "Shipment");
 
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.3
+ * @version 0.3.0
  */
-export function Shipment({ OrderId, TrackingNumber, Refresh }: IShipment) {
+export function Shipment({ OrderId }: { OrderId: number }) {
   const [edit, { setTrue, setFalse }] = useBoolean();
-  const [track, setTrack] = useState(TrackingNumber);
-
   const { dispatch, dispatchToast } = useErrorToast(log);
+
+  const { data: order, mutate } = useOrder(OrderId, true);
+  const [track, setTrack] = useState(order?.TrackingNumber);
 
   const { run } = AdminHub.Order.Post.useShip({
     manual: true,
@@ -48,7 +39,10 @@ export function Shipment({ OrderId, TrackingNumber, Refresh }: IShipment) {
       );
 
       setFalse();
-      Refresh();
+      mutate((old) => ({
+        ...old!,
+        TrackingNumber: track
+      }));
     }
   });
 

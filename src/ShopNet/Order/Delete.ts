@@ -16,7 +16,7 @@ export abstract class OrderDelete extends ShopNet {
   public static useDelete(options: Options<true, [number]>) {
     return useRequest(async orderId => {
       this.EnsureLogin();
-      const res = await this.Invoke<boolean>("OrderDeleteCancel", orderId);
+      const res = await this.Invoke<boolean>("OrderDeleteCancelled", orderId);
       this.EnsureTrue(res);
       return res;
     }, options);

@@ -4,8 +4,9 @@ import { useRequest } from "ahooks";
 import { ColFlex, Flex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
-import type { OrderEntity } from "~/ShopNet/Order/Entity";
 import type { IOrderComp } from ".";
+import { useRouter } from "../Router";
+import { useOrder } from "./useOrder";
 
 /**
  * @author Aloento
@@ -21,18 +22,22 @@ const useStyles = makeStyles({
   },
 });
 
-interface IOrderInfo extends IOrderComp {
-  Order?: OrderEntity.Order;
-}
-
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 1.0.0
+ * @version 1.1.0
  */
-export function OrderInfo({ OrderId, Order, Admin, ParentLog }: IOrderInfo) {
+export function OrderInfo({ OrderId, Admin, ParentLog }: IOrderComp) {
   const log = useConst(() => ParentLog.With("Info"));
   const style = useStyles();
+
+  const { Nav } = useRouter();
+  const { data: order } = useOrder(OrderId, Admin, {
+    onError(e) {
+      Nav(Admin ? "Admin/Order" : "History");
+      ParentLog.error(e);
+    }
+  });
 
   const { data: admin } = useRequest(() => AdminHub.User.Get.OrderUser(OrderId), {
     manual: !Admin,
@@ -61,13 +66,13 @@ export function OrderInfo({ OrderId, Order, Admin, ParentLog }: IOrderInfo) {
     <div className={style.flex}>
       <div className={style.box}>
         <Field label="Order Date" size="large">
-          <Label>{Order?.CreateAt.toLocaleDateString()}</Label>
+          <Label>{order?.CreateAt.toLocaleDateString()}</Label>
         </Field>
       </div>
 
       <div className={style.box}>
         <Field label="Status" size="large">
-          <Label>{Order?.Status}</Label>
+          <Label>{order?.Status}</Label>
         </Field>
       </div>
     </div>
@@ -83,7 +88,7 @@ export function OrderInfo({ OrderId, Order, Admin, ParentLog }: IOrderInfo) {
         !Admin &&
         <div className={style.box}>
           <Field label="Tracking Number" size="large">
-            <Label>{Order?.TrackingNumber}</Label>
+            <Label>{order?.TrackingNumber}</Label>
           </Field>
         </div>
       }

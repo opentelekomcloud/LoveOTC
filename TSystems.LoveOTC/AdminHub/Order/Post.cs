@@ -41,10 +41,10 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 1.2.0
+     * @version 1.3.0
      * </remarks>
      */
-    public async Task<bool> OrderPostClose(uint orderId, string reason) {
+    public async Task<string> OrderPostClose(uint orderId, string reason) {
         var valid = typeof(Comment)
             .GetProperty(nameof(Comment.Content))!
             .GetCustomAttribute<StringLengthAttribute>()!;
@@ -72,7 +72,9 @@ internal partial class AdminHub {
             Order = order,
         });
 
-        return await this.Db.SaveChangesAsync() > 0;
+        await this.Db.SaveChangesAsync();
+
+        return order.Status.ToString();
     }
 
     /**

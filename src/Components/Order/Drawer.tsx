@@ -1,21 +1,16 @@
 import { Body1Strong, Caption1, DataGridCell, DataGridHeaderCell, Link, TableColumnDefinition, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
-import { useConst } from "@fluentui/react-hooks";
 import { DelegateDataGrid } from "~/Components/DataGrid";
 import { OrderComment } from "~/Components/Order/Comment";
 import { OrderInfo } from "~/Components/Order/Info";
 import { ICartItem } from "~/Components/ShopCart";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { ColFlex } from "~/Helpers/Styles";
-import { useSWR } from "~/Helpers/useSWR";
 import { AdminOrderAction } from "~/Pages/Admin/Order/Action";
 import { AdminOrderList } from "~/Pages/Admin/Order/List";
 import { Shipment } from "~/Pages/Admin/Order/Ship";
 import { Hub } from "~/ShopNet";
-import { AdminHub } from "~/ShopNet/Admin";
-import { SignalR } from "~/ShopNet/SignalR";
 import { IOrderComp } from ".";
 import { OrderAction } from "../../Pages/History/Action";
-import { useRouter } from "../Router";
 
 /**
  * @author Aloento
@@ -25,7 +20,8 @@ import { useRouter } from "../Router";
 const useStyles = makeStyles({
   body: {
     ...ColFlex,
-    rowGap: tokens.spacingVerticalL
+    rowGap: tokens.spacingVerticalL,
+    paddingBottom: tokens.spacingVerticalXXL
   },
   prod: {
     ...ColFlex,
@@ -82,38 +78,22 @@ const columns: TableColumnDefinition<ICartItem>[] = [
 /**
  * @author Aloento
  * @since 1.3.5
- * @version 1.3.0
+ * @version 1.4.0
  */
 export function OrderDetailDrawer({ OrderId, Admin, ParentLog }: IOrderComp) {
   const style = useStyles();
-
-  const { Nav } = useRouter();
-  const index = useConst(() => SignalR.Index(OrderId, Hub.Order.Get.order));
-
-  const { data: order, run } = useSWR(
-    index,
-    () => (Admin ? AdminHub : Hub).Order.Get.Order(OrderId),
-    {
-      onError(e) {
-        Nav("History");
-        ParentLog.error(e);
-      },
-      useMemory: true
-    }
-  );
-
   const { data: cart } = Hub.Order.Get.useItems(OrderId, ParentLog, Admin);
 
   return (
     <div className={style.body}>
-      <OrderInfo OrderId={OrderId} Order={order} Admin={Admin} ParentLog={ParentLog} />
+      <OrderInfo OrderId={OrderId} Admin={Admin} ParentLog={ParentLog} />
 
       {
         Admin
           ?
           <>
             <AdminOrderList Items={cart} />
-            <Shipment OrderId={OrderId} TrackingNumber={order?.TrackingNumber} Refresh={run} />
+            <Shipment OrderId={OrderId} />
           </>
           :
           <DelegateDataGrid
@@ -127,9 +107,9 @@ export function OrderDetailDrawer({ OrderId, Admin, ParentLog }: IOrderComp) {
       {
         Admin
           ?
-          <AdminOrderAction OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={ParentLog} />
+          <AdminOrderAction OrderId={OrderId} />
           :
-          <OrderAction OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={ParentLog} />
+          <OrderAction OrderId={OrderId} />
       }
     </div>
   );

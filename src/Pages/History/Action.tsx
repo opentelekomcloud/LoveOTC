@@ -1,7 +1,7 @@
 import { Button, Field, Toast, ToastTitle, makeStyles } from "@fluentui/react-components";
-import { useConst } from "@fluentui/react-hooks";
-import { IOrderRef } from "~/Components/Order";
+import { useOrder } from "~/Components/Order/useOrder";
 import { useRouter } from "~/Components/Router";
+import { Logger } from "~/Helpers/Logger";
 import { ColFlex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
@@ -18,16 +18,18 @@ const useStyles = makeStyles({
   },
 });
 
+const log = new Logger("History", "Detail", "Action");
+
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.2.0
+ * @version 0.3.0
  */
-export function OrderAction({ OrderId, Status, Refresh, ParentLog }: IOrderRef & { Status?: string; }) {
-  const log = useConst(() => ParentLog.With("Action"));
-
+export function OrderAction({ OrderId }: { OrderId: number; }) {
   const style = useStyles();
   const { Reload } = useRouter();
+
+  const { data: order, mutate } = useOrder(OrderId);
   const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run: received } = Hub.Order.Post.useReceived({
@@ -47,7 +49,7 @@ export function OrderAction({ OrderId, Status, Refresh, ParentLog }: IOrderRef &
         { intent: "success" }
       );
 
-      Refresh();
+      mutate((old) => ({ ...old!, Status: "Finished" }));
     }
   });
 
@@ -72,7 +74,7 @@ export function OrderAction({ OrderId, Status, Refresh, ParentLog }: IOrderRef &
     }
   });
 
-  switch (Status) {
+  switch (order?.Status) {
     case "Pending":
     case "Processing":
     // case "Shipping":
@@ -86,14 +88,14 @@ export function OrderAction({ OrderId, Status, Refresh, ParentLog }: IOrderRef &
     <Field label="Action" size="large">
       <div className={style.body}>
         {
-          Status === "Cancelled" &&
+          order?.Status === "Cancelled" &&
           <Button appearance="subtle" onClick={() => remove(OrderId)}>
             Delete Order
           </Button>
         }
 
         {
-          Status === "Shipping" &&
+          order?.Status === "Shipping" &&
           <Button appearance="subtle" onClick={() => received(OrderId)}>
             I Received Order
           </Button>

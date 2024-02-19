@@ -47,14 +47,12 @@ export abstract class OrderPost extends ShopNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.2.0
+   * @version 0.3.0
    */
-  public static useCancel(options: Options<true, [number, string]>) {
-    return useRequest(async (orderId, reason) => {
+  public static useCancel(options: Options<string, [number, string]>) {
+    return useRequest((orderId, reason) => {
       this.EnsureLogin();
-      const res = await this.Invoke<boolean>("OrderPostCancel", orderId, reason);
-      this.EnsureTrue(res);
-      return res;
+      return this.Invoke("OrderPostCancel", orderId, reason);
     }, options);
   }
 

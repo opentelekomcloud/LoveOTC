@@ -105,11 +105,11 @@ internal partial class ShopHub {
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 1.2.0
+     * @version 1.3.0
      * </remarks>
      */
     [Authorize]
-    public async Task<bool> OrderPostCancel(uint orderId, string reason) {
+    public async Task<string> OrderPostCancel(uint orderId, string reason) {
         var valid = typeof(Comment)
             .GetProperty(nameof(Comment.Content))!
             .GetCustomAttribute<StringLengthAttribute>()!;
@@ -118,8 +118,8 @@ internal partial class ShopHub {
             throw new HubException(valid.FormatErrorMessage("Reason"));
 
         var order = await this.Db.Orders
-            .Where(x => x.UserId == this.UserId)
             .Where(x => x.OrderId == orderId)
+            .Where(x => x.UserId == this.UserId)
             .Where(x => x.Status != OrderStatus.Cancelled)
             .Where(x => x.Status != OrderStatus.Finished)
             .Include(x => x.OrderCombos)
@@ -139,7 +139,9 @@ internal partial class ShopHub {
             Order = order
         });
 
-        return await this.Db.SaveChangesAsync() > 0;
+        await this.Db.SaveChangesAsync();
+
+        return order.Status.ToString();
     }
 
     /**

@@ -32,8 +32,8 @@ internal partial class ShopHub {
     [Authorize]
     public async Task<dynamic> OrderGetItems(uint orderId) =>
         await this.Db.OrderCombos
-            .Where(x => x.Order.UserId == this.UserId)
             .Where(x => x.OrderId == orderId)
+            .Where(x => x.Order.UserId == this.UserId)
             .Select(x => new {
                 x.Quantity,
                 Types = x.Combo.Types.Select(t => t.TypeId).ToArray()
@@ -50,8 +50,8 @@ internal partial class ShopHub {
     [Authorize]
     public Task<uint[]> OrderGetCmts(uint orderId) =>
         this.Db.Comments
-            .Where(x => x.Order.UserId == this.UserId)
             .Where(x => x.OrderId == orderId)
+            .Where(x => x.Order.UserId == this.UserId)
             .Select(x => x.CommentId)
             .ToArrayAsync();
 }
