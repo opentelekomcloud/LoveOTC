@@ -82,7 +82,15 @@ const columns: TableColumnDefinition<IPhotoItem>[] = [
  * @version 1.0.0
  */
 export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
-  const { data: [list] } = Hub.Product.Get.usePhotoList(ProdId, log);
+  const { data } = Hub.Product.Get.usePhotoList(ProdId, log);
+  const list = data
+    ? data[0].map(x => ({
+      Id: x.PhotoId,
+      Cover: x.ObjectId,
+      Caption: x.Caption,
+      ProductId: x.ProductId
+    }))
+    : undefined;
 
   const { dispatch, dispatchToast } = useErrorToast(log);
 
@@ -137,14 +145,7 @@ export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
     </div>
 
     <DelegateDataGrid
-      Items={
-        list?.map(x => ({
-          Id: x.PhotoId,
-          Cover: x.ObjectId,
-          Caption: x.Caption,
-          ProductId: x.ProductId
-        }))
-      }
+      Items={list}
       Columns={columns}
     />
   </>

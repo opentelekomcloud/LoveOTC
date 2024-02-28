@@ -38,11 +38,11 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 0.1.0
+     * @version 1.0.0
      * </remarks>
      */
     public async Task<bool> ProductPostMovePhoto(uint photoId, bool up) {
-        var orders = await this.Db.Photos
+        var photos = await this.Db.Photos
             .Where(x => x.ProductId == this.Db.Photos
                 .Where(y => y.PhotoId == photoId)
                 .Select(z => z.ProductId)
@@ -50,25 +50,22 @@ internal partial class AdminHub {
             .OrderBy(x => x.Order)
             .ToListAsync();
 
-        var index = orders.FindIndex(x => x.PhotoId == photoId);
-        var current = orders[index].Order;
+        var index = photos.FindIndex(x => x.PhotoId == photoId);
+        var current = photos[index].Order;
 
         if (up) {
             if (current == 1)
                 throw new HubException("Photo already at top");
 
-            orders[index - 1].Order = current;
-            orders[index].Order = (byte)(current - 1);
+            photos[index - 1].Order = current;
+            photos[index].Order = (byte)(current - 1);
         } else {
-            if (current == orders.Last().Order)
+            if (current == photos.Last().Order)
                 throw new HubException("Photo already at bottom");
 
-            orders[index + 1].Order = current;
-            orders[index].Order = (byte)(current + 1);
+            photos[index + 1].Order = current;
+            photos[index].Order = (byte)(current + 1);
         }
-
-        for (byte i = 0; i < orders.Count; i++)
-            orders[i].Order = (byte)(i + 1);
 
         await this.Db.SaveChangesAsync();
         return true;

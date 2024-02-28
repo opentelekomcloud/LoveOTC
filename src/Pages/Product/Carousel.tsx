@@ -33,7 +33,8 @@ export function ProductCarousel({ Id }: { Id: number; }) {
   const style = useStyles();
   const [imgs, setImgs] = useState<[string, string?][]>([[img]]);
 
-  const { data: [list] } = Hub.Product.Get.usePhotoList(Id, log);
+  const { data } = Hub.Product.Get.usePhotoList(Id, log);
+  const list = data ? data[0] : undefined;
 
   useAsyncEffect(async () => {
     if (!list) return;

@@ -27,23 +27,23 @@
   <ItemGroup>
     <PackageReference Include="DocumentFormat.OpenXml" Version="3.0.1" />
     <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="8.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.1">
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="8.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="8.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.1">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="8.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="8.0.0" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.2" />
-    <PackageReference Include="Z.EntityFramework.Plus.EFCore" Version="8.101.2.1" />
+    <PackageReference Include="Z.EntityFramework.Plus.EFCore" Version="8.102.1.1" />
   </ItemGroup>
 
   <ItemGroup>

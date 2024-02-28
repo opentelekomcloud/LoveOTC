@@ -1,7 +1,5 @@
-import { useConst } from "@fluentui/react-hooks";
-import { useAsyncEffect } from "ahooks";
-import { useState } from "react";
 import type { Logger } from "~/Helpers/Logger";
+import { useSWR } from "~/Helpers/useSWR";
 import { IComboItem } from "~/Pages/Admin/Product/Combo";
 import type { IGallery } from "~/Pages/Gallery";
 import { ProductData } from "./Data";
@@ -115,13 +113,16 @@ export abstract class ProductGet extends ProductData {
    * @liveSafe
    * @deprecated Use {@link usePhotoList} if possible.
    */
-  public static async PhotoList(prodId: number, pLog: Logger) {
+  public static async PhotoList(prodId: number, pLog: Logger): Promise<[ProductData.Photo[], string]> {
     const log = pLog.With(...this.Log, "PhotoList");
-    const ids = await this.GetTimeCache<number[]>(prodId, this.photoList, (x) => x, prodId).catch(log.error);
-    return this.makePhotoList(prodId, ids || [], log);
-  }
 
-  private static async makePhotoList(prodId: number, ids: number[], log: Logger): Promise<[ProductData.Photo[], string]> {
+    const index = this.Index(prodId, this.photoList);
+    await this.getLocker(index);
+    this.reqPool.add(index);
+
+    const ids = await this.Invoke<number[]>(this.photoList, prodId)
+      .finally(() => this.reqPool.delete(index));
+
     let list = [];
     let cover = "";
 
@@ -140,7 +141,7 @@ export abstract class ProductGet extends ProductData {
     list = list.sort((a, b) => a.Order - b.Order);
 
     if (!cover && list.length > 0) {
-      log.warn(`Product ${prodId} has no cover photo, using first photo instead`);
+      log.debug(`Product ${prodId} has no cover photo, using first photo instead`);
       return [list, list[0].ObjectId];
     }
 
@@ -150,31 +151,18 @@ export abstract class ProductGet extends ProductData {
   /**
    * @author Aloento
    * @since 1.4.0
-   * @version 0.1.0
+   * @version 0.2.0
    */
   public static usePhotoList(prodId: number, pLog: Logger) {
-    const log = useConst(() => pLog.With(...this.Log, "PhotoList"));
-    const [list, setList] = useState<ProductData.Photo[]>();
-    const [cover, setCover] = useState<string>();
+    const req = useSWR(
+      this.Index(prodId, this.photoList),
+      (id) => this.PhotoList(id, pLog),
+      {
+        defaultParams: [prodId],
+        onError: pLog.error
+      }
+    );
 
-    const req = this.useTimeCache<number[]>(prodId, this.photoList, {
-      defaultParams: [prodId],
-      onError: log.error,
-    });
-
-    useAsyncEffect(async () => {
-      const ids = req.data;
-      if (!ids)
-        return;
-
-      const [list, cover] = await this.makePhotoList(prodId, ids, log);
-      setList(list);
-      setCover(cover);
-    }, [req.data]);
-
-    return {
-      ...req,
-      data: [list, cover] as const
-    }
+    return req;
   }
 }

@@ -120,14 +120,14 @@ export abstract class SignalR {
    * @since 1.3.5
    * @version 0.1.0
    */
-  private static readonly reqPool = new Set<string>();
+  protected static readonly reqPool = new Set<string>();
 
   /**
    * @author Aloento
    * @since 1.3.5
    * @version 0.1.0
    */
-  private static async getLocker(key: string) {
+  protected static async getLocker(key: string) {
     if (this.reqPool.has(key))
       return new Promise<void>(res => {
         const t = setTimeout(() => this.reqPool.delete(key), 10000);
