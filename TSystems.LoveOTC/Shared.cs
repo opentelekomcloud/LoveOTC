@@ -13,4 +13,6 @@ internal static class Shared {
 #else
     public const bool Dev = false;
 #endif
+
+    public const string App = nameof(LoveOTC);
 }

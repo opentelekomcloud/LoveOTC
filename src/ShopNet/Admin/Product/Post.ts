@@ -4,7 +4,6 @@ import { Options } from "ahooks/lib/useRequest/src/types";
 import { Subject } from "rxjs";
 import { Logger } from "~/Helpers/Logger";
 import { CurrentEditor } from "~/Lexical/Utils";
-import { ProductGet } from "~/ShopNet/Product/Get";
 import { AdminNet } from "../AdminNet";
 import { AdminProductGet } from "./Get";
 
@@ -62,10 +61,7 @@ export abstract class AdminProductPost extends AdminNet {
       const res = this.Invoke<number>("ProductPostPhoto", prodId, subject);
       await this.HandleFileStream(file, subject, log);
 
-      const id = await res;
-      ProductGet.PhotoListUpdate(prodId, x => [...x, id]);
-
-      return id;
+      return res;
     }, options);
   }
 

@@ -1,7 +1,6 @@
 import { useRequest } from "ahooks";
 import { Options } from "ahooks/lib/useRequest/src/types";
 import { ProductData } from "~/ShopNet/Product/Data";
-import { ProductGet } from "~/ShopNet/Product/Get";
 import { AdminNet } from "../AdminNet";
 import { AdminProductGet } from "./Get";
 
@@ -20,8 +19,6 @@ export abstract class AdminProductDelete extends AdminNet {
     return useRequest(async (prodId, photoId) => {
       const res = await this.Invoke<boolean>("ProductDeletePhoto", photoId);
       this.EnsureTrue(res);
-
-      ProductGet.PhotoListUpdate(prodId, x => x!.filter(x => x !== photoId));
       return res;
     }, options);
   }

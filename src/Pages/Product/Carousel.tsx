@@ -1,5 +1,5 @@
 import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
-import { useRequest } from "ahooks";
+import { useAsyncEffect } from "ahooks";
 import { useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -27,27 +27,28 @@ const log = new Logger("Product", "Carousel");
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.3.0
+ * @version 0.4.0
  */
 export function ProductCarousel({ Id }: { Id: number; }) {
   const style = useStyles();
   const [imgs, setImgs] = useState<[string, string?][]>([[img]]);
 
-  useRequest(() => Hub.Product.Get.PhotoList(Id, log), {
-    async onSuccess([list]) {
-      setImgs(Array<[string, string?]>(list.length).fill([img]));
+  const { data: [list] } = Hub.Product.Get.usePhotoList(Id, log);
 
-      for (let i = 0; i < list.length; i++)
-        Hub.Storage.GetBySlice(list[i].ObjectId, log).then(slice => {
-          setImgs(x => {
-            const n = [...x];
-            n[i] = [URL.createObjectURL(new Blob(slice)), list[i].Caption];
-            return n;
-          });
+  useAsyncEffect(async () => {
+    if (!list) return;
+
+    setImgs(Array<[string, string?]>(list.length).fill([img]));
+
+    for (let i = 0; i < list.length; i++)
+      Hub.Storage.GetBySlice(list[i].ObjectId, log).then(slice => {
+        setImgs(x => {
+          const n = [...x];
+          n[i] = [URL.createObjectURL(new Blob(slice)), list[i].Caption];
+          return n;
         });
-    },
-    onError: log.error
-  });
+      });
+  }, [list]);
 
   return (
     <Carousel showArrows>

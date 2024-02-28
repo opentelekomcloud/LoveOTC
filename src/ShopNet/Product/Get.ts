@@ -1,4 +1,6 @@
-import dayjs from "dayjs";
+import { useConst } from "@fluentui/react-hooks";
+import { useAsyncEffect } from "ahooks";
+import { useState } from "react";
 import type { Logger } from "~/Helpers/Logger";
 import { IComboItem } from "~/Pages/Admin/Product/Combo";
 import type { IGallery } from "~/Pages/Gallery";
@@ -109,17 +111,21 @@ export abstract class ProductGet extends ProductData {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 1.0.1
+   * @version 1.1.0
    * @liveSafe
+   * @deprecated Use {@link usePhotoList} if possible.
    */
-  public static async PhotoList(prodId: number, pLog: Logger): Promise<[ProductData.Photo[], string]> {
+  public static async PhotoList(prodId: number, pLog: Logger) {
     const log = pLog.With(...this.Log, "PhotoList");
+    const ids = await this.GetTimeCache<number[]>(prodId, this.photoList, (x) => x, prodId).catch(log.error);
+    return this.makePhotoList(prodId, ids || [], log);
+  }
 
-    const ids = await this.GetTimeCache<number[]>(prodId, this.photoList, (x) => x.add(1, "m"), prodId).catch(log.error);
+  private static async makePhotoList(prodId: number, ids: number[], log: Logger): Promise<[ProductData.Photo[], string]> {
     let list = [];
     let cover = "";
 
-    for (const photoId of ids || []) {
+    for (const photoId of ids) {
       const photo = await this.Photo(photoId).catch(log.error);
 
       if (photo) {
@@ -140,7 +146,35 @@ export abstract class ProductGet extends ProductData {
 
     return [list, cover];
   }
-  public static PhotoListUpdate(prodId: number, action: (list: number[]) => number[]) {
-    return this.UpdateCache(action, prodId, this.photoList, dayjs().add(1, "m"));
+
+  /**
+   * @author Aloento
+   * @since 1.4.0
+   * @version 0.1.0
+   */
+  public static usePhotoList(prodId: number, pLog: Logger) {
+    const log = useConst(() => pLog.With(...this.Log, "PhotoList"));
+    const [list, setList] = useState<ProductData.Photo[]>();
+    const [cover, setCover] = useState<string>();
+
+    const req = this.useTimeCache<number[]>(prodId, this.photoList, {
+      defaultParams: [prodId],
+      onError: log.error,
+    });
+
+    useAsyncEffect(async () => {
+      const ids = req.data;
+      if (!ids)
+        return;
+
+      const [list, cover] = await this.makePhotoList(prodId, ids, log);
+      setList(list);
+      setCover(cover);
+    }, [req.data]);
+
+    return {
+      ...req,
+      data: [list, cover] as const
+    }
   }
 }

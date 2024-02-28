@@ -60,7 +60,7 @@ internal partial class AdminHub {
         var cells = new List<Cell>(7) {
             new() {
                 DataType = CellValues.String,
-                CellValue = new(nameof(LoveOTC))
+                CellValue = new(Shared.App)
             }
         };
 

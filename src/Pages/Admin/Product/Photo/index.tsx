@@ -1,6 +1,5 @@
 import { Button, DataGridCell, DataGridHeaderCell, Subtitle1, TableColumnDefinition, Toast, ToastTitle, createTableColumn, makeStyles } from "@fluentui/react-components";
-import { AddRegular, ArrowDownRegular, ArrowUpRegular } from "@fluentui/react-icons";
-import { useLiveQuery } from "dexie-react-hooks";
+import { AddRegular } from "@fluentui/react-icons";
 import { DelegateDataGrid } from "~/Components/DataGrid";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { Logger } from "~/Helpers/Logger";
@@ -8,7 +7,7 @@ import { Flex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
-import { AdminProductPhotoEdit } from "./Edit";
+import { AdminProductPhotoAction } from "./Action";
 
 /**
  * @author Aloento
@@ -68,35 +67,9 @@ const columns: TableColumnDefinition<IPhotoItem>[] = [
       )
     },
     renderCell(item) {
-      const { dispatch } = useErrorToast(log);
-
-      const { run } = AdminHub.Product.Post.useMovePhoto({
-        manual: true,
-        onError(e, params) {
-          dispatch({
-            Message: "Failed Update Order",
-            Request: params,
-            Error: e
-          });
-        },
-        onSuccess: refreshCarousel
-      });
-
       return (
         <DataGridCell className={useStyles().f11}>
-          <Button
-            appearance="subtle"
-            icon={<ArrowUpRegular />}
-            onClick={() => run(item.Id, true)}
-          />
-
-          <Button
-            appearance="subtle"
-            icon={<ArrowDownRegular />}
-            onClick={() => run(item.Id, false)}
-          />
-
-          <AdminProductPhotoEdit {...item} />
+          <AdminProductPhotoAction {...item} ParentLog={log} />
         </DataGridCell>
       )
     },
@@ -104,28 +77,12 @@ const columns: TableColumnDefinition<IPhotoItem>[] = [
 ]
 
 /**
- * @deprecated
- */
-let refreshCarousel: () => void = () => { };
-
-/**
  * @author Aloento
  * @since 0.5.0
- * @version 0.5.0
+ * @version 1.0.0
  */
 export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
-  const list = useLiveQuery<IPhotoItem[]>(async () => {
-    const [raw] = await Hub.Product.Get.PhotoList(ProdId, log);
-
-    const map = raw.map(x => ({
-      Id: x.PhotoId,
-      Cover: x.ObjectId,
-      Caption: x.Caption,
-      ProductId: x.ProductId
-    }));
-
-    return map;
-  });
+  const { data: [list] } = Hub.Product.Get.usePhotoList(ProdId, log);
 
   const { dispatch, dispatchToast } = useErrorToast(log);
 
@@ -179,6 +136,16 @@ export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
       </Button>
     </div>
 
-    <DelegateDataGrid Items={list} Columns={columns} />
+    <DelegateDataGrid
+      Items={
+        list?.map(x => ({
+          Id: x.PhotoId,
+          Cover: x.ObjectId,
+          Caption: x.Caption,
+          ProductId: x.ProductId
+        }))
+      }
+      Columns={columns}
+    />
   </>
 }
