@@ -1,7 +1,4 @@
 namespace TSystems.LoveOTC.Helpers;
-
-using Entities;
-
 /**
  * <remarks>
  * @author Aloento
@@ -13,15 +10,6 @@ internal static class DataSeeder {
     public static async Task SeedData(IApplicationBuilder host) {
         await using var scope = host.ApplicationServices.CreateAsyncScope();
         await using var context = scope.ServiceProvider.GetRequiredService<ShopContext>();
-
-        var aloento = context.Users.Add(new() {
-            UserId = Guid.Parse("e2653b80-9be7-41d0-aff0-524ad0e66944"),
-            Name = "Aloento",
-            EMail = "me@example.com",
-            Phone = "+1 300000000",
-            Address = "T-Systems, Budapest, Hungary",
-            Admin = true
-        }).Entity;
 
         #region Photo
 
@@ -74,7 +62,7 @@ internal static class DataSeeder {
         }).Entity;
 
         var jacSComb = context.Combos.Add(new() {
-            Stock = 20,
+            Stock = 51,
             Product = jacketProd,
             Types = [jacSType]
         }).Entity;
@@ -85,7 +73,7 @@ internal static class DataSeeder {
         }).Entity;
 
         var jacMComb = context.Combos.Add(new() {
-            Stock = 100,
+            Stock = 120,
             Product = jacketProd,
             Types = [jacMType]
         }).Entity;
@@ -96,7 +84,7 @@ internal static class DataSeeder {
         }).Entity;
 
         var jacLComb = context.Combos.Add(new() {
-            Stock = 122,
+            Stock = 115,
             Product = jacketProd,
             Types = [jacLType]
         }).Entity;
@@ -107,7 +95,7 @@ internal static class DataSeeder {
         }).Entity;
 
         var jac1XLComb = context.Combos.Add(new() {
-            Stock = 110,
+            Stock = 52,
             Product = jacketProd,
             Types = [jac1XLType]
         }).Entity;
@@ -118,18 +106,40 @@ internal static class DataSeeder {
         }).Entity;
 
         var jac2XLComb = context.Combos.Add(new() {
-            Stock = 105,
+            Stock = 42,
             Product = jacketProd,
             Types = [jac2XLType]
         }).Entity;
 
         var jac3XLType = context.Types.Add(new() {
-            Name = "XXXL+",
+            Name = "3XL",
             Variant = jacSizeVar
         }).Entity;
 
         var jac3XLComb = context.Combos.Add(new() {
-            Stock = 43,
+            Stock = 9,
+            Product = jacketProd,
+            Types = [jac3XLType]
+        }).Entity;
+
+        var jac4XLType = context.Types.Add(new() {
+            Name = "4XL",
+            Variant = jacSizeVar
+        }).Entity;
+
+        var jac4XLComb = context.Combos.Add(new() {
+            Stock = 4,
+            Product = jacketProd,
+            Types = [jac3XLType]
+        }).Entity;
+
+        var jac5XLType = context.Types.Add(new() {
+            Name = "5XL",
+            Variant = jacSizeVar
+        }).Entity;
+
+        var jac5XLComb = context.Combos.Add(new() {
+            Stock = 1,
             Product = jacketProd,
             Types = [jac3XLType]
         }).Entity;
@@ -173,7 +183,7 @@ internal static class DataSeeder {
         }).Entity;
 
         var mShirtSComb = context.Combos.Add(new() {
-            Stock = 25,
+            Stock = 59,
             Product = mShirtProd,
             Types = [mShirtSType]
         }).Entity;
@@ -184,7 +194,7 @@ internal static class DataSeeder {
         }).Entity;
 
         var mShirtMComb = context.Combos.Add(new() {
-            Stock = 105,
+            Stock = 145,
             Product = mShirtProd,
             Types = [mShirtMType]
         }).Entity;
@@ -195,7 +205,7 @@ internal static class DataSeeder {
         }).Entity;
 
         var mShirtLComb = context.Combos.Add(new() {
-            Stock = 115,
+            Stock = 145,
             Product = mShirtProd,
             Types = [mShirtLType]
         }).Entity;
@@ -206,7 +216,7 @@ internal static class DataSeeder {
         }).Entity;
 
         var mShirt1XLComb = context.Combos.Add(new() {
-            Stock = 115,
+            Stock = 78,
             Product = mShirtProd,
             Types = [mShirt1XLType]
         }).Entity;
@@ -217,29 +227,40 @@ internal static class DataSeeder {
         }).Entity;
 
         var mShirt2XLComb = context.Combos.Add(new() {
-            Stock = 85,
+            Stock = 69,
             Product = mShirtProd,
             Types = [mShirt2XLType]
         }).Entity;
 
         var mShirt3XLType = context.Types.Add(new() {
-            Name = "XXXL",
+            Name = "3XL",
             Variant = mShirtSizeVar
         }).Entity;
 
         var mShirt3XLComb = context.Combos.Add(new() {
-            Stock = 27,
+            Stock = 25,
             Product = mShirtProd,
             Types = [mShirt3XLType]
         }).Entity;
 
         var mShirt4XLType = context.Types.Add(new() {
-            Name = "XXXXL+",
+            Name = "4XL",
             Variant = mShirtSizeVar
         }).Entity;
 
         var mShirt4XLComb = context.Combos.Add(new() {
-            Stock = 15,
+            Stock = 8,
+            Product = mShirtProd,
+            Types = [mShirt4XLType]
+        }).Entity;
+
+        var mShirt5XLType = context.Types.Add(new() {
+            Name = "5XL",
+            Variant = mShirtSizeVar
+        }).Entity;
+
+        var mShirt5XLComb = context.Combos.Add(new() {
+            Stock = 5,
             Product = mShirtProd,
             Types = [mShirt4XLType]
         }).Entity;
@@ -277,7 +298,7 @@ internal static class DataSeeder {
         }).Entity;
 
         var fShirtSComb = context.Combos.Add(new() {
-            Stock = 28,
+            Stock = 29,
             Product = fShirtProd,
             Types = [fShirtSType]
         }).Entity;
@@ -288,7 +309,7 @@ internal static class DataSeeder {
         }).Entity;
 
         var fShirtMComb = context.Combos.Add(new() {
-            Stock = 50,
+            Stock = 32,
             Product = fShirtProd,
             Types = [fShirtMType]
         }).Entity;
@@ -299,7 +320,7 @@ internal static class DataSeeder {
         }).Entity;
 
         var fShirtLComb = context.Combos.Add(new() {
-            Stock = 55,
+            Stock = 25,
             Product = fShirtProd,
             Types = [fShirtLType]
         }).Entity;
@@ -310,7 +331,7 @@ internal static class DataSeeder {
         }).Entity;
 
         var fShirt1XLComb = context.Combos.Add(new() {
-            Stock = 20,
+            Stock = 10,
             Product = fShirtProd,
             Types = [fShirt1XLType]
         }).Entity;
@@ -321,161 +342,23 @@ internal static class DataSeeder {
         }).Entity;
 
         var fShirt2XLComb = context.Combos.Add(new() {
-            Stock = 6,
+            Stock = 4,
             Product = fShirtProd,
             Types = [fShirt2XLType]
         }).Entity;
 
         var fShirt3XLType = context.Types.Add(new() {
-            Name = "XXXL",
+            Name = "3XL",
             Variant = fShirtSizeVar
         }).Entity;
 
         var fShirt3XLComb = context.Combos.Add(new() {
-            Stock = 4,
+            Stock = 2,
             Product = fShirtProd,
             Types = [fShirt3XLType]
         }).Entity;
 
         #endregion
-
-        #endregion
-
-        #region Order
-
-        context.Orders.Add(new() {
-            User = aloento,
-            Status = OrderStatus.Shipping,
-            CreateAt = DateTime.UtcNow,
-            TrackingNumber = Guid.NewGuid().ToString(),
-            OrderCombos = [
-                new() {
-                    Combo = jacSComb,
-                    Quantity = (byte)Random.Shared.Next(1, 3),
-                },
-                new() {
-                    Combo = jacMComb,
-                    Quantity = (byte)Random.Shared.Next(1, 3),
-                },
-                new() {
-                    Combo = jacLComb,
-                    Quantity = (byte)Random.Shared.Next(1, 3),
-                },
-                new() {
-                    Combo = jac1XLComb,
-                    Quantity = (byte)Random.Shared.Next(1, 3),
-                },
-                new() {
-                    Combo = jac2XLComb,
-                    Quantity = (byte)Random.Shared.Next(1, 3),
-                },
-                new() {
-                    Combo = jac3XLComb,
-                    Quantity = (byte)Random.Shared.Next(1, 3),
-                }
-            ],
-            Comments = [
-                new() {
-                    Content = "Jacket This is a comment no user",
-                    CreateAt = DateTime.UtcNow,
-                },
-                new() {
-                    Content = "Jacket This is a comment",
-                    User = aloento,
-                    CreateAt = DateTime.UtcNow,
-                }
-            ]
-        });
-
-        context.Orders.Add(new() {
-            User = aloento,
-            Status = OrderStatus.Pending,
-            CreateAt = DateTime.UtcNow,
-            OrderCombos = [
-                new() {
-                    Combo = mShirtSComb,
-                    Quantity = (byte)Random.Shared.Next(1, 3),
-                },
-                new() {
-                    Combo = mShirtMComb,
-                    Quantity = (byte)Random.Shared.Next(1, 3),
-                },
-                new() {
-                    Combo = mShirtLComb,
-                    Quantity = (byte)Random.Shared.Next(1, 3),
-                },
-                new() {
-                    Combo = mShirt1XLComb,
-                    Quantity = (byte)Random.Shared.Next(1, 3),
-                },
-                new() {
-                    Combo = mShirt2XLComb,
-                    Quantity = (byte)Random.Shared.Next(1, 3),
-                },
-                new() {
-                    Combo = mShirt3XLComb,
-                    Quantity = (byte)Random.Shared.Next(1, 3),
-                },
-                new() {
-                    Combo = mShirt4XLComb,
-                    Quantity = (byte)Random.Shared.Next(1, 3),
-                }
-            ],
-            Comments = [
-                new() {
-                    Content = "M Shirt This is a comment no user",
-                    CreateAt = DateTime.UtcNow,
-                },
-                new() {
-                    Content = "M Shirt This is a comment",
-                    User = aloento,
-                    CreateAt = DateTime.UtcNow,
-                }
-            ]
-        });
-
-        context.Orders.Add(new() {
-            User = aloento,
-            Status = OrderStatus.Processing,
-            CreateAt = DateTime.UtcNow,
-            OrderCombos = [
-                new() {
-                    Combo = fShirtSComb,
-                    Quantity = (byte)Random.Shared.Next(1, 3),
-                },
-                new() {
-                    Combo = fShirtMComb,
-                    Quantity = (byte)Random.Shared.Next(1, 3),
-                },
-                new() {
-                    Combo = fShirtLComb,
-                    Quantity = (byte)Random.Shared.Next(1, 3),
-                },
-                new() {
-                    Combo = fShirt1XLComb,
-                    Quantity = (byte)Random.Shared.Next(1, 3),
-                },
-                new() {
-                    Combo = fShirt2XLComb,
-                    Quantity = (byte)Random.Shared.Next(1, 3),
-                },
-                new() {
-                    Combo = fShirt3XLComb,
-                    Quantity = (byte)Random.Shared.Next(1, 3),
-                }
-            ],
-            Comments = [
-                new() {
-                    Content = "F Shirt This is a comment no user",
-                    CreateAt = DateTime.UtcNow,
-                },
-                new() {
-                    Content = "F Shirt This is a comment",
-                    User = aloento,
-                    CreateAt = DateTime.UtcNow,
-                }
-            ]
-        });
 
         #endregion
 
