@@ -55,7 +55,7 @@ const useStyles = makeStyles({
   },
   bg: {
     width: "fit-content",
-    backgroundColor: tokens.colorScrollbarOverlay
+    backgroundColor: "rgba(0, 0, 0, 0.65)"
   },
   btn: {
     width: "fit-content"
@@ -64,7 +64,7 @@ const useStyles = makeStyles({
 
 const useMaskStyle = makeResetStyles({
   background: "linear-gradient(to right, transparent, var(--colorScrollbarOverlay))"
-})
+});
 
 /**
  * @author Aloento

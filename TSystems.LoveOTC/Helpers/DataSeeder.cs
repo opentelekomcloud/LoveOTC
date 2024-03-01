@@ -101,7 +101,7 @@ internal static class DataSeeder {
         }).Entity;
 
         var jac2XLType = context.Types.Add(new() {
-            Name = "XXL",
+            Name = "2XL",
             Variant = jacSizeVar
         }).Entity;
 
@@ -130,7 +130,7 @@ internal static class DataSeeder {
         var jac4XLComb = context.Combos.Add(new() {
             Stock = 4,
             Product = jacketProd,
-            Types = [jac3XLType]
+            Types = [jac4XLType]
         }).Entity;
 
         var jac5XLType = context.Types.Add(new() {
@@ -141,7 +141,7 @@ internal static class DataSeeder {
         var jac5XLComb = context.Combos.Add(new() {
             Stock = 1,
             Product = jacketProd,
-            Types = [jac3XLType]
+            Types = [jac5XLType]
         }).Entity;
 
         #endregion
@@ -160,12 +160,10 @@ internal static class DataSeeder {
             Photos = [
                 new() {
                     Cover = true,
-                    Caption = "Male T-Shirts Front",
                     Order = 1,
                     Object = new() { Data = tMale1 }
                 },
                 new() {
-                    Caption = "Male T-Shirts Back",
                     Order = 2,
                     Object = new() { Data = tMale2 }
                 },
@@ -222,7 +220,7 @@ internal static class DataSeeder {
         }).Entity;
 
         var mShirt2XLType = context.Types.Add(new() {
-            Name = "XXL",
+            Name = "2XL",
             Variant = mShirtSizeVar
         }).Entity;
 
@@ -262,7 +260,7 @@ internal static class DataSeeder {
         var mShirt5XLComb = context.Combos.Add(new() {
             Stock = 5,
             Product = mShirtProd,
-            Types = [mShirt4XLType]
+            Types = [mShirt5XLType]
         }).Entity;
 
         #endregion
@@ -275,12 +273,10 @@ internal static class DataSeeder {
             Photos = [
                 new() {
                     Cover = true,
-                    Caption = "Female T-Shirts Front",
                     Order = 1,
                     Object = new() { Data = tFemale1 }
                 },
                 new() {
-                    Caption = "Female T-Shirts Back",
                     Order = 2,
                     Object = new() { Data = tFemale2 }
                 },
@@ -337,7 +333,7 @@ internal static class DataSeeder {
         }).Entity;
 
         var fShirt2XLType = context.Types.Add(new() {
-            Name = "XXL",
+            Name = "2XL",
             Variant = fShirtSizeVar
         }).Entity;
 
