@@ -51,12 +51,11 @@ const useStyles = makeStyles({
     "@media screen and (max-width: 600px)": {
       fontSize: tokens.fontSizeBase300,
       lineHeight: tokens.lineHeightBase300,
-    },
-    backgroundColor: tokens.colorBackgroundOverlay
+    }
   },
-  title: {
+  bg: {
     width: "fit-content",
-    backgroundColor: tokens.colorBackgroundOverlay
+    backgroundColor: tokens.colorScrollbarOverlay
   },
   btn: {
     width: "fit-content"
@@ -64,10 +63,7 @@ const useStyles = makeStyles({
 });
 
 const useMaskStyle = makeResetStyles({
-  background: "linear-gradient(to right, transparent, var(--colorScrollbarOverlay))",
-  "@media screen and (max-width: 1024px)": {
-    background: tokens.colorBackgroundOverlay
-  }
+  background: "linear-gradient(to right, transparent, var(--colorScrollbarOverlay))"
 })
 
 /**
@@ -101,7 +97,7 @@ export function Banner() {
         <div className={style.space} />
 
         <div className={style.txt}>
-          <div className={style.title}>
+          <div className={style.bg}>
             <LargeTitle className={style.white}>
               Play&nbsp;
             </LargeTitle>
@@ -121,7 +117,7 @@ export function Banner() {
             </LargeTitle>
           </div>
 
-          <Text size={500} truncate className={style.white}>
+          <Text size={500} truncate className={mergeClasses(style.bg, style.white)}>
             We offer an exclusive chance for OTC tribe members to get up to three fashion items until February 29, 2024.
             Members can log in using their OTC-LDAP account, update their delivery address in the "Settings," and shop for their preferred styles.
             After selecting items and sizes, confirm and submit their order and address.
@@ -131,7 +127,7 @@ export function Banner() {
           <Dialog modalType="non-modal">
             <DialogTrigger disableButtonEnhancement>
               <div className={style.btn}>
-                <Button appearance="outline" size="large" className={style.white}>
+                <Button appearance="outline" size="large" className={mergeClasses(style.bg, style.white)}>
                   Learn More
                 </Button>
               </div>
