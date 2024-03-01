@@ -51,7 +51,15 @@ const useStyles = makeStyles({
     "@media screen and (max-width: 600px)": {
       fontSize: tokens.fontSizeBase300,
       lineHeight: tokens.lineHeightBase300,
-    }
+    },
+    backgroundColor: tokens.colorBackgroundOverlay
+  },
+  title: {
+    width: "fit-content",
+    backgroundColor: tokens.colorBackgroundOverlay
+  },
+  btn: {
+    width: "fit-content"
   }
 });
 
@@ -93,7 +101,7 @@ export function Banner() {
         <div className={style.space} />
 
         <div className={style.txt}>
-          <div>
+          <div className={style.title}>
             <LargeTitle className={style.white}>
               Play&nbsp;
             </LargeTitle>
@@ -122,7 +130,7 @@ export function Banner() {
 
           <Dialog modalType="non-modal">
             <DialogTrigger disableButtonEnhancement>
-              <div>
+              <div className={style.btn}>
                 <Button appearance="outline" size="large" className={style.white}>
                   Learn More
                 </Button>
