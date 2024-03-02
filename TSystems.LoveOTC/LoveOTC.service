@@ -3,7 +3,11 @@ Description=LoveOTC
 
 [Service]
 Type=notify
-ExecStart=/home/aloento/LoveOTC/TSystems.LoveOTC
+ExecStart=/home/ubuntu/LoveOTC/TSystems.LoveOTC
+User=root
+WorkingDirectory=/home/ubuntu/LoveOTC
+Restart=always
+SyslogIdentifier=LoveOTC
 
 [Install]
 WantedBy=multi-user.target

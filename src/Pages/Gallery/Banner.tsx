@@ -52,15 +52,19 @@ const useStyles = makeStyles({
       fontSize: tokens.fontSizeBase300,
       lineHeight: tokens.lineHeightBase300,
     }
+  },
+  bg: {
+    width: "fit-content",
+    backgroundColor: "rgba(0, 0, 0, 0.65)"
+  },
+  btn: {
+    width: "fit-content"
   }
 });
 
 const useMaskStyle = makeResetStyles({
-  background: "linear-gradient(to right, transparent, var(--colorScrollbarOverlay))",
-  "@media screen and (max-width: 1024px)": {
-    background: tokens.colorBackgroundOverlay
-  }
-})
+  background: "linear-gradient(to right, transparent, var(--colorScrollbarOverlay))"
+});
 
 /**
  * @author Aloento
@@ -93,7 +97,7 @@ export function Banner() {
         <div className={style.space} />
 
         <div className={style.txt}>
-          <div>
+          <div className={style.bg}>
             <LargeTitle className={style.white}>
               Play&nbsp;
             </LargeTitle>
@@ -113,7 +117,7 @@ export function Banner() {
             </LargeTitle>
           </div>
 
-          <Text size={500} truncate className={style.white}>
+          <Text size={500} truncate className={mergeClasses(style.bg, style.white)}>
             We offer an exclusive chance for OTC tribe members to get up to three fashion items until February 29, 2024.
             Members can log in using their OTC-LDAP account, update their delivery address in the "Settings," and shop for their preferred styles.
             After selecting items and sizes, confirm and submit their order and address.
@@ -122,8 +126,8 @@ export function Banner() {
 
           <Dialog modalType="non-modal">
             <DialogTrigger disableButtonEnhancement>
-              <div>
-                <Button appearance="outline" size="large" className={style.white}>
+              <div className={style.btn}>
+                <Button appearance="outline" size="large" className={mergeClasses(style.bg, style.white)}>
                   Learn More
                 </Button>
               </div>
@@ -138,7 +142,6 @@ export function Banner() {
                     Open Telekom Cloud is envisioned, run, and nurtured by a unique and dynamic team of experts committed to sovereignty and open-source innovation:
                     The OTC tribe! To showcase your connection and #werkstolz,
                     we're thrilled to offer our tribe members an exclusive chance to snag up to three fashion items as a token of appreciation.
-                    Hurry, this offer is only open until February 29, 2024!
                     <br /><br />
                     To start shopping, simply log in with your OTC-LDAP account in the top right corner.
                     Don't forget to update your delivery address for a seamless experience – just click on your profile avatar and head to "Settings."
