@@ -24,16 +24,16 @@ const log = new Logger("Admin", "Product", "Detail", "Variant", "New");
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.2
+ * @version 0.2.0
  */
-export function AdminProductNewVariant({ ProdId, Refresh }: { ProdId: number; Refresh: () => void }) {
+export function AdminProductNewVariant({ ProdId }: { ProdId: number; }) {
   const style = useStyles();
   const [open, { toggle }] = useBoolean();
   const [name, setName] = useState("");
 
   const { dispatch, dispatchToast } = useErrorToast(log);
 
-  const { run } = AdminHub.Product.Post.useVariant({
+  const { run, loading } = AdminHub.Product.Post.useVariant(ProdId, {
     onError(e, params) {
       dispatch({
         Message: "Failed Create Variant",
@@ -49,7 +49,6 @@ export function AdminProductNewVariant({ ProdId, Refresh }: { ProdId: number; Re
         { intent: "success" }
       );
 
-      Refresh();
       setName("");
       toggle();
     }
@@ -68,7 +67,10 @@ export function AdminProductNewVariant({ ProdId, Refresh }: { ProdId: number; Re
           <Input value={name} onChange={(_, e) => setName(e.value)} />
         </Field>
 
-        <Button onClick={() => run(ProdId, name)}>
+        <Button
+          disabled={loading}
+          onClick={() => run(name)}
+        >
           Add
         </Button>
       </PopoverSurface>

@@ -9,12 +9,12 @@ const log = new Logger("Admin", "Product", "Detail", "Variant", "Edit", "TypeDel
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.1
+ * @version 0.2.0
  */
-export function AdminProductTypeDelete({ VariantId, Type, Refresh }: { VariantId: number; Type: string; Refresh: () => void }) {
+export function AdminProductTypeDelete({ TypeId }: { TypeId: number; }) {
   const { dispatch, dispatchToast } = useErrorToast(log);
 
-  const { run } = AdminHub.Product.Delete.useType({
+  const { run } = AdminHub.Product.Delete.useType(TypeId, {
     onError(e, req) {
       dispatch({
         Message: "Failed Delete Type",
@@ -29,8 +29,6 @@ export function AdminProductTypeDelete({ VariantId, Type, Refresh }: { VariantId
         </Toast>,
         { intent: "success" }
       );
-
-      Refresh();
     }
   });
 
@@ -38,7 +36,7 @@ export function AdminProductTypeDelete({ VariantId, Type, Refresh }: { VariantId
     <Button
       appearance="subtle"
       icon={<DeleteRegular />}
-      onClick={() => run(VariantId, Type)}
+      onClick={() => run()}
     />
   )
 }

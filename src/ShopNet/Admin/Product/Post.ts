@@ -101,11 +101,17 @@ export abstract class AdminProductPost extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.2.0
+   * @version 0.3.0
    */
-  public static useVariant(options: Options<number, [number, string]>) {
+  public static useVariant(prodId: number, options: Options<number, [string]>) {
+    const { mutate } = AdminProductGet.useVariants(prodId);
+
     return useRequest(
-      (prodId, name) => this.Invoke("ProductPostVariant", prodId, name),
+      async (name) => {
+        const res = await this.Invoke<number>("ProductPostVariant", prodId, name);
+        mutate(x => [res, ...x || []]);
+        return res;
+      },
       {
         ...options,
         manual: true
@@ -115,11 +121,17 @@ export abstract class AdminProductPost extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.2.0
+   * @version 0.3.0
    */
-  public static useType(options: Options<number, [number, string]>) {
+  public static useType(variantId: number, options: Options<number, [string]>) {
+    const { mutate } = AdminProductGet.useTypes(variantId);
+
     return useRequest(
-      (variantId, name) => this.Invoke("ProductPostType", variantId, name),
+      async (name) => {
+        const res = await this.Invoke<number>("ProductPostType", variantId, name);
+        mutate(x => [res, ...x || []]);
+        return res;
+      },
       {
         ...options,
         manual: true

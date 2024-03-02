@@ -6,13 +6,23 @@ using Microsoft.AspNetCore.SignalR;
  * <remarks>
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.2.0
  * </remarks>
  */
 internal static partial class LoggerExtension {
     [LoggerMessage(
         EventId = 1001,
         Level = LogLevel.Debug,
+        Message = "Guest : Visit from [{ip}]"
+    )]
+    private static partial void guestVisit(ILogger logger, string? ip);
+
+    public static void GuestVisit(this ILogger logger, HubCallerContext ctx) =>
+        guestVisit(logger, ctx.GetHttpContext()?.Connection.RemoteIpAddress?.ToString());
+
+    [LoggerMessage(
+        EventId = 2001,
+        Level = LogLevel.Information,
         Message = "User {name} : [{uid}] Logged from [{ip}]"
     )]
     private static partial void userLogin(ILogger logger, string? name, string? uid, string? ip);

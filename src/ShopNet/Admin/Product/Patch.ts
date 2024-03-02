@@ -114,12 +114,20 @@ export abstract class AdminProductPatch extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.2.0
+   * @version 0.3.0
    */
-  public static useVariantName(options: Options<true, [number, string]>) {
-    return useRequest(async (variantId, name) => {
+  public static useVariantName(variantId: number, options: Options<true, [string]>) {
+    const { mutate } = ProductData.useVariant(variantId);
+
+    return useRequest(async (name) => {
       const res = await this.Invoke<boolean>("ProductPatchVariantName", variantId, name);
       this.EnsureTrue(res);
+
+      mutate((raw) => {
+        raw!.Name = name;
+        return raw;
+      });
+
       return res;
     }, {
       ...options,
@@ -130,12 +138,20 @@ export abstract class AdminProductPatch extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.2.0
+   * @version 0.3.0
    */
-  public static useType(options: Options<true, [number, string, string]>) {
-    return useRequest(async (variantId, oldName, newName) => {
-      const res = await this.Invoke<boolean>("ProductPatchType", variantId, oldName, newName);
+  public static useType(typeId: number, options: Options<true, [string]>) {
+    const { mutate } = ProductData.useType(typeId);
+
+    return useRequest(async (newName) => {
+      const res = await this.Invoke<boolean>("ProductPatchType", typeId, newName);
       this.EnsureTrue(res);
+
+      mutate((raw) => {
+        raw!.Name = newName;
+        return raw;
+      });
+
       return res;
     }, {
       ...options,

@@ -94,12 +94,14 @@ export abstract class ProductData extends ShopNet {
       {
         ...options,
         defaultParams: [key],
+        useMemory: true
       }
     );
 
     return req;
   }
 
+  public static readonly type = "TypeEntity";
   /**
    * @author Aloento
    * @since 1.0.0
@@ -112,12 +114,55 @@ export abstract class ProductData extends ShopNet {
 
   /**
    * @author Aloento
+   * @since 1.4.5
+   * @version 0.1.0
+   */
+  public static useType(key: number, options?: Options<ProductData.Type, [number]>) {
+    const index = useConst(() => this.Index(key, this.type));
+
+    const req = useSWR(
+      index,
+      (id) => this.Type(id),
+      {
+        ...options,
+        defaultParams: [key],
+        useMemory: true
+      }
+    );
+
+    return req;
+  }
+
+  public static readonly variant = "VariantEntity";
+  /**
+   * @author Aloento
    * @since 1.0.0
    * @version 0.1.0
    * @liveSafe
    */
   public static Variant(key: number): Promise<ProductData.Variant> {
     return this.GetVersionCache(key, "VariantEntity");
+  }
+
+  /**
+   * @author Aloento
+   * @since 1.4.5
+   * @version 0.1.0
+   */
+  public static useVariant(key: number, options?: Options<ProductData.Variant, [number]>) {
+    const index = useConst(() => this.Index(key, this.variant));
+
+    const req = useSWR(
+      index,
+      (id) => this.Variant(id),
+      {
+        ...options,
+        defaultParams: [key],
+        useMemory: true
+      }
+    );
+
+    return req;
   }
 
   /**

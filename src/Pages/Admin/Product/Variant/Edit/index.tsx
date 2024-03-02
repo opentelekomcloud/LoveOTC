@@ -2,21 +2,15 @@ import { Button, DataGridCell, DataGridHeaderCell, Dialog, DialogActions, Dialog
 import { DismissRegular, EditRegular } from "@fluentui/react-icons";
 import { DelegateDataGrid } from "~/Components/DataGrid";
 import { ColFlex } from "~/Helpers/Styles";
-import { IVariantItem } from "..";
+import { Hub } from "~/ShopNet";
+import { AdminHub } from "~/ShopNet/Admin";
 import { AdminProductTypeDelete } from "./Delete";
 import { AdminProductVariantName } from "./Name";
 import { AdminProductType } from "./Type";
 
-/**
- * @author Aloento
- * @since 0.5.0
- * @version 0.1.0
- */
 interface ITypeItem {
   Id: number;
-  Name: string;
   VariantId: number;
-  Refresh: () => void;
 }
 
 /**
@@ -38,19 +32,20 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 const columns: TableColumnDefinition<ITypeItem>[] = [
-  createTableColumn<ITypeItem>({
+  createTableColumn({
     columnId: "Name",
     renderHeaderCell: () => {
       return <DataGridHeaderCell>Name</DataGridHeaderCell>
     },
-    renderCell(item) {
-      return <DataGridCell>{item.Name}</DataGridCell>
+    renderCell({ Id }) {
+      const { data } = Hub.Product.Get.useType(Id)
+      return <DataGridCell>{data?.Name}</DataGridCell>
     }
   }),
-  createTableColumn<ITypeItem>({
+  createTableColumn({
     columnId: "Action",
     renderHeaderCell: () => {
       return (
@@ -59,12 +54,12 @@ const columns: TableColumnDefinition<ITypeItem>[] = [
         </DataGridHeaderCell>
       )
     },
-    renderCell(item) {
+    renderCell({ Id, VariantId }) {
       return (
         <DataGridCell className={useStyles().twelve}>
-          <AdminProductType VariantId={item.VariantId} Type={item.Name} Refresh={item.Refresh} />
+          <AdminProductType VariantId={VariantId} TypeId={Id} />
 
-          <AdminProductTypeDelete VariantId={item.VariantId} Type={item.Name} Refresh={item.Refresh} />
+          <AdminProductTypeDelete TypeId={Id} />
         </DataGridCell>
       )
     }
@@ -74,9 +69,11 @@ const columns: TableColumnDefinition<ITypeItem>[] = [
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
+ * @version 0.3.0
  */
-export function AdminProductVariantEdit({ Variant, Refresh }: { Variant: IVariantItem; Refresh: () => void }) {
+export function AdminProductVariantEdit({ VariantId }: { VariantId: number; }) {
+  const { data } = AdminHub.Product.Get.useTypes(VariantId);
+
   return (
     <Dialog>
       <DialogTrigger disableButtonEnhancement>
@@ -97,16 +94,16 @@ export function AdminProductVariantEdit({ Variant, Refresh }: { Variant: IVarian
           </DialogTitle>
 
           <DialogContent className={useStyles().body}>
-            <AdminProductVariantName Id={Variant.Id} Name={Variant.Name} />
+            <AdminProductVariantName VariantId={VariantId} />
 
             <DelegateDataGrid
-              Items={Variant.Types.map<ITypeItem>((v, i) => ({ Id: i, Name: v, VariantId: Variant.Id, Refresh }))}
+              Items={data?.map(x => ({ Id: x, VariantId }))}
               Columns={columns}
             />
           </DialogContent>
 
           <DialogActions>
-            <AdminProductType VariantId={Variant.Id} Refresh={Refresh} New />
+            <AdminProductType VariantId={VariantId} New />
           </DialogActions>
         </DialogBody>
       </DialogSurface>

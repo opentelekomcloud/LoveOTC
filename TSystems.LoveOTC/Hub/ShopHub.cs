@@ -18,7 +18,7 @@ internal partial class ShopHub(ShopContext db, ILogger<ShopHub> logger) : CraftH
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 0.1.0
+     * @version 0.1.1
      * </remarks>
      */
     public override async Task OnConnectedAsync() {
@@ -34,7 +34,8 @@ internal partial class ShopHub(ShopContext db, ILogger<ShopHub> logger) : CraftH
                 await this.Clients.Caller.OnNewUser();
                 this.Context.Items.TryAdd("NewUser", true);
             }
-        }
+        } else
+            this.Logger.GuestVisit(this.Context);
     }
 
     /**

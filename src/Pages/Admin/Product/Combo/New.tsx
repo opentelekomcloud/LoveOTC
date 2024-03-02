@@ -1,20 +1,31 @@
 import { Button, Combobox, DataGridCell, DataGridHeaderCell, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Label, Option, SpinButton, TableColumnDefinition, Toast, ToastTitle, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
 import { AddRegular, DismissRegular } from "@fluentui/react-icons";
-import { useBoolean, useRequest } from "ahooks";
+import { useAsyncEffect, useBoolean } from "ahooks";
 import { useState } from "react";
 import { DelegateDataGrid } from "~/Components/DataGrid";
 import { Logger } from "~/Helpers/Logger";
 import { Flex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
+import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
-import { IVariantItem } from "../Variant";
 
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.1.0
  */
-interface INewComboItem extends IVariantItem {
+export interface IVariantItem {
+  Id: number;
+  Name: string;
+  Types: string[];
+}
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.1.0
+ */
+export interface IUpdateComboItem extends IVariantItem {
   Update: (type: string) => void;
 }
 
@@ -23,8 +34,8 @@ interface INewComboItem extends IVariantItem {
  * @since 0.5.0
  * @version 0.1.0
  */
-const columns: TableColumnDefinition<INewComboItem>[] = [
-  createTableColumn<INewComboItem>({
+const columns: TableColumnDefinition<IUpdateComboItem>[] = [
+  createTableColumn({
     columnId: "Variant",
     renderHeaderCell: () => {
       return <DataGridHeaderCell>Variant</DataGridHeaderCell>
@@ -33,7 +44,7 @@ const columns: TableColumnDefinition<INewComboItem>[] = [
       return <DataGridCell>{item.Name}</DataGridCell>
     }
   }),
-  createTableColumn<INewComboItem>({
+  createTableColumn({
     columnId: "Type",
     renderHeaderCell: () => {
       return <DataGridHeaderCell>Type</DataGridHeaderCell>
@@ -72,26 +83,52 @@ const log = new Logger("Admin", "Product", "Detail", "Combo", "NewCombo");
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.3
+ * @version 1.0.0
  */
 export function AdminProductNewCombo({ ProdId, Refresh }: { ProdId: number; Refresh: () => void }) {
   const [open, { toggle }] = useBoolean();
+
+  const [varis, setVaris] = useState<IVariantItem[]>([]);
   const [combo, setCombo] = useState<Record<string, string>>({});
   const [stock, setStock] = useState(1);
 
-  const { data: varis } = useRequest(() => AdminHub.Product.Get.Variants(ProdId, log), {
-    onSuccess(data) {
-      for (const i of data)
-        combo[i.Name] = "";
-
-      setCombo({ ...combo });
-    },
+  const { data: varIds } = AdminHub.Product.Get.useVariants(ProdId, {
     onError: log.error
   });
 
+  useAsyncEffect(async () => {
+    if (!varIds)
+      return;
+
+    const varis: IVariantItem[] = [];
+
+    for (const i of varIds) {
+      const typeIds = await AdminHub.Product.Get.Types(i);
+      const types = [];
+
+      for (const typeId of typeIds) {
+        const type = await Hub.Product.Get.Type(typeId);
+        types.push(type);
+      }
+
+      const { Name } = await Hub.Product.Get.Variant(i);
+
+      varis.push({
+        Id: i,
+        Name: Name,
+        Types: types.map(x => x.Name)
+      });
+
+      combo[Name] = "";
+    }
+
+    setVaris(varis);
+    setCombo({ ...combo });
+  }, [varIds]);
+
   const { dispatch, dispatchToast } = useErrorToast(log);
 
-  const { run } = AdminHub.Product.Post.useCombo({
+  const { run, loading } = AdminHub.Product.Post.useCombo({
     onError(e, req) {
       dispatch({
         Message: "Failed Create Combo",
@@ -154,7 +191,13 @@ export function AdminProductNewCombo({ ProdId, Refresh }: { ProdId: number; Refr
                 setStock(val);
               }} />
 
-              <Button appearance="primary" onClick={() => run(ProdId, combo, stock)}>Create</Button>
+              <Button
+                disabled={loading}
+                appearance="primary"
+                onClick={() => run(ProdId, combo, stock)}
+              >
+                Create
+              </Button>
             </div>
           </DialogContent>
         </DialogBody>

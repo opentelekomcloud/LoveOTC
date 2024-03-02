@@ -110,7 +110,7 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 0.1.0
+     * @version 0.1.1
      * </remarks>
      */
     public async Task<uint> ProductPostVariant(uint prodId, string name) {
@@ -138,14 +138,14 @@ internal partial class AdminHub {
         });
 
         await this.Db.SaveChangesAsync();
-        return temp.Entity.ProductId;
+        return temp.Entity.VariantId;
     }
 
     /**
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 0.1.0
+     * @version 0.1.1
      * </remarks>
      */
     public async Task<uint> ProductPostType(uint variantId, string name) {
@@ -173,7 +173,7 @@ internal partial class AdminHub {
         });
 
         await this.Db.SaveChangesAsync();
-        return temp.Entity.VariantId;
+        return temp.Entity.TypeId;
     }
 
     /**

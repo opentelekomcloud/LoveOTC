@@ -106,13 +106,13 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.2.0
+     * @version 0.3.0
      * </remarks>
      */
-    public async Task<bool> ProductDeleteType(uint variantId, string reqType) {
+    public async Task<bool> ProductDeleteType(uint typeId) {
         await this.deleteType(
             await this.Db.Types
-                .Where(x => x.VariantId == variantId && x.Name == reqType)
+                .Where(x => x.TypeId == typeId)
                 .IncludeOptimized(x => x.Combos)
                 .SingleAsync()
         );

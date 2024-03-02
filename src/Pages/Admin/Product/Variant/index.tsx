@@ -1,23 +1,12 @@
 import { DataGridCell, DataGridHeaderCell, Subtitle1, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
-import { useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid";
 import { Logger } from "~/Helpers/Logger";
 import { Flex } from "~/Helpers/Styles";
+import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
 import { AdminProductVariantDelete } from "./Delete";
 import { AdminProductVariantEdit } from "./Edit";
 import { AdminProductNewVariant } from "./New";
-
-/**
- * @author Aloento
- * @since 0.5.0
- * @version 0.1.0
- */
-export interface IVariantItem {
-  Id: number;
-  Name: string;
-  Types: string[];
-}
 
 /**
  * @author Aloento
@@ -48,10 +37,10 @@ const log = new Logger("Admin", "Product", "Detail", "Variant");
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
+ * @version 0.3.0
  */
-const columns: TableColumnDefinition<IVariantItem>[] = [
-  createTableColumn<IVariantItem>({
+const columns: TableColumnDefinition<number>[] = [
+  createTableColumn({
     columnId: "Id",
     renderHeaderCell: () => {
       return (
@@ -63,12 +52,12 @@ const columns: TableColumnDefinition<IVariantItem>[] = [
     renderCell(item) {
       return (
         <DataGridCell className={useStyles().four}>
-          {item.Id}
+          {item}
         </DataGridCell>
       )
     }
   }),
-  createTableColumn<IVariantItem>({
+  createTableColumn({
     columnId: "Name",
     renderHeaderCell: () => {
       return (
@@ -78,31 +67,39 @@ const columns: TableColumnDefinition<IVariantItem>[] = [
       )
     },
     renderCell(item) {
+      const { data } = Hub.Product.Get.useVariant(item, {
+        onError: log.error
+      });
+
       return (
         <DataGridCell className={useStyles().twelve}>
-          {item.Name}
+          {data?.Name}
         </DataGridCell>
       )
     }
   }),
-  createTableColumn<IVariantItem>({
+  createTableColumn({
     columnId: "Type",
     renderHeaderCell: () => {
       return <DataGridHeaderCell>Type</DataGridHeaderCell>
     },
     renderCell(item) {
+      const { data } = AdminHub.Product.Get.useTypeList(item, {
+        onError: log.error
+      });
+
       return (
         <DataGridCell>
           {
-            item.Types.reduce((prev, curr) => {
-              return `${prev} ${curr} ;`
+            data?.reduce((prev, { Name }) => {
+              return `${prev} ${Name} ;`
             }, "")
           }
         </DataGridCell>
       )
     }
   }),
-  createTableColumn<IVariantItem>({
+  createTableColumn({
     columnId: "Action",
     renderHeaderCell: () => {
       return (
@@ -114,9 +111,9 @@ const columns: TableColumnDefinition<IVariantItem>[] = [
     renderCell(item) {
       return (
         <DataGridCell className={useStyles().seven}>
-          <AdminProductVariantEdit Variant={item} Refresh={refreshVariant} />
+          <AdminProductVariantEdit VariantId={item} />
 
-          <AdminProductVariantDelete VariantId={item.Id} Refresh={refreshVariant} />
+          <AdminProductVariantDelete VariantId={item} />
         </DataGridCell>
       )
     }
@@ -126,29 +123,21 @@ const columns: TableColumnDefinition<IVariantItem>[] = [
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
- */
-let refreshVariant: () => void;
-
-/**
- * @author Aloento
- * @since 0.5.0
- * @version 0.2.1
+ * @version 0.3.0
  */
 export function AdminProductVariant({ ProdId }: { ProdId: number }) {
   const style = useStyles();
 
-  const { data, run } = useRequest(() => AdminHub.Product.Get.Variants(ProdId, log), {
+  const { data } = AdminHub.Product.Get.useVariants(ProdId, {
     onError: log.error
   });
-  refreshVariant = run;
 
   return <>
     <div className={style.body}>
       <Subtitle1>Variant</Subtitle1>
-      <AdminProductNewVariant ProdId={ProdId} Refresh={run} />
+      <AdminProductNewVariant ProdId={ProdId} />
     </div>
 
-    <DelegateDataGrid Items={data} Columns={columns} />
+    <DelegateDataGrid Items={data} Columns={columns} getRowId={x => x} />
   </>
 }

@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Logger } from "~/Helpers/Logger";
 import { ColFlex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
+import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
 
 /**
@@ -25,24 +26,31 @@ const log = new Logger("Admin", "Product", "Detail", "Variant", "Edit", "Type");
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 interface IAdminProductType {
   VariantId: number;
-  Type?: string;
-  Refresh: () => void;
+  TypeId?: number;
   New?: true;
 }
 
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.1
+ * @version 0.3.0
  */
-export function AdminProductType({ VariantId, Type, Refresh, New }: IAdminProductType) {
+export function AdminProductType({ VariantId, TypeId, New }: IAdminProductType) {
   const style = useStyles();
   const [open, { toggle }] = useBoolean();
-  const [name, setName] = useState(Type || "");
+
+  const [name, setName] = useState("");
+  Hub.Product.Get.useType(TypeId!, {
+    manual: New,
+    onSuccess(data) {
+      setName(data.Name);
+    },
+    onError: log.error
+  });
 
   const { dispatch, dispatchToast } = useErrorToast(log);
 
@@ -64,15 +72,14 @@ export function AdminProductType({ VariantId, Type, Refresh, New }: IAdminProduc
         { intent: "success" }
       );
 
-      Refresh();
       setName("");
       toggle();
     }
   }
 
-  const { run: post } = AdminHub.Product.Post.useType(options);
+  const { run: post, loading: loadingN } = AdminHub.Product.Post.useType(VariantId, options);
 
-  const { run: patch } = AdminHub.Product.Patch.useType(options);
+  const { run: patch, loading } = AdminHub.Product.Patch.useType(TypeId!, options);
 
   return (
     <Popover withArrow open={open} onOpenChange={toggle}>
@@ -90,7 +97,10 @@ export function AdminProductType({ VariantId, Type, Refresh, New }: IAdminProduc
           <Input value={name} onChange={(_, e) => setName(e.value)} />
         </Field>
 
-        <Button onClick={() => New ? post(VariantId, name) : patch(VariantId, Type!, name)}>
+        <Button
+          disabled={loading || loadingN}
+          onClick={() => New ? post(name) : patch(name)}
+        >
           Submit
         </Button>
       </PopoverSurface>

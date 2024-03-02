@@ -37,7 +37,7 @@ theme.fontFamilyMonospace = `TeleNeoWeb, ${theme.fontFamilyMonospace}`;
 theme.fontFamilyNumeric = `TeleNeoWeb, ${theme.fontFamilyNumeric}`;
 
 const log = new Logger("LoveOTC");
-log.info("Version: 1.4.0 2024/02/28");
+log.info("Version: 1.4.0 2024/03/03");
 log.debug("T-Systems, EcoSystem Squad, Aloento");
 
 /**

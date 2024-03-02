@@ -35,10 +35,10 @@ export abstract class AdminProductDelete extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.2.0
+   * @version 0.3.0
    */
-  public static useVariant(options: Options<true, [number]>) {
-    return useRequest(async (variantId) => {
+  public static useVariant(variantId: number, options: Options<true, []>) {
+    return useRequest(async () => {
       const res = await this.Invoke<boolean>("ProductDeleteVariant", variantId);
       this.EnsureTrue(res);
       return res;
@@ -51,11 +51,11 @@ export abstract class AdminProductDelete extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.2.0
+   * @version 0.3.0
    */
-  public static useType(options: Options<true, [number, string]>) {
-    return useRequest(async (variantId, type) => {
-      const res = await this.Invoke<boolean>("ProductDeleteType", variantId, type);
+  public static useType(typeId: number, options: Options<true, []>) {
+    return useRequest(async () => {
+      const res = await this.Invoke<boolean>("ProductDeleteType", typeId);
       this.EnsureTrue(res);
       return res;
     }, {

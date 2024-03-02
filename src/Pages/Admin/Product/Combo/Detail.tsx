@@ -1,23 +1,23 @@
 import { Button, Combobox, DataGridCell, DataGridHeaderCell, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Label, Option, SpinButton, TableColumnDefinition, Toast, ToastTitle, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
 import { DismissRegular, EditRegular } from "@fluentui/react-icons";
-import { useBoolean, useRequest } from "ahooks";
+import { useAsyncEffect, useBoolean } from "ahooks";
 import { useState } from "react";
 import { DelegateDataGrid } from "~/Components/DataGrid";
 import { Logger } from "~/Helpers/Logger";
 import { Flex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
+import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
 import { IComboItem } from ".";
-import { IVariantItem } from "../Variant";
+import { IUpdateComboItem, IVariantItem } from "./New";
 
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.1.0
  */
-interface IEditComboItem extends IVariantItem {
+interface IEditComboItem extends IUpdateComboItem {
   Current: string;
-  Update: (type: string) => void;
 }
 
 /**
@@ -80,6 +80,7 @@ const useStyles = makeStyles({
  */
 export interface IDetailComboItem extends IComboItem {
   ProdId: number;
+  /** @deprecated */
   Refresh: () => void;
 }
 
@@ -88,21 +89,48 @@ const log = new Logger("Admin", "Product", "Detail", "Combo", "Detail");
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.3
+ * @version 0.3.0
  */
 export function AdminProductComboDetail({ Id, ProdId, Combo, Stock, Refresh }: IDetailComboItem) {
   const [open, { toggle }] = useBoolean();
   const [combo, setCombo] = useState(Combo);
   const [stock, setStock] = useState(Stock);
 
-  const { data: varis } = useRequest(() => AdminHub.Product.Get.Variants(ProdId, log), {
+  const [varis, setVaris] = useState<IVariantItem[]>([]);
+  const { data: varIds } = AdminHub.Product.Get.useVariants(ProdId, {
     onError: log.error
   });
 
+  useAsyncEffect(async () => {
+    if (!varIds)
+      return;
+
+    const varis: IVariantItem[] = [];
+
+    for (const i of varIds) {
+      const typeIds = await AdminHub.Product.Get.Types(i);
+      const types = [];
+
+      for (const typeId of typeIds) {
+        const type = await Hub.Product.Get.Type(typeId);
+        types.push(type);
+      }
+
+      const { Name } = await Hub.Product.Get.Variant(i);
+
+      varis.push({
+        Id: i,
+        Name: Name,
+        Types: types.map(x => x.Name)
+      });
+    }
+
+    setVaris(varis);
+  }, [varIds]);
+
   const { dispatch, dispatchToast } = useErrorToast(log);
 
-  const { run } = AdminHub.Product.Patch.useCombo({
-    manual: true,
+  const { run, loading } = AdminHub.Product.Patch.useCombo({
     onError(e, req) {
       dispatch({
         Message: "Failed Update Combo",
@@ -167,7 +195,13 @@ export function AdminProductComboDetail({ Id, ProdId, Combo, Stock, Refresh }: I
                 setStock(val);
               }} />
 
-              <Button appearance="primary" onClick={() => run(Id, combo, stock)}>Submit</Button>
+              <Button
+                disabled={loading}
+                appearance="primary"
+                onClick={() => run(Id, combo, stock)}
+              >
+                Submit
+              </Button>
             </div>
           </DialogContent>
         </DialogBody>

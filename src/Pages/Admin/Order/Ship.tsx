@@ -1,7 +1,7 @@
 import { Button, Field, Input, Toast, ToastTitle } from "@fluentui/react-components";
 import { EditRegular, SendRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useOrder } from "~/Components/Order/useOrder";
 import { Logger } from "~/Helpers/Logger";
 import { useErrorToast } from "~/Helpers/useToast";
@@ -12,14 +12,18 @@ const log = new Logger("Admin", "Order", "Detail", "Shipment");
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.3.0
+ * @version 0.3.1
  */
 export function Shipment({ OrderId }: { OrderId: number }) {
   const [edit, { setTrue, setFalse }] = useBoolean();
   const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { data: order, mutate } = useOrder(OrderId, true);
-  const [track, setTrack] = useState(order?.TrackingNumber);
+  const [track, setTrack] = useState<string>("");
+
+  useEffect(() => {
+    order?.TrackingNumber && setTrack(order?.TrackingNumber);
+  }, [order]);
 
   const { run } = AdminHub.Order.Post.useShip({
     manual: true,

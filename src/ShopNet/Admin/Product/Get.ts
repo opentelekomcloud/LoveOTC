@@ -1,9 +1,12 @@
 import { useConst } from "@fluentui/react-hooks";
+import { Options } from "ahooks/lib/useRequest/src/types";
 import dayjs from "dayjs";
 import { useLiveQuery } from "dexie-react-hooks";
+import { useEffect } from "react";
 import type { Logger } from "~/Helpers/Logger";
+import { useSWR } from "~/Helpers/useSWR";
 import { IProductCount } from "~/Pages/Admin/Product";
-import { IVariantItem } from "~/Pages/Admin/Product/Variant";
+import { ProductData } from "~/ShopNet/Product/Data";
 import { ProductGet } from "~/ShopNet/Product/Get";
 import { AdminNet } from "../AdminNet";
 
@@ -17,7 +20,6 @@ export abstract class AdminProductGet extends AdminNet {
   protected static override readonly Log = [...super.Log, "Product", "Get"];
 
   public static readonly list = "ProductGetList";
-
   /**
    * @author Aloento
    * @since 0.5.0
@@ -27,7 +29,7 @@ export abstract class AdminProductGet extends AdminNet {
     const log = useConst(() => pLog.With(...this.Log, "List"));
 
     const res = useLiveQuery(() =>
-      this.GetTimeCache<number[]>("", this.list, (x) => x.add(1, "m"))
+      this.GetTimeCache<number[]>("", this.list, (x) => x.add(5, "s"))
         .catch(log.error)
     );
 
@@ -35,7 +37,7 @@ export abstract class AdminProductGet extends AdminNet {
   }
   /** @deprecated */
   public static ListUpdate(action: (raw: number[]) => number[]) {
-    return this.UpdateCache(action, "", this.list, dayjs().add(1, "m"));
+    return this.UpdateCache(action, "", this.list, dayjs().add(5, "s"));
   }
 
   /**
@@ -44,7 +46,7 @@ export abstract class AdminProductGet extends AdminNet {
    * @version 0.1.0
    */
   public static Count(prodId: number): Promise<IProductCount> {
-    return this.GetTimeCache<IProductCount>(prodId, "ProductGetCount", (x) => x.add(1, "m"), prodId);
+    return this.GetTimeCache<IProductCount>(prodId, "ProductGetCount", (x) => x.add(5, "s"), prodId);
   }
 
   /**
@@ -75,51 +77,106 @@ export abstract class AdminProductGet extends AdminNet {
     return prod.Category;
   }
 
+  public static readonly variants = "ProductGetVariants";
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 1.0.1
+   * @version 2.0.0
    */
-  public static async Variants(prodId: number, pLog: Logger): Promise<IVariantItem[]> {
-    const log = pLog.With(...this.Log, "Variants");
+  public static useVariants(prodId: number, options?: Options<number[], [number]>) {
+    const index = useConst(() => this.Index(prodId, this.variants));
 
-    const list = await this.GetTimeCache<
+    const req = useSWR(
+      index,
+      async (id) => {
+        await this.getLocker(index);
+        this.reqPool.add(index);
+
+        const list = await this.Invoke<number[]>(this.variants, id)
+          .finally(() => this.reqPool.delete(index));
+
+        return list;
+      },
       {
-        VariantId: number;
-        Types: number[];
-      }[]
-    >(prodId, "ProductGetVariants", (x) => x.add(1, "m"), prodId);
-
-    const items: IVariantItem[] = [];
-
-    for (const meta of list) {
-      const vari = await ProductGet.Variant(meta.VariantId);
-
-      if (!vari) {
-        log.warn(`Variant ${meta} Not Found. Product : ${prodId}`);
-        continue;
+        ...options,
+        defaultParams: [prodId],
       }
+    );
 
-      const types: string[] = [];
+    return req;
+  }
 
-      for (const typeId of meta.Types) {
-        const type = await ProductGet.Type(typeId);
+  public static readonly types = "ProductGetTypes";
+  /**
+   * @author Aloento
+   * @since 1.4.5
+   * @version 0.1.0
+   */
+  public static async Types(variantId: number) {
+    return this.GetTimeCache<number[]>(variantId, this.types, (x) => x.add(5, "s"), variantId);
+  }
 
-        if (!type) {
-          log.warn(`Type ${typeId} Not Found. Variant : ${meta.VariantId}, Product : ${prodId}`);
-          continue;
+  /**
+   * @author Aloento
+   * @since 0.5.0
+   * @version 2.0.0
+   */
+  public static useTypes(
+    variantId: number,
+    options?: Options<number[], [number]>
+  ) {
+    const index = useConst(() => this.Index(variantId, this.types));
+
+    const req = useSWR(
+      index,
+      (variantId) => this.Invoke<number[]>(this.types, variantId),
+      {
+        ...options,
+        defaultParams: [variantId]
+      }
+    );
+
+    return req;
+  }
+
+  /**
+   * @author Aloento
+   * @since 1.4.0
+   * @version 0.1.0
+   */
+  public static useTypeList(
+    variantId: number,
+    options?: Options<ProductData.Type[], []>
+  ) {
+    const { data } = this.useTypes(variantId);
+    const index = useConst(() => this.Index(variantId, "TypeList"));
+
+    const req = useSWR(
+      index,
+      async () => {
+        if (!data)
+          return [];
+
+        const types: ProductData.Type[] = [];
+
+        for (const typeId of data) {
+          const type = await ProductData.Type(typeId);
+          types.push(type);
         }
 
-        types.push(type.Name);
+        return types;
+      },
+      {
+        ...options,
+        useMemory: true
       }
+    );
 
-      items.push({
-        Id: meta.VariantId,
-        Name: vari.Name,
-        Types: types
-      });
-    }
+    useEffect(() => {
+      if (data)
+        req.refresh();
+    }, [data]);
 
-    return items;
+    return req;
   }
 }

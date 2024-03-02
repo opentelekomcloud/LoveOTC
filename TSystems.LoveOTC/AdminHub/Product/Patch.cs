@@ -228,10 +228,10 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 1.0.0
+     * @version 1.1.0
      * </remarks>
      */
-    public async Task<bool> ProductPatchType(uint variantId, string oldName, string newName) {
+    public async Task<bool> ProductPatchType(uint typeId, string newName) {
         var valid = typeof(Type)
             .GetProperty(nameof(Type.Name))!
             .GetCustomAttribute<StringLengthAttribute>()!;
@@ -240,7 +240,7 @@ internal partial class AdminHub {
             throw new HubException(valid.FormatErrorMessage("Name"));
 
         var type = this.Db.Types
-            .Where(x => x.VariantId == variantId && x.Name == oldName);
+            .Where(x => x.TypeId == typeId);
 
         var any = await type
             .SelectMany(x => x.Combos)

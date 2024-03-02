@@ -124,7 +124,7 @@ export abstract class ProductGet extends ProductData {
    * @since 1.4.0
    * @version 0.3.0
    */
-  public static usePhotoList(prodId: number, options?: Options<number[], number[]>) {
+  public static usePhotoList(prodId: number, options?: Options<number[], [number]>) {
     const req = useSWR(
       this.Index(prodId, this.photoList),
       (id) => this.PhotoList(id),
