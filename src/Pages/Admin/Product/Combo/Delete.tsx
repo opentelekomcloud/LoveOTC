@@ -15,7 +15,6 @@ export function AdminProductComboDelete({ ComboId, Refresh }: { ComboId: number;
   const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run } = AdminHub.Product.Delete.useCombo({
-    manual: true,
     onError(e, req) {
       dispatch({
         Message: "Failed Delete Combo",

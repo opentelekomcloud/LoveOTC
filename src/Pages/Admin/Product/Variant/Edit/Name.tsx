@@ -19,7 +19,6 @@ export function AdminProductVariantName({ Id, Name }: { Id: number; Name: string
   const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run } = AdminHub.Product.Patch.useVariantName({
-    manual: true,
     onError(e, params) {
       dispatch({
         Message: "Failed Update Variant Name",

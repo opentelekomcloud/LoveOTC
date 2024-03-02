@@ -11,7 +11,7 @@ const log = new Logger("Admin", "Product", "Row");
 /**
  * @author Aloento
  * @since 1.3.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 export function AdminProductRow({ item: id }: TableRowData<number>) {
   const [detail, setDetail] = useState<IProductItem>(() => ({
@@ -40,14 +40,16 @@ export function AdminProductRow({ item: id }: TableRowData<number>) {
 
     setDetail(item);
 
-    const [_, cover] = await hub.PhotoList(id, log);
+    const [coverId] = await hub.PhotoList(id, true);
 
-    if (!cover)
+    if (!coverId)
       log.warn(`Product ${id} has no photo`);
+
+    const cover = await hub.Photo(coverId);
 
     setDetail(item = {
       ...item,
-      Cover: cover
+      Cover: cover.ObjectId
     });
 
     const count = await AdminHub.Product.Get.Count(id).catch(log.error);

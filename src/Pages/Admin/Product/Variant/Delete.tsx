@@ -15,7 +15,6 @@ export function AdminProductVariantDelete({ VariantId, Refresh }: { VariantId: n
   const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run } = AdminHub.Product.Delete.useVariant({
-    manual: true,
     onError(e, req) {
       dispatch({
         Message: "Failed Delete Variant",

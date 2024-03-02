@@ -44,7 +44,6 @@ export function AdminProductCategory({ ProdId }: { ProdId: number; }) {
   const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run } = AdminHub.Product.Patch.useCategory({
-    manual: true,
     onError(e, params) {
       dispatch({
         Message: "Failed Update Category",
@@ -65,7 +64,6 @@ export function AdminProductCategory({ ProdId }: { ProdId: number; }) {
   });
 
   const { run: det } = AdminHub.Product.Delete.useCategory({
-    manual: true,
     onError(e, params) {
       dispatch({
         Message: "Failed Detach Category",

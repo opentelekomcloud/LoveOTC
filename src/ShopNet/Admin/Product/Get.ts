@@ -33,6 +33,7 @@ export abstract class AdminProductGet extends AdminNet {
 
     return res;
   }
+  /** @deprecated */
   public static ListUpdate(action: (raw: number[]) => number[]) {
     return this.UpdateCache(action, "", this.list, dayjs().add(1, "m"));
   }

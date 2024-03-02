@@ -38,7 +38,7 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 1.0.0
+     * @version 1.1.0
      * </remarks>
      */
     public async Task<bool> ProductPostMovePhoto(uint photoId, bool up) {
@@ -57,14 +57,18 @@ internal partial class AdminHub {
             if (current == 1)
                 throw new HubException("Photo already at top");
 
+            var prev = photos[index - 1].Order;
+
             photos[index - 1].Order = current;
-            photos[index].Order = (byte)(current - 1);
+            photos[index].Order = prev;
         } else {
             if (current == photos.Last().Order)
                 throw new HubException("Photo already at bottom");
 
+            var next = photos[index + 1].Order;
+
             photos[index + 1].Order = current;
-            photos[index].Order = (byte)(current + 1);
+            photos[index].Order = next;
         }
 
         await this.Db.SaveChangesAsync();

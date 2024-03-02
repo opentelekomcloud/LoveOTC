@@ -32,7 +32,6 @@ export function AdminProductName({ ProdId }: { ProdId: number; }) {
   const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run } = AdminHub.Product.Patch.useName({
-    manual: true,
     onError(e, req) {
       dispatch({
         Message: "Failed Update Name",

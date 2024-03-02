@@ -17,7 +17,7 @@ export function ProductRadioList({ ProdId }: { ProdId: number }) {
   const { Update, SetAll } = useRadioGroup();
   const [variants, setVariants] = useState<[string, string[]][]>([]);
 
-  const { loading } = useRequest(() => Hub.Product.Get.ComboItem(ProdId, log), {
+  const { loading } = useRequest(() => Hub.Product.Get.ComboList(ProdId, log), {
     onError: log.error,
     onSuccess(data) {
       const variant: Record<string, Set<string>> = {};

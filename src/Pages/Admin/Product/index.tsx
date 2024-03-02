@@ -53,7 +53,7 @@ const log = new Logger("Admin", "Product");
  * @version 0.2.0
  */
 const columns: TableColumnDefinition<IProductItem>[] = [
-  MakeCoverCol(50, log),
+  MakeCoverCol(50, log, x => x.Cover),
   createTableColumn({
     columnId: "Product",
     renderHeaderCell: () => <DataGridHeaderCell>Product</DataGridHeaderCell>,

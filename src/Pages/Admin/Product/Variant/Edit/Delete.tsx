@@ -15,7 +15,6 @@ export function AdminProductTypeDelete({ VariantId, Type, Refresh }: { VariantId
   const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run } = AdminHub.Product.Delete.useType({
-    manual: true,
     onError(e, req) {
       dispatch({
         Message: "Failed Delete Type",

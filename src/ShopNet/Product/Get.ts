@@ -1,3 +1,4 @@
+import { Options } from "ahooks/lib/useRequest/src/types";
 import type { Logger } from "~/Helpers/Logger";
 import { useSWR } from "~/Helpers/useSWR";
 import { IComboItem } from "~/Pages/Admin/Product/Combo";
@@ -16,7 +17,7 @@ export abstract class ProductGet extends ProductData {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 1.1.0
+   * @version 1.2.0
    * @liveSafe
    */
   public static async Basic(prodId: number, pLog: Logger): Promise<IGallery> {
@@ -26,12 +27,13 @@ export abstract class ProductGet extends ProductData {
     if (!res)
       throw new Error(`Product ${prodId} Not Found`);
 
-    const [_, cover] = await this.PhotoList(prodId, pLog);
+    const [coverId] = await this.PhotoList(prodId, true);
+    const cover = await this.Photo(coverId);
 
     if (cover)
       return {
         Name: res.Name,
-        Cover: cover
+        Cover: cover.ObjectId
       };
 
     log.warn(`Product ${prodId} has no photo`);
@@ -53,13 +55,13 @@ export abstract class ProductGet extends ProductData {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 1.1.0
+   * @version 1.2.0
    * @liveSafe
    */
-  public static async ComboItem(prodId: number, pLog: Logger): Promise<IComboItem[]> {
+  public static async ComboList(prodId: number, pLog: Logger): Promise<IComboItem[]> {
     const log = pLog.With(...this.Log, "Combo");
 
-    const list = await this.ComboList(prodId);
+    const list = await this.GetTimeCache<number[]>(prodId, "ProductGetComboList", (x) => x.add(3, "s"), prodId);
     const items: IComboItem[] = [];
 
     for (const comboId of list) {
@@ -95,26 +97,17 @@ export abstract class ProductGet extends ProductData {
     return items;
   }
 
-  /**
-   * @author Aloento
-   * @since 1.0.0
-   * @version 1.0.0
-   * @liveSafe
-   */
-  public static ComboList(prodId: number): Promise<number[]> {
-    return this.GetTimeCache(prodId, "ProductGetComboList", (x) => x.add(1, "m"), prodId);
-  }
-
   public static readonly photoList = "ProductGetPhotoList";
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 1.1.0
+   * @version 2.0.1
    * @liveSafe
    * @deprecated Use {@link usePhotoList} if possible.
    */
-  public static async PhotoList(prodId: number, pLog: Logger): Promise<[ProductData.Photo[], string]> {
-    const log = pLog.With(...this.Log, "PhotoList");
+  public static async PhotoList(prodId: number, cache?: true): Promise<number[]> {
+    if (cache)
+      return this.GetTimeCache<number[]>(prodId, this.photoList, (x) => x.add(3, "s"), prodId);
 
     const index = this.Index(prodId, this.photoList);
     await this.getLocker(index);
@@ -123,43 +116,21 @@ export abstract class ProductGet extends ProductData {
     const ids = await this.Invoke<number[]>(this.photoList, prodId)
       .finally(() => this.reqPool.delete(index));
 
-    let list = [];
-    let cover = "";
-
-    for (const photoId of ids) {
-      const photo = await this.Photo(photoId).catch(log.error);
-
-      if (photo) {
-        list.push(photo);
-
-        if (photo.Cover)
-          cover = photo.ObjectId;
-      } else
-        log.warn(`Photo ${photoId} not found in Product ${prodId}`);
-    }
-
-    list = list.sort((a, b) => a.Order - b.Order);
-
-    if (!cover && list.length > 0) {
-      log.debug(`Product ${prodId} has no cover photo, using first photo instead`);
-      return [list, list[0].ObjectId];
-    }
-
-    return [list, cover];
+    return ids;
   }
 
   /**
    * @author Aloento
    * @since 1.4.0
-   * @version 0.2.0
+   * @version 0.3.0
    */
-  public static usePhotoList(prodId: number, pLog: Logger) {
+  public static usePhotoList(prodId: number, options?: Options<number[], number[]>) {
     const req = useSWR(
       this.Index(prodId, this.photoList),
-      (id) => this.PhotoList(id, pLog),
+      (id) => this.PhotoList(id),
       {
+        ...options,
         defaultParams: [prodId],
-        onError: pLog.error
       }
     );
 

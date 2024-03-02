@@ -1,5 +1,7 @@
+import { useConst } from "@fluentui/react-hooks";
 import { IStreamResult } from "@microsoft/signalr";
 import { Logger } from "~/Helpers/Logger";
+import { useSWR } from "~/Helpers/useSWR";
 import { Shared } from "./Database";
 import { ShopNet } from "./ShopNet";
 
@@ -20,6 +22,23 @@ export class ObjectStorage extends ShopNet {
 
     await this.EnsureConnected();
     return this.Hub.stream<Uint8Array>("ObjectStorageGet", objId);
+  }
+
+  /**
+   * @author Aloento
+   * @since 1.4.0
+   * @version 0.1.0
+   */
+  public static useGet(objId: string, pLog: Logger) {
+    const log = useConst(() => pLog.With("GuidImage"));
+
+    const req = useSWR(objId, (id) => this.GetBySlice(id, log), {
+      onError: log.error,
+      defaultParams: [objId],
+      useMemory: true
+    });
+
+    return req;
   }
 
   /**

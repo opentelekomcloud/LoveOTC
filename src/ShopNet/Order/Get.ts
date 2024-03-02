@@ -78,7 +78,7 @@ export abstract class OrderGet extends OrderEntity {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 2.2.0
+   * @version 2.2.1
    */
   public static useItems(orderId: number, pLog: Logger, admin?: true) {
     const log = useConst(() => pLog.With(...this.Log, "Items"));
@@ -139,12 +139,12 @@ export abstract class OrderGet extends OrderEntity {
         let cover = "";
 
         if (!admin) {
-          const [_, res] = await ProductGet.PhotoList(prodId, log);
+          const [coverId] = await ProductGet.PhotoList(prodId, true);
 
-          if (!res)
+          if (!coverId)
             log.warn(`Product ${prodId} has no photo`);
 
-          cover = res;
+          cover = (await ProductGet.Photo(coverId)).ObjectId;
         }
 
         items.push({

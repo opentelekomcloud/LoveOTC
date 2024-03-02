@@ -34,7 +34,6 @@ export function AdminProductAddButton() {
   const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run, loading } = AdminHub.Product.Post.useCreate({
-    manual: true,
     onError(e, params) {
       dispatch({
         Message: `Failed Create ${name}`,

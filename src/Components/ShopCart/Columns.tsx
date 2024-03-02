@@ -92,7 +92,7 @@ const columns: TableColumnDefinition<ICartItem>[] = [
  */
 export function CartColumns(log: Logger): TableColumnDefinition<ICartItem>[] {
   return [
-    MakeCoverCol(44, log),
+    MakeCoverCol(44, log, x => x.Cover),
     ...columns
   ];
 }

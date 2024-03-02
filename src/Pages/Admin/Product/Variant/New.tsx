@@ -34,7 +34,6 @@ export function AdminProductNewVariant({ ProdId, Refresh }: { ProdId: number; Re
   const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run } = AdminHub.Product.Post.useVariant({
-    manual: true,
     onError(e, params) {
       dispatch({
         Message: "Failed Create Variant",

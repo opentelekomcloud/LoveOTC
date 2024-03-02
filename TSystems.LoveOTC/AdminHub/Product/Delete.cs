@@ -9,15 +9,25 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.2.0
+     * @version 0.3.0
      * </remarks>
      */
     public async Task<bool> ProductDeletePhoto(uint photoId) {
-        var res = await this.Db.Photos
-            .Where(x => x.PhotoId == photoId)
+        var where = this.Db.Photos
+            .Where(x => x.PhotoId == photoId);
+
+        var objId = await where
+            .Select(x => x.ObjectId)
+            .SingleAsync();
+
+        await this.Db.Objects
+            .Where(x => x.Id == objId)
             .ExecuteDeleteAsync();
 
-        return res > 0;
+        await where
+            .ExecuteDeleteAsync();
+
+        return true;
     }
 
     /**

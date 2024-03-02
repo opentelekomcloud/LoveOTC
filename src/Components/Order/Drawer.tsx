@@ -98,7 +98,7 @@ export function OrderDetailDrawer({ OrderId, Admin, ParentLog }: IOrderComp) {
           :
           <DelegateDataGrid
             Items={cart}
-            Columns={[MakeCoverCol(44, ParentLog), ...columns]}
+            Columns={[MakeCoverCol(44, ParentLog, (x: ICartItem) => x.Cover), ...columns]}
           />
       }
 

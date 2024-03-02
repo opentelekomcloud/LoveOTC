@@ -24,7 +24,6 @@ export function AdminProductDelete({ ProdId }: { ProdId: number }) {
   const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run, loading } = AdminHub.Product.Delete.useProduct({
-    manual: true,
     onError(e, params) {
       dispatch({
         Message: "Failed Delete Product",

@@ -27,29 +27,34 @@ const log = new Logger("Product", "Carousel");
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.4.0
+ * @version 0.4.1
  */
 export function ProductCarousel({ Id }: { Id: number; }) {
   const style = useStyles();
   const [imgs, setImgs] = useState<[string, string?][]>([[img]]);
 
-  const { data } = Hub.Product.Get.usePhotoList(Id, log);
-  const list = data ? data[0] : undefined;
+  const { data } = Hub.Product.Get.usePhotoList(Id, {
+    onError: log.error
+  });
 
   useAsyncEffect(async () => {
-    if (!list) return;
+    if (!data) return;
 
-    setImgs(Array<[string, string?]>(list.length).fill([img]));
+    setImgs(Array<[string, string?]>(data.length).fill([img]));
 
-    for (let i = 0; i < list.length; i++)
-      Hub.Storage.GetBySlice(list[i].ObjectId, log).then(slice => {
+    for (let i = 0; i < data.length; i++) {
+      const coverId = data[i];
+      const cover = await Hub.Product.Get.Photo(coverId);
+
+      Hub.Storage.GetBySlice(cover.ObjectId, log).then(slice => {
         setImgs(x => {
           const n = [...x];
-          n[i] = [URL.createObjectURL(new Blob(slice)), list[i].Caption];
+          n[i] = [URL.createObjectURL(new Blob(slice)), cover.Caption];
           return n;
         });
       });
-  }, [list]);
+    }
+  }, [data]);
 
   return (
     <Carousel showArrows>

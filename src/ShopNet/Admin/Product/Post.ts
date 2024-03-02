@@ -4,6 +4,8 @@ import { Options } from "ahooks/lib/useRequest/src/types";
 import { Subject } from "rxjs";
 import { Logger } from "~/Helpers/Logger";
 import { CurrentEditor } from "~/Lexical/Utils";
+import { IPhotoItem } from "~/Pages/Admin/Product/Photo";
+import { ProductGet } from "~/ShopNet/Product/Get";
 import { AdminNet } from "../AdminNet";
 import { AdminProductGet } from "./Get";
 
@@ -26,31 +28,57 @@ export abstract class AdminProductPost extends AdminNet {
       const res = await this.Invoke<number>("ProductPostCreate", name);
       AdminProductGet.ListUpdate(x => [res, ...x])
       return res;
-    }, options);
+    }, {
+      ...options,
+      manual: true
+    });
   }
 
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.2.0
+   * @version 0.3.0
    */
-  public static useMovePhoto(options: Options<true, [number, boolean]>) {
-    return useRequest(async (photoId, up) => {
-      const res = await this.Invoke<boolean>("ProductPostMovePhoto", photoId, up);
+  public static useMovePhoto({ ProductId, PhotoId }: IPhotoItem, options: Options<true, [boolean]>) {
+    const { mutate } = ProductGet.usePhotoList(ProductId);
+
+    return useRequest(async (up) => {
+      const res = await this.Invoke<boolean>("ProductPostMovePhoto", PhotoId, up);
       this.EnsureTrue(res);
+
+      mutate(list => {
+        const index = list!.findIndex(x => x === PhotoId);
+        if (index === -1)
+          return list;
+
+        const newIndex = up ? index - 1 : index + 1;
+        if (newIndex < 0 || newIndex >= list!.length)
+          return list;
+
+        const temp = list![index];
+        list![index] = list![newIndex];
+        list![newIndex] = temp;
+
+        return list;
+      });
+
       return res;
-    }, options);
+    }, {
+      ...options,
+      manual: true
+    });
   }
 
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 1.0.5
+   * @version 1.1.0
    */
-  public static usePhoto(pLog: Logger, options: Options<number, [number, File]>) {
+  public static usePhoto(prodId: number, pLog: Logger, options: Options<number, [File]>) {
     const log = useConst(() => pLog.With(...this.Log, "Photo"));
+    const { mutate } = ProductGet.usePhotoList(prodId);
 
-    return useRequest(async (prodId, file) => {
+    return useRequest(async (file) => {
       if (!file.type.startsWith("image/"))
         throw new TypeError("File is not an image");
 
@@ -61,8 +89,13 @@ export abstract class AdminProductPost extends AdminNet {
       const res = this.Invoke<number>("ProductPostPhoto", prodId, subject);
       await this.HandleFileStream(file, subject, log);
 
-      return res;
-    }, options);
+      const id = await res;
+      mutate(x => [...x || [], id]);
+      return id;
+    }, {
+      ...options,
+      manual: true
+    });
   }
 
   /**
@@ -71,7 +104,12 @@ export abstract class AdminProductPost extends AdminNet {
    * @version 0.2.0
    */
   public static useVariant(options: Options<number, [number, string]>) {
-    return useRequest((prodId, name) => this.Invoke("ProductPostVariant", prodId, name), options);
+    return useRequest(
+      (prodId, name) => this.Invoke("ProductPostVariant", prodId, name),
+      {
+        ...options,
+        manual: true
+      });
   }
 
   /**
@@ -80,7 +118,12 @@ export abstract class AdminProductPost extends AdminNet {
    * @version 0.2.0
    */
   public static useType(options: Options<number, [number, string]>) {
-    return useRequest((variantId, name) => this.Invoke("ProductPostType", variantId, name), options);
+    return useRequest(
+      (variantId, name) => this.Invoke("ProductPostType", variantId, name),
+      {
+        ...options,
+        manual: true
+      });
   }
 
   /**
@@ -89,7 +132,12 @@ export abstract class AdminProductPost extends AdminNet {
    * @version 0.2.0
    */
   public static useCombo(options: Options<number, [number, Record<string, string>, number]>) {
-    return useRequest((prodId, combo, stock) => this.Invoke("ProductPostCombo", prodId, combo, stock), options);
+    return useRequest(
+      (prodId, combo, stock) => this.Invoke("ProductPostCombo", prodId, combo, stock),
+      {
+        ...options,
+        manual: true
+      });
   }
 
   /**
@@ -108,6 +156,9 @@ export abstract class AdminProductPost extends AdminNet {
       const res = await this.Invoke<true>("ProductPostDescription", prodId, json);
       this.EnsureTrue(res);
       return res;
-    }, options);
+    }, {
+      ...options,
+      manual: true
+    });
   }
 }

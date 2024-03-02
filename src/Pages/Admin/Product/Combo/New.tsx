@@ -92,7 +92,6 @@ export function AdminProductNewCombo({ ProdId, Refresh }: { ProdId: number; Refr
   const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run } = AdminHub.Product.Post.useCombo({
-    manual: true,
     onError(e, req) {
       dispatch({
         Message: "Failed Create Combo",

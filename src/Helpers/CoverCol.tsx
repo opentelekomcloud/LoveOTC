@@ -24,12 +24,12 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
+ * @version 1.0.0
  */
-export function MakeCoverCol(size: number, log: Logger) {
+export function MakeCoverCol<T>(size: number, log: Logger, fac: (item: T) => string) {
   const w = { width: `${size}px` };
 
-  return createTableColumn<{ Cover: string; }>({
+  return createTableColumn<T>({
     columnId: "Cover",
     renderHeaderCell: () => {
       const style = useStyles();
@@ -42,14 +42,15 @@ export function MakeCoverCol(size: number, log: Logger) {
     },
     renderCell(item) {
       const style = useStyles();
+      const cover = fac(item);
 
       return (
         <DataGridCell className={style.unset}>
           <GuidImage
             className={style.img}
             style={w}
-            Guid={item.Cover}
-            Log={log}
+            Guid={cover}
+            ParentLog={log}
           />
         </DataGridCell>
       )

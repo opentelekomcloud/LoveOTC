@@ -1,3 +1,6 @@
+import { useConst } from "@fluentui/react-hooks";
+import { Options } from "ahooks/lib/useRequest/src/types";
+import { useSWR } from "~/Helpers/useSWR";
 import { IConcurrency } from "../Database";
 import { ShopNet } from "../ShopNet";
 
@@ -13,7 +16,6 @@ export namespace ProductData {
 
   export type Photo = {
     PhotoId: number;
-    Cover?: boolean;
     Caption?: string;
     Order: number;
     ObjectId: string;
@@ -52,6 +54,7 @@ export abstract class ProductData extends ShopNet {
   public static Product(key: number): Promise<ProductData.Product> {
     return this.GetVersionCache(key, this.product);
   }
+  /** @deprecated */
   public static ProductUpdate(key: number, action: (raw: ProductData.Product) => ProductData.Product) {
     return this.UpdateCache(action, key, this.product);
   }
@@ -76,8 +79,25 @@ export abstract class ProductData extends ShopNet {
   public static Photo(key: number): Promise<ProductData.Photo> {
     return this.GetVersionCache(key, this.photo);
   }
-  public static PhotoUpdate(key: number, action: (raw: ProductData.Photo) => ProductData.Photo) {
-    return this.UpdateCache(action, key, this.photo);
+
+  /**
+   * @author Aloento
+   * @since 1.4.0
+   * @version 0.1.0
+   */
+  public static usePhoto(key: number, options?: Options<ProductData.Photo, number[]>) {
+    const index = useConst(() => this.Index(key, this.photo));
+
+    const req = useSWR(
+      index,
+      (id) => this.Photo(id),
+      {
+        ...options,
+        defaultParams: [key],
+      }
+    );
+
+    return req;
   }
 
   /**

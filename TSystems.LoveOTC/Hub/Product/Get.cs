@@ -32,12 +32,13 @@ internal partial class ShopHub {
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 0.2.0
+     * @version 0.2.1
      * </remarks>
      */
     public Task<uint[]> ProductGetPhotoList(uint prodId) =>
         this.Db.Photos
             .Where(x => x.ProductId == prodId)
+            .OrderBy(x => x.Order)
             .Select(x => x.PhotoId)
             .ToArrayAsync();
 }

@@ -39,7 +39,7 @@ export function GalleryCard({ Id }: { Id: number }) {
     <Link href={`/Product/${Id}`}>
       <Card>
         <CardPreview>
-          <GuidImage className={style.img} Guid={data?.Cover} Log={log} />
+          <GuidImage className={style.img} Guid={data?.Cover} ParentLog={log} />
         </CardPreview>
 
         <CardFooter>

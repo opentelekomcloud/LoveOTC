@@ -3,6 +3,7 @@ import { useRequest } from "ahooks";
 import { Options } from "ahooks/lib/useRequest/src/types";
 import { Subject } from "rxjs";
 import { Logger } from "~/Helpers/Logger";
+import { ObjectStorage } from "~/ShopNet/ObjectStorage";
 import { ProductData } from "~/ShopNet/Product/Data";
 import { AdminNet } from "../AdminNet";
 
@@ -25,7 +26,10 @@ export abstract class AdminProductPatch extends AdminNet {
       const res = await this.Invoke<boolean>("ProductPatchName", prodId, name);
       this.EnsureTrue(res);
       return res;
-    }, options);
+    }, {
+      ...options,
+      manual: true
+    });
   }
 
   /**
@@ -38,18 +42,27 @@ export abstract class AdminProductPatch extends AdminNet {
       const res = await this.Invoke<boolean>("ProductPatchCategory", prodId, name);
       this.EnsureTrue(res);
       return res;
-    }, options);
+    }, {
+      ...options,
+      manual: true
+    });
   }
 
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 1.0.2
+   * @version 1.1.0
    */
-  public static usePhoto(pLog: Logger, options: Options<true, [number, File]>) {
+  public static usePhoto(photoId: number, pLog: Logger, options: Options<true, [File]>) {
     const log = useConst(() => pLog.With(...this.Log, "Photo"));
 
-    return useRequest(async (photoId, file) => {
+    const { data } = ProductData.usePhoto(photoId, {
+      onError: log.error
+    });
+
+    const { mutate } = ObjectStorage.useGet(data!.ObjectId, pLog);
+
+    return useRequest(async (file) => {
       if (!file.type.startsWith("image/"))
         throw new TypeError("File is not an image");
 
@@ -63,26 +76,39 @@ export abstract class AdminProductPatch extends AdminNet {
       await this.HandleFileStream(file, subject, log);
 
       this.EnsureTrue(await res);
+
+      const mut = await file.arrayBuffer();
+      mutate(() => [new Uint8Array(mut)]);
+
       return true as const;
-    }, options);
+    }, {
+      ...options,
+      manual: true
+    });
   }
 
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.3.0
+   * @version 1.0.0
    */
-  public static useCaption(options: Options<true, [number, string]>) {
-    return useRequest(async (photoId, caption) => {
+  public static useCaption(photoId: number, options: Options<true, [string]>) {
+    const { mutate } = ProductData.usePhoto(photoId);
+
+    return useRequest(async (caption) => {
       const res = await this.Invoke<boolean>("ProductPatchCaption", photoId, caption);
       this.EnsureTrue(res);
 
-      ProductData.PhotoUpdate(photoId, (raw) => {
-        raw.Caption = caption;
+      mutate((raw) => {
+        raw!.Caption = caption;
         return raw;
       });
+
       return res;
-    }, options);
+    }, {
+      ...options,
+      manual: true
+    });
   }
 
   /**
@@ -95,7 +121,10 @@ export abstract class AdminProductPatch extends AdminNet {
       const res = await this.Invoke<boolean>("ProductPatchVariantName", variantId, name);
       this.EnsureTrue(res);
       return res;
-    }, options);
+    }, {
+      ...options,
+      manual: true
+    });
   }
 
   /**
@@ -108,7 +137,10 @@ export abstract class AdminProductPatch extends AdminNet {
       const res = await this.Invoke<boolean>("ProductPatchType", variantId, oldName, newName);
       this.EnsureTrue(res);
       return res;
-    }, options);
+    }, {
+      ...options,
+      manual: true
+    });
   }
 
   /**
@@ -121,6 +153,9 @@ export abstract class AdminProductPatch extends AdminNet {
       const res = await this.Invoke<boolean>("ProductPatchCombo", comboId, combo, stock);
       this.EnsureTrue(res);
       return res;
-    }, options);
+    }, {
+      ...options,
+      manual: true
+    });
   }
 }

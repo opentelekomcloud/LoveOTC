@@ -1,26 +1,20 @@
 import { Image } from "@fluentui/react-components";
-import { useConst } from "@fluentui/react-hooks";
-import { useRequest } from "ahooks";
-import { ComponentProps, useEffect } from "react";
+import { ComponentProps } from "react";
 import { Hub } from "~/ShopNet";
-import type { Logger } from "./Logger";
+import type { ICompLog } from "./Logger";
+
+const hold = (txt: string) => "https://placehold.co/400?text=" + txt + "...";
 
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.2.1
+ * @version 0.3.0
  */
-export function GuidImage({ Guid, Log, ...rest }: { Guid?: string, Log: Logger } & ComponentProps<typeof Image>) {
-  const log = useConst(() => Log.With("GuidImage"));
+export function GuidImage({ Guid, ParentLog, ...rest }: { Guid?: string } & ComponentProps<typeof Image> & ICompLog) {
+  if (!Guid)
+    return <Image {...rest} src={hold("Pending")} />;
 
-  const { data, run } = useRequest(Hub.Storage.GetBySlice.bind(Hub.Storage), {
-    manual: true,
-    onError: log.error,
-  });
+  const { data } = Hub.Storage.useGet(Guid, ParentLog);
 
-  useEffect(() => {
-    Guid && run(Guid, log);
-  }, [Guid]);
-
-  return <Image {...rest} src={data ? URL.createObjectURL(new Blob(data)) : "https://placehold.co/400?text=Loading..."} />;
+  return <Image {...rest} src={data ? URL.createObjectURL(new Blob(data)) : hold("Loading")} />;
 }
