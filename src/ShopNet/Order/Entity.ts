@@ -10,7 +10,7 @@ export namespace OrderEntity {
 
   export type Comment = {
     Content: string;
-    Name?: string;
+    Forename?: string;
     CreateAt: Date;
   } & IConcurrency;
 }

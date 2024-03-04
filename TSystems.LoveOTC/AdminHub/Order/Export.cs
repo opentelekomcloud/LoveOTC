@@ -182,7 +182,7 @@ internal partial class AdminHub {
                 data.AddRange([
                     new() {
                         DataType = CellValues.SharedString,
-                        CellValue = new(shared(user.Name))
+                        CellValue = new(shared($"{user.Surname}, {user.Forename}"))
                     },
                     new() {
                         DataType = CellValues.SharedString,
@@ -207,7 +207,7 @@ internal partial class AdminHub {
                                 prev.Append('[');
                                 prev.Append(curr.CreateAt.ToString("yyyy-MM-dd HH:mm"));
                                 prev.Append("] : ");
-                                prev.AppendLine(curr.User?.Name ?? "User");
+                                prev.AppendLine(curr.User?.Forename ?? "User");
                                 prev.AppendLine(curr.Content);
 
                                 return prev;

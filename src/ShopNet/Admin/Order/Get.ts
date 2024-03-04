@@ -79,7 +79,7 @@ export abstract class AdminOrderGet extends AdminNet {
         Status: order.Status,
         TrackNumber: order.TrackingNumber,
         OrderDate: order.CreateAt,
-        User: user.Name,
+        User: user.Forename,
       });
     }
 

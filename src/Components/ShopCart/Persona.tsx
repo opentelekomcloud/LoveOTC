@@ -21,10 +21,11 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 export interface IPersona {
-  Name: string;
+  Surname: string;
+  Forename: string;
   Phone: string;
   EMail: string;
   Address: string;
@@ -33,7 +34,7 @@ export interface IPersona {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.1
+ * @version 0.3.0
  */
 export function PersonaInfo({ Log }: { Log: Logger }) {
   const style = useStyles();
@@ -44,7 +45,7 @@ export function PersonaInfo({ Log }: { Log: Logger }) {
     <div className={style.person}>
       <div className={style.inf}>
         <Field label="Name" size="large">
-          <Label>{data?.Name}</Label>
+          <Label>{data?.Surname}, {data?.Forename}</Label>
         </Field>
       </div>
 

@@ -52,7 +52,7 @@ export function OrderInfo({ OrderId, Admin, ParentLog }: IOrderComp) {
     <div className={style.flex}>
       <div className={style.box}>
         <Field label="Name" size="large">
-          <Label>{data?.Name}</Label>
+          <Label>{data?.Surname}, {data?.Forename}</Label>
         </Field>
       </div>
 

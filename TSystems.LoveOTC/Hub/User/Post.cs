@@ -12,7 +12,7 @@ internal partial class ShopHub {
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 0.1.2
+     * @version 0.2.0
      * </remarks>
      */
     [Authorize]
@@ -38,7 +38,8 @@ internal partial class ShopHub {
 
             await this.Db.Users.AddAsync(new() {
                 UserId = this.UserId,
-                Name = req.Name!,
+                Surname = req.Surname!,
+                Forename = req.Forename!,
                 EMail = req.EMail!,
                 Phone = req.Phone!,
                 Address = req.Address!
@@ -46,14 +47,15 @@ internal partial class ShopHub {
             var row1 = await this.Db.SaveChangesAsync();
 
             this.Context.Items.Remove("NewUser");
-            this.Logger.NewUser(req.Name, this.Context);
+            this.Logger.NewUser($"{req.Surname}, {req.Forename}", this.Context);
             return row1 > 0;
         }
 
         var row = await this.Db.Users
             .Where(x => x.UserId == this.UserId)
             .ExecuteUpdateAsync(x => x
-                .SetProperty(u => u.Name, req.Name!)
+                .SetProperty(u => u.Surname, req.Surname!)
+                .SetProperty(u => u.Forename, req.Forename!)
                 .SetProperty(u => u.EMail, req.EMail!)
                 .SetProperty(u => u.Phone, req.Phone!)
                 .SetProperty(u => u.Address, req.Address!)

@@ -6,13 +6,17 @@ using System.ComponentModel.DataAnnotations;
  * <remarks>
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.0
+ * @version 0.2.0
  * </remarks>
  */
 internal class Persona {
     [Required]
-    [StringLength(50, MinimumLength = 2)]
-    public string? Name { get; set; }
+    [StringLength(20, MinimumLength = 2)]
+    public string? Surname { get; set; }
+
+    [Required]
+    [StringLength(20, MinimumLength = 2)]
+    public string? Forename { get; set; }
 
     [Required]
     [Phone]

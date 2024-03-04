@@ -8,15 +8,18 @@ using Microsoft.EntityFrameworkCore;
  * <remarks>
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.0
+ * @version 1.0.0
  * </remarks>
  */
 [Index(nameof(EMail), IsUnique = true)]
 public class User : Concurrency {
     public Guid UserId { get; set; }
 
-    [StringLength(50, MinimumLength = 2)]
-    public required string Name { get; set; }
+    [StringLength(20, MinimumLength = 2)]
+    public required string Surname { get; set; }
+
+    [StringLength(20, MinimumLength = 2)]
+    public required string Forename { get; set; }
 
     [EmailAddress]
     [StringLength(100, MinimumLength = 6)]

@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Input, Label, Toast, ToastBody, ToastTitle, Tooltip, makeStyles, tokens } from "@fluentui/react-components";
+import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Input, Toast, ToastBody, ToastTitle, Tooltip, makeStyles, tokens } from "@fluentui/react-components";
 import { useEffect, useState } from "react";
 import { useAuth } from "react-oidc-context";
 import { Logger } from "~/Helpers/Logger";
@@ -39,13 +39,15 @@ const log = new Logger("Setting");
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.7.0
+ * @version 0.8.0
  */
 export function Setting({ Open, Toggle, New }: ISetting) {
   const style = useStyles();
   const auth = useAuth();
 
-  const [name, setName] = useState<string>();
+  const [surname, setSurname] = useState<string>();
+  const [forename, setForename] = useState<string>();
+
   const [phone, setPhone] = useState<string>();
   const [address, setAddress] = useState<string>();
 
@@ -54,9 +56,10 @@ export function Setting({ Open, Toggle, New }: ISetting) {
   useEffect(() => {
     if (New || !data) return;
 
-    const { Name, Phone, Address } = data;
+    const { Surname, Forename, Phone, Address } = data;
 
-    setName(Name);
+    setSurname(Surname);
+    setForename(Forename);
     setPhone(Phone);
     setAddress(Address);
   }, [data]);
@@ -82,7 +85,7 @@ export function Setting({ Open, Toggle, New }: ISetting) {
         <Toast>
           <ToastTitle>Info {New ? "Created" : "Updated"}</ToastTitle>
           <ToastBody>
-            {req.Name}
+            {req.Surname}, {req.Forename}
             <br />
             {req.Phone}
             <br />
@@ -111,17 +114,29 @@ export function Setting({ Open, Toggle, New }: ISetting) {
           <DialogContent className={style.box}>
             <div className={style.one}>
               <Tooltip
-                content="Full first and family names, will be used to the shipping label."
+                content="Surname, for shipping label"
                 relationship="description"
                 withArrow
               >
-                <Field label="Name" size="large" required>
-                  <Input size="medium" value={name} maxLength={20} onChange={(_, v) => setName(v.value)} />
+                <Field label="Family Name" size="large" required>
+                  <Input size="medium" value={surname} maxLength={20} onChange={(_, v) => setSurname(v.value)} />
                 </Field>
               </Tooltip>
 
               <Tooltip
-                content="Up to 20 digits, starting with an internation access code."
+                content="Forename, for shipping label"
+                relationship="description"
+                withArrow
+              >
+                <Field label="Given Name" size="large" required>
+                  <Input size="medium" value={forename} maxLength={20} onChange={(_, v) => setForename(v.value)} />
+                </Field>
+              </Tooltip>
+            </div>
+
+            <div className={style.one}>
+              <Tooltip
+                content="Up to 20 digits, starting with an internation access code"
                 relationship="description"
                 withArrow
               >
@@ -129,14 +144,20 @@ export function Setting({ Open, Toggle, New }: ISetting) {
                   <Input size="medium" value={phone} maxLength={20} onChange={(_, v) => setPhone(v.value)} />
                 </Field>
               </Tooltip>
+
+              <Tooltip
+                content={`Your company email, ${auth.user?.profile.email}`}
+                relationship="description"
+                withArrow
+              >
+                <Field label="E-Mail" size="large">
+                  <Input size="medium" value={auth.user?.profile.email} disabled />
+                </Field>
+              </Tooltip>
             </div>
 
-            <Field label="E-Mail" size="large">
-              <Label>{auth.user?.profile.email}</Label>
-            </Field>
-
             <Tooltip
-              content="Your full shipping address including street, number, ZIP, town and country. Separate lines by commas."
+              content="Your full shipping address including street, number, ZIP, town and country. Separate lines by commas"
               relationship="description"
               withArrow
             >
@@ -155,7 +176,8 @@ export function Setting({ Open, Toggle, New }: ISetting) {
 
             <Button appearance="primary" onClick={() => run({
               EMail: auth.user?.profile.email,
-              Name: name,
+              Surname: surname,
+              Forename: forename,
               Address: address,
               Phone: phone
             })}>

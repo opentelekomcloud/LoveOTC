@@ -21,7 +21,8 @@ internal partial class AdminHub {
         return await this.Db.Users
             .Where(x => x.UserId == key)
             .Select(x => new {
-                x.Name,
+                x.Surname,
+                x.Forename,
                 x.EMail,
                 x.Phone,
                 x.Address,

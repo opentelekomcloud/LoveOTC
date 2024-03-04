@@ -206,7 +206,7 @@ export abstract class OrderGet extends OrderEntity {
             const user = await AdminUserEntity.User(cmt.UserId);
 
             if (user)
-              name = user.Name;
+              name = user.Forename;
             else
               log.warn(`[Mismatch] User ${cmt.UserId} not found. Order : ${orderId}`);
           }
@@ -229,7 +229,7 @@ export abstract class OrderGet extends OrderEntity {
           comments.push({
             Content: cmt.Content,
             Time: cmt.CreateAt,
-            User: cmt.Name || "You"
+            User: cmt.Forename || "You"
           });
         }
 

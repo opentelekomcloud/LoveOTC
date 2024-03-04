@@ -8,7 +8,7 @@ internal partial class ShopHub {
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 0.1.1
+     * @version 0.2.0
      * </remarks>
      */
     [Authorize]
@@ -26,7 +26,8 @@ internal partial class ShopHub {
         return await this.Db.Users
             .Where(x => x.UserId == this.UserId)
             .Select(x => new {
-                x.Name,
+                x.Surname,
+                x.Forename,
                 x.EMail,
                 x.Phone,
                 x.Address,

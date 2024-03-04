@@ -1,11 +1,12 @@
-import { Button, Field, Textarea, Toast, ToastBody, ToastTitle, makeStyles, tokens } from "@fluentui/react-components";
+import { Badge, Button, DialogBody, DialogContent, DialogSurface, DialogTitle, Field, Textarea, makeStyles, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { useConst } from "@fluentui/react-hooks";
 import { DismissRegular } from "@fluentui/react-icons";
+import { CheckmarkFilled } from "@fluentui/react-icons/lib/fonts";
 import { useBoolean } from "ahooks";
 import { useState } from "react";
 import { Logger } from "~/Helpers/Logger";
-import { ColFlex } from "~/Helpers/Styles";
+import { ColFlex, Flex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
 import { DelegateDataGrid } from "../DataGrid";
@@ -17,7 +18,7 @@ import { PersonaInfo } from "./Persona";
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 const useStyles = makeStyles({
   body: {
@@ -27,6 +28,11 @@ const useStyles = makeStyles({
   sub: {
     width: "fit-content",
     alignSelf: "flex-end"
+  },
+  title: {
+    ...Flex,
+    alignItems: "center",
+    columnGap: tokens.spacingHorizontalM,
   }
 });
 
@@ -35,7 +41,7 @@ const log = new Logger("TopNavBar", "ShopCart", "Confirm");
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.4.2
+ * @version 0.5.0
  */
 export function Confirm() {
   const [cmt, setCmt] = useState<string>();
@@ -58,16 +64,34 @@ export function Confirm() {
     },
     onSuccess(data) {
       dispatchToast(
-        <Toast>
-          <ToastTitle>Order Placed</ToastTitle>
-          <ToastBody>Order Id: {data}</ToastBody>
-        </Toast>,
-        { intent: "success" }
+        <DialogSurface>
+          <DialogBody>
+            <DialogTitle className={style.title}>
+              <Badge size="large" color="success" icon={<CheckmarkFilled />} />
+              Thank You!
+            </DialogTitle>
+
+            <DialogContent>
+              Your order {data} has been placed and is being processed.
+              <br /><br />
+              You can click Avatar -{">"} History to view details,
+              <br />
+              send us an additional comment or even cancel it.
+              <br /><br />
+              You will now be taken to your order details.
+            </DialogContent>
+          </DialogBody>
+        </DialogSurface>,
+        {
+          onStatusChange(_, toast) {
+            if (toast.status === "unmounted")
+              Nav("History", data);
+          },
+        }
       );
 
-      Update([]);
       toggle();
-      Nav("History", data);
+      Update([]);
     },
   });
 

@@ -48,7 +48,7 @@ export abstract class AdminUserGet extends AdminNet {
 
       res.push({
         Id: userId,
-        Name: user.Name,
+        Name: `${user.Surname}, ${user.Forename}`,
         EMail: user.EMail,
         Admin: user.Admin,
       });

@@ -35,7 +35,7 @@ internal partial class ShopHub {
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 0.1.1
+     * @version 0.2.0
      * </remarks>
      */
     [Authorize]
@@ -49,9 +49,10 @@ internal partial class ShopHub {
 
         return await this.Db.Comments
             .Where(x => x.CommentId == key && x.Order.UserId == this.UserId)
+            .Include(x => x.User)
             .Select(x => new {
                 x.Content,
-                x.User!.Name,
+                x.User!.Forename,
                 x.CreateAt,
                 x.Version
             })
