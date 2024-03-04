@@ -118,10 +118,9 @@ export function Banner() {
           </div>
 
           <Text size={500} truncate className={mergeClasses(style.bg, style.white)}>
-            We offer an exclusive chance for OTC tribe members to get up to three fashion items until February 29, 2024.
-            Members can log in using their OTC-LDAP account, update their delivery address in the "Settings," and shop for their preferred styles.
-            After selecting items and sizes, confirm and submit their order and address.
-            Orders are expected to arrive within 10-14 days.
+            Open Telekom Cloud is envisioned, run, and nurtured by a unique and dynamic team of experts committed to sovereignty and open-source innovation:
+            The OTC tribe! To showcase your connection and #werkstolz,
+            we're thrilled to offer our members an exclusive chance to snag up to three fashion items as a token of appreciation.
           </Text>
 
           <Dialog modalType="non-modal">

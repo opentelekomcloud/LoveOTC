@@ -17,8 +17,8 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: "8.0.x"
-          dotnet-quality: preview
+          dotnet-version: "8"
+          dotnet-quality: ga
 
       - uses: actions/setup-node@v3
         with:
