@@ -4,7 +4,7 @@ import { useConst } from "@fluentui/react-hooks";
 import { DismissRegular } from "@fluentui/react-icons";
 import { CheckmarkFilled } from "@fluentui/react-icons/lib/fonts";
 import { useBoolean } from "ahooks";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { Logger } from "~/Helpers/Logger";
 import { ColFlex, Flex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
@@ -41,7 +41,7 @@ const log = new Logger("TopNavBar", "ShopCart", "Confirm");
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.5.0
+ * @version 0.6.0
  */
 export function Confirm() {
   const [cmt, setCmt] = useState<string>();
@@ -51,7 +51,8 @@ export function Confirm() {
   const { Nav } = useRouter();
   const style = useStyles();
 
-  const { dispatch, dispatchToast } = useErrorToast(log);
+  const { dispatch, dispatchToast, dismissToast } = useErrorToast(log);
+  const toastId = useId();
 
   const { run } = Hub.Order.Post.useNew({
     manual: true,
@@ -66,7 +67,16 @@ export function Confirm() {
       dispatchToast(
         <DialogSurface>
           <DialogBody>
-            <DialogTitle className={style.title}>
+            <DialogTitle
+              action={
+                <Button
+                  appearance="subtle"
+                  icon={<DismissRegular />}
+                  onClick={() => dismissToast(toastId)}
+                />
+              }
+              className={style.title}
+            >
               <Badge size="large" color="success" icon={<CheckmarkFilled />} />
               Thank You!
             </DialogTitle>
@@ -83,6 +93,8 @@ export function Confirm() {
           </DialogBody>
         </DialogSurface>,
         {
+          toastId,
+          timeout: 5000,
           onStatusChange(_, toast) {
             if (toast.status === "unmounted")
               Nav("History", data);

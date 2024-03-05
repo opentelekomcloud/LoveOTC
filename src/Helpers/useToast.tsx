@@ -25,11 +25,12 @@ interface Cause<T = any> {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.3
+ * @version 0.3.0
  */
 export function useErrorToast<T>(log: Logger) {
   const style = useStyles();
-  const { dispatchToast } = useToastController();
+  const controller = useToastController();
+  const { dispatchToast } = controller;
 
   return {
     dispatch: (e: Cause<T>) => {
@@ -63,6 +64,6 @@ export function useErrorToast<T>(log: Logger) {
 
       log.error(e);
     },
-    dispatchToast
+    ...controller
   };
 }

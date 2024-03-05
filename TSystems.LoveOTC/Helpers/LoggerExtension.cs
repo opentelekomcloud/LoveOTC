@@ -41,7 +41,7 @@ internal static partial class LoggerExtension {
         newUser(logger, name, ctx.UserIdentifier, ctx.GetHttpContext()?.Connection.RemoteIpAddress?.ToString());
 
     [LoggerMessage(
-        EventId = 2001,
+        EventId = 2003,
         Level = LogLevel.Information,
         Message = "Admin {name} : [{uid}] Logged from [{ip}]"
     )]
